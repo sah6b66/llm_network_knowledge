@@ -1,0 +1,182 @@
+[
+  {
+    "id": 26,
+    "difficulty": "简单",
+    "category": {"scope": "设备", "protocol_layer": "其他", "lifecycle": "其他"},
+    "scenario": "园区",
+    "device_type": "交换机",
+    "question": "华为S5735系列园区交换机（V600R025C00版本）支持iStack堆叠特性。请简述iStack堆叠特性是什么、它能解决哪些问题，以及S5735系列设备的典型组网部署建议。",
+    "answer": "iStack堆叠（也称堆叠系统，Stack）是指将多台（2~9台）设备通过线缆连接在一起，从逻辑上变成一台设备，作为一个整体参与数据转发。堆叠解决的问题：一是扩展端口数量，接入用户增加、端口密度不足时增加新设备组堆叠即可；二是扩展带宽，成员设备的多条物理链路可配置成一个聚合组，提高上行带宽；三是提供设备级与链路级可靠性，成员设备间冗余备份，一台故障时业务切换至其他成员，并利用跨设备Eth-Trunk实现链路冗余备份；四是简化组网，虚拟成单一逻辑设备后不再需要VRRP、MSTP等协议，避免二层环路，简化配置并加快收敛。堆叠组成上，成员设备分为管理整个堆叠的主设备（Master，仅一台）、作为备份的备设备（Standby，仅一台）和用于业务转发的从设备（Slave）；堆叠ID取值范围1~9、缺省值为1，用于唯一标识成员设备；堆叠优先级数值越大，当选主设备的可能性越大；堆叠域（Domain ID）用于区分不同堆叠，避免连线错误导致非预期设备组建堆叠。设备支持业务口堆叠，物理成员端口需与Stack-Port逻辑端口绑定，每台设备支持Stack-Port n/1和Stack-Port n/2两个逻辑端口。堆叠拓扑分链形和环形：链形首尾无需物理连接、适合长距离但可靠性低；环形可靠性高，一条堆叠链路故障时退化为链形、不影响堆叠正常工作，成员距离较近时建议环形。典型组网方面，手册场景推荐中S5735-L-V2、S5735-S-V2、S5735E-S-V2等S5735系列形态优选部署在接入层或接入环，汇聚层次选；堆叠成员设备建议通过Eth-Trunk接口上行连接到汇聚/核心设备，且尽量每台成员都有上行口，任意一台故障时不影响上行流量。",
+    "scoring_points": [
+      "堆叠是将2~9台设备通过线缆连接，从逻辑上虚拟成一台设备，作为整体参与数据转发",
+      "堆叠用途包括扩展端口数量、扩展带宽、提供设备级与链路级可靠性、简化组网（无需VRRP/MSTP）",
+      "堆叠角色分为主设备Master（一台）、备设备Standby（一台）、从设备Slave；堆叠ID取值1~9，缺省值为1",
+      "堆叠优先级数值越大，当选主设备的可能性越大；堆叠域用于区分不同堆叠系统",
+      "堆叠拓扑分链形和环形，环形可靠性高，一条堆叠链路故障变为链形拓扑不影响堆叠正常工作，成员距离近建议环形",
+      "S5735系列优选部署在接入层/接入环，成员设备上行通过Eth-Trunk连接上层设备"
+    ],
+    "tags": ["S5735", "V600R025C00", "特性", "iStack"]
+  },
+  {
+    "id": 27,
+    "difficulty": "中",
+    "category": {"scope": "设备", "protocol_layer": "其他", "lifecycle": "其他"},
+    "scenario": "园区",
+    "device_type": "交换机",
+    "question": "某园区网络使用华为S5735系列交换机（V600R025C00版本），DeviceA、DeviceB、DeviceC和DeviceD四台设备之间存在二层环路。现要求部署MSTP破除环路，避免广播风暴和MAC表振荡，并实现VLAN2～10和VLAN11～20的流量负载分担。请给出配置思路与配置步骤。",
+    "answer": "配置思路：1.四台设备配置到域名为RG1的同一MST域（域名、实例与VLAN映射关系、修订级别都相同才属于同一MST域），创建实例MSTI1映射VLAN2～10、MSTI2映射VLAN11～20，同一VLAN不能映射到多个实例；2.在域内分别配置两个实例的根桥和备份根桥，实现负载分担；3.全网采用相同的端口路径开销计算方法（华为计算方法），并将将要被阻塞端口的路径开销值配置为大于缺省值；4.设备全局启用MSTP（缺省情况下生成树协议处于使能状态，也可执行stp enable），与终端相连端口去使能MSTP，根桥指定端口配置根保护；5.创建VLAN并将接口加入VLAN。配置步骤要点：①四台设备分别执行stp region-configuration，配置region-name RG1、instance 1 vlan 2 to 10、instance 2 vlan 11 to 20后quit；②[DeviceA] stp instance 1 root primary、stp instance 2 root secondary；[DeviceB] stp instance 1 root secondary、stp instance 2 root primary；③各设备执行stp pathcost-standard legacy统一开销计算方法，DeviceC在端口10GE1/0/2下执行stp instance 2 cost 20000，DeviceD在端口10GE1/0/2下执行stp instance 1 cost 20000，使不同实例阻塞不同端口；④DeviceC、DeviceD连接终端的端口10GE1/0/1下执行stp disable；⑤DeviceA、DeviceB根桥指定端口10GE1/0/1下执行stp root-protection；⑥vlan batch 2 to 20，互联端口配置port link-type trunk并port trunk allow-pass vlan 2 to 20，终端端口配置access加入相应VLAN。验证：拓扑稳定后执行display stp brief，DeviceC的10GE1/0/2在MSTI2中为ALTE discarding（开销20000），DeviceD的10GE1/0/2在MSTI1中被阻塞，两实例分别阻塞不同链路，破除环路并实现负载分担。",
+    "scoring_points": [
+      "四台设备配置相同MST域：stp region-configuration视图下region-name RG1、instance 1 vlan 2 to 10、instance 2 vlan 11 to 20",
+      "通过stp instance 1 root primary/secondary与stp instance 2 root primary/secondary在两个实例中配置不同根桥实现负载分担",
+      "全网统一路径开销计算方法stp pathcost-standard legacy，并将待阻塞端口开销配置为大于缺省值（如stp instance 2 cost 20000）",
+      "与终端相连端口执行stp disable，根桥指定端口配置stp root-protection",
+      "创建VLAN（vlan batch 2 to 20），互联端口配置trunk并port trunk allow-pass vlan 2 to 20",
+      "用display stp brief检查端口角色，验证不同实例阻塞端口不同、环路被破除"
+    ],
+    "tags": ["S5735", "V600R025C00", "配置方案", "MSTP"]
+  },
+  {
+    "id": 28,
+    "difficulty": "中",
+    "category": {"scope": "设备", "protocol_layer": "其他", "lifecycle": "其他"},
+    "scenario": "园区",
+    "device_type": "交换机",
+    "question": "在华为S5735系列交换机（V600R025C00版本）上，要求同一VLAN内的两个用户端口之间二层互相隔离（彼此不能通信，但都可正常访问网关）。应使用哪条命令实现？请给出该命令的完整语法、每个参数的含义与取值、命令所在视图，并说明端口隔离的行为规则。",
+    "answer": "使用端口隔离命令port-isolate enable（V600R025C00命令参考-接口管理-端口隔离配置命令）。命令功能：port-isolate enable用来开启端口的隔离功能，undo port-isolate enable用来关闭端口的隔离功能，可以实现同一VLAN内端口之间的隔离，为用户提供更安全、更灵活的组网方案。命令格式：port-isolate enable group group-id；undo port-isolate enable [ group group-id ]。参数说明：group group-id指定端口隔离组编号，整数形式，取值范围是1～64。命令视图：GE二层接口视图、10GE二层接口视图、25GE/40GE/100GE/400GE二层接口视图、Eth-Trunk二层接口视图、GE光接口视图、GE电接口视图、MultiGE二层接口视图、端口组视图等。缺省情况下，未开启端口隔离功能；命令缺省级别为2（配置级）。行为规则：同一端口隔离组的端口之间互相隔离，不同端口隔离组的端口之间不隔离；管理口不支持端口隔离命令port-isolate enable的配置。配置示例：system-view进入系统视图后interface进入需隔离的以太网接口，执行port-isolate enable group 1，再将需要互相隔离的其他端口同样加入隔离组1即可。相关配合命令（系统视图）：port-isolate exclude vlan { beginVlanId [ to endVlanId ] } &<1-10>，用于配置端口隔离功能生效时排除VLAN，使该VLAN内用户依旧可以互相访问，beginVlanId与endVlanId为VLAN开始/结束编号，整数形式，取值范围均是1～4094，最多可输入10组，缺省情况下端口隔离功能生效时没有排除VLAN。",
+    "scoring_points": [
+      "命令为port-isolate enable group group-id，undo port-isolate enable关闭端口隔离功能",
+      "参数group group-id指定端口隔离组编号，整数形式，取值范围1～64",
+      "命令所在视图为二层接口视图（GE二层接口视图、Eth-Trunk二层接口视图等）及端口组视图，缺省未开启端口隔离",
+      "同一端口隔离组的端口之间互相隔离，不同端口隔离组的端口之间不隔离，可实现同一VLAN内端口隔离",
+      "管理口不支持port-isolate enable命令的配置",
+      "可用系统视图命令port-isolate exclude vlan配置隔离排除VLAN，VLAN编号取值范围1～4094"
+    ],
+    "tags": ["S5735", "V600R025C00", "命令行", "端口隔离"]
+  },
+  {
+    "id": 29,
+    "difficulty": "中",
+    "category": {"scope": "设备", "protocol_layer": "其他", "lifecycle": "其他"},
+    "scenario": "园区",
+    "device_type": "交换机",
+    "question": "华为S5735系列交换机（V600R025C00版本）作为接入交换机已开启DHCP Snooping功能，现需配置DHCP报文上送DHCP报文处理单元的最大允许速率，防止报文上送速率过快影响处理效率。应使用哪条命令？请给出完整语法、参数含义与取值、命令视图、缺省值与前置条件，并说明与信任接口配置的配合关系。",
+    "answer": "使用命令dhcp snooping check dhcp-rate（V600R025C00命令参考-IP地址与服务-DHCP Snooping配置命令）。命令功能：配置DHCP报文上送DHCP报文处理单元的最大允许速率，超过该速率的报文将被丢弃。命令格式：dhcp snooping check dhcp-rate rate；undo dhcp snooping check dhcp-rate用于恢复最大允许速率为缺省值。参数说明：dhcp-rate rate指定DHCP报文上送DHCP报文处理单元的最大允许速率，整数形式，取值范围是1～5000，单位pps，缺省值是5000 pps（缺省情况下DHCP报文上送DHCP报文处理单元的最大允许速率为5000 pps）。命令视图：系统视图、VLAN视图、GE/10GE/25GE/40GE/100GE/400GE接口视图、Eth-Trunk接口视图、MultiGE接口视图、端口组视图；系统视图下配置用于整机全量报文的检查，接口视图下仅用于该接口，VLAN视图下仅用于该VLAN，三者配置互不耦合。缺省级别为2（配置级）。前置条件：需先在系统视图执行dhcp enable开启全局DHCP功能、执行dhcp snooping enable开启DHCP Snooping总开关，并在连接用户的接口或VLAN视图下执行dhcp snooping enable；还必须已使用命令dhcp snooping check dhcp-rate enable使能DHCP报文速率检测功能，否则本命令配置不生效。配合关系：开启DHCP Snooping的接口不仅处理DHCP请求报文也处理DHCP响应报文，需要使用命令dhcp snooping trusted将连接DHCP服务器的接口配置为信任模式，两者配合使用才能生成绑定表；缺省情况下设备接口为非信任状态，非信任接口接收到DHCP服务器响应的DHCP ACK和DHCP OFFER报文后将其丢弃，从而保证客户端只能从合法DHCP服务器获取IP地址。配置示例（VLAN视图）：dhcp enable、dhcp snooping enable后进入vlan 10，依次执行dhcp snooping enable、dhcp snooping check dhcp-rate enable、dhcp snooping check dhcp-rate 50。",
+    "scoring_points": [
+      "命令为dhcp snooping check dhcp-rate rate，undo dhcp snooping check dhcp-rate恢复缺省值",
+      "参数rate指定DHCP报文上送DHCP报文处理单元的最大允许速率，整数形式，取值范围1～5000，单位pps，缺省值5000 pps",
+      "命令视图包括系统视图、VLAN视图、各类以太网接口视图、Eth-Trunk接口视图、端口组视图，各维度配置互不耦合",
+      "前置条件：先dhcp enable、dhcp snooping enable，且必须先用dhcp snooping check dhcp-rate enable使能速率检测，否则配置不生效",
+      "超过配置速率的DHCP报文将被丢弃",
+      "需配合dhcp snooping trusted将连接DHCP服务器的接口设为信任模式才能生成绑定表，缺省接口为非信任状态"
+    ],
+    "tags": ["S5735", "V600R025C00", "命令行", "DHCP Snooping"]
+  },
+  {
+    "id": 30,
+    "difficulty": "中",
+    "category": {"scope": "设备", "protocol_layer": "其他", "lifecycle": "其他"},
+    "scenario": "园区",
+    "device_type": "交换机",
+    "question": "华为S6730系列交换机（V600R025C00版本）下联端口存在广播风暴风险，需要在接口上配置流量抑制，限制广播、未知组播或未知单播报文的流量。应使用哪条命令？请给出该命令的完整语法（含各种形式）、每个参数的含义与取值、命令所在视图与缺省情况。",
+    "answer": "使用接口视图下的storm suppression命令（V600R025C00命令参考-安全-风暴抑制配置命令）。该命令用来配置接口下允许通过的最大广播、未知组播或未知单播报文的流量，执行后设备将对指定接口下对应类型报文进行限制，超过限制速率的报文将被丢弃。命令格式有三种形式：①storm suppression { broadcast | multicast | unknown-unicast } cir cir-value [ gbps | kbps | mbps ] [ cbs cbs-value [ bytes | kbytes | mbytes ] ]；②storm suppression { broadcast broadcast-percent | { multicast | unknown-unicast } percent-value }；③storm suppression { broadcast | multicast | unknown-unicast } packets packets-per-second；取消配置用undo storm suppression { broadcast | multicast | unknown-unicast }。参数说明：broadcast设置广播流量抑制；multicast设置未知组播流量抑制；unknown-unicast配置未知单播流量抑制；cir cir-value指定承诺信息速率CIR（Committed Information Rate），即保证能够通过的速率，整数形式，取值范围是0～800000000，缺省单位是kbit/s，可用gbps/kbps/mbps指定单位；cbs cbs-value指定承诺突发尺寸CBS（Committed Burst Size），即瞬间能够通过的承诺流量，整数形式，取值范围是10000～4294967295，缺省单位是bytes，可用bytes/kbytes/mbytes指定单位；broadcast-percent与percent-value为百分比值，即报文速率和接口速率的比值，整数形式，取值范围是0～100，广播百分比缺省值为10，单位是百分比；packets packets-per-second指定每秒包速率，整数形式，取值范围是0～595240000，单位是pps。命令视图：GE二层接口视图、10GE二层接口视图、25GE/40GE/100GE/400GE二层接口视图、MultiGE二层接口视图、端口组视图及相应接口视图，缺省级别为2（配置级）。缺省情况下，接口下允许通过的最大广播报文流量按照百分比抑制，比例值为10%；最大未知组播报文流量按百分比抑制，比例值为100%；最大未知单播报文流量按百分比抑制，比例值为100%。配置示例：进入接口后执行storm suppression broadcast cir 100，配置接口允许通过的广播报文的承诺信息速率为100kbit/s。",
+    "scoring_points": [
+      "命令为storm suppression（接口视图），用于限制接口下广播、未知组播或未知单播报文流量，超过限制速率的报文被丢弃",
+      "支持三种形式：cir+cbs形式、百分比形式、packets每秒包速率形式",
+      "cir cir-value取值范围0～800000000（缺省单位kbit/s，可用gbps/kbps/mbps指定单位）；cbs cbs-value取值范围10000～4294967295（缺省单位bytes）",
+      "百分比参数取值范围0～100，广播百分比缺省值为10；packets packets-per-second取值范围0～595240000 pps",
+      "缺省情况：广播按百分比10%抑制，未知组播和未知单播按百分比100%抑制",
+      "命令视图为二层接口视图（GE二层接口视图、10GE二层接口视图等）及端口组视图"
+    ],
+    "tags": ["S6730", "V600R025C00", "命令行", "风暴抑制"]
+  },
+  {
+    "id": 31,
+    "difficulty": "中",
+    "category": {"scope": "设备", "protocol_layer": "其他", "lifecycle": "其他"},
+    "scenario": "园区",
+    "device_type": "交换机",
+    "question": "华为S5735系列PoE交换机（V600R025C00版本）输出告警hwPoePdPowerOverload。请说明该告警的含义（含告警ID与级别）、对系统的影响、可能原因与处理步骤。",
+    "answer": "告警含义：hwPoePdPowerOverload表示PD（受电设备）在受电的过程中，消耗的功率大于自己的分级对应的最大功率。Trap Buffer信息为\"PD is overdrawing power. (IfIndex=[IfIndex], Interface=[Interface], ConsumingPower (mW)=[ConsumingPower], MaximumPower (mW)=[MaximumPower])\"，参数含义：IfIndex为故障接口索引，Interface为故障接口名，ConsumingPower为当前消耗的功率，MaximumPower为分级对应的最大功率。告警属性：Trap OID为1.3.6.1.4.1.2011.5.25.195.40.6，MIB为HUAWEI-POE-MIB；告警ID为0x08012261/0x8012261；告警级别为Warning（Trap Severity为Warning）；告警类型为equipmentAlarm；对应恢复告警为hwPoePdPowerOverloadResume。S5735-L-V2、S5735-S-V2、S5735E-S-V2、S5735R-S-V2、S5735I-S-V2等S5735系列形态支持此告警。对系统的影响：停止PoE供电。可能原因：连接到接口上的PD消耗的功率大于自己的分级对应的最大功率。处理步骤：1.在接口视图下执行命令poe power port-max-power，查看告警是否恢复；如果恢复，则执行步骤3；如果未恢复，则执行步骤2；2.请收集告警信息、日志信息和配置信息，并联系技术支持人员；3.结束。",
+    "scoring_points": [
+      "告警含义：PD在受电过程中消耗的功率大于自己的分级对应的最大功率",
+      "告警ID为0x08012261/0x8012261，告警级别为Warning，MIB为HUAWEI-POE-MIB，OID为1.3.6.1.4.1.2011.5.25.195.40.6",
+      "对系统的影响是停止PoE供电",
+      "可能原因：连接到接口上的PD消耗的功率大于自己分级对应的最大功率",
+      "处理步骤：在接口视图下执行poe power port-max-power查看告警是否恢复，未恢复则收集告警/日志/配置信息联系技术支持人员",
+      "对应恢复告警为hwPoePdPowerOverloadResume"
+    ],
+    "tags": ["S5735", "V600R025C00", "告警处理", "PoE"]
+  },
+  {
+    "id": 32,
+    "difficulty": "中",
+    "category": {"scope": "设备", "protocol_layer": "其他", "lifecycle": "其他"},
+    "scenario": "园区",
+    "device_type": "交换机",
+    "question": "华为S6730系列交换机（V600R025C00版本）组建的堆叠系统输出告警hwDadConflictDetect。请说明该告警的含义（含告警ID与级别）、对系统的影响、可能原因与处理步骤。",
+    "answer": "告警含义：hwDadConflictDetect表示检测到双主（Dual-Active）场景，即因集群或堆叠线缆故障导致集群或堆叠分裂，产生了双主冲突。Trap Buffer信息为\"Dual-active scenario is detected.\"。告警属性：Trap OID为1.3.6.1.4.1.2011.5.25.246.1.1，MIB为HUAWEI-DAD-MIB；告警ID为0x09A90000/0x9A90000；告警级别为Critical（Trap Severity为Alert）；告警类型为communicationsAlarm，属于Raise告警；对应的恢复告警（Match trap）为STACK_1.3.6.1.4.1.2011.5.25.246.1.2 hwDadConflictResume。对系统的影响：网络上出现IP、MAC、全局配置完全一样的两台设备，即双主冲突，影响数据转发。可能原因：原因1是集群或堆叠线缆被拔出（堆叠管理链路的线缆被拔出）；原因2是集群或堆叠线缆故障。处理步骤——原因1：1.检查集群或堆叠线缆是否被拔出，如果是则执行步骤2，如果不是则执行步骤3；2.插入集群或堆叠线缆，恢复集群或堆叠连线；3.请收集告警信息、日志信息和配置信息，并联系技术支持人员。原因2：1.检查集群或堆叠物理成员端口指示灯是否正常，如果是则执行步骤3，如果不是则执行步骤2；2.请更换集群或堆叠线缆；3.请收集告警信息、日志信息和配置信息，并联系技术支持人员。",
+    "scoring_points": [
+      "告警含义：因堆叠线缆故障导致堆叠分裂，产生双主（Dual-Active）冲突",
+      "告警ID为0x09A90000/0x9A90000，告警级别为Critical（Trap Severity为Alert），MIB为HUAWEI-DAD-MIB",
+      "对系统的影响：网络上出现IP、MAC、全局配置完全一样的两台设备，影响数据转发",
+      "可能原因：堆叠线缆被拔出或堆叠线缆故障",
+      "处理：检查并插回/更换堆叠线缆恢复堆叠连线，无法解决则收集告警、日志和配置信息联系技术支持人员",
+      "对应恢复告警为hwDadConflictResume"
+    ],
+    "tags": ["S6730", "V600R025C00", "告警处理", "堆叠"]
+  },
+  {
+    "id": 33,
+    "difficulty": "中",
+    "category": {"scope": "设备", "protocol_layer": "其他", "lifecycle": "其他"},
+    "scenario": "园区",
+    "device_type": "交换机",
+    "question": "华为S5735系列交换机（V600R025C00版本）输出告警hwFanFail。请说明该告警的含义（含告警ID与级别）、对系统的影响、可能原因与处理步骤。",
+    "answer": "告警含义：hwFanFail表示风扇局部功能失效。Trap Buffer信息为\"The fan partially failed. (EntPhysicalIndex=[EntPhysicalIndex], EntPhysicalName=[EntPhysicalName], EntityTrapFaultID=[EntityTrapFaultID], EntityOperStatus=[EntityOperStatus], Reason=[ReasonDsp])\"，参数含义：EntPhysicalIndex为实体索引，EntPhysicalName为实体名称，EntityTrapFaultID为故障码，EntityOperStatus为告警状态信息，ReasonDsp为告警产生原因。告警属性：Trap OID为1.3.6.1.4.1.2011.5.25.219.2.6.3，MIB为HUAWEI-ENTITY-TRAP-MIB；告警ID为0x08130036/0x8130036；告警级别为Major（Trap Severity为Critical）；告警类型为equipmentAlarm；对应恢复告警为hwFanFailResume。对系统的影响：风扇状态异常或风向异常会影响设备散热，短时间不会影响业务，但急需解决；转速不一致可能导致环境噪声过大或散热异常，影响使用体验以及系统功能，急需处理。可能原因：1.风扇状态异常（fan module in abnormal state）；2.风扇风向异常（fan wind direction abnormal）；3.风扇下发和获取的转速不一致。处理步骤：原因1和2：更换风扇；若问题未解决，收集告警信息、日志信息和配置信息并联系技术支持人员。原因3：将该风扇模块拔出后重新插入，待系统稳定后查看告警是否清除，未清除则收集告警信息、日志信息和配置信息，联系技术支持工程师处理。",
+    "scoring_points": [
+      "告警含义：风扇局部功能失效",
+      "告警ID为0x08130036/0x8130036，告警级别为Major（Trap Severity为Critical），MIB为HUAWEI-ENTITY-TRAP-MIB",
+      "影响：风扇异常影响设备散热，短时间不影响业务但急需解决；转速不一致可能导致噪声过大或散热异常",
+      "可能原因：风扇状态异常、风扇风向异常、风扇下发和获取的转速不一致",
+      "处理：风扇状态/风向异常则更换风扇；转速不一致可将风扇模块拔出后重新插入，查看告警是否清除",
+      "无法解决时收集告警信息、日志信息和配置信息并联系技术支持人员"
+    ],
+    "tags": ["S5735", "V600R025C00", "告警处理", "风扇"]
+  },
+  {
+    "id": 34,
+    "difficulty": "中",
+    "category": {"scope": "设备", "protocol_layer": "其他", "lifecycle": "其他"},
+    "scenario": "园区",
+    "device_type": "交换机",
+    "question": "华为S5735系列交换机（V600R025C00版本）运行生成树协议时输出日志MSTP/1/TOPOLOGY_CHANGE。请说明该日志的信息含义（含日志格式与示例）、可能原因与处理步骤。",
+    "answer": "日志格式与示例：日志信息为\"MSTP/1/TOPOLOGY_CHANGE: Bridge topology changed.\"，该日志属于MSTP日志模块，日志级别编号为1，无日志参数。信息含义：生成树协议计算出的拓扑发生改变。可能原因：原因1是网络拓扑发生变化，有新的链路加入；原因2是网络拓扑发生变化，有端口Up/Down；原因3是网络拓扑发生故障。处理步骤——原因1（有新链路加入）：1.请检查新加入的物理链路是否是需要的物理链路，如果是则执行步骤2，如果不是则执行步骤3；2.执行命令display stp查看各个端口是否符合协议计算结果，如果符合则告警消除，如果不符合则执行步骤3；3.请收集告警信息和配置信息，并联系技术支持工程师。原因2（有端口Up/Down）：1.请在接口视图下执行命令undo shutdown，重新打开端口，查看问题是否解决，如果未解决则执行步骤2；2.请收集告警信息和配置信息，并联系技术支持工程师。原因3（网络拓扑发生故障）：1.请正确修复网络拓扑中存在的故障，如果故障无法排除则执行步骤2；2.请收集告警信息和配置信息，并联系技术支持工程师。",
+    "scoring_points": [
+      "日志格式为\"MSTP/1/TOPOLOGY_CHANGE: Bridge topology changed.\"，属于MSTP日志，无日志参数",
+      "信息含义：生成树协议计算出的拓扑发生改变",
+      "可能原因：有新的链路加入、网络中端口Up/Down、网络拓扑发生故障",
+      "新链路加入时检查是否为需要的物理链路，并执行display stp查看各端口是否符合协议计算结果",
+      "端口Up/Down原因时在接口视图执行undo shutdown重新打开端口",
+      "无法解决时收集告警信息和配置信息，联系技术支持工程师"
+    ],
+    "tags": ["S5735", "V600R025C00", "日志", "STP"]
+  },
+  {
+    "id": 35,
+    "difficulty": "中",
+    "category": {"scope": "设备", "protocol_layer": "其他", "lifecycle": "其他"},
+    "scenario": "园区",
+    "device_type": "交换机",
+    "question": "华为S6730系列交换机（V600R025C00版本）作为SSH服务器输出日志SSH/3/hwSSHLoginFailed_active。请说明该日志的信息含义（含日志格式与示例、参数）、可能原因与处理步骤。",
+    "answer": "日志格式与示例：日志信息为\"SSH/3/hwSSHLoginFailed_active: Users failed to login ssh server too frequently. (failed times=[hwUserInfoLoginFailedTimes], statistic period=[hwUserInfoStatisticPeriod] minutes)\"，属于SSH日志模块，日志级别编号为3。日志参数：hwUserInfoLoginFailedTimes为用户登录失败次数；hwUserInfoStatisticPeriod为用户登录失败统计周期（单位分钟）。信息含义：用户登录SSH服务器失败太频繁。可能原因：在单位周期内，用户登录SSH服务器失败的次数达到设置的阈值。缺省情况下，在5分钟内发生30次或以上次数的登录失败，即产生告警；在5分钟内登录失败次数小于20，取消告警。处理步骤：1.了解上述缺省阈值机制；2.联系管理员获取正确的SSH用户名和密码重新登录设备，成功登录后，等到一个统计周期后告警取消；3.执行命令display current-configuration configuration ssh include-default | include login-failed，查询单位周期内用户登录SSH服务器失败次数的阈值；执行ssh server login-failed threshold-alarm命令指定周期（单位分钟）内登录失败次数小于告警恢复门限，等到一个统计周期后，告警取消。",
+    "scoring_points": [
+      "日志格式为\"SSH/3/hwSSHLoginFailed_active: Users failed to login ssh server too frequently. (failed times=[...], statistic period=[...] minutes)\"",
+      "日志参数：hwUserInfoLoginFailedTimes为用户登录失败次数，hwUserInfoStatisticPeriod为登录失败统计周期（分钟）",
+      "信息含义：用户登录SSH服务器失败太频繁",
+      "可能原因：单位周期内用户登录SSH服务器失败的次数达到设置的阈值；缺省5分钟内30次及以上登录失败产生告警，5分钟内失败次数小于20取消告警",
+      "处理：联系管理员获取正确的用户名密码重新登录，成功登录后等待一个统计周期告警取消",
+      "可执行display current-configuration configuration ssh include-default | include login-failed查询阈值，用ssh server login-failed threshold-alarm调整"
+    ],
+    "tags": ["S6730", "V600R025C00", "日志", "SSH"]
+  }
+]

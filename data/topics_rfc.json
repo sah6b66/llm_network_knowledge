@@ -1,0 +1,452 @@
+[
+  {
+    "id": 1,
+    "rfc": 8966,
+    "category": {"scope": "其他", "protocol_layer": "IP层", "lifecycle": "其他"},
+    "scenario": "其他",
+    "device_type": "其他",
+    "topic": "Babel 距离矢量路由协议：元组机制、更新报文与可达性维护",
+    "tags": ["RFC-2021", "RFC8966", "Babel", "路由协议"]
+  },
+  {
+    "id": 2,
+    "rfc": 8976,
+    "category": {"scope": "其他", "protocol_layer": "其他", "lifecycle": "其他"},
+    "scenario": "其他",
+    "device_type": "其他",
+    "topic": "DNS 区域消息摘要 ZONEMD：用途与摘要算法选择",
+    "tags": ["RFC-2021", "RFC8976", "DNS", "ZONEMD"]
+  },
+  {
+    "id": 3,
+    "rfc": 8981,
+    "category": {"scope": "其他", "protocol_layer": "IP层", "lifecycle": "其他"},
+    "scenario": "其他",
+    "device_type": "其他",
+    "topic": "IPv6 SLAAC 临时地址隐私扩展：生成规则与生命周期",
+    "tags": ["RFC-2021", "RFC8981", "IPv6", "隐私地址"]
+  },
+  {
+    "id": 4,
+    "rfc": 8985,
+    "category": {"scope": "其他", "protocol_layer": "传输层", "lifecycle": "其他"},
+    "scenario": "其他",
+    "device_type": "其他",
+    "topic": "TCP RACK-TLP 丢包检测算法：乱序确认推断与尾包探测",
+    "tags": ["RFC-2021", "RFC8985", "TCP", "丢包检测"]
+  },
+  {
+    "id": 5,
+    "rfc": 8986,
+    "category": {"scope": "其他", "protocol_layer": "IP层", "lifecycle": "其他"},
+    "scenario": "其他",
+    "device_type": "其他",
+    "topic": "SRv6 网络编程：SRH 报文结构与 SID 网络指令",
+    "tags": ["RFC-2021", "RFC8986", "SRv6", "Segment Routing"]
+  },
+  {
+    "id": 6,
+    "rfc": 8996,
+    "category": {"scope": "其他", "protocol_layer": "传输层", "lifecycle": "其他"},
+    "scenario": "其他",
+    "device_type": "其他",
+    "topic": "TLS 1.0/1.1 弃用：安全缺陷原因与迁移要求",
+    "tags": ["RFC-2021", "RFC8996", "TLS", "协议弃用"]
+  },
+  {
+    "id": 7,
+    "rfc": 9000,
+    "category": {"scope": "其他", "protocol_layer": "传输层", "lifecycle": "其他"},
+    "scenario": "其他",
+    "device_type": "其他",
+    "topic": "QUIC v1 传输协议：连接建立、流多路复用与加密集成",
+    "tags": ["RFC-2021", "RFC9000", "QUIC", "传输协议"]
+  },
+  {
+    "id": 8,
+    "rfc": 9012,
+    "category": {"scope": "其他", "protocol_layer": "IP层", "lifecycle": "其他"},
+    "scenario": "其他",
+    "device_type": "其他",
+    "topic": "BGP 隧道封装属性：TLV 结构与隧道参数通告",
+    "tags": ["RFC-2021", "RFC9012", "BGP", "隧道封装"]
+  },
+  {
+    "id": 9,
+    "rfc": 9024,
+    "category": {"scope": "其他", "protocol_layer": "其他", "lifecycle": "其他"},
+    "scenario": "其他",
+    "device_type": "其他",
+    "topic": "DetNet 数据平面：TSN over MPLS 的确定性承载封装",
+    "tags": ["RFC-2021", "RFC9024", "DetNet", "MPLS"]
+  },
+  {
+    "id": 10,
+    "rfc": 9136,
+    "category": {"scope": "其他", "protocol_layer": "其他", "lifecycle": "其他"},
+    "scenario": "其他",
+    "device_type": "其他",
+    "topic": "EVPN IP 前缀通告：IRB 与以太标签的配合",
+    "tags": ["RFC-2021", "RFC9136", "EVPN", "L3VPN"]
+  },
+  {
+    "id": 11,
+    "rfc": 9114,
+    "category": {"scope": "其他", "protocol_layer": "其他", "lifecycle": "其他"},
+    "scenario": "其他",
+    "device_type": "其他",
+    "topic": "HTTP/3：基于 QUIC 的 HTTP 语义与连接映射",
+    "tags": ["RFC-2022", "RFC9114", "HTTP/3", "QUIC"]
+  },
+  {
+    "id": 12,
+    "rfc": 9129,
+    "category": {"scope": "其他", "protocol_layer": "其他", "lifecycle": "其他"},
+    "scenario": "其他",
+    "device_type": "其他",
+    "topic": "OSPF YANG 数据模型：模块结构与关键配置节点",
+    "tags": ["RFC-2022", "RFC9129", "YANG", "OSPF"]
+  },
+  {
+    "id": 13,
+    "rfc": 9147,
+    "category": {"scope": "其他", "protocol_layer": "传输层", "lifecycle": "其他"},
+    "scenario": "其他",
+    "device_type": "其他",
+    "topic": "DTLS 1.3：防重放、握手丢包容忍与记录层保护",
+    "tags": ["RFC-2022", "RFC9147", "DTLS", "TLS 1.3"]
+  },
+  {
+    "id": 14,
+    "rfc": 9182,
+    "category": {"scope": "其他", "protocol_layer": "其他", "lifecycle": "其他"},
+    "scenario": "其他",
+    "device_type": "其他",
+    "topic": "L3VPN 网络 YANG 模型：网络级与业务级分层",
+    "tags": ["RFC-2022", "RFC9182", "YANG", "L3VPN"]
+  },
+  {
+    "id": 15,
+    "rfc": 9250,
+    "category": {"scope": "其他", "protocol_layer": "其他", "lifecycle": "其他"},
+    "scenario": "其他",
+    "device_type": "其他",
+    "topic": "DNS over QUIC（DoQ）：会话建立与流使用规则",
+    "tags": ["RFC-2022", "RFC9250", "DNS", "QUIC"]
+  },
+  {
+    "id": 16,
+    "rfc": 9252,
+    "category": {"scope": "其他", "protocol_layer": "IP层", "lifecycle": "其他"},
+    "scenario": "其他",
+    "device_type": "其他",
+    "topic": "EVPN over SRv6：业务 SID 与传送 SID 的组合",
+    "tags": ["RFC-2022", "RFC9252", "EVPN", "SRv6"]
+  },
+  {
+    "id": 17,
+    "rfc": 9256,
+    "category": {"scope": "其他", "protocol_layer": "IP层", "lifecycle": "其他"},
+    "scenario": "其他",
+    "device_type": "其他",
+    "topic": "SR Policy 架构：候选路径、偏好值与段列表",
+    "tags": ["RFC-2022", "RFC9256", "SR Policy", "流量工程"]
+  },
+  {
+    "id": 18,
+    "rfc": 9262,
+    "category": {"scope": "其他", "protocol_layer": "IP层", "lifecycle": "其他"},
+    "scenario": "其他",
+    "device_type": "其他",
+    "topic": "BIER-TE：邻接与集位点的显式树编程",
+    "tags": ["RFC-2022", "RFC9262", "BIER", "组播"]
+  },
+  {
+    "id": 19,
+    "rfc": 9293,
+    "category": {"scope": "其他", "protocol_layer": "传输层", "lifecycle": "其他"},
+    "scenario": "其他",
+    "device_type": "其他",
+    "topic": "TCP（互联网标准）：报文格式、状态机与拥塞控制基线",
+    "tags": ["RFC-2022", "RFC9293", "TCP", "互联网标准"]
+  },
+  {
+    "id": 20,
+    "rfc": 9298,
+    "category": {"scope": "其他", "protocol_layer": "其他", "lifecycle": "其他"},
+    "scenario": "其他",
+    "device_type": "其他",
+    "topic": "用 HTTP 代理 UDP：CONNECT-UDP 与 UDP 数据流封装",
+    "tags": ["RFC-2022", "RFC9298", "MASQUE", "代理"]
+  },
+  {
+    "id": 21,
+    "rfc": 9352,
+    "category": {"scope": "其他", "protocol_layer": "IP层", "lifecycle": "其他"},
+    "scenario": "其他",
+    "device_type": "其他",
+    "topic": "IS-IS SRv6 扩展：SRv6 Capabilities 与 SID 通告",
+    "tags": ["RFC-2023", "RFC9352", "IS-IS", "SRv6"]
+  },
+  {
+    "id": 22,
+    "rfc": 9364,
+    "category": {"scope": "其他", "protocol_layer": "其他", "lifecycle": "其他"},
+    "scenario": "其他",
+    "device_type": "其他",
+    "topic": "DNSSEC：区域签名、密钥滚动与信任链验证",
+    "tags": ["RFC-2023", "RFC9364", "DNSSEC", "DNS"]
+  },
+  {
+    "id": 23,
+    "rfc": 9369,
+    "category": {"scope": "其他", "protocol_layer": "传输层", "lifecycle": "其他"},
+    "scenario": "其他",
+    "device_type": "其他",
+    "topic": "QUIC 版本 2：版本协商与不变量属性",
+    "tags": ["RFC-2023", "RFC9369", "QUIC", "版本协商"]
+  },
+  {
+    "id": 24,
+    "rfc": 9406,
+    "category": {"scope": "其他", "protocol_layer": "传输层", "lifecycle": "其他"},
+    "scenario": "其他",
+    "device_type": "其他",
+    "topic": "HyStart++：慢启动退出阈值的自适应估算",
+    "tags": ["RFC-2023", "RFC9406", "TCP", "拥塞控制"]
+  },
+  {
+    "id": 25,
+    "rfc": 9418,
+    "category": {"scope": "其他", "protocol_layer": "其他", "lifecycle": "其他"},
+    "scenario": "其他",
+    "device_type": "其他",
+    "topic": "业务保障 YANG 模型：意图、推演与症状三元结构",
+    "tags": ["RFC-2023", "RFC9418", "YANG", "网络保障"]
+  },
+  {
+    "id": 26,
+    "rfc": 9460,
+    "category": {"scope": "其他", "protocol_layer": "其他", "lifecycle": "其他"},
+    "scenario": "其他",
+    "device_type": "其他",
+    "topic": "SVCB/HTTPS 记录：服务端端点与参数通告",
+    "tags": ["RFC-2023", "RFC9460", "DNS", "SVCB"]
+  },
+  {
+    "id": 27,
+    "rfc": 9486,
+    "category": {"scope": "其他", "protocol_layer": "IP层", "lifecycle": "其他"},
+    "scenario": "其他",
+    "device_type": "其他",
+    "topic": "IPv6 逐跳 IOAM 选项：选项类型与命名空间",
+    "tags": ["RFC-2023", "RFC9486", "IPv6", "IOAM"]
+  },
+  {
+    "id": 28,
+    "rfc": 9494,
+    "category": {"scope": "其他", "protocol_layer": "IP层", "lifecycle": "其他"},
+    "scenario": "其他",
+    "device_type": "其他",
+    "topic": "BGP 长期优雅重启（LLGR）：GR 会话与保留路由通告",
+    "tags": ["RFC-2023", "RFC9494", "BGP", "优雅重启"]
+  },
+  {
+    "id": 29,
+    "rfc": 9525,
+    "category": {"scope": "其他", "protocol_layer": "传输层", "lifecycle": "其他"},
+    "scenario": "其他",
+    "device_type": "其他",
+    "topic": "TLS 服务身份：DNS-ID/SRV-ID/URI-ID 与参考标识匹配",
+    "tags": ["RFC-2023", "RFC9525", "TLS", "证书验证"]
+  },
+  {
+    "id": 30,
+    "rfc": 9552,
+    "category": {"scope": "其他", "protocol_layer": "IP层", "lifecycle": "其他"},
+    "scenario": "其他",
+    "device_type": "其他",
+    "topic": "BGP-LS：链路状态与 TE 信息的 BGP 分发机制",
+    "tags": ["RFC-2023", "RFC9552", "BGP-LS", "链路状态"]
+  },
+  {
+    "id": 31,
+    "rfc": 9499,
+    "category": {"scope": "其他", "protocol_layer": "其他", "lifecycle": "其他"},
+    "scenario": "其他",
+    "device_type": "其他",
+    "topic": "DNS 术语：权威/递归/转发与缓存相关定义体系",
+    "tags": ["RFC-2024", "RFC9499", "DNS", "术语"]
+  },
+  {
+    "id": 32,
+    "rfc": 9545,
+    "category": {"scope": "其他", "protocol_layer": "IP层", "lifecycle": "其他"},
+    "scenario": "其他",
+    "device_type": "其他",
+    "topic": "SR-MPLS 路径段标识 Path Segment ID 的用途与信令",
+    "tags": ["RFC-2024", "RFC9545", "SR-MPLS", "Path Segment"]
+  },
+  {
+    "id": 33,
+    "rfc": 9568,
+    "category": {"scope": "其他", "protocol_layer": "IP层", "lifecycle": "其他"},
+    "scenario": "其他",
+    "device_type": "其他",
+    "topic": "VRRPv3：虚拟路由器、主备选举与通告机制",
+    "tags": ["RFC-2024", "RFC9568", "VRRP", "网关冗余"]
+  },
+  {
+    "id": 34,
+    "rfc": 9572,
+    "category": {"scope": "其他", "protocol_layer": "其他", "lifecycle": "其他"},
+    "scenario": "其他",
+    "device_type": "其他",
+    "topic": "EVPN BUM 处理更新：PMSI 与以太网标签变化",
+    "tags": ["RFC-2024", "RFC9572", "EVPN", "BUM"]
+  },
+  {
+    "id": 35,
+    "rfc": 9599,
+    "category": {"scope": "其他", "protocol_layer": "传输层", "lifecycle": "其他"},
+    "scenario": "其他",
+    "device_type": "其他",
+    "topic": "封装 IP 的协议传播 ECN 拥塞通知的指南",
+    "tags": ["RFC-2024", "RFC9599", "ECN", "拥塞控制"]
+  },
+  {
+    "id": 36,
+    "rfc": 9625,
+    "category": {"scope": "其他", "protocol_layer": "其他", "lifecycle": "其他"},
+    "scenario": "其他",
+    "device_type": "其他",
+    "topic": "EVPN OISM：优化的 IRB 子网间组播转发",
+    "tags": ["RFC-2024", "RFC9625", "EVPN", "组播"]
+  },
+  {
+    "id": 37,
+    "rfc": 9648,
+    "category": {"scope": "其他", "protocol_layer": "其他", "lifecycle": "其他"},
+    "scenario": "其他",
+    "device_type": "其他",
+    "topic": "TCP YANG 数据模型：连接分组与全局配置",
+    "tags": ["RFC-2024", "RFC9648", "YANG", "TCP"]
+  },
+  {
+    "id": 38,
+    "rfc": 9673,
+    "category": {"scope": "其他", "protocol_layer": "IP层", "lifecycle": "其他"},
+    "scenario": "其他",
+    "device_type": "其他",
+    "topic": "IPv6 逐跳选项处理：节点行为与限制",
+    "tags": ["RFC-2024", "RFC9673", "IPv6", "Hop-by-Hop"]
+  },
+  {
+    "id": 39,
+    "rfc": 9685,
+    "category": {"scope": "其他", "protocol_layer": "IP层", "lifecycle": "其他"},
+    "scenario": "其他",
+    "device_type": "其他",
+    "topic": "ND 组播/任播地址监听订阅（MLD 侦听要求）",
+    "tags": ["RFC-2024", "RFC9685", "IPv6", "邻居发现"]
+  },
+  {
+    "id": 40,
+    "rfc": 9687,
+    "category": {"scope": "其他", "protocol_layer": "IP层", "lifecycle": "其他"},
+    "scenario": "其他",
+    "device_type": "其他",
+    "topic": "BGP-4 Send Hold Timer：卡死会话的检测与处置",
+    "tags": ["RFC-2024", "RFC9687", "BGP", "会话安全"]
+  },
+  {
+    "id": 41,
+    "rfc": 9692,
+    "category": {"scope": "其他", "protocol_layer": "IP层", "lifecycle": "其他"},
+    "scenario": "其他",
+    "device_type": "其他",
+    "topic": "RIFT：胖树路由——北向/南向泛洪与可达性分离",
+    "tags": ["RFC-2025", "RFC9692", "RIFT", "数据中心"]
+  },
+  {
+    "id": 42,
+    "rfc": 9704,
+    "category": {"scope": "其他", "protocol_layer": "其他", "lifecycle": "其他"},
+    "scenario": "其他",
+    "device_type": "其他",
+    "topic": "验证式拆分水平 DNS：本地权威的建立与失效探测",
+    "tags": ["RFC-2025", "RFC9704", "DNS", "本地解析"]
+  },
+  {
+    "id": 43,
+    "rfc": 9743,
+    "category": {"scope": "其他", "protocol_layer": "传输层", "lifecycle": "其他"},
+    "scenario": "其他",
+    "device_type": "其他",
+    "topic": "新拥塞控制算法的规范要求：评估维度与文档要素",
+    "tags": ["RFC-2025", "RFC9743", "拥塞控制", "BCP"]
+  },
+  {
+    "id": 44,
+    "rfc": 9762,
+    "category": {"scope": "其他", "protocol_layer": "IP层", "lifecycle": "其他"},
+    "scenario": "其他",
+    "device_type": "其他",
+    "topic": "RA 通告 DHCPv6 前缀授权可用性（P flag）",
+    "tags": ["RFC-2025", "RFC9762", "IPv6", "DHCPv6 PD"]
+  },
+  {
+    "id": 45,
+    "rfc": 9777,
+    "category": {"scope": "其他", "protocol_layer": "IP层", "lifecycle": "其他"},
+    "scenario": "其他",
+    "device_type": "其他",
+    "topic": "MLDv2（互联网标准）：查询/报告机制与过滤模式",
+    "tags": ["RFC-2025", "RFC9777", "MLD", "组播"]
+  },
+  {
+    "id": 46,
+    "rfc": 9800,
+    "category": {"scope": "其他", "protocol_layer": "IP层", "lifecycle": "其他"},
+    "scenario": "其他",
+    "device_type": "其他",
+    "topic": "压缩 SRv6 段列表（CSID）：G-SID 与绑定 SID 压缩",
+    "tags": ["RFC-2025", "RFC9800", "SRv6", "CSID"]
+  },
+  {
+    "id": 47,
+    "rfc": 9813,
+    "category": {"scope": "其他", "protocol_layer": "传输层", "lifecycle": "其他"},
+    "scenario": "其他",
+    "device_type": "其他",
+    "topic": "TLS-PSK 用于 RADIUS/AAA 的安全考量",
+    "tags": ["RFC-2025", "RFC9813", "TLS-PSK", "RADIUS"]
+  },
+  {
+    "id": 48,
+    "rfc": 9815,
+    "category": {"scope": "其他", "protocol_layer": "IP层", "lifecycle": "其他"},
+    "scenario": "其他",
+    "device_type": "其他",
+    "topic": "BGP-LS SPF：用 BGP 携带链路状态做 SPF 计算",
+    "tags": ["RFC-2025", "RFC9815", "BGP-LS", "SPF"]
+  },
+  {
+    "id": 49,
+    "rfc": 9855,
+    "category": {"scope": "其他", "protocol_layer": "IP层", "lifecycle": "其他"},
+    "scenario": "其他",
+    "device_type": "其他",
+    "topic": "TI-LFA 拓扑无关快速重路由：P 空间/Q 空间与后继节点",
+    "tags": ["RFC-2025", "RFC9855", "TI-LFA", "FRR"]
+  },
+  {
+    "id": 50,
+    "rfc": 9868,
+    "category": {"scope": "其他", "protocol_layer": "传输层", "lifecycle": "其他"},
+    "scenario": "其他",
+    "device_type": "其他",
+    "topic": "UDP Options：UDP 载荷后的选项 TLV 扩展",
+    "tags": ["RFC-2025", "RFC9868", "UDP", "传输选项"]
+  }
+]

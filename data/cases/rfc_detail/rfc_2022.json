@@ -1,0 +1,190 @@
+[
+  {
+    "id": 11,
+    "difficulty": "中",
+    "category": {"scope": "其他", "protocol_layer": "其他", "lifecycle": "其他"},
+    "scenario": "其他",
+    "device_type": "其他",
+    "question": "请详细说明 HTTP/3(RFC 9114)中单向流的类型与用途、控制流上 SETTINGS 帧的规则、主要帧类型的编号,以及服务器推送(push ID)的控制机制与对端流控要求。",
+    "answer": "HTTP/3 定义两类单向流类型:控制流(0x00)与推送流(0x01),QPACK 另定义编码器/解码器两个附加流类型。每端必须在连接开始建立单个控制流,并以 SETTINGS 帧作为该流的首帧;首帧不是 SETTINGS 属于 H3_MISSING_SETTINGS 连接错误,控制流不得关闭。SETTINGS_MAX_FIELD_SECTION_SIZE(0x06)是唯一由 HTTP/3 定义的设置项,默认 unlimited。帧格式为 Type(i)+Length(i)+Frame Payload,其中 DATA=0x00、HEADERS=0x01、CANCEL_PUSH=0x03、SETTINGS=0x04、PUSH_PROMISE=0x05、GOAWAY=0x07、MAX_PUSH_ID=0x0d。服务器推送以 push ID 标识,push ID 空间从 0 开始,连接建立时最大 push ID 未设置,服务器在客户端发送 MAX_PUSH_ID 帧之前不能推送。传输参数必须允许对端至少创建 3 个单向流,并建议为每个单向流提供至少 1024 字节流控信用;服务器还应允许至少 100 个并发请求流。",
+    "scoring_points": [
+      "单向流类型:控制流 0x00、推送流 0x01,QPACK 另定义两个流类型(编码器/解码器流)",
+      "每端必须建立单个控制流且 SETTINGS 必须是其首帧;首帧非 SETTINGS 为 H3_MISSING_SETTINGS 错误,控制流不得关闭",
+      "SETTINGS_MAX_FIELD_SECTION_SIZE(0x06)是唯一 HTTP/3 定义的设置项,默认值 unlimited",
+      "帧格式为 Type(i)+Length(i)+Frame Payload;DATA=0x00、HEADERS=0x01、SETTINGS=0x04、GOAWAY=0x07、MAX_PUSH_ID=0x0d(或 CANCEL_PUSH=0x03、PUSH_PROMISE=0x05)",
+      "服务器推送以 push ID 标识,push ID 从 0 开始;客户端用 MAX_PUSH_ID 设定上限,未发送前服务器无法推送",
+      "传输参数 MUST 允许对端至少创建 3 个单向流,并 SHOULD 为每个单向流提供至少 1024 字节流控信用",
+      "服务器 SHOULD 允许至少 100 个并发请求流"
+    ],
+    "tags": ["RFC-2022", "RFC9114", "HTTP/3", "QUIC"]
+  },
+  {
+    "id": 12,
+    "difficulty": "中",
+    "category": {"scope": "其他", "protocol_layer": "其他", "lifecycle": "其他"},
+    "scenario": "其他",
+    "device_type": "其他",
+    "question": "请说明 ietf-ospf 模型(RFC 9129)中 area-type 的 identity 继承关系、ietf-spf-delay 容器的定时器配置项,以及 graceful-restart 相关配置叶子,并列举至少 5 个模型定义的可选 feature。",
+    "answer": "area-type 是区域类型的基础 identity:normal-area(普通区域)直接以 area-type 为 base;stub-nssa-area 也以 area-type 为 base,表示 Stub 区域或 NSSA,并由 stub-area(Stub 区域)与 nssa-area(NSSA 区域)两个 identity 继承。ietf-spf-delay 容器(需 ietf-spf-delay feature)包含 initial-delay、short-delay、long-delay、hold-down、time-to-learn 五个定时器配置,以及 current-state 等运行状态。graceful-restart 容器包含 enabled、helper-enabled、restart-interval、helper-strict-lsa-checking 等叶子。模型定义的可选 feature 包括 multi-topology、multi-area-adj、explicit-router-id、demand-circuit、mtu-ignore、lls、prefix-suppression、ttl-security、nsr、graceful-restart、auto-cost、max-ecmp、max-lsa、te-rid、ldp-igp-sync、ospfv2/ospfv3-authentication-trailer、ospfv3-authentication-ipsec、fast-reroute、node-flag、node-tag、lfa、remote-lfa、stub-router、pe-ce-protocol、ietf-spf-delay、bfd、hybrid-interface 等。",
+    "scoring_points": [
+      "area-type 为基础 identity;normal-area 与 stub-nssa-area 均以 area-type 为 base",
+      "stub-area 与 nssa-area 以 stub-nssa-area 为 base,分别表示 Stub 区域与 NSSA 区域",
+      "ietf-spf-delay 定时器包含 initial-delay、short-delay、long-delay、hold-down、time-to-learn 五项",
+      "graceful-restart 配置包含 enabled、helper-enabled、restart-interval、helper-strict-lsa-checking",
+      "正确列举至少 5 个可选 feature(如 multi-topology、nsr、max-ecmp、max-lsa、lfa、remote-lfa、bfd、ttl-security、stub-router、pe-ce-protocol、ietf-spf-delay 等)"
+    ],
+    "tags": ["RFC-2022", "RFC9129", "YANG", "OSPF"]
+  },
+  {
+    "id": 13,
+    "difficulty": "中",
+    "category": {"scope": "其他", "protocol_layer": "传输层", "lifecycle": "其他"},
+    "scenario": "其他",
+    "device_type": "其他",
+    "question": "请详细说明 DTLS 1.3 的防重放机制与记录层保护:滑动窗口如何工作、epoch 与序列号如何编码维护、加密记录的序列号如何被加密,以及重传的密钥使用规则。",
+    "answer": "防重放采用借自 RFC 4303(IPsec)的滑动窗口技术:因为每次更换密钥会重置序列号空间,每个 epoch 需维护独立窗口;窗口右边界代表该 epoch 内已成功解保护的最高序列号,低于左边界的记录被拒绝,落在窗口内的记录用位掩码(bit mask)检查是否已接收;窗口在记录被成功解保护之前不得更新。序列号在每个 epoch 内独立维护、初始为 0;DTLSCiphertext 中线上 epoch 字段为连接 epoch(8 字节计数器,每次 KeyUpdate 递增)的低 2 字节,序列号为 64 位序号的低 48 位;epoch 不得回绕,序列号回绕前必须重密钥或放弃关联。当记录被加密时其序列号也被加密:sn_key 由 HKDF-Expand-Label(Secret, \"sn\", \"\", key_length) 派生,生成掩码与线上序列号异或。AEAD 基于 AES 时,掩码为对密文前 16 字节做 AES-ECB 的结果;基于 ChaCha20 时,以密文前 4 字节为 block counter、后 12 字节为 nonce 调用 ChaCha20 块函数。丢失消息的重传必须使用与原始传输相同的 epoch 和密钥材料。",
+    "scoring_points": [
+      "防重放使用 RFC 4303(IPsec)式滑动窗口,且因每次 rekey 序列号空间重置,每个 epoch 维护独立窗口",
+      "窗口右边界为已成功解保护(验证)的最高序列号;窗口内用位掩码判重;解保护成功前不得更新窗口",
+      "序列号按 epoch 独立维护且初始为 0;epoch 不得回绕(需新建关联)",
+      "线上 epoch 为 8 字节连接 epoch 的低 2 字节,序列号取 64 位值的低 48 位",
+      "加密记录的序列号也被加密:sn_key 由 HKDF-Expand-Label(Secret, \"sn\", \"\", key_length) 派生,掩码与序列号异或",
+      "AES 类 AEAD 的掩码用 AES-ECB 计算密文前 16 字节;ChaCha20 类以密文前 4 字节为 counter、后 12 字节为 nonce",
+      "丢失消息的重传必须使用与原发送相同的 epoch 与密钥材料"
+    ],
+    "tags": ["RFC-2022", "RFC9147", "DTLS", "TLS 1.3"]
+  },
+  {
+    "id": 14,
+    "difficulty": "中",
+    "category": {"scope": "其他", "protocol_layer": "其他", "lifecycle": "其他"},
+    "scenario": "其他",
+    "device_type": "其他",
+    "question": "请描述 ietf-l3vpn-ntw 模块(RFC 9182)的整体树结构层级、vpn-profiles 容器包含的 profile 标识符类别,以及 vpn-service 的关键属性与取值。",
+    "answer": "顶层 l3vpn-ntw 容器包含 vpn-profiles 与 vpn-services 两个主容器。vpn-services 下的 vpn-service 以 vpn-id 为键(该标识仅在本地如网络控制器有意义),其下依次为 vpn-nodes(vpn-node 以 vpn-node-id 为键)和 vpn-network-accesses(vpn-network-access 以 id 为键)。vpn-profiles 的 valid-provider-identifiers 下定义六类 profile 标识:external-connectivity-identifier(外部连通性)、encryption-profile-identifier(加密)、qos-profile-identifier(QoS)、bfd-profile-identifier(BFD)、forwarding-profile-identifier(转发,如 ACL)、routing-profile-identifier(路由策略),其确切定义由提供商本地决定。vpn-service 的关键属性包括 vpn-name、customer-name、parent-service-id(关联触发创建该业务的父业务如 L3SM 或网络切片)、vpn-type(典型取值 BGP/MPLS L3VPN)、vpn-service-topology(取值 hub-spoke、any-to-any 或 custom)、admin/oper 状态(status)、underlay-transport 与 external-connectivity 等。",
+    "scoring_points": [
+      "l3vpn-ntw 下两个主容器:vpn-profiles 与 vpn-services",
+      "层级:vpn-service* [vpn-id] → vpn-nodes/vpn-node* [vpn-node-id] → vpn-network-accesses/vpn-network-access* [id]",
+      "vpn-profiles 含六类 profile 标识符:external-connectivity、encryption、qos、bfd、forwarding、routing",
+      "vpn-service 关键属性:vpn-name、customer-name、parent-service-id、vpn-type、status(admin/oper)",
+      "vpn-service-topology 取值 hub-spoke、any-to-any、custom;vpn-type 通常为 BGP/MPLS L3VPN",
+      "vpn-id 仅在本地(如网络控制器)有意义"
+    ],
+    "tags": ["RFC-2022", "RFC9182", "YANG", "L3VPN"]
+  },
+  {
+    "id": 15,
+    "difficulty": "中",
+    "category": {"scope": "其他", "protocol_layer": "其他", "lifecycle": "其他"},
+    "scenario": "其他",
+    "device_type": "其他",
+    "question": "请详细说明 DoQ(RFC 9250)的流映射与使用规则:查询与响应如何映射到 QUIC 流、DNS 消息如何封装、DNS Message ID 如何设置,以及错误码与空闲超时的处理。",
+    "answer": "客户端必须为每个查询选择下一个可用的客户端发起双向流,服务器在同一流上返回该查询的全部响应(区域传送可有多条响应),即单个 DNS 事务占用一条双向流:客户端第一个查询使用流 0,第二个使用流 4,依此类推。所有 DNS 消息(查询与响应)必须编码为 2 字节长度字段后跟消息内容,与 DNS over TCP 的编码方式完全一致。客户端发送查询后必须通过 STREAM FIN 表明该流不再发送数据;服务器在最后一个响应后同样必须设置 STREAM FIN。由于流映射已能无歧义地关联查询与响应,DNS Message ID 必须置为 0。端口方面:支持 DoQ 的服务器默认必须监听 UDP 端口 853,且 DoQ 不得使用 UDP 端口 53。定义的错误码包括 DOQ_NO_ERROR(0x0)、DOQ_INTERNAL_ERROR(0x1)、DOQ_PROTOCOL_ERROR(0x2)、DOQ_REQUEST_CANCELLED(0x3)、DOQ_EXCESSIVE_LOAD(0x4)、DOQ_UNSPECIFIED_ERROR(0x5)。连接管理上建议协商空闲超时,其有效值为两端通告值的最小值,超时关闭无需任何报文交换。",
+    "scoring_points": [
+      "每个查询使用一条独立的客户端发起双向流,响应用同一流;首个查询在流 0、第二个在流 4",
+      "DNS 消息编码为 2-octet 长度字段+消息内容,与 DNS over TCP 编码一致",
+      "客户端在查询后必须设置 STREAM FIN;服务器在最后响应后必须设置 STREAM FIN",
+      "DNS Message ID 必须置为 0(流映射完成查询与响应的关联)",
+      "默认监听 UDP 端口 853;DoQ 不得使用 UDP 端口 53",
+      "错误码:DOQ_NO_ERROR 0x0、DOQ_INTERNAL_ERROR 0x1、DOQ_PROTOCOL_ERROR 0x2、DOQ_REQUEST_CANCELLED 0x3、DOQ_EXCESSIVE_LOAD 0x4、DOQ_UNSPECIFIED_ERROR 0x5",
+      "建议协商空闲超时,有效值取两端通告值的最小值,超时关闭无报文交换"
+    ],
+    "tags": ["RFC-2022", "RFC9250", "DNS", "QUIC"]
+  },
+  {
+    "id": 16,
+    "difficulty": "中",
+    "category": {"scope": "其他", "protocol_layer": "IP层", "lifecycle": "其他"},
+    "scenario": "其他",
+    "device_type": "其他",
+    "question": "请详细说明 RFC 9252 中 SRv6 Services TLV 的两类 TLV(TLV 类型值、各自适用的 SRv6 Endpoint Behavior)以及 Transposition Scheme 的编码方式、SRv6 SID Structure Sub-Sub-TLV 的作用与相关约束。",
+    "answer": "BGP Prefix-SID 属性新增两类 SRv6 Service TLV:SRv6 L3 Service TLV(TLV Type=5)编码 L3 业务的 Service SID,可携带的 SRv6 Endpoint Behavior 包括 End.DX4、End.DT4、End.DX6、End.DT6、End.DT46;SRv6 L2 Service TLV(TLV Type=6)编码 EVPN L2 业务的 Service SID,可携带 End.DX2、End.DX2V、End.DT2U、End.DT2M。TLV 格式为:Type(1 字节)+Length(2 字节)+RESERVED(1 字节)+SRv6 Service Sub-TLVs。为实现高效打包可采用 Transposition Scheme:TLV 中只编码 SID 的公共部分(如 Locator),可变部分(Function 或 Argument)移入该业务编码中既有的 MPLS Label 字段。例如 EVPN Ethernet A-D per EVI 路由把 Function 部分放入 NLRI 的 24 位 MPLS Label 字段,其 Service SID Behavior 应为 End.DX2、End.DX2V 或 End.DT2U;Ethernet A-D per ES 路由把 Argument 部分放入 ESI Label 扩展团体属性的 24 位 ESI Label 字段,其 Behavior 应为 End.DT2M。SRv6 SID Structure Sub-Sub-TLV 说明 Locator Block Length(LBL)、Locator Node Length(LNL)、Function Length(FL)、Argument Length(AL)及 Transposition Offset/Length(被移位比特的位置与数量);约束为 LBL+LNL+FL+AL 必须 ≤128 且大于 Transposition Offset 与 Transposition Length 之和。",
+    "scoring_points": [
+      "SRv6 L3 Service TLV 的 Type=5,可编码 End.DX4/End.DT4/End.DX6/End.DT6/End.DT46 等 L3 业务 Behavior",
+      "SRv6 L2 Service TLV 的 Type=6,可编码 End.DX2/End.DX2V/End.DT2U/End.DT2M 等 EVPN L2 业务 Behavior",
+      "TLV 格式:Type 1 字节、Length 2 字节、RESERVED 1 字节,其后为 SRv6 Service Sub-TLVs",
+      "Transposition Scheme:TLV 内只编码 SID 公共部分(如 Locator),可变部分(Function/Argument)移入既有 MPLS Label 字段",
+      "A-D per EVI 路由将 Function 部分放入 24 位 MPLS Label 字段;A-D per ES 路由将 Argument 部分放入 ESI Label 字段(End.DT2M/Arg.FE2)",
+      "SRv6 SID Structure Sub-Sub-TLV 给出 LBL/LNL/FL/AL 长度及 Transposition Offset/Length",
+      "约束:LBL+LNL+FL+AL ≤ 128,且大于 Transposition Offset 与 Transposition Length 之和"
+    ],
+    "tags": ["RFC-2022", "RFC9252", "EVPN", "SRv6"]
+  },
+  {
+    "id": 17,
+    "difficulty": "中",
+    "category": {"scope": "其他", "protocol_layer": "IP层", "lifecycle": "其他"},
+    "scenario": "其他",
+    "device_type": "其他",
+    "question": "请详细说明 RFC 9256 中候选路径的标识三元组及各字段取值(含 Protocol-Origin 默认值、Originator 构成)、Preference 语义,以及活跃候选路径(Active Candidate Path)的选择与平局决胜规则。",
+    "answer": "候选路径在单个 SR Policy 语境中由三元组 <Protocol-Origin, Originator, Discriminator> 唯一标识,不被段列表标识(段列表只是其属性)。Protocol-Origin 是 8 位值,表示候选路径的来源,推荐默认值:PCEP=10、BGP SR Policy=20、经配置=30。Originator 为 160 位数值,由 <ASN(4 字节)+node-address> 拼接构成,标识提供该候选路径的节点。Discriminator 用于最终决胜(如 BGP 提供的区分符,PCEP 场景默认 0)。Preference 为 32 位值,数值越大优先级越高,默认 100。活跃路径选择:候选路径在被选中时必须有效(valid)且是所有有效候选路径中 Preference 最高者;当多个有效候选路径 Preference 相同时,按以下顺序平局决胜直至唯一:(1)选 Protocol-Origin 值更高者;(2)若经配置指定,偏好已安装的现有路径;(3)选 Originator 数值更低者;(4)选 Discriminator 数值更高者。有效性的推荐准则是其至少一个成员段列表有效;SR Policy 在拥有至少一个有效候选路径时有效,转发仅使用活跃候选路径(快速重路由等场景除外)。",
+    "scoring_points": [
+      "候选路径由 <Protocol-Origin, Originator, Discriminator> 三元组唯一标识;段列表不构成标识",
+      "Protocol-Origin 为 8 位值,推荐默认:PCEP=10、BGP SR Policy=20、Configuration=30",
+      "Originator 为 160 位数值,由 4 字节 ASN 与 node-address 拼接构成",
+      "Preference 为 32 位值,越高越优先,默认值为 100",
+      "选择规则:候选路径有效且 Preference 最高者被选为活跃路径",
+      "平局决胜顺序:更高 Protocol-Origin → (若配置)偏好已安装现有路径 → 更低 Originator → 更高 Discriminator",
+      "有效性推荐准则为至少一个成员段列表有效;SR Policy 至少有一个有效候选路径才有效,转发仅用活跃路径"
+    ],
+    "tags": ["RFC-2022", "RFC9256", "SR Policy", "流量工程"]
+  },
+  {
+    "id": 18,
+    "difficulty": "中",
+    "category": {"scope": "其他", "protocol_layer": "IP层", "lifecycle": "其他"},
+    "scenario": "其他",
+    "device_type": "其他",
+    "question": "请详细说明 BIER-TE(RFC 9262)定义的邻接(adjacency)类型及其转发行为、转发时位的清除规则(含 DNC 标志),以及 BIFT-index 的计算方式与 BIER-TE BIFT 同 BIER BIFT 的差异。",
+    "answer": "BIER-TE 定义四类邻接:(1) forward_connected(interface, neighbor{,DNC})——将 BIER 包以 L2 单播发给直连邻居,不依赖路由底层;(2) forward_routed({VRF,} l3-neighbor)——封装副本后交由路由底层的转发面送到可路由的目的地址;(3) local_decap({VRF})——解封装 BIER-TE 包并把载荷交给相应 NextProto(IP/IPv6、Ethernet 等)处理,使该 BFR 对匹配报文成为 BFER;(4) ECMP((adjacency1,...adjacencyN){,seed})——以实现相关的哈希函数从邻接列表中选出一个转发,封装含熵字段时应被尊重,seed 用于避免连续 ECMP 跳的极化。转发规则:BFR 对 BitString 中置位且其本地 BIFT 中有邻接的每个 BP 制作副本;发送任何副本之前,BFR 清除其拥有邻接的所有 BP,以防误含环路时包循环;若 forward_connected 邻接设置 DoNotClear(DNC) 标志,则该位在该副本中会被重新置位。BIFT-index = SI * BSL + BP - 1(BP 从 1 到 BSL 编号);与 BIER 不同,BIER 中 BIFT-index 寻址一个 BFER(BFR-id=BIFT-index+1),而 BIER-TE 的 SI:BP 表示一条或多条邻接且只填充在邻接上游 BFR 的 BIFT 中,其余 BFR 上为空。",
+    "scoring_points": [
+      "forward_connected():以 L2 单播发给直连邻居,不依赖路由底层;可携带 DNC 标志",
+      "forward_routed():封装后经路由底层转发到可路由目的地址(可指定 VRF)",
+      "local_decap():解封装并将载荷交给 NextProto 处理,使 BFR 成为 BFER",
+      "ECMP():从邻接列表中哈希选择一个转发,应尊重熵字段,可带 seed 参数",
+      "对 BitString 中置位且本地 BIFT 有邻接的每个 BP 制作副本;发送前清除本地有邻接的全部位以防环路",
+      "DNC(DoNotClear)标志:该 BP 在发往该邻接的副本中被重新置位",
+      "BIFT-index = SI * BSL + BP - 1,BP 编号从 1 开始",
+      "BIER-TE 的 SI:BP 表示邻接且仅填充于上游 BFR;BIER 中 BIFT-index 对应 BFER(BFR-id=BIFT-index+1)"
+    ],
+    "tags": ["RFC-2022", "RFC9262", "BIER", "组播"]
+  },
+  {
+    "id": 19,
+    "difficulty": "中",
+    "category": {"scope": "其他", "protocol_layer": "传输层", "lifecycle": "其他"},
+    "scenario": "其他",
+    "device_type": "其他",
+    "question": "请给出 TCP(RFC 9293)报文头各字段的名称、位宽与含义(含各控制位的作用),并说明 MSS 选项的格式与使用限制,以及连接状态机包含的状态集合。",
+    "answer": "TCP 头字段:Source Port 与 Destination Port 各 16 位(源/目的端口);Sequence Number 32 位,为本报文段第一个数据字节的序号,SYN 置位时为 ISN 且第一个数据字节为 ISN+1;Acknowledgment Number 32 位,ACK 置位时为期望接收的下一个序号,连接建立后总是发送;Data Offset 4 位(TCP 头长);Reserved 4 位保留;控制位(来自 TCP Header Flags 注册表):CWR(拥塞窗口减小)、ECE(ECN-Echo)、URG(紧急指针有效)、ACK(确认字段有效)、PSH(推送功能)、RST(复位连接)、SYN(同步序号)、FIN(发送方无更多数据);Window 16 位,为从确认字段指示的字节起愿意接收的字节数,必须按无符号数处理;Checksum 16 位,为头部与数据全部 16 位字反码和的反码;Urgent Pointer 16 位;之后是可变长 Options。MSS 选项:Kind=2、Length=4,携带 2 字节最大接收段长,只能在 SYN 置位的报文段中发送,不得在其他报文段发送。连接状态集合:LISTEN、SYN-SENT、SYN-RECEIVED、ESTABLISHED、FIN-WAIT-1、FIN-WAIT-2、CLOSE-WAIT、CLOSING、LAST-ACK、TIME-WAIT 及虚拟状态 CLOSED。",
+    "scoring_points": [
+      "Source/Destination Port 各 16 位;Sequence Number 32 位(SYN 置位时为 ISN,首数据字节为 ISN+1)",
+      "Acknowledgment Number 32 位,为期望的下一个序号,ACK 置位时有效、连接建立后总被发送",
+      "Data Offset 4 位、Reserved 4 位",
+      "控制位为 CWR、ECE、URG、ACK、PSH、RST、SYN、FIN 并能说明各自含义(如 CWR=拥塞窗口减小、SYN=同步序号、FIN=发送方无更多数据)",
+      "Window 16 位且必须按无符号数处理;Checksum 为 16 位反码校验和;Urgent Pointer 16 位",
+      "MSS 选项 Kind=2、Length=4、含 2 字节 MSS,仅在 SYN 报文段中发送、不得在其他报文段发送",
+      "状态机包含 LISTEN、SYN-SENT、SYN-RECEIVED、ESTABLISHED、FIN-WAIT-1、FIN-WAIT-2、CLOSE-WAIT、CLOSING、LAST-ACK、TIME-WAIT 与虚拟的 CLOSED"
+    ],
+    "tags": ["RFC-2022", "RFC9293", "TCP", "互联网标准"]
+  },
+  {
+    "id": 20,
+    "difficulty": "中",
+    "category": {"scope": "其他", "protocol_layer": "其他", "lifecycle": "其他"},
+    "scenario": "其他",
+    "device_type": "其他",
+    "question": "请详细说明 CONNECT-UDP(RFC 9298)在 HTTP/2、HTTP/3 中的请求与响应构造(伪头字段、Capsule Protocol)、HTTP Datagram 的封装格式与 Context ID 分配规则,以及 UDP 代理对套接字的处理行为。",
+    "answer": "HTTP/2 与 HTTP/3 中 UDP 代理请求使用 Extended CONNECT,伪头字段要求::method 为 \"CONNECT\"、:protocol 为 \"connect-udp\"、:authority 为 UDP 代理的 authority、:scheme 与 :path 不得为空且取 URI Template 展开后的 scheme 与 path;请求与响应需协商 Capsule-Protocol(?1)。成功响应的 HTTP 状态码必须在 2xx(Successful)区间且满足 Capsule Protocol 启动要求。HTTP Datagram 载荷格式为 {Context ID (i), UDP Proxying Payload (..)}:Context ID 是可变长整数(62 位,0 到 2^62-1);值为 0 保留给 UDP 载荷,此时 UDP Proxying Payload 为未修改的 UDP 包数据(data octets);非 0 值动态分配,偶数值由客户端分配、奇数值由代理分配,命名空间绑定单个 HTTP 请求。代理处理:从重建的 URI 提取 target_host/target_port 并解码百分号编码,直接向目标打开 UDP socket;UDP 无连接,代理无需等待目标流量即可响应,但 target_host 为 DNS 名时必须先完成 DNS 解析再回复;socket 生命周期与请求流绑定,只要请求流打开就必须保持 socket,socket 不可用(如收到 ICMP Destination Unreachable)时必须关闭请求流;因不活跃而关闭 socket 的周期 SHOULD 不低于 2 分钟。另外 target_host 为 IPv6 字面量时冒号必须百分号编码,target_port 必须为 1 到 65535 的整数。",
+    "scoring_points": [
+      "伪头字段::method=CONNECT、:protocol=connect-udp、:authority 为 UDP 代理的 authority、:scheme/:path 非空且来自 URI Template 展开",
+      "成功响应:状态码在 2xx 区间且满足 Capsule Protocol 启动要求(如 capsule-protocol=?1)",
+      "HTTP Datagram 载荷 = Context ID(可变长整数)+UDP Proxying Payload;Context ID=0 表示未修改的 UDP 载荷",
+      "Context ID 为 62 位;非 0 偶数由客户端分配、奇数由代理分配;命名空间绑定单个 HTTP 请求",
+      "代理直接打开 UDP socket 即可响应;target_host 为 DNS 名时必须先完成 DNS 解析再回复",
+      "socket 生命周期与请求流绑定;socket 不可用(如 ICMP Destination Unreachable)时必须关闭请求流",
+      "因不活跃关闭 socket 的周期 SHOULD 不低于 2 分钟;IPv6 字面量冒号需百分号编码、target_port 取值 1-65535"
+    ],
+    "tags": ["RFC-2022", "RFC9298", "MASQUE", "代理"]
+  }
+]

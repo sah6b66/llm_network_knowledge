@@ -1,0 +1,211 @@
+[
+  {
+    "id": 31,
+    "difficulty": "简单",
+    "category": {
+      "scope": "其他",
+      "protocol_layer": "其他",
+      "lifecycle": "其他"
+    },
+    "scenario": "其他",
+    "device_type": "其他",
+    "question": "在 DNS 术语权威 RFC 9499（BCP 219）中，\"权威服务器\"（authoritative server / authoritative-only server）与递归解析的工作方式有何区别？请说明权威服务器如何作答、客户端如何请求递归服务，以及兼具递归与缓存能力的解析器被称为什么。",
+    "answer": "权威服务器用其本地区（zone）数据作答，应答中权威回答（AA）位为 1；它本身不提供递归服务。客户端需在查询中设置 RD（递归期望）位为 1 来请求递归服务，服务器若支持递归则代表客户端完成查询，并在应答中置 RA（递归可用）位。兼具递归服务与缓存能力的解析器称为 full-service resolver（全服务解析器）。",
+    "scoring_points": [
+      "权威服务器使用本地区（zone）数据作答",
+      "权威服务器的应答中 AA（Authoritative Answer）位为 1",
+      "客户端通过在查询中设置 RD（Recursion Desired）位为 1 来请求递归",
+      "服务器支持递归时在应答中设置 RA（Recursion Available）位",
+      "兼具递归与缓存的解析器称为 full-service resolver"
+    ],
+    "tags": ["RFC-2024", "RFC9499", "DNS", "术语"]
+  },
+  {
+    "id": 32,
+    "difficulty": "简单",
+    "category": {
+      "scope": "其他",
+      "protocol_layer": "IP层",
+      "lifecycle": "其他"
+    },
+    "scenario": "其他",
+    "device_type": "其他",
+    "question": "RFC 9545 为 SR-MPLS 定义了路径段标识符 PSID（Path Segment ID）。请说明 PSID 是什么、由哪个节点从哪个标签块中分配、以及它的典型用途是什么。",
+    "answer": "PSID 是一个 SR-MPLS 标签，用于标识一条 SR 路径（即一个 segment list）。PSID 由 SR 路径的 egress（出口）节点从其 SRLB（Segment Routing Local Block）中分配，并通过控制平面（如 PCE）告知 ingress（入口）节点。ingress 将 PSID 压入标签栈以标识该路径，典型用途是支撑 RFC 7799 定义的性能测量（无源、有源或混合测量）。",
+    "scoring_points": [
+      "PSID 是标识一条 SR 路径（segment list）的单个 SR-MPLS 标签",
+      "PSID 由 SR 路径的 egress（出口）节点分配",
+      "PSID 从 egress 的 SRLB（Segment Routing Local Block）中分配",
+      "典型用途是支撑 RFC 7799 定义的性能测量（passive/active/hybrid）"
+    ],
+    "tags": ["RFC-2024", "RFC9545", "SR-MPLS", "Path Segment"]
+  },
+  {
+    "id": 33,
+    "difficulty": "简单",
+    "category": {
+      "scope": "其他",
+      "protocol_layer": "IP层",
+      "lifecycle": "其他"
+    },
+    "scenario": "其他",
+    "device_type": "其他",
+    "question": "RFC 9568（VRRPv3）用 Active/Backup Router 取代了旧版本的主/备称谓。请描述一个虚拟路由器由哪些要素标识、优先级字段各取值范围的含义，以及当前转发路由器的称谓。",
+    "answer": "虚拟路由器由 VRID（Virtual Router Identifier）标识，取值范围 1 到 255。优先级 255 表示地址拥有者（address owner，即拥有该虚拟 IP 的接口）；1 到 254 为可配置优先级，默认 100；优先级 0 用于当前 Active 路由器通知 Backup 立即接管而不再担任转发角色。当前负责转发的路由器称为 Active Router，其余为 Backup Router。",
+    "scoring_points": [
+      "虚拟路由器由 VRID 标识，取值范围 1-255",
+      "优先级 255 表示地址拥有者（address owner）",
+      "优先级 1-254 为普通可配置范围，默认值为 100",
+      "优先级 0 表示当前 Active 路由器放弃角色、通知 Backup 接管",
+      "当前转发路由器称为 Active Router，其余称为 Backup Router"
+    ],
+    "tags": ["RFC-2024", "RFC9568", "VRRP", "网关冗余"]
+  },
+  {
+    "id": 34,
+    "difficulty": "简单",
+    "category": {
+      "scope": "其他",
+      "protocol_layer": "其他",
+      "lifecycle": "其他"
+    },
+    "scenario": "其他",
+    "device_type": "其他",
+    "question": "RFC 9572 为 EVPN 的 BUM 流量以太网标签（Ethernet Tag）约束扩展了三种新的路由类型。请写出这三种路由类型的编号与名称，并简述其中 Leaf A-D 路由的触发方式。",
+    "answer": "三种新路由类型是：Type 9 Per-Region I-PMSI A-D 路由（携带 Region ID 字段）、Type 10 S-PMSI A-D 路由（用于选择性组播隧道）和 Type 11 Leaf A-D 路由（用于显式叶子跟踪）。Leaf A-D 路由由接收 PE 在收到 I-PMSI 或 S-PMSI A-D 路由并匹配到组播流量时触发，其 Route Key 中嵌入了所触发的整条 NLRI 以及 Originator's IP Address 字段。",
+    "scoring_points": [
+      "Type 9 为 Per-Region I-PMSI A-D 路由",
+      "Type 10 为 S-PMSI A-D 路由",
+      "Type 11 为 Leaf A-D 路由",
+      "Leaf A-D 路由由收到的 I-PMSI 或 S-PMSI A-D 路由触发",
+      "Leaf A-D 路由的 Route Key 嵌入整条被触发的 NLRI 及 Originator's IP Address"
+    ],
+    "tags": ["RFC-2024", "RFC9572", "EVPN", "BUM"]
+  },
+  {
+    "id": 35,
+    "difficulty": "简单",
+    "category": {
+      "scope": "其他",
+      "protocol_layer": "传输层",
+      "lifecycle": "其他"
+    },
+    "scenario": "其他",
+    "device_type": "其他",
+    "question": "RFC 9599 是关于在隧道中响应拥塞（ECN）的 Best Current Practice。请说明其文档地位（BCP 编号、更新了哪份 RFC）、其核心原则如何定位 IP 层的角色，以及对隧道解封装点处理 ECN 标记的基线要求。",
+    "answer": "RFC 9599 是 BCP 89，更新了 RFC 3819。其核心原则是将 IP 层定位为\"可移植层\"（portability layer）：任何封装协议都应支持 ECN 标记的传播，使 ECN 信息能够跨隧道端到端传递，而不依赖于具体的隧道技术。隧道入口在封装前应检查隧道出口的 ECN 能力；解封装点须按 RFC 6040 的规则合并内外层的 ECN 标记。",
+    "scoring_points": [
+      "RFC 9599 是 BCP 89",
+      "RFC 9599 更新了 RFC 3819",
+      "IP 层被定位为可移植层（portability layer），封装协议应支持 ECN 标记跨隧道传播",
+      "隧道入口须检查隧道出口的 ECN 能力",
+      "解封装点须按 RFC 6040 规则合并内外层 ECN 标记"
+    ],
+    "tags": ["RFC-2024", "RFC9599", "ECN", "拥塞控制"]
+  },
+  {
+    "id": 36,
+    "difficulty": "简单",
+    "category": {
+      "scope": "其他",
+      "protocol_layer": "其他",
+      "lifecycle": "其他"
+    },
+    "scenario": "其他",
+    "device_type": "其他",
+    "question": "RFC 9625 定义的 EVPN 优化的组播服务 OISM（Optimized Inter-Subnet Multicast）以补充桥接域 SBD（Supplemental Broadcast Domain）为核心机制。请说明实施 OISM 的前提条件、SBD 在控制平面中的地位，以及对其 RT 和 EVI 配置的要求。",
+    "answer": "OISM 的实施以支持 RFC 9135 与 RFC 9251 为前提。SBD 是一个控制平面意义上的真实桥接域，但不连接任何接入电路（AC），仅作为组播流量的中转/落点桥梁。每个租户域的 RT 域中，SBD 必须使用专用的 SBD-RT，且必须与其他所有 BD 的 RT 不同；建议为 SBD 配置独立的 EVI。租户域内的所有 OISM PE 都须配置 SBD 及通往 SBD 的 IRB 接口。",
+    "scoring_points": [
+      "OISM 实施前提是支持 RFC 9135 与 RFC 9251",
+      "SBD 是控制平面意义上的真实桥接域但没有 AC（接入电路）",
+      "SBD 必须使用专用 SBD-RT，且必须与所有其他 BD 的 RT 不同",
+      "建议为 SBD 配置独立的 EVI",
+      "租户域内所有 OISM PE 都须配置 SBD 及通往 SBD 的 IRB 接口"
+    ],
+    "tags": ["RFC-2024", "RFC9625", "EVPN", "组播"]
+  },
+  {
+    "id": 37,
+    "difficulty": "简单",
+    "category": {
+      "scope": "其他",
+      "protocol_layer": "其他",
+      "lifecycle": "其他"
+    },
+    "scenario": "其他",
+    "device_type": "其他",
+    "question": "RFC 9648 定义了 TCP 配置的 YANG 数据模型。请写出该模型的模块名与前缀、connections 列表的键、所采用的数据架构规范，以及模型导入了哪些外部模块。",
+    "answer": "RFC 9648 定义的 YANG 模块名为 ietf-tcp，前缀为 tcp。connections 列表以 local-address、remote-address、local-port、remote-port 四个键唯一标识一条 TCP 连接。模型基于 YANG 1.1 并遵循 NMDA（RFC 8342）网络数据架构，连接状态等作为运行状态数据（config false）暴露。模型导入了 ietf-tcp-common（RFC 9643）、ietf-key-chain（RFC 8177）和 ietf-netconf-acm（RFC 8341）等外部模块。",
+    "scoring_points": [
+      "YANG 模块名为 ietf-tcp，前缀为 tcp",
+      "connections 列表的键为 local-address、remote-address、local-port、remote-port",
+      "模型基于 YANG 1.1 并遵循 NMDA（RFC 8342）架构",
+      "连接状态以 config false 的运行状态数据暴露",
+      "导入了 ietf-tcp-common（RFC 9643）、ietf-key-chain（RFC 8177）、ietf-netconf-acm（RFC 8341）"
+    ],
+    "tags": ["RFC-2024", "RFC9648", "YANG", "TCP"]
+  },
+  {
+    "id": 38,
+    "difficulty": "简单",
+    "category": {
+      "scope": "其他",
+      "protocol_layer": "IP层",
+      "lifecycle": "其他"
+    },
+    "scenario": "其他",
+    "device_type": "其他",
+    "question": "RFC 9673 更新了 IPv6 对 Hop-by-Hop（HBH）选项头的处理要求。请说明 HBH 选项头在报文中如何被识别与定位、路由器是否可以仅因存在 HBH 头而丢弃报文，以及未处理时的转发要求。",
+    "answer": "HBH 选项头由 IPv6 基础头中的 Next Header 字段值 0 标识，必须紧跟在 IPv6 基础头之后，且在一个报文中至多出现一次。路由器不得（MUST NOT）仅因报文含有 HBH 选项头而将其丢弃。如果路由器不处理 HBH 选项，则应按照报文中其余扩展头正常转发该报文。同时 RFC 9673 建议主机节点 SHOULD 处理其发送或接收报文中的 HBH 选项头。",
+    "scoring_points": [
+      "HBH 选项头由 IPv6 基础头 Next Header 字段值 0 标识",
+      "HBH 选项头必须紧跟 IPv6 基础头之后，且至多出现一次",
+      "路由器 MUST NOT 仅因报文含有 HBH 选项头而丢弃报文",
+      "未处理 HBH 选项时应按其余扩展头正常转发报文",
+      "RFC 9673 建议（SHOULD）主机处理 HBH 选项头"
+    ],
+    "tags": ["RFC-2024", "RFC9673", "IPv6", "Hop-by-Hop"]
+  },
+  {
+    "id": 39,
+    "difficulty": "简单",
+    "category": {
+      "scope": "其他",
+      "protocol_layer": "IP层",
+      "lifecycle": "其他"
+    },
+    "scenario": "其他",
+    "device_type": "其他",
+    "question": "RFC 9685 用 2 位的 P 字段扩展了邻居发现的注册机制，区分 subscribe 与 register。请写出 P 字段各取值的含义、subscribe 与 register 的区别，以及链路本地全体节点组播地址的隐式订阅规则。",
+    "answer": "P 字段为 2 位：0 表示单播（unicast），1 表示组播（multicast），2 表示任播（anycast），3 为未分配。subscribe（订阅）指声明节点正在监听某组播地址或接受发往某任播地址的流量，地址不属于该节点自有；register（注册）指注册节点自有的单播地址。所有节点对链路本地全体节点组播地址 ff02::1 隐式订阅，无需显式注册。",
+    "scoring_points": [
+      "P 字段取值 0 表示 unicast（单播）",
+      "P 字段取值 1 表示 multicast（组播），2 表示 anycast（任播），3 为未分配",
+      "subscribe 指声明监听某组播地址或接受任播地址流量，地址非节点自有",
+      "register 指注册节点自有的单播地址",
+      "所有节点隐式订阅 ff02::1，无需显式注册"
+    ],
+    "tags": ["RFC-2024", "RFC9685", "IPv6", "邻居发现"]
+  },
+  {
+    "id": 40,
+    "difficulty": "简单",
+    "category": {
+      "scope": "其他",
+      "protocol_layer": "IP层",
+      "lifecycle": "其他"
+    },
+    "scenario": "其他",
+    "device_type": "其他",
+    "question": "RFC 9687 为 BGP 定义了发送保持定时器 Send Hold Timer，以解决远端停止读取导致的连接僵死。请说明该定时器解决的问题、到期后的动作、SendHoldTime 的默认取值规则，以及与协商 HoldTime 的关系。",
+    "answer": "Send Hold Timer 用于检测对端不再读取任何 BGP 报文的情形（如 TCP 接收窗口为 0 导致本地无法发送），避免出现滞留旧路由的\"BGP 僵尸\"。定时器到期后，本地应主动关闭该 BGP 连接。非零的 SendHoldTime 必须大于协商的 HoldTime；默认值建议取 8 分钟与两倍协商 HoldTime 中的较大者，并建议默认启用该定时器。",
+    "scoring_points": [
+      "Send Hold Timer 用于检测对端不再读取任何 BGP 报文（如 TCP 接收窗口为 0）",
+      "到期后本地主动关闭该 BGP 连接",
+      "非零的 SendHoldTime 必须（MUST）大于协商的 HoldTime",
+      "默认值建议取 8 分钟与 2 倍协商 HoldTime 中的较大者",
+      "建议（RECOMMENDED）默认启用该定时器"
+    ],
+    "tags": ["RFC-2024", "RFC9687", "BGP", "会话安全"]
+  }
+]

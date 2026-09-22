@@ -1,0 +1,403 @@
+[
+  {
+    "id": 56,
+    "difficulty": "简单",
+    "category": {
+      "scope": "设备",
+      "protocol_layer": "其他",
+      "lifecycle": "其他"
+    },
+    "scenario": "通用",
+    "device_type": "路由器",
+    "question": "华为AR6140E路由器（版本V600R025C10）支持IPsec VPN特性。请简述IPsec是什么特性、它能解决什么问题，以及点到点和点到多点两种典型组网应用的区别。",
+    "answer": "IPsec（Internet Protocol Security）是为IP网络提供安全性的一系列协议和服务的集合，通过这些协议和服务可以在两个设备之间建立一条IPsec加密隧道，数据通过IPsec加密隧道传输，能有效保证数据的安全性。从组网需求维度划分，IPsec分为两类典型应用：一是点到点IPsec，主要用于两个设备之间建立IPsec隧道，实现两个局域网之间点到点的安全互通；二是点到多点IPsec，主要用于一个设备同时和多个设备之间建立IPsec隧道，实现一个局域网与多个局域网之间的安全互通。IPsec解决的问题是：IP报文本身并未集成任何安全特性，企业不同局域网之间的业务数据穿越Internet时存在被伪造、篡改或窃取的风险，IPsec作为对IP协议安全性的补充，解决了IP层的安全性问题。IPsec通过加密、验证等方式提供的安全服务包括：数据加密（密文传输）、数据完整性验证（防篡改）、数据源验证（确认发送方身份真实合法）、防止数据重放（拒绝旧的或重复的报文）。典型场景如企业分支与总部跨Internet安全互联。",
+    "scoring_points": [
+      "IPsec定义：为IP网络提供安全性的一系列协议和服务的集合，在两个设备之间建立IPsec加密隧道",
+      "典型应用分为点到点IPsec（两设备/两局域网互通）与点到多点IPsec（一设备对多设备/一局域网对多局域网）",
+      "解决的问题：IP报文无安全特性，数据穿越Internet存在被伪造、篡改或窃取风险，IPsec解决IP层安全性问题",
+      "提供四类安全服务：数据加密、数据完整性验证、数据源验证、防止数据重放"
+    ],
+    "tags": [
+      "AR6140E",
+      "V600R025C10",
+      "特性",
+      "IPSec"
+    ]
+  },
+  {
+    "id": 57,
+    "difficulty": "中",
+    "category": {
+      "scope": "设备",
+      "protocol_layer": "其他",
+      "lifecycle": "其他"
+    },
+    "scenario": "通用",
+    "device_type": "路由器",
+    "question": "某公司在网络边界部署华为AR6140E路由器（版本V600R025C10），只向ISP申请了一个公网IP地址用于公网接口和ISP的Router互联，现要使公司私网10.1.1.0/24网段用户借用设备公网接口IP地址访问Internet（出接口NAT/Easy IP方式）。请给出配置思路与配置步骤。",
+    "answer": "Easy IP是利用出接口的公网IP地址作为NAT转换后的地址、同时转换地址和端口（转换后端口范围2048-65535）的源NAT方式。配置思路：1）配置接口IP地址，并在公网出接口下开启NAT功能；2）配置缺省路由，使私网流量可正常转发至ISP路由器；3）配置出接口地址方式的源NAT策略，只需设置easy-ip参数，设备通过查询路由自动找到对应出接口地址；4）私网主机配置缺省网关。操作步骤：1）私网侧接口10GE0/0/1配置IP 10.1.1.1/24；2）公网接口10GE0/0/2配置IP 1.1.1.1/24并执行nat enable；3）执行ip route-static 0.0.0.0 0.0.0.0 1.1.1.254；4）配置源NAT策略：nat-policy进入策略视图，rule name policy_nat1创建规则，source-address 10.1.1.0 24匹配源网段，action source-nat easy-ip指定出接口地址转换。验证：内网PC可访问Internet；display nat-policy rule name查策略命中次数（大于等于1表示有数据流命中）；display session all verbose查会话，转换后IP为出接口公网地址即成功。",
+    "scoring_points": [
+      "配置思路包含：配置接口IP并在公网出接口开启NAT功能（nat enable）",
+      "配置去往Internet的缺省路由（ip route-static 0.0.0.0 0.0.0.0下一跳）",
+      "通过nat-policy创建规则并配置source-address匹配10.1.1.0/24源网段",
+      "动作为action source-nat easy-ip，设备通过查询路由自动使用出接口地址转换",
+      "Easy IP同时转换地址和端口（转换后端口范围2048-65535），支持多私网用户共用一个公网IP",
+      "验证方法：display nat-policy rule name查命中次数、display session all verbose查转换表项"
+    ],
+    "tags": [
+      "AR6140E",
+      "V600R025C10",
+      "配置方案",
+      "NAT"
+    ]
+  },
+  {
+    "id": 58,
+    "difficulty": "中",
+    "category": {
+      "scope": "设备",
+      "protocol_layer": "其他",
+      "lifecycle": "其他"
+    },
+    "scenario": "通用",
+    "device_type": "路由器",
+    "question": "某企业在IPv4骨干网（运行OSPF）中使用华为AR6710路由器（版本V600R025C10）作为DeviceA，需要在DeviceA与对端DeviceC之间建立GRE隧道（IPv4 over IPv4），通过静态路由指定到达对端的报文经Tunnel接口转发，实现两侧PC互访。请给出配置思路与配置步骤。",
+    "answer": "配置思路：1）设备运行IPv4动态路由协议（OSPF）实现骨干网互通；2）在两端创建Tunnel接口，指定Tunnel的源地址（发出报文的实际接口IP）和目的地址（接收报文的实际接口IP），并封装GRE协议；3）配置Tunnel接口的网络地址使隧道支持发布路由；4）两端配置到各自相连PC网段的静态路由，出接口为本端Tunnel接口。操作步骤（以DeviceA为例）：1）配置各接口IP地址；2）配置骨干网IGP：ospf 1、area 0、network 172.20.1.0 0.0.0.255；3）创建Tunnel接口：interface tunnel 1，tunnel-protocol gre，ip address 172.22.1.1 255.255.255.0，source 172.20.1.1，destination 172.21.1.2（DeviceC对称配置，source 172.21.1.2、destination 172.20.1.1）；4）配置静态路由：ip route-static 10.2.1.0 255.255.255.0 tunnel1。验证：Tunnel接口状态变为Up，ping -a 172.22.1.1 172.22.1.2可通；display ip routing-table可见以Tunnel1为出接口去往对端用户侧网段的静态路由。",
+    "scoring_points": [
+      "配置思路包含骨干网先运行IGP（OSPF）实现互通",
+      "创建Tunnel接口并执行tunnel-protocol gre、配置Tunnel接口IP地址",
+      "Tunnel源地址为发出报文实际接口IP、目的地址为接收报文实际接口IP（source/destination）",
+      "配置到对端用户侧网段的静态路由，出接口为本端Tunnel接口（ip route-static … tunnel1）",
+      "验证：Tunnel接口Up、ping隧道对端地址、display ip routing-table查看Tunnel路由"
+    ],
+    "tags": [
+      "AR6710",
+      "V600R025C10",
+      "配置方案",
+      "GRE"
+    ]
+  },
+  {
+    "id": 59,
+    "difficulty": "中",
+    "category": {
+      "scope": "设备",
+      "protocol_layer": "其他",
+      "lifecycle": "其他"
+    },
+    "scenario": "通用",
+    "device_type": "路由器",
+    "question": "某企业分支位于偏远地区无法获取有线广域接入服务，使用华为AR5710路由器（版本V600R025C10）通过运营商4G/5G蜂窝网络（Cellular接口）拨号接入Internet实现与总部广域互联，从运营商获取的APN名称为4gnet，用户要求自动选择接入的网络。请给出配置思路与配置步骤。",
+    "answer": "配置思路：1）配置网络连接方式：创建Cellular模板并配置为auto模式，在Cellular接口下应用；2）创建APN模板及参数（APN为4gnet），在Cellular通道接口下绑定；3）开启Cellular通道接口的拨号功能，并配置缺省路由，指定出接口为Cellular通道接口。操作步骤：1）执行cellular-profile 4g创建模板，mode auto配置自动选择网络，interface cellular 2/0/0进入接口视图后执行cellular-profile 4g应用模板；2）执行apn-profile 4gprofile创建APN模板，apn 4gnet配置APN名称，interface cellular 2/0/0:1进入通道接口后执行apn-profile 4gprofile绑定；3）在通道接口下执行ip address modem-alloc使能自动拨号并从核心网获取IP；4）执行ip route-static 0.0.0.0 0 cellular 2/0/0:1配置缺省路由。验证：display apn-profile configuration查APN模板配置；display cellular 2/0/0 radio查网络连接方式（如显示LTE）；display ip interface brief查获取的IP地址，物理和协议状态均Up即成功。",
+    "scoring_points": [
+      "创建Cellular模板并配置mode auto（自动选择网络），在Cellular接口下应用（cellular-profile）",
+      "创建APN模板（apn-profile）并配置apn 4gnet，在Cellular通道接口下绑定",
+      "在Cellular通道接口执行ip address modem-alloc使能自动拨号并获取IP地址",
+      "配置缺省路由，出接口指定为Cellular通道接口（如cellular 2/0/0:1）",
+      "验证命令：display apn-profile configuration、display cellular radio、display ip interface brief"
+    ],
+    "tags": [
+      "AR5710",
+      "V600R025C10",
+      "配置方案",
+      "Cellular"
+    ]
+  },
+  {
+    "id": 60,
+    "difficulty": "中",
+    "category": {
+      "scope": "设备",
+      "protocol_layer": "其他",
+      "lifecycle": "其他"
+    },
+    "scenario": "通用",
+    "device_type": "路由器",
+    "question": "在华为AR6140E路由器（版本V600R025C10）上需要创建一个NAT地址池用于源NAT转换：地址池名称为nataddr、编号为1，并在地址池内配置1.1.1.1～1.1.1.10的地址段。应使用哪些命令？请给出命令完整语法、参数含义与取值以及命令所在视图。",
+    "answer": "需要使用nat address-group命令和section命令。1）创建地址池：命令格式nat address-group group-name [ group-number ]，undo nat address-group group-name删除地址池；命令所在视图为系统视图；缺省情况下没有配置地址池。参数：group-name为地址池的名称，字符串形式，长度范围1～96个字符，区分大小写，不能设置为all、vsys或all-systems，名称中包含空格时需用双引号括起来，名称不可包含问号；group-number为地址池的编号，取值因产品而异——针对AR5700-H系列及AR5710-S8T2X、AR5710-S8T2XE、AR5710-S8T2XE-LTE4CN等AR5710型号为整数0～63，针对AR6700-H系列、AR8100系列、AR8700系列为0～2499，针对AR6710-L14T2X4、AR6710-L26T2X4、AR6710-L50T2X4、AR6710-L8T3TS1X2为0～127。2）配置地址段：进入地址池视图后执行section [ id ] StartAddress [ EndAddress ]；命令所在视图为NAT实例地址池视图。参数：StartAddress/EndAddress为地址段起始/终点地址，点分十进制形式；section id为地址段编号，AR5700-H系列及AR5710各型号取值0～255，AR6700-H系列、AR8100系列、AR8700系列为0～4095，AR6710-L14T2X4等型号为0～1023。起始地址与结束地址相同表示地址池只有一个IP地址，可实现内部主机固定转换为特定公网IP；同一地址池只能配置一种类型的地址段（IPv4或IPv6）。配置示例：进入系统视图后执行nat address-group nataddr 1，进入地址池视图后执行section 1.1.1.1 1.1.1.10。注意：已被用于地址转换功能的地址池不能被删除。",
+    "scoring_points": [
+      "创建地址池命令语法：nat address-group group-name [ group-number ]，视图为系统视图",
+      "group-name为1～96字符字符串、区分大小写，不能设为all、vsys、all-systems",
+      "group-number取值按型号区分：AR5710系列0～63，AR6700-H/AR8100/AR8700系列0～2499，AR6710-L系列0～127",
+      "地址段命令语法：section [ id ] StartAddress [ EndAddress ]，视图为NAT实例地址池视图",
+      "起始地址等于结束地址表示地址池只有一个IP地址；同一地址池只能配置一种类型（IPv4或IPv6）地址段",
+      "已被用于地址转换的地址池不能删除"
+    ],
+    "tags": [
+      "AR6140E",
+      "V600R025C10",
+      "命令行",
+      "NAT"
+    ]
+  },
+  {
+    "id": 61,
+    "difficulty": "中",
+    "category": {
+      "scope": "设备",
+      "protocol_layer": "其他",
+      "lifecycle": "其他"
+    },
+    "scenario": "通用",
+    "device_type": "路由器",
+    "question": "在华为AR6140E路由器（版本V600R025C10）上需要创建一个编号为2999的基本ACL，并添加一条规则：拒绝源IP地址为10.1.1.1的报文。应使用哪些命令？请给出命令完整语法、参数含义与取值以及命令所在视图。",
+    "answer": "需要使用acl number命令和rule（基本ACL视图）命令。1）创建ACL：命令格式acl [ number ] basic-acl-number（另有advance-acl-number、link-acl-number两种编号形式），undo acl all可删除所有ACL；命令所在视图为系统视图；缺省情况下设备上没有创建ACL。参数取值：basic-acl-number基本ACL编号为整数2000～2999；advance-acl-number高级ACL编号为3000～3999；link-acl-number二层ACL编号为4000～4999。2）创建规则：在基本ACL视图下执行rule [ rule-id ] [ name rule-name ] { permit | deny } [ fragment-type fragment | source { source-ip-address { source-wildcard | 0 | src-netmask } | any } | time-range time-name | [ vpn-instance vpn-instance-name | vpn-instance-public ] | logging ] *。参数说明：rule-id为规则编号，整数0～4294967294；name rule-name为规则名称，字符串1～32字符（不支持空格、不能以下划线开始、区分大小写）；permit允许匹配报文、deny拒绝匹配报文；source指定根据源IP地址匹配，source-ip-address为点分十进制源地址，source-wildcard为通配符（0表示所有32位都检查即匹配单一主机，255.255.255.255等价于any），0表示匹配单一主机，src-netmask为掩码长度整数1～32，any匹配任意报文；time-range time-name指定规则生效时间段（字符串1～32）；logging对匹配报文记录日志。rule命令视图为基本ACL视图，缺省级别2:配置级。配置示例：进入系统视图后执行acl number 2999，再执行rule deny source 10.1.1.1 0。注意：不指定规则编号时系统按步长自动分配编号；undo acl all会删除设备上所有ACL，删除被其他业务引用的ACL会造成业务中断。",
+    "scoring_points": [
+      "创建基本ACL命令：acl [ number ] basic-acl-number，视图为系统视图，基本ACL编号取值2000～2999",
+      "高级ACL编号3000～3999、二层ACL编号4000～4999",
+      "rule命令语法：rule [ rule-id ] [ name rule-name ] { permit | deny } [ source … ] *，视图为基本ACL视图",
+      "rule-id取值0～4294967294，rule-name为1～32个字符字符串",
+      "source参数中通配符0表示匹配单一主机，any匹配任意源地址",
+      "示例配置：rule deny source 10.1.1.1 0"
+    ],
+    "tags": [
+      "AR6140E",
+      "V600R025C10",
+      "命令行",
+      "ACL"
+    ]
+  },
+  {
+    "id": 62,
+    "difficulty": "中",
+    "category": {
+      "scope": "设备",
+      "protocol_layer": "其他",
+      "lifecycle": "其他"
+    },
+    "scenario": "通用",
+    "device_type": "路由器",
+    "question": "华为AR6710路由器（版本V600R025C10）作为DHCP服务器，需要创建名称为global1的全局地址池，并配置可分配网段为192.168.1.0、掩码长度24。应使用哪些命令？请给出命令完整语法、参数含义与取值以及命令所在视图。",
+    "answer": "需要使用dhcp enable、ip pool和network命令。1）开启DHCP功能：命令格式dhcp enable [ ipv4 | ipv6 ]，undo dhcp enable关闭；命令所在视图为系统视图；缺省情况下系统未开启DHCP功能。参数ipv4指定设备仅处理DHCPv4报文，ipv6指定仅处理DHCPv6报文；不带参数时设备同时处理DHCPv4与DHCPv6报文。2）创建全局地址池：命令格式ip pool pool-name，undo ip pool pool-name删除；命令所在视图为系统视图；缺省情况下没有创建全局地址池。参数pool-name为地址池名称，字符串形式、不支持空格、不区分大小写，长度范围1～64，只能包含数字、字母和特殊字符（下划线、中划线或点）的组合，不能为单个中划线或两个中划线。3）配置网段：进入IP地址池视图后执行network ip-address [ mask { mask | mask-length } ]，undo network恢复缺省；命令所在视图为IP地址池视图；缺省未配置动态分配的IP地址范围。参数：ip-address为网络地址段，点分十进制格式，必须是A、B、C三类IP地址中的一种；mask为点分十进制掩码；mask-length为掩码长度，整数0～32，且不能配置为0-7、31和32，不指定mask参数时使用自然掩码。配置示例：进入系统视图后执行dhcp enable，再执行ip pool global1，进入地址池视图后执行network 192.168.1.0 mask 24。注意：每个IP地址池只能配置一个网段，需要多网段则配置多个地址池；当删除的地址池中存在已分配的IP地址时，会导致已分配的IP地址被释放。",
+    "scoring_points": [
+      "dhcp enable [ ipv4 | ipv6 ]在系统视图开启DHCP功能，缺省未开启",
+      "ip pool pool-name在系统视图创建全局地址池，pool-name为1～64个字符、不区分大小写",
+      "network ip-address [ mask { mask | mask-length } ]在IP地址池视图配置可分配网段",
+      "network的ip-address必须是A、B、C三类地址，mask-length取值0～32且不能为0-7、31和32",
+      "每个IP地址池只能配置一个网段，需要多网段须配置多个地址池",
+      "示例：dhcp enable→ip pool global1→network 192.168.1.0 mask 24"
+    ],
+    "tags": [
+      "AR6710",
+      "V600R025C10",
+      "命令行",
+      "DHCP"
+    ]
+  },
+  {
+    "id": 63,
+    "difficulty": "中",
+    "category": {
+      "scope": "设备",
+      "protocol_layer": "其他",
+      "lifecycle": "其他"
+    },
+    "scenario": "通用",
+    "device_type": "路由器",
+    "question": "华为AR5710路由器（版本V600R025C10）通过Cellular接口拨号接入运营商网络。请说明：如何在Cellular通道接口上使能自动拨号并获取IP地址；如希望在Cellular模板内设置自动呼叫间隔时间为90秒，应使用哪条命令？请给出命令完整语法、参数含义与取值以及命令所在视图。",
+    "answer": "1）使能自动拨号：使用ip address modem-alloc命令，命令格式ip address modem-alloc，undo ip address modem-alloc去使能；命令所在视图为Cellular通道接口视图（也支持10GE子接口、25GE子接口、40GE子接口、GE子接口、MultiGE子接口视图）；缺省情况下设备上自动拨号功能处于去使能状态。该命令用来使能自动拨号并获取IP地址功能，当设备需要从核心网获取IP地址时需使能该功能；注意只有SIM卡在位时，才能拨号并获取到IP地址。2）配置自动拨号时间间隔：使用dialer timer命令，命令格式dialer timer { seconds seconds | minutes minutes } [ exponential [ times times ] ]，undo dialer timer恢复缺省；命令所在视图为Cellular模板视图；缺省情况下自动拨号的时间间隔为10秒，不开启指数退避。参数说明：seconds seconds指定发起下次呼叫尝试的间隔时间，单位秒，整数形式取值范围1～604800，缺省值是10；minutes minutes指定间隔时间，单位分，整数形式取值范围1～10080；exponential开启指数退避功能，为防止频繁拨号被核心网判定为网络攻击，可指定指数级拨号间隔，第n次拨号的时间间隔T(n)=T(n-1)+2^n+random(180*n)，拨号次数超过指定次数后仍尝试拨号但间隔不再退避；times times指定拨号间隔时间指数退避的最大次数，整数形式取值范围1～16，缺省值是5。配置示例：进入系统视图后执行cellular-profile profileName创建（进入）Cellular模板，执行dialer timer seconds 90设置自动呼叫间隔90秒；再执行interface cellular 1/0/0:1进入Cellular通道接口，执行ip address modem-alloc使能自动拨号。设备配置ip address modem-alloc之后若无法与对端正常建立拨号连接，则每隔该间隔时间将再次自动尝试建立拨号连接。",
+    "scoring_points": [
+      "ip address modem-alloc用于使能自动拨号并获取IP地址，视图为Cellular通道接口视图，缺省为去使能状态",
+      "只有SIM卡在位时才能拨号并获取到IP地址",
+      "dialer timer语法：dialer timer { seconds seconds | minutes minutes } [ exponential [ times times ] ]，视图为Cellular模板视图",
+      "seconds取值1～604800（缺省10），minutes取值1～10080",
+      "exponential开启指数退避（防频繁拨号被核心网判定为攻击），times取值1～16（缺省5）",
+      "配置示例：cellular-profile下dialer timer seconds 90"
+    ],
+    "tags": [
+      "AR5710",
+      "V600R025C10",
+      "命令行",
+      "Cellular"
+    ]
+  },
+  {
+    "id": 64,
+    "difficulty": "中",
+    "category": {
+      "scope": "设备",
+      "protocol_layer": "其他",
+      "lifecycle": "其他"
+    },
+    "scenario": "通用",
+    "device_type": "路由器",
+    "question": "在华为AR6710路由器（版本V600R025C10）的接口上需要创建VRRP备份组1并配置虚拟IP地址10.1.1.111，同时设置该设备在此备份组中的优先级为150。应使用哪些命令？请给出命令完整语法、参数含义与取值以及命令所在视图。",
+    "answer": "需要使用vrrp vrid命令和vrrp vrid priority命令。1）创建VRRP备份组并配置虚拟IP：命令格式vrrp vrid virtual-router-id [ virtual-ip virtual-address ]，undo vrrp vrid virtual-router-id [ virtual-ip virtual-address ]删除；命令所在视图为接口视图（支持GE接口/GE子接口、10GE接口/子接口、25GE、40GE、MultiGE、Eth-Trunk、VLANIF等接口视图）；缺省情况下系统未配置VRRP备份组。参数：virtual-router-id指定VRRP备份组号，整数形式取值范围1～255；virtual-ip virtual-address指定VRRP备份组的虚拟IP地址，点分十进制形式，必须与接口所在IP地址在同一网段。每个备份组最多可配置16个虚拟IP地址；如果VRRP备份组中的虚拟IP地址被全部删除，系统会自动将此备份组删除。2）设置优先级：命令格式vrrp vrid virtual-router-id priority priority-value，undo vrrp vrid virtual-router-id priority恢复缺省；视图同为接口视图；缺省情况下设备在备份组中的优先级为100。参数：virtual-router-id取值1～255；priority-value为设备在VRRP备份组中的优先级，整数形式取值范围1～254，值越大优先级越高，优先级最高的设备成为Master设备。注意：255由系统保留给IP地址拥有者使用，IP地址拥有者的优先级不可配置、始终为255；使用priority命令前必须先执行vrrp vrid virtual-ip命令配置VRRP备份组。配置示例：进入系统视图后执行interface进入接口视图，ip address 10.1.1.1 24配置接口IP，vrrp vrid 1 virtual-ip 10.1.1.111创建备份组，vrrp vrid 1 priority 150设置优先级。",
+    "scoring_points": [
+      "创建备份组命令：vrrp vrid virtual-router-id [ virtual-ip virtual-address ]，视图为接口视图（GE/VLANIF/Eth-Trunk等）",
+      "virtual-router-id取值1～255；虚拟IP必须与接口IP在同一网段",
+      "每个备份组最多配置16个虚拟IP地址；虚拟IP全部删除后系统自动删除该备份组",
+      "优先级命令：vrrp vrid virtual-router-id priority priority-value，priority-value取值1～254、值越大优先级越高，缺省100",
+      "255保留给IP地址拥有者，其优先级不可配置恒为255",
+      "配置priority前必须先配置vrrp vrid virtual-ip"
+    ],
+    "tags": [
+      "AR6710",
+      "V600R025C10",
+      "命令行",
+      "VRRP"
+    ]
+  },
+  {
+    "id": 65,
+    "difficulty": "中",
+    "category": {
+      "scope": "设备",
+      "protocol_layer": "其他",
+      "lifecycle": "其他"
+    },
+    "scenario": "通用",
+    "device_type": "路由器",
+    "question": "华为AR6140E路由器（版本V600R025C10）产生告警：VCMU_1.3.6.1.4.1.2011.5.25.219.2.5.3 hwPowerFail。请说明该电源异常告警的含义（含告警ID/级别）、可能原因与处理步骤。",
+    "answer": "hwPowerFail表示电源局部功能失效（A power module experienced a partial failure），Trap参数含EntPhysicalIndex实体索引、EntPhysicalName实体名称、EntityTrapFaultID故障码、ReasonDsp原因。告警属性：Alarm ID为0x0813001D/0x813001D，Alarm Severity为Major，Trap OID为1.3.6.1.4.1.2011.5.25.219.2.5.3，MIB为HUAWEI-ENTITY-TRAP-MIB，恢复告警为hwPowerFailResume。影响：电源供电不正常，可能引起供电不足导致单板复位，间接影响业务。可能原因（共18种）：电源与MPU通信故障、内部风扇风向异常或堵转、电源开关故障、不均流、电源内软件版本较低、内部模块故障、在位但输出异常、EEPROM故障、保护被触发、输出过流、缺相、A/B路接入线缆与PM模块不匹配等。处理步骤（以电源与MPU通信故障为例）：1）拔插电源模块，未恢复执行下一步；2）更换电源模块，未恢复执行下一步；3）收集告警、日志和配置信息，联系技术支持。其他原因：电源开关故障则手动打开背板电源开关；软件版本较低可在诊断视图执行upgrade device power升级。",
+    "scoring_points": [
+      "告警含义：电源局部功能失效（电源模块部分故障）",
+      "告警ID为0x0813001D/0x813001D，告警级别Major（Trap Severity为Critical），OID 1.3.6.1.4.1.2011.5.25.219.2.5.3",
+      "影响：电源供电不正常可能引起供电不足、单板复位，间接影响业务",
+      "可能原因包含：电源与MPU通信故障、风扇故障、电源开关故障、输出异常、不均流、过流、缺相、线缆不匹配等",
+      "通用处理步骤：拔插电源模块→更换电源模块→收集告警/日志/配置信息联系技术支持",
+      "特定原因处理：开关故障手动打开背板电源开关；软件版本低用upgrade device power升级"
+    ],
+    "tags": [
+      "AR6140E",
+      "V600R025C10",
+      "告警处理",
+      "电源"
+    ]
+  },
+  {
+    "id": 66,
+    "difficulty": "中",
+    "category": {
+      "scope": "设备",
+      "protocol_layer": "其他",
+      "lifecycle": "其他"
+    },
+    "scenario": "通用",
+    "device_type": "路由器",
+    "question": "华为AR6140E路由器（版本V600R025C10）与对端建立IPsec VPN时产生告警：IPSEC_1.3.6.1.4.1.2011.6.122.26.6.14 hwIPSecNegoFail。请说明该IPSec协商相关告警的含义（含告警ID）、可能原因与处理步骤。",
+    "answer": "hwIPSecNegoFail表示IPsec隧道协商失败（IPSec tunnel negotiation fails）。告警属性：Trap OID为1.3.6.1.4.1.2011.6.122.26.6.14，Alarm ID为0x00F10354/0xF10354，MIB为HUAWEI-SECURITY-IPSEC-MIB；该Trap为事件Trap（Warning），不涉及告警级别、名称和类型。影响：IPsec隧道无法建立成功。可能原因：两端IKE安全提议参数不匹配（phase1，含加密/认证算法、DH组、PRF）；两端IPsec安全提议、PFS或Security ACL不匹配（phase2）；封装模式不匹配；IKE Peer地址不匹配；身份认证失败、预共享密钥不一致；License或规格限制；没有策略应用到接口上；NAT探测失败等。处理步骤（按原因）：提议或PFS不匹配——查看两端IKE/IPsec安全提议参数并修改一致；DH或封装模式不匹配——修改两端一致；认证失败——检查两端IKE提议或对等体参数；对端地址不匹配——修改IKE对等体地址；无策略应用——在接口上应用相应IPsec策略；License受限——申请License或扩容；非以上原因或未解决时收集信息联系技术支持人员。",
+    "scoring_points": [
+      "告警含义：IPsec隧道协商失败",
+      "告警ID为0x00F10354/0xF10354，OID 1.3.6.1.4.1.2011.6.122.26.6.14，该Trap是事件Trap不涉及告警级别",
+      "影响：IPsec隧道无法建立成功",
+      "可能原因包含：两端IKE/IPsec安全提议参数不匹配、PFS不匹配、封装模式不匹配、ACL或对端地址不匹配、身份认证失败、预共享密钥不一致等",
+      "处理：按Reason将两端提议参数/算法/封装模式/对端地址修改一致，接口上应用IPsec策略，License受限则申请扩容",
+      "非以上原因或未解决时收集信息联系技术支持人员"
+    ],
+    "tags": [
+      "AR6140E",
+      "V600R025C10",
+      "告警处理",
+      "IPSec"
+    ]
+  },
+  {
+    "id": 67,
+    "difficulty": "中",
+    "category": {
+      "scope": "设备",
+      "protocol_layer": "其他",
+      "lifecycle": "其他"
+    },
+    "scenario": "通用",
+    "device_type": "路由器",
+    "question": "华为AR5710路由器（版本V600R025C10）产生告警：SYSTEM_1.3.6.1.4.1.2011.5.25.129.2.4.1 hwCPUUtilizationRisingAlarm。请说明该CPU占用率过高告警的含义（含告警ID/级别）、可能原因与处理步骤。",
+    "answer": "hwCPUUtilizationRisingAlarm表示CPU占用率超过过载门限——系统持续采样CPU利用率，一个采样周期（CPU持续过载次数×采样时间间隔）中每次采样均大于过载门限时产生该告警。告警属性：Trap OID为1.3.6.1.4.1.2011.5.25.129.2.4.1，Alarm ID为0x00F10357/0xF10357，Alarm Severity为Critical，类型qualityOfServiceAlarm，MIB为HUAWEI-BASE-TRAP-MIB。影响：原因74299为管理面/控制面CPU利用率超过过载门限，短期对业务无影响，长期过高导致业务不能及时处理，影响界面响应、邻居状态或路由收敛；原因74300为数据面CPU使用率超阈值，转发流量超过转发性能时会丢包。处理步骤（74299）：1）display cpu-usage查看CPU使用率及门限值；2）减少不需要的业务和配置，降低CPU使用率，检查告警是否恢复；3）set cpu-usage threshold调整过载门限值；4）仍告警则收集告警、日志和配置信息，联系技术工程师。74300：参考display cpu-usage中服务的使用率确认具体业务，按需扩容。",
+    "scoring_points": [
+      "告警含义：一个采样周期内每次采样的CPU利用率均大于过载门限时产生该告警",
+      "告警ID为0x00F10357/0xF10357，告警级别Critical，类型qualityOfServiceAlarm，MIB为HUAWEI-BASE-TRAP-MIB",
+      "影响：管理面/控制面CPU长期过高影响界面响应、邻居状态、路由收敛；数据面超阈值可能导致转发丢包",
+      "处理步骤：display cpu-usage查看使用率与门限",
+      "减少不需要的业务和配置降低CPU使用率",
+      "set cpu-usage threshold调整过载门限值；仍未恢复则收集信息联系技术工程师"
+    ],
+    "tags": [
+      "AR5710",
+      "V600R025C10",
+      "告警处理",
+      "CPU"
+    ]
+  },
+  {
+    "id": 68,
+    "difficulty": "中",
+    "category": {
+      "scope": "设备",
+      "protocol_layer": "其他",
+      "lifecycle": "其他"
+    },
+    "scenario": "通用",
+    "device_type": "路由器",
+    "question": "华为AR6140E路由器（版本V600R025C10）输出日志：IFNET/2/linkDown_active: The interface status changes. (ifName=[ifName], AdminStatus=[ifAdminStatus], OperStatus=[ifOperStatus], Reason=[Reason], mainIf=[mainIf])。请说明该接口物理状态变化日志的含义（含日志格式）、可能原因与处理步骤。",
+    "answer": "IFNET/2/linkDown_active表示接口状态改变。日志格式：IFNET/2/linkDown_active: The interface status changes. (ifName=[ifName], AdminStatus=[ifAdminStatus], OperStatus=[ifOperStatus], Reason=[Reason], mainIf=[mainIf])。日志参数：ifName为接口名称、ifAdminStatus为接口管理状态、ifOperStatus为接口当前状态、Reason为告警产生原因、mainIf为主接口名称。可能原因：接口物理链路变为Down；接口被shutdown；链路层协议变为Down；接口被删除；BFD会话变为Down；接口error-down；误码率超过误码告警阈值（CRC ERR DOWN）；端口传输速率与配置速率不匹配；端口插入不支持的介质；接口处于standby状态等。处理步骤（以物理链路Down为例）：1）接口视图下执行display this，查看两端接口是否被shutdown，子接口还需检查两端是否配置了正确的VLAN ID；2）查看网线、光模块等物理链路是否松动脱落，不正常则重新正确连接物理线路；3）收集告警信息和配置信息，联系技术支持工程师。接口被删除、standby状态属正常运行信息无需处理。",
+    "scoring_points": [
+      "日志含义：接口状态改变（接口物理/协议状态发生变化）",
+      "日志格式：IFNET/2/linkDown_active: The interface status changes. (ifName/AdminStatus/OperStatus/Reason/mainIf)",
+      "参数含义：ifName接口名、AdminStatus管理状态、OperStatus当前状态、Reason原因、mainIf主接口名",
+      "可能原因：物理链路Down、接口被shutdown、链路层协议Down、BFD会话Down、error-down、CRC误码超阈值、速率/介质不匹配等",
+      "处理：接口视图display this检查两端是否shutdown及子接口VLAN ID",
+      "处理：检查网线/光模块等物理链路是否松动脱落并重新连接；仍未恢复则收集信息联系技术支持"
+    ],
+    "tags": [
+      "AR6140E",
+      "V600R025C10",
+      "日志",
+      "接口"
+    ]
+  },
+  {
+    "id": 69,
+    "difficulty": "中",
+    "category": {
+      "scope": "设备",
+      "protocol_layer": "其他",
+      "lifecycle": "其他"
+    },
+    "scenario": "通用",
+    "device_type": "路由器",
+    "question": "华为AR5710路由器（版本V600R025C10）通过Cellular接口拨号上网时输出日志：WWAN/4/WWAN_DIALER_FAILED: Dialup failed. (Interface=[interface-name], SIM-id=[sim-id], APN=[apn-name], Reason=[fail-reason])。请说明该拨号相关日志的含义（含日志格式）、可能原因与处理步骤。",
+    "answer": "日志含义：WWAN/4/WWAN_DIALER_FAILED表示拨号失败（日志信息包含接口名称、SIM卡ID、APN、AT指令执行结果）。日志格式：WWAN/4/WWAN_DIALER_FAILED: Dialup failed. (Interface=[interface-name], SIM-id=[sim-id], APN=[apn-name], Reason=[fail-reason])。日志参数：interface-name为Cellular接口名称；sim-id为SIM卡编号；apn-name为接入点名称；fail-reason为拨号失败原因。可能原因：1）IP地址获取失败；2）AT指令执行失败；3）拨号超时。处理步骤：原因1（IP地址获取失败）：先检查配置是否正确；如果配置正确，请收集告警信息、日志信息和配置信息，联系技术支持人员进行处理。原因2（AT指令执行失败）：请收集告警信息、日志信息和配置信息，联系技术支持人员进行处理。原因3（拨号超时）：拨号超时可能是由于无线网络不稳定导致的，请调整天线，并等待拨号自动重试；若超过1分钟仍然拨号超时，检查配置是否正确；如果配置正确，请收集告警信息、日志信息和配置信息，联系技术支持人员进行处理。",
+    "scoring_points": [
+      "日志含义：Cellular接口拨号失败，日志包含接口名、SIM卡ID、APN、失败原因",
+      "日志格式：WWAN/4/WWAN_DIALER_FAILED: Dialup failed. (Interface/SIM-id/APN/Reason)",
+      "可能原因：IP地址获取失败、AT指令执行失败、拨号超时",
+      "处理：IP地址获取失败先检查配置是否正确",
+      "处理：拨号超时可能因无线网络不稳定，调整天线并等待自动重试，超过1分钟仍超时再查配置",
+      "无法恢复时收集告警/日志/配置信息联系技术支持"
+    ],
+    "tags": [
+      "AR5710",
+      "V600R025C10",
+      "日志",
+      "Cellular"
+    ]
+  },
+  {
+    "id": 70,
+    "difficulty": "中",
+    "category": {
+      "scope": "设备",
+      "protocol_layer": "其他",
+      "lifecycle": "其他"
+    },
+    "scenario": "通用",
+    "device_type": "路由器",
+    "question": "华为AR6710路由器（版本V600R025C10）输出两条日志：DEVM/3/hwDeviceReboot_active: The device has been reset. (PhysicalName=[PhysicalName], ResetInfo=[ResetInfo]) 与 DEVM/4/hwBoardRemove_active: The board was removed. (EntPhysicalIndex=[EntPhysicalIndex], EntPhysicalName=[EntPhysicalName], EntityType=[EntityType], EntityTrapFaultID=[EntityTrapFaultID], Reason=[Reason])。请说明这两条系统启动与单板插拔日志的含义（含日志格式）、可能原因与处理步骤。",
+    "answer": "DEVM/3/hwDeviceReboot_active表示设备重启（注册到控制器时才触发上报；PhysicalName/ResetInfo为物理/重启信息）。格式：DEVM/3/hwDeviceReboot_active: The device has been reset. (PhysicalName=[PhysicalName], ResetInfo=[ResetInfo])。重启信息为Reboot board from command属正常重启无需关注，否则异常重启，收集信息联系技术支持。DEVM/4/hwBoardRemove_active表示单板被拔出。格式：DEVM/4/hwBoardRemove_active: The board was removed. (EntPhysicalIndex=[EntPhysicalIndex], EntPhysicalName=[EntPhysicalName], EntityType=[EntityType], EntityTrapFaultID=[EntityTrapFaultID], Reason=[Reason])。EntityType：1 MPU、2 LPU、3 SFU、4 PIC、5 CFX_CARD、6 OFC。人为拔出则重插单板，display device查注册成功即恢复；否则收集日志和配置信息，联系技术支持。",
+    "scoring_points": [
+      "hwDeviceReboot_active含义：设备重启（设备注册到控制器时才触发上报），参数含PhysicalName与ResetInfo",
+      "hwDeviceReboot处理：重启信息为Reboot board from command表示正常重启无需关注，否则按异常重启收集信息联系技术支持",
+      "hwBoardRemove_active含义：单板被拔出",
+      "hwBoardRemove的EntityType取值：1 MPU、2 LPU、3 SFU、4 PIC、5 CFX_CARD、6 OFC",
+      "hwBoardRemove处理：先检查是否人为拔出→重新插入单板→display device查看是否注册成功",
+      "未恢复时收集告警/日志/配置信息联系技术支持人员"
+    ],
+    "tags": [
+      "AR6710",
+      "V600R025C10",
+      "日志",
+      "系统"
+    ]
+  }
+]

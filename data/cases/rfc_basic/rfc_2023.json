@@ -1,0 +1,205 @@
+[
+  {
+    "id": 21,
+    "difficulty": "简单",
+    "category": {
+      "scope": "其他",
+      "protocol_layer": "IP层",
+      "lifecycle": "其他"
+    },
+    "scenario": "其他",
+    "device_type": "其他",
+    "question": "在 RFC 9352 中，IS-IS 通过哪个 TLV 通告 SRv6 能力？SRv6 Capabilities sub-TLV 的类型号是多少，其中 O 标志位如何定义？",
+    "answer": "IS-IS 在 Router Capability TLV（类型 242）中携带 SRv6 Capabilities sub-TLV（类型 25）通告能力。该 sub-TLV 含 2 字节 Flags，O-flag 位于第 1 比特，置位表示可处理 SRH 中 O-bit。",
+    "scoring_points": [
+      "SRv6 Capabilities sub-TLV 的类型号为 25",
+      "该 sub-TLV 携带于 Router Capability TLV（类型 242）中",
+      "Flags 字段长度为 2 字节",
+      "O-flag 位于第 1 比特（bit 1），与 SRH 的 O-bit 相关"
+    ],
+    "tags": ["RFC-2023", "RFC9352", "IS-IS", "SRv6"]
+  },
+  {
+    "id": 22,
+    "difficulty": "简单",
+    "category": {
+      "scope": "其他",
+      "protocol_layer": "其他",
+      "lifecycle": "其他"
+    },
+    "scenario": "其他",
+    "device_type": "其他",
+    "question": "RFC 9364 是 DNSSEC 的最佳当前实践（BCP）文档，它汇集的核心协议规范 RFC 4033、4034、4035 各自的作用是什么？",
+    "answer": "RFC 9364（BCP 237）将 RFC 4033/4034/4035 作为 DNSSEC 核心规范：RFC 4033 提供概述与概念，4034 定义 DNSSEC 资源记录，4035 定义协议处理（签名与验证）。该 BCP 同时汇集 RFC 5011 自动信任锚更新等扩展实践。",
+    "scoring_points": [
+      "RFC 9364 即 BCP 237，汇集 DNSSEC 最佳当前实践",
+      "RFC 4033 提供概述与概念定义",
+      "RFC 4034 定义 DNSSEC 资源记录",
+      "RFC 4035 定义协议处理（签名与验证）",
+      "同时汇集了 RFC 5011 等扩展机制"
+    ],
+    "tags": ["RFC-2023", "RFC9364", "DNSSEC", "DNS"]
+  },
+  {
+    "id": 23,
+    "difficulty": "简单",
+    "category": {
+      "scope": "其他",
+      "protocol_layer": "传输层",
+      "lifecycle": "其他"
+    },
+    "scenario": "其他",
+    "device_type": "其他",
+    "question": "RFC 9369 定义 QUIC 版本 2 的主要目的是什么？其版本号的取值是如何得到的？",
+    "answer": "QUIC v2 目的：对抗协议僵化（ossification）、检验版本协商机制、为未来 QUIC 版本提供模板。版本号 0x6b3343cf 是字符串 \"QUICv2 version number\" 的 SHA-256 前 4 字节，无内在含义。v2 与 v1 仅琐碎细节不同。",
+    "scoring_points": [
+      "目的之一是对抗协议僵化（ossification）",
+      "目的包括检验版本协商机制并为未来版本提供模板",
+      "版本号为 0x6b3343cf",
+      "版本号来自 \"QUICv2 version number\" 的 SHA-256 前 4 字节，无内在含义"
+    ],
+    "tags": ["RFC-2023", "RFC9369", "QUIC", "版本协商"]
+  },
+  {
+    "id": 24,
+    "difficulty": "简单",
+    "category": {
+      "scope": "其他",
+      "protocol_layer": "传输层",
+      "lifecycle": "其他"
+    },
+    "scenario": "其他",
+    "device_type": "其他",
+    "question": "HyStart++（RFC 9406）解决 TCP 慢启动的什么问题？其基本工作机制是什么？",
+    "answer": "HyStart++ 解决慢启动末段 cwnd 增长过快导致的过冲（overshoot）与大量丢包。其按轮次测量最小 RTT，检测到时延增加（当前轮最小 RTT 超过上一轮加阈值）即退出慢启动，并用 Conservative Slow Start（CSS）安全过渡。",
+    "scoring_points": [
+      "解决慢启动过冲（overshoot）导致的大量丢包问题",
+      "基于每轮最小 RTT 的时延增加启发式判断",
+      "检测到时延增加即退出慢启动",
+      "使用 Conservative Slow Start（CSS）作为安全过渡机制"
+    ],
+    "tags": ["RFC-2023", "RFC9406", "TCP", "拥塞控制"]
+  },
+  {
+    "id": 25,
+    "difficulty": "简单",
+    "category": {
+      "scope": "其他",
+      "protocol_layer": "其他",
+      "lifecycle": "其他"
+    },
+    "scenario": "其他",
+    "device_type": "其他",
+    "question": "RFC 9418 定义的 ietf-service-assurance YANG 模型的核心思想是什么？健康分（health-score）如何定义？",
+    "answer": "该模型把业务保障建模为 subservice 组成的保障图（assurance graph），subservice 间以依赖关联，保障代理计算健康状态并产生症状（symptom）。health-score 为 int8，取值 -1 到 100：100 健康，0 故障，-1 不可计算。",
+    "scoring_points": [
+      "subservice 及其依赖关系构成保障图（assurance graph）",
+      "保障代理计算健康状态并产生症状（symptom）",
+      "health-score 为 int8 类型，取值范围 -1 到 100",
+      "100 表示健康，0 表示故障，-1 表示不可计算"
+    ],
+    "tags": ["RFC-2023", "RFC9418", "YANG", "网络保障"]
+  },
+  {
+    "id": 26,
+    "difficulty": "简单",
+    "category": {
+      "scope": "其他",
+      "protocol_layer": "其他",
+      "lifecycle": "其他"
+    },
+    "scenario": "其他",
+    "device_type": "其他",
+    "question": "SVCB/HTTPS DNS 记录（RFC 9460）中 AliasMode 与 ServiceMode 有何区别？",
+    "answer": "AliasMode 下 SvcPriority 为 0，忽略 SvcParams，可用于区域 apex 别名指向（替代 CNAME），TargetName 为 \".\" 表示服务不存在；ServiceMode 下优先级大于 0，客户端按 SvcParams 连接替代端点，数值越小越优先，同级随机。",
+    "scoring_points": [
+      "AliasMode 对应 SvcPriority=0，ServiceMode 对应 SvcPriority>0",
+      "AliasMode 忽略 SvcParams；位于 apex 时可替代 CNAME",
+      "AliasMode 下 TargetName 为 \".\" 表示服务不存在",
+      "ServiceMode 下优先级数值越小越优先，同优先级随机选择"
+    ],
+    "tags": ["RFC-2023", "RFC9460", "DNS", "SVCB"]
+  },
+  {
+    "id": 27,
+    "difficulty": "简单",
+    "category": {
+      "scope": "其他",
+      "protocol_layer": "IP层",
+      "lifecycle": "其他"
+    },
+    "scenario": "其他",
+    "device_type": "其他",
+    "question": "RFC 9486 中 IPv6 IOAM 数据字段可以放在哪些扩展头中？各 IOAM 选项的类型值如何分配？",
+    "answer": "IOAM 数据字段可置于 IPv6 逐跳选项头（hop-by-hop）或目的选项头（destination）：Pre-allocated Trace 与 POT 为 0x31（逐跳）；E2E 为 0x11（目的选项）；DEX 为 0x11（逐跳）。选项的 8 位保留字段源节点必须置 0。",
+    "scoring_points": [
+      "IOAM 数据字段可置于 hop-by-hop 或 destination 选项头",
+      "Pre-allocated Trace 选项类型为 0x31，位于 hop-by-hop 选项头",
+      "POT 选项为 0x31；E2E 选项为 0x11（destination options）",
+      "DEX 选项为 0x11，位于 hop-by-hop 选项头",
+      "8 位保留字段必须由源节点置 0"
+    ],
+    "tags": ["RFC-2023", "RFC9486", "IPv6", "IOAM"]
+  },
+  {
+    "id": 28,
+    "difficulty": "简单",
+    "category": {
+      "scope": "其他",
+      "protocol_layer": "IP层",
+      "lifecycle": "其他"
+    },
+    "scenario": "其他",
+    "device_type": "其他",
+    "question": "BGP 长期优雅重启（LLGR，RFC 9494）的能力协商与路由标记机制是什么？",
+    "answer": "LLGR 用能力码 71 协商；通告 LLGR 必须同时通告 Graceful Restart 能力，否则被忽略。保持期路由必须附加 LLGR_STALE 团体（0xFFFF0006）；不适用路由附加 NO_LLGR（0xFFFF0007）且不得保留；期间陈旧路由降为最低优先。",
+    "scoring_points": [
+      "LLGR 能力码为 71",
+      "通告 LLGR 必须同时通告 Graceful Restart 能力，否则 LLGR 被忽略",
+      "LLGR 期间路由附加 LLGR_STALE 团体属性（0xFFFF0006）",
+      "NO_LLGR 团体为 0xFFFF0007，该类路由不得保留",
+      "LLGR 期间陈旧路由被降为最低优先（least preferred）"
+    ],
+    "tags": ["RFC-2023", "RFC9494", "BGP", "优雅重启"]
+  },
+  {
+    "id": 29,
+    "difficulty": "简单",
+    "category": {
+      "scope": "其他",
+      "protocol_layer": "传输层",
+      "lifecycle": "其他"
+    },
+    "scenario": "其他",
+    "device_type": "其他",
+    "question": "RFC 9525 定义了哪几类 TLS 证书中的服务身份标识？对 Common Name 字段的使用有何规定？",
+    "answer": "定义四类标识：DNS-ID（dNSName）、IP-ID（iPAddress）、SRV-ID（SRVName）、URI-ID。证书须至少含一个标识，建议以 DNS-ID 为基线；Common Name（CN）RDN 不得用作身份标识。通配符仅一个且须为最左侧完整标签。",
+    "scoring_points": [
+      "四类标识：DNS-ID（dNSName）、IP-ID（iPAddress）、SRV-ID（SRVName）、URI-ID（uniformResourceIdentifier）",
+      "证书必须至少包含一个标识，建议以 DNS-ID 为基线",
+      "Common Name（CN）RDN 不得用作身份标识",
+      "通配符只能有一个且必须作为最左侧完整标签"
+    ],
+    "tags": ["RFC-2023", "RFC9525", "TLS", "证书验证"]
+  },
+  {
+    "id": 30,
+    "difficulty": "简单",
+    "category": {
+      "scope": "其他",
+      "protocol_layer": "IP层",
+      "lifecycle": "其他"
+    },
+    "scenario": "其他",
+    "device_type": "其他",
+    "question": "BGP-LS（RFC 9552）使用什么 AFI/SAFI 组合？定义了哪几种 NLRI 类型？",
+    "answer": "BGP-LS 用 AFI 16388，SAFI 71（BGP-LS）与 72（BGP-LS-VPN），MP-BGP 能力码 1。NLRI 类型：1=Node、2=Link、3=IPv4 与 4=IPv6 Topology Prefix；65000-65535 为私有。",
+    "scoring_points": [
+      "AFI 为 16388；SAFI 71（BGP-LS）与 72（BGP-LS-VPN）",
+      "MP-BGP 能力码为 1",
+      "四种 NLRI：1=Node、2=Link、3=IPv4 Topology Prefix、4=IPv6 Topology Prefix",
+      "NLRI 类型 65000-65535 保留为私有用途"
+    ],
+    "tags": ["RFC-2023", "RFC9552", "BGP-LS", "链路状态"]
+  }
+]

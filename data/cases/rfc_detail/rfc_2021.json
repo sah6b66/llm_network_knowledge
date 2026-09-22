@@ -1,0 +1,191 @@
+[
+  {
+    "id": 1,
+    "difficulty": "中",
+    "category": {"scope": "其他", "protocol_layer": "IP层", "lifecycle": "其他"},
+    "scenario": "其他",
+    "device_type": "其他",
+    "question": "请详述 RFC 8966 中 Babel 报文头格式、Update TLV(Type 8)各字段的含义,以及带序列号的可行条件判定规则。",
+    "answer": "Babel 报文含 4 字节报文头:Magic(必须为十进制 42,首字节非 42 的报文必须被静默忽略)、Version(本文档规定为 2)、Body length,其后是 TLV 序列。Update TLV(Type 值为 8)用于通告或撤销路由,字段包括:AE(前缀的编码方式);Flags(P 位 0x80 表示为后续同地址族 Update 建立默认前缀,R 位 0x40 表示建立默认 router-id);Plen(所通告前缀的比特长度);Omitted(前缀开头被省略的字节数,应从前一个同地址族且置 P 位的 Update 中补全);Interval(以厘秒为单位,是发送方为本前缀再发新更新的时间上界,不得为 0,十六进制 FFFF 表示除非收到请求否则不再重发);Seqno(发起者对本更新的序列号);Metric(发送方对该路由的度量,十六进制 FFFF 表示路由撤销);Prefix(被通告的前缀)。可行条件:设 FD(A)=(s,m),收到携带距离 (s',m') 的更新,当 s'>s,或 s'=s 且 m'<m 时,该更新可行。",
+    "scoring_points": [
+      "报文头 4 字节:Magic=42(十进制)、Version=2、Body length,其后为 TLV 序列",
+      "Update TLV 的 Type 值为 8,用于通告或撤销路由",
+      "Flags:P 位(0x80)为后续 Update 建立默认前缀,R 位(0x40)建立默认 router-id",
+      "Interval 以厘秒为单位、是再发更新时间的上界,不得为 0,FFFF 表示不主动重发",
+      "Metric 为十六进制 FFFF(无穷)表示路由撤销(retraction)",
+      "Omitted 表示前缀开头省略的字节数,取自同地址族前一个置 P 位的 Update",
+      "可行条件:s'>s,或 s'=s 且 m'<m 时更新可行"
+    ],
+    "tags": ["RFC-2021", "RFC8966", "Babel", "路由协议"]
+  },
+  {
+    "id": 2,
+    "difficulty": "中",
+    "category": {"scope": "其他", "protocol_layer": "其他", "lifecycle": "其他"},
+    "scenario": "其他",
+    "device_type": "其他",
+    "question": "请详述 RFC 8976 中 ZONEMD 资源记录的 RDATA 各字段及其取值规则,并说明非 apex ZONEMD 记录的处理方式。",
+    "answer": "ZONEMD 的 RR 类型值为 63,与类别(class)无关,RDATA 由四个字段组成:Serial 为 32 位无符号整数(网络字节序),取自区域 SOA 记录的序列号,用于把 ZONEMD 绑定到特定版本的区域内容,否则摘要无法关联到具体的区域实例;Scheme 为 8 位无符号整数,标识数据整理并送入哈希函数的方法,本文档中 SIMPLE(Scheme=1)是唯一标准化的方案且实现必须支持,240-254 留作私用;Hash Algorithm 为 8 位,标识构造摘要的哈希算法:SHA384 取值 1,必须支持,摘要为 48 字节;SHA512 取值 2,应该支持,摘要为 64 字节;两者的摘要都不得截断;Digest 为变长字段,长度由 RDATA 尺寸减去 Serial、Scheme、Hash Algorithm 固定长度得出,不得短于 12 字节。非 apex 的 ZONEMD 记录未被禁止,但在本规范中无意义,不得用于校验;在摘要计算期间它们按普通 RR 处理,按原样参与摘要而不被替换为占位 RR。",
+    "scoring_points": [
+      "RR 类型值为 63,与类别(class)无关",
+      "Serial:32 位无符号整数、网络字节序,取自 SOA 记录序列号,用于绑定特定版本的区域",
+      "Scheme:8 位,SIMPLE=1 是唯一标准化方案且必须(MUST)支持,240-254 为私用",
+      "Hash Algorithm:SHA384=1 必须支持(摘要 48 字节),SHA512=2 应该支持(摘要 64 字节)",
+      "SHA384/SHA512 的摘要不得截断",
+      "Digest 变长,长度由 RDATA 尺寸推算,不得短于 12 字节",
+      "非 apex ZONEMD 不得用于验证,摘要计算中按普通 RR 原样处理"
+    ],
+    "tags": ["RFC-2021", "RFC8976", "DNS", "ZONEMD"]
+  },
+  {
+    "id": 3,
+    "difficulty": "中",
+    "category": {"scope": "其他", "protocol_layer": "IP层", "lifecycle": "其他"},
+    "scenario": "其他",
+    "device_type": "其他",
+    "question": "按照 RFC 8981 第 3.4 节,主机处理带 A 位的 Prefix Information option 时如何生成临时地址?请说明生命周期计算、DESYNC_FACTOR 的作用、DAD 失败处理、创建条件与相关默认取值。",
+    "answer": "主机按以下规则生成临时地址:其有效寿命取前缀 Valid Lifetime 与 TEMP_VALID_LIFETIME 中的较小者,TEMP_VALID_LIFETIME 默认为两天;首选寿命取前缀 Preferred Lifetime 与 TEMP_PREFERRED_LIFETIME - DESYNC_FACTOR 中的较小者,TEMP_PREFERRED_LIFETIME 默认为一天。DESYNC_FACTOR 是创建地址时计算并关联到该地址的随机值,用于避免客户端以固定频率再生地址、避免多台客户端相互同步而在同一时刻再生地址。仅当计算出的首选寿命大于 REGEN_ADVANCE 时才创建临时地址,且不得创建首选寿命为 0 的临时地址。临时地址必须通过在收到的前缀后拼接随机 IID 生成,并必须对其执行 DAD;若 DAD 表明地址已被使用,必须重新生成随机 IID 并重复相应步骤,最多重试 TEMP_IDGEN_RETRIES 次,仍失败则必须记录系统错误。为保证始终有可用的首选临时地址,主机应在旧地址被弃用前 REGEN_ADVANCE 时间启动再生成;正常情况下每个接口上每个前缀任一时刻至多一个非弃用的临时地址。",
+    "scoring_points": [
+      "有效寿命 = min(前缀 Valid Lifetime, TEMP_VALID_LIFETIME),TEMP_VALID_LIFETIME 默认两天",
+      "首选寿命 = min(前缀 Preferred Lifetime, TEMP_PREFERRED_LIFETIME - DESYNC_FACTOR),TEMP_PREFERRED_LIFETIME 默认一天",
+      "DESYNC_FACTOR 为地址创建时计算的随机值,避免固定频率再生成及主机间同步",
+      "仅当计算出的首选寿命大于 REGEN_ADVANCE 才创建,不得创建首选寿命为 0 的地址",
+      "IID 必须随机生成,必须执行 DAD,失败后最多重试 TEMP_IDGEN_RETRIES 次再记系统错误",
+      "应在弃用前 REGEN_ADVANCE 时间再生成;正常时每前缀每接口至多一个非弃用临时地址"
+    ],
+    "tags": ["RFC-2021", "RFC8981", "IPv6", "隐私地址"]
+  },
+  {
+    "id": 4,
+    "difficulty": "中",
+    "category": {"scope": "其他", "protocol_layer": "传输层", "lifecycle": "其他"},
+    "scenario": "其他",
+    "device_type": "其他",
+    "question": "按照 RFC 8985,发送方如何计算 TLP 的 PTO 定时器时长?PTO 到期后发送 loss probe 必须满足哪两个条件?RACK 基于时间推断丢包的基本原理是什么?",
+    "answer": "发送方在发送新数据(非探测)或收到累积确认新数据的 ACK 后应启动或重启 PTO 定时器(已处于快速恢复、RTO 恢复或已有段被 SACK 时除外)。PTO 计算规则:SRTT 可用时默认 PTO = 2*SRTT(正常情况下 ACK 通常在一个 SRTT 内到达,取两倍是为保守起见避免伪探测);若 FlightSize 只有一个报文段,可以再加上 TLP.max_ack_delay 以容忍可能延迟的确认;无 SRTT 估计时 PTO 取 1 秒(对应 RFC 6298 无 SRTT 时的 RTO 值);若 RTO 会更早到期,则把探测安排在 RTO 到期时刻发送。PTO 到期后,仅当同时满足两个条件才发送 loss probe:(1) 没有先前的 loss probe 仍在途,由状态变量 TLP.end_seq 维持,保证任意时刻超出拥塞窗口的在途报文至多一个;(2) 自上次发送 loss probe 或连接开始(取较晚者)以来已获得过 RTT 测量样本,以兔探测重传妨碍 SRTT 对路径 RTT 变化的自适应。RACK 原理:若某段被乱序送达,则按时间顺序在其之前发送的段要么丢失要么被乱序;RACK 为每个已发送段记录最近发送时间,基于最新 RTT 测量加 reordering window 的时间推断标记丢包,不依赖发送量,因此对应用受限流量有效,且同样适用于检测重传本身丢失。",
+    "scoring_points": [
+      "SRTT 可用时默认 PTO = 2*SRTT",
+      "无 SRTT 估计时 PTO 取 1 秒",
+      "FlightSize 为一个报文段时可加上 TLP.max_ack_delay 以容忍延迟确认",
+      "若 RTO 会更早到期,则探测改在 RTO 到期时刻发送",
+      "条件一:无先前 loss probe 仍在途(TLP.end_seq 维持,超窗在途包至多一个)",
+      "条件二:自上次探测或连接开始以来取得过 RTT 测量样本",
+      "RACK:乱序送达说明更早发送的段丢失或乱序,用最近发送时间戳加 reordering window 的时间推断,不依赖发送量"
+    ],
+    "tags": ["RFC-2021", "RFC8985", "TCP", "丢包检测"]
+  },
+  {
+    "id": 5,
+    "difficulty": "中",
+    "category": {"scope": "其他", "protocol_layer": "IP层", "lifecycle": "其他"},
+    "scenario": "其他",
+    "device_type": "其他",
+    "question": "请详述 RFC 8986 中 SRv6 SID 的 LOC:FUNCT:ARG 结构,以及节点收到 IPv6 DA 为本地 End SID 的报文时对 SRH 的处理步骤(含异常处理)。",
+    "answer": "SRv6 SID 由 LOC:FUNCT:ARG 组成:LOC(定位符)编码在 SID 最高 L 位,FUNCT(功能)占 F 位,ARG(参数)占 A 位,L+F+A<=128,不足 128 位时 SID 其余位必须为 0;LOC 可表示为 B:N(B 为操作者分配给 SRv6 SID 的 IPv6 前缀块,N 为实例化该 SID 的父节点标识),LOC 可路由时能引导到实例化该 SID 的节点;FUNCT 是绑定到该 SID 的本地行为的不透明(opaque)标识。End 行为处理:若 Segments Left 为 0,停止处理 SRH,继续处理报文中由路由头的 Next Header 字段标识的下一个头;若 IPv6 Hop Limit <= 1,向源地址发送 Code 0 的 ICMP Time Exceeded 消息,中断处理并丢弃报文;若 Last Entry > max_LE 或 Segments Left > Last Entry+1,向源地址发送 ICMP Parameter Problem(Code 0,Pointer 指向 Segments Left 字段),中断处理并丢弃报文;否则将 IPv6 Hop Limit 减 1、Segments Left 减 1,用 Segment List[Segments Left] 更新 IPv6 DA,并把报文提交 egress IPv6 FIB 查表发送。",
+    "scoring_points": [
+      "SID = LOC:FUNCT:ARG,L+F+A<=128,不足 128 位时其余位必须为 0",
+      "LOC 可表示为 B:N 且可路由到实例化 SID 的节点;FUNCT 为本地行为的不透明标识",
+      "Segments Left==0 时停止处理 SRH,继续处理下一个头",
+      "Hop Limit<=1 时发送 ICMP Time Exceeded(Code 0)并丢弃报文",
+      "Last Entry>max_LE 或 Segments Left>Last Entry+1 时发 ICMP Parameter Problem,Pointer 指向 Segments Left 字段",
+      "正常流程:Hop Limit 减 1、Segments Left 减 1、IPv6 DA 更新为 Segment List[Segments Left]",
+      "最后提交 egress IPv6 FIB 查表转发"
+    ],
+    "tags": ["RFC-2021", "RFC8986", "SRv6", "Segment Routing"]
+  },
+  {
+    "id": 6,
+    "difficulty": "中",
+    "category": {"scope": "其他", "protocol_layer": "传输层", "lifecycle": "其他"},
+    "scenario": "其他",
+    "device_type": "其他",
+    "question": "RFC 8996 指出 TLS 1.0/1.1 存在哪些与 SHA-1 相关的安全问题?对客户端与服务器在版本协商上的具体要求(含版本号取值与告警行为)是什么?",
+    "answer": "安全问题:TLS 1.0 和 1.1 的握手完整性依赖对交换消息的连续 SHA-1 哈希,能执行 2^77 次操作的攻击者可对握手发起降级攻击,远低于可接受的现代安全余量;握手的认证依赖 SHA-1 哈希或 MD5 与 SHA-1 拼接(强度与 SHA-1 相当)的签名,攻击者攻破严重弱化的 SHA-1 后即可冒充服务器。此外 TLS 1.0 存在 IV 选择与填充错误处理方面的弱点(TLS 1.1 针对性修补)。具体要求:TLS 1.0 与 TLS 1.1 必须不得使用,从任何 TLS 版本协商到 1.0/1.1 必须不得允许;客户端不得发送 ClientHello.client_version 为 {03,01}(TLS 1.0)或 {03,02}(TLS 1.1)的 ClientHello,服务器不得发送 ServerHello.server_version 为上述值的 ServerHello;任何一方收到版本号为 {03,01} 或 {03,02} 的 Hello 报文,必须回应 protocol_version 告警并关闭连接;服务器必须接受 ClientHello 记录层版本号为任意 {03,XX}(包括 {03,00})的报文,但仍不得据此协商 TLS 1.0 或 1.1。",
+    "scoring_points": [
+      "握手完整性依赖交换消息的连续 SHA-1 哈希,2^77 次操作即可实施降级攻击,低于现代安全余量",
+      "握手认证使用 SHA-1 或 MD5+SHA-1 拼接的签名,攻破 SHA-1 即可冒充服务器",
+      "TLS 1.0 在 IV 选择与填充错误处理上存在弱点(TLS 1.1 针对修补)",
+      "TLS 1.0/1.1 必须不得(MUST NOT)使用且必须不得被协商",
+      "客户端不得发送 client_version 为 {03,01}/{03,02} 的 ClientHello,服务器不得发送对应 ServerHello",
+      "收到版本号为 {03,01}/{03,02} 的 Hello 须回应 protocol_version 告警并关闭连接",
+      "服务器须接受任意 {03,XX}(含 {03,00})的记录层版本号,但仍不得协商 TLS 1.0/1.1"
+    ],
+    "tags": ["RFC-2021", "RFC8996", "TLS", "协议弃用"]
+  },
+  {
+    "id": 7,
+    "difficulty": "中",
+    "category": {"scope": "其他", "protocol_layer": "传输层", "lifecycle": "其他"},
+    "scenario": "其他",
+    "device_type": "其他",
+    "question": "请详述 RFC 9000 中 QUIC 流 ID 的结构与编码规则(低两位比特的含义及四种流类型),以及 Version Negotiation 报文的发送规则与客户端处理规则。",
+    "answer": "流 ID 是 62 位整数(取值 0 到 2^62-1),在连接内对所有流唯一,按变长整数编码,端点在连接内不得重用流 ID。最低位(0x01)标识发起方:客户端发起的流为偶数(该位为 0),服务器发起的流为奇数(该位为 1);次低位(0x02)区分流的方向性:双向流该位为 0,单向流该位为 1。因此低两位组合出四种类型:0x00 客户端发起双向流、0x01 服务器发起双向流、0x02 客户端发起单向流、0x03 服务器发起单向流;每类流的编号空间分别从 0x00 至 0x03 起始,同类后续流以递增编号创建,乱序使用某个流 ID 会导致同类中编号更低的流也被打开。版本协商:当客户端所选版本服务器不可接受时,服务器对可能发起连接的报文回应 Version Negotiation 报文,其中列出服务器可接受的版本列表;端点不得对收到的 Version Negotiation 报文再回应 Version Negotiation 报文。只支持本版本的客户端收到 Version Negotiation 报文必须放弃当前连接尝试,但有两个例外:若此前已收到并成功处理过任何其他报文(包括更早的 Version Negotiation 报文),必须丢弃该报文;若该报文列出了客户端所选的 QUIC 版本,也必须丢弃。",
+    "scoring_points": [
+      "流 ID 为 62 位整数(0 到 2^62-1),按变长整数编码,连接内不得重用",
+      "最低位 0x01 标识发起方:客户端发起为偶数,服务器发起为奇数",
+      "次低位 0x02 区分方向:双向流为 0,单向流为 1",
+      "四种类型:0x00 客户端双向、0x01 服务器双向、0x02 客户端单向、0x03 服务器单向",
+      "每类流编号空间分别从 0x00-0x03 起始递增;乱序使用会连带打开更低编号的同类流",
+      "服务器对不可接受的版本回 Version Negotiation 报文,内含可接受版本列表;不得以 VN 响应 VN",
+      "仅支持本版本的客户端收到 VN 须放弃连接尝试,但已处理过其他报文或 VN 列出客户端所选版本时须丢弃该报文"
+    ],
+    "tags": ["RFC-2021", "RFC9000", "QUIC", "传输协议"]
+  },
+  {
+    "id": 8,
+    "difficulty": "中",
+    "category": {"scope": "其他", "protocol_layer": "IP层", "lifecycle": "其他"},
+    "scenario": "其他",
+    "device_type": "其他",
+    "question": "请描述 RFC 9012 中 Tunnel Encapsulation 属性的 TLV 与 sub-TLV 结构(含 sub-TLV 长度字段规则)、主要隧道类型编号,以及 Tunnel Egress Endpoint sub-TLV 的编码规则。",
+    "answer": "该属性由一组 TLV 构成,每个 Tunnel TLV(Tunnel Encapsulation TLV)含三个字段:Tunnel Type(2 字节,取值来自 IANA 的 BGP Tunnel Encapsulation Attribute Tunnel Types 注册表,标识隧道类型)、Length(2 字节,Value 字段的总字节数)、Value(变长,由多个 sub-TLV 组成)。每个 sub-TLV 含 1 字节 Type、1 或 2 字节 Length 及变长 Value:当 Type 取值 0-127 时 Length 为 1 字节,取值 128-255 时为 2 字节。主要隧道类型编号:L2TPv3=1、GRE=2、VXLAN=8、NVGRE=9、MPLS-in-GRE=11。Tunnel Egress Endpoint sub-TLV(Type Code 6)指定隧道出口端点(即解封装载荷的路由器)的地址,Value 由三部分组成:Reserved(4 字节,发起时应为 0,接收时必须忽略、传播时不得修改)、Address Family(2 字节,取自 IANA 地址族编号注册表,本文假定 IPv4 或 IPv6)、Address(长度取决于地址族):IPv4 时必须为 /32 的 IPv4 地址,IPv6 时必须为 /128 的 IPv6 地址。特例:Address Family 为 0 表示隧道出口端点就是下一跳地址,此时省略 Address 字段,且该 sub-TLV 的 Length 必须为 6(0x06)。在本文档规定的 AFI/SAFI 中,每个 TLV 必须有且仅有一个 Tunnel Egress Endpoint sub-TLV。",
+    "scoring_points": [
+      "Tunnel TLV:Tunnel Type 2 字节、Length 2 字节、Value 为多个 sub-TLV",
+      "sub-TLV:Type 1 字节;Type 为 0-127 时 Length 1 字节,128-255 时 2 字节",
+      "隧道类型编号:L2TPv3=1、GRE=2、VXLAN=8、NVGRE=9、MPLS-in-GRE=11",
+      "Tunnel Egress Endpoint sub-TLV(Type Code 6):Reserved 4 字节、Address Family 2 字节、Address 变长",
+      "IPv4 时 Address 必须为 /32,IPv6 时必须为 /128",
+      "Address Family=0 表示端点为下一跳地址,省略 Address,Length 必须为 6(0x06)",
+      "每个 TLV 必须有且仅有一个 Tunnel Egress Endpoint sub-TLV"
+    ],
+    "tags": ["RFC-2021", "RFC9012", "BGP", "隧道封装"]
+  },
+  {
+    "id": 9,
+    "difficulty": "中",
+    "category": {"scope": "其他", "protocol_layer": "其他", "lifecycle": "其他"},
+    "scenario": "其他",
+    "device_type": "其他",
+    "question": "在 RFC 9024 定义的 DetNet MPLS 数据平面中,S-Label、F-Label 与 d-CW 各自的作用是什么?d-CW 携带什么信息、支持哪两种序列号长度?不同类型节点如何处理这些元素?",
+    "answer": "S-Label 是 MPLS 业务标签(类似 PW 标签),同时标识 DetNet 流身份与 MPLS 载荷类型;对栈顶为 S-Label 的 DetNet 报文,业务子层节点使用与该 S-Label 关联的本地上下文,例如收到的 F-Label 可用于确定对该报文应用的本地 DetNet 操作;S-Label 可取自平台标签空间,使报文无论从哪个入接口或 LSP 到达都能正确识别 DetNet 流。业务子层功能(PREOF,即 Packet Replication, Elimination and Ordering Functions)使用 DetNet 控制字 d-CW;d-CW 携带 DetNet 序列号以及 Data/OAM 判别符,支持 16 位与 28 位两种序列号长度。F-Label(转发标签,可有一个或多个)支撑转发子层,负责资源分配与显式路由,以消除或减少拥塞丢包与抖动。DetNet 边缘/中继(relay)节点同时提供业务与转发子层功能,按需添加、删除和处理 d-CW、S-Label 与 F-Label;而 transit 节点只包含转发子层功能(显式路由与资源分配),不提供任何业务子层处理。由于 DetNet PREOF 与 TSN FRER 功能刻意相似,业务保护可在 TSN 与 DetNet 域之间互通,但需要在 TSN(L2)与 PW(MPLS)封装间复制序列号字段,该互通场景超出本文档范围,留待后续研究。",
+    "scoring_points": [
+      "S-Label 是业务标签(类似 PW 标签),同时标识 DetNet 流身份与 MPLS 载荷类型",
+      "处理栈顶 S-Label 的节点使用与该标签关联的本地上下文;S-Label 可取自平台标签空间",
+      "PREOF 即 Packet Replication, Elimination and Ordering Functions,业务子层功能使用 d-CW",
+      "d-CW 携带 DetNet 序列号与 Data/OAM 判别符,支持 16 位和 28 位两种序列号长度",
+      "F-Label(可多个)支撑转发子层,提供资源分配与显式路由",
+      "边缘/中继节点添加、删除、处理 d-CW/S-Label/F-Label;transit 节点不做业务子层处理",
+      "PREOF 与 TSN FRER 互通需在 TSN(L2)与 PW(MPLS)封装间复制序列号,该场景不在本文档范围内"
+    ],
+    "tags": ["RFC-2021", "RFC9024", "DetNet", "MPLS"]
+  },
+  {
+    "id": 10,
+    "difficulty": "中",
+    "category": {"scope": "其他", "protocol_layer": "其他", "lifecycle": "其他"},
+    "scenario": "其他",
+    "device_type": "其他",
+    "question": "请描述 RFC 9136 中 EVPN IP Prefix Route(RT-5)NLRI 的字段构成与编码规则(含 ESI、GW IP、MPLS Label 的取值约束),并说明在 IP-VRF-to-IP-VRF(对称 IRB)场景中 Ethernet Tag ID 与 GW IP 如何取值。",
+    "answer": "RT-5 的 NLRI 编码:IPv4 时 Length 字段为 34,依次为 RD(8 字节)、Ethernet Segment Identifier(10 字节)、Ethernet Tag ID(4 字节)、IP Prefix Length(1 字节,0 到 32)、IP Prefix(4 字节)、GW IP Address(4 字节)、MPLS Label(3 字节);IPv6 时 Length 为 58,IP Prefix Length 为 0 到 128,IP Prefix 与 GW IP Address 各 16 字节;IP 前缀与网关 IP 地址必须属于同一地址族。RD 与 Ethernet Tag ID 按 RFC 7432/RFC 8365 使用,RD 在每个 MAC-VRF(或 IP-VRF)内唯一;RD、Ethernet Tag ID、前缀长度与前缀是 BGP 比较路由时路由键的组成部分。ESI 仅在用作 Overlay Index 时必须为非零的 10 字节标识符,否则必须全零;GW IP Address 编码用作 Overlay Index 的有效 IP 地址,不用时必须全零。MPLS Label 编码为 3 字节,高 20 位为标签值(可设为 MPLS 标签或 VNI);采用基于 Overlay Index 的递归解析时发送方标签值应为 0;若收到的标签值为 0 但路由不含 Overlay Index,则必须按 treat-as-withdraw 处理。在 IP-VRF-to-IP-VRF 场景(按 RFC 9135 的定义属对称 IRB 模型,即 ingress 与 egress NVE 都需 IP 和 MAC 查找,而不对称模型只在 ingress 做 IP+MAC 查找)中,各 NVE/DGW 通告 RT-5 时 Ethernet Tag ID = 0,GW IP Address 填 SBD IRB 接口的 IRB-IP 作为递归路由解析的 Overlay Index,该 SBD 是在每个 NVE/PE 上实例化并经 IRB 接口连接到 IP-VRF 的补充广播域。",
+    "scoring_points": [
+      "IPv4 时 NLRI Length=34:RD(8)、ESI(10)、Ethernet Tag ID(4)、IP Prefix Length(1,0-32)、IP Prefix(4)、GW IP(4)、MPLS Label(3)",
+      "IPv6 时 Length=58,前缀长度 0-128,前缀与 GW IP 各 16 字节,且前缀与 GW IP 须同地址族",
+      "RD、Ethernet Tag ID、前缀长度与前缀构成路由键;RD 每 MAC-VRF/IP-VRF 唯一",
+      "ESI 用作 Overlay Index 时须非零,否则全零;GW IP 不用作 Overlay Index 时全零",
+      "MPLS Label 高 20 位为标签值(或 VNI);收到标签 0 且无 Overlay Index 的路由须 treat-as-withdraw",
+      "IP-VRF-to-IP-VRF 属对称 IRB 模型:ingress 与 egress NVE 均做 IP 和 MAC 查找",
+      "该场景通告 RT-5 时 Ethernet Tag ID=0,GW IP 填 SBD IRB 接口的 IRB-IP 作递归解析 Overlay Index"
+    ],
+    "tags": ["RFC-2021", "RFC9136", "EVPN", "L3VPN"]
+  }
+]

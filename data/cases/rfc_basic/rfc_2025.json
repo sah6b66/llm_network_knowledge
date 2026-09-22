@@ -1,0 +1,172 @@
+[
+  {
+    "id": 41,
+    "difficulty": "简单",
+    "category": {"scope": "其他", "protocol_layer": "IP层", "lifecycle": "其他"},
+    "scenario": "其他",
+    "device_type": "其他",
+    "question": "RFC 9692 定义的 RIFT 是一种为什么场景设计的路由协议？它的核心设计思想（路由信息交换方式的“混合”特征）是什么？",
+    "answer": "RIFT 是专为 Clos/胖树（fat tree）IP 构造（数据中心 Spine-Leaf fabric）设计的动态路由协议，目标是最小化控制平面状态与配置运维复杂度。其核心思想是链路状态与距离矢量的混合：向 Spine 方向（北向）以链路状态方式泛洪拓扑，向 Leaf 方向（南向）以距离矢量方式下发默认路由，从而实现无环转发。",
+    "scoring_points": [
+      "指出面向 Clos/胖树 IP fabric（数据中心）场景",
+      "说明设计目标是最小化控制平面状态与配置/运维复杂度",
+      "说明北向（朝 Spine）采用链路状态方式泛洪",
+      "说明南向（朝 Leaf）采用距离矢量方式（默认路由）",
+      "提到两种方式的混合可实现无环（valley-free）转发"
+    ],
+    "tags": ["RFC-2025", "RFC9692", "RIFT", "数据中心"]
+  },
+  {
+    "id": 42,
+    "difficulty": "简单",
+    "category": {"scope": "其他", "protocol_layer": "其他", "lifecycle": "其他"},
+    "scenario": "其他",
+    "device_type": "其他",
+    "question": "RFC 9704 定义的“验证式拆分水平 DNS”（Validated Split-Horizon DNS）要解决什么问题？其基本机制是什么？",
+    "answer": "它解决混合（hybrid）设备如何安全获取内网拆分水平解析结果的问题：域主通过网络向 DNS 客户端声明哪些本地加密解析器被授权对哪些父区的子域给出权威应答，客户端在接入受保护网络时通过密码学令牌与验证记录验证该声明，验证成功后形成的区域即 Validated Split-Horizon 区，从而在内外网同时可用的情况下安全使用内部名字。",
+    "scoring_points": [
+      "指出目标是让（混合）客户端安全获得拆分水平/内网 DNS 解析结果",
+      "说明由域主声明本地加密解析器对特定子域的授权",
+      "说明客户端需要验证授权声明（验证令牌/验证记录机制）",
+      "提到网络必须提供加密解析器（DNR/DDR）",
+      "提到验证成功后形成 Validated Split-Horizon 区域"
+    ],
+    "tags": ["RFC-2025", "RFC9704", "DNS", "本地解析"]
+  },
+  {
+    "id": 43,
+    "difficulty": "简单",
+    "category": {"scope": "其他", "protocol_layer": "传输层", "lifecycle": "其他"},
+    "scenario": "其他",
+    "device_type": "其他",
+    "question": "RFC 9743（BCP 133）是什么性质的文档？它对新的拥塞控制算法的评估提出了哪些总体要求？",
+    "answer": "它是替代 RFC 5033 的最佳现行实践（BCP），为评审与 RFC 2914 原则有差异的新拥塞控制算法提供框架，目标是保证算法在多样化路径上的稳定性。总体要求：先仿真研究、独立实现并取得实际经验；缺乏大规模部署实证的规范必须申请 Experimental 状态；每份 RFC 须在摘要中说明 IETF 是否认为该算法可安全用于互联网及不推荐使用的环境。",
+    "scoring_points": [
+      "指出是 BCP（替代 RFC 5033）性质的评估指导文档",
+      "说明适用对象是与 RFC 2914 原则不同的新拥塞控制算法",
+      "说明评估顺序要求：仿真优先、独立实现、取得实际经验",
+      "说明缺乏互联网规模部署证据的规范必须申请 Experimental 状态",
+      "说明 RFC 摘要须声明算法是否安全及不适用的环境"
+    ],
+    "tags": ["RFC-2025", "RFC9743", "拥塞控制", "BCP"]
+  },
+  {
+    "id": 44,
+    "difficulty": "简单",
+    "category": {"scope": "其他", "protocol_layer": "IP层", "lifecycle": "其他"},
+    "scenario": "其他",
+    "device_type": "其他",
+    "question": "RFC 9762 在 IPv6 路由通告（RA）的前缀信息选项（PIO）中定义了什么新标志？其作用是什么？",
+    "answer": "它定义了 P flag（DHCPv6-PD Preferred Flag），是位于 R flag 之后的 1 比特 PIO 标志。当 P 置位时表示网络希望客户端采用 RFC 9663 的每设备前缀模型，即通过 DHCPv6 前缀委派（PD）获取前缀，而非 SLAAC 或 DHCPv6 地址分配；同时隐含网络中存在能为每台设备委派前缀的 DHCPv6 服务器。P 与 M/O 标志相互独立。",
+    "scoring_points": [
+      "指出定义的是 P 标志（DHCPv6-PD Preferred Flag）",
+      "说明位置：PIO 中 R 标志之后的 1 比特",
+      "说明 P 置位表示网络偏好客户端使用 DHCPv6-PD 每设备前缀模型",
+      "说明隐含网络存在可为每台设备委派前缀的 DHCPv6 服务器",
+      "说明 P 与 M/O 标志相互独立"
+    ],
+    "tags": ["RFC-2025", "RFC9762", "IPv6", "DHCPv6 PD"]
+  },
+  {
+    "id": 45,
+    "difficulty": "简单",
+    "category": {"scope": "其他", "protocol_layer": "IP层", "lifecycle": "其他"},
+    "scenario": "其他",
+    "device_type": "其他",
+    "question": "RFC 9777（STD 101）将 MLDv2 提升为互联网标准。MLD 的功能是什么？MLDv2 相比 MLDv1 的主要增强是什么？",
+    "answer": "MLD（Multicast Listener Discovery）使 IPv6 路由器发现直连链路上有哪些组播侦听者及其关心的组播地址，它是 ICMPv6 的子协议。MLDv2 是 IGMPv3（RFC 9776）向 IPv6 的翻译，核心增强是引入源过滤：主机可指定 INCLUDE/EXCLUDE 源列表，从而支持源特定组播（SSM），并可与 MLDv1 互操作。",
+    "scoring_points": [
+      "说明 MLD 用于路由器发现直连链路上的组播侦听者及其关心的组播地址",
+      "指出 MLD 是 ICMPv6 的子协议",
+      "指出 MLDv2 是 IGMPv3（RFC 9776）的 IPv6 翻译",
+      "说明新增源过滤能力（INCLUDE/EXCLUDE 模式）以支持 SSM",
+      "提到可与 MLDv1 互操作"
+    ],
+    "tags": ["RFC-2025", "RFC9777", "MLD", "组播"]
+  },
+  {
+    "id": 46,
+    "difficulty": "简单",
+    "category": {"scope": "其他", "protocol_layer": "IP层", "lifecycle": "其他"},
+    "scenario": "其他",
+    "device_type": "其他",
+    "question": "RFC 9800 定义的 SRv6 段列表压缩机制解决什么问题？它定义了哪两种容器风格（flavor）？",
+    "answer": "它为 SRv6 定义段列表压缩，解决长段列表（如严格路径 TE）导致封装过大的问题。核心是 CSID（G-SID）概念：共享同一 Locator-Block 的多个段压缩进 128 位 CSID 容器。定义两种 flavor：NEXT-CSID（把后续 CSID 放入 Argument，逐段复制前进）与 REPLACE-CSID（SRH 表目为打包格式的 CSID 容器，逐个替换 DA 中的 CSID）。",
+    "scoring_points": [
+      "指出解决长段列表导致 SRv6 报头/封装开销过大的问题",
+      "说明基于共享同一 Locator-Block 的 CSID 压缩进 128 位容器",
+      "指出 NEXT-CSID flavor 及其 Argument 逐段前进机制",
+      "指出 REPLACE-CSID flavor 及其容器逐个替换 DA 的机制",
+      "提到该文档更新 RFC 8754（SRH 段列表表项可为 REPLACE-CSID 容器）"
+    ],
+    "tags": ["RFC-2025", "RFC9800", "SRv6", "CSID"]
+  },
+  {
+    "id": 47,
+    "difficulty": "简单",
+    "category": {"scope": "其他", "protocol_layer": "传输层", "lifecycle": "其他"},
+    "scenario": "其他",
+    "device_type": "其他",
+    "question": "RFC 9813 是关于什么的 BCP？为什么要在 RADIUS/TLS 中引入 TLS-PSK？它适用于什么场景、不适用于什么场景？",
+    "answer": "它给出在 RADIUS/TLS（RFC 6614）与 RADIUS/DTLS（RFC 7360）中使用 TLS 预共享密钥的实现与运营考虑，帮助从 RADIUS/UDP 平滑迁移到 RADIUS/TLS。引入 PSK 是因为其运营模式与传统 RADIUS 共享密钥相似，比证书更易升级；适用于收发双方地址已知的环境，不适用于客户端动态发现服务器的场景（无法确定该用哪个 PSK，动态发现需证书）。",
+    "scoring_points": [
+      "指出文档内容：RADIUS/TLS 与 RADIUS/DTLS 使用 TLS-PSK 的实现与运营考虑（BCP）",
+      "说明目的：帮助从 RADIUS/UDP 向 RADIUS/TLS 平滑过渡",
+      "说明动机：PSK 运营模式类似传统 RADIUS 共享密钥、升级成本低",
+      "说明适用于收发双方地址已知的网络",
+      "说明不适用于动态服务发现场景（动态发现需要证书）"
+    ],
+    "tags": ["RFC-2025", "RFC9813", "TLS-PSK", "RADIUS"]
+  },
+  {
+    "id": 48,
+    "difficulty": "简单",
+    "category": {"scope": "其他", "protocol_layer": "IP层", "lifecycle": "其他"},
+    "scenario": "其他",
+    "device_type": "其他",
+    "question": "RFC 9815 定义的 BGP-LS SPF 是什么？它相对传统 BGP 路径矢量路由的主要优势是什么？",
+    "answer": "它扩展 BGP：以 BGP-LS-SPF SAFI 分发链路状态（Node/Link/Prefix NLRI），并用 SPF（Dijkstra）替代传统决策过程，使 BGP 可同时充当大规模数据中心（MSDC）的 underlay 与 overlay 协议。主要优势：所有 BGP 说话者拥有完整拓扑视图（天然支持 ECMP 与 LFA）、TCP 可靠传输且无周期刷新、NLRI 增量通告且变更立即扩散、链路故障仅由始发者撤销，收敛效率类似链路状态协议。",
+    "scoring_points": [
+      "说明以 BGP-LS-SPF SAFI 分发链路状态并用 SPF 替代传统决策过程",
+      "指出面向大规模数据中心（MSDC）、BGP 可同时作 underlay 与 overlay",
+      "说明完整拓扑视图天然支持 ECMP/快速收敛（LFA）",
+      "说明无周期性链路状态刷新、NLRI 增量通告且变更立即扩散",
+      "说明链路故障只需始发节点撤销对应 Link NLRI"
+    ],
+    "tags": ["RFC-2025", "RFC9815", "BGP-LS", "SPF"]
+  },
+  {
+    "id": 49,
+    "difficulty": "简单",
+    "category": {"scope": "其他", "protocol_layer": "IP层", "lifecycle": "其他"},
+    "scenario": "其他",
+    "device_type": "其他",
+    "question": "RFC 9855 定义的 TI-LFA 是什么？“拓扑无关”与“沿期望收敛后路径保护”分别是什么含义？",
+    "answer": "TI-LFA（Topology Independent LFA）是基于 Segment Routing 的快速重路由（FRR）机制，在链路状态 IGP 中对节点段与邻接段提供保护，可在任意双连通网络中保证覆盖（LFA/RLFA 做不到）。“拓扑无关”指备份路径在所有网络拓扑下均有效且无环；“沿期望收敛后路径”指 PLR 预先计算的修复路径与故障后 IGP 收敛路径一致，从而减少在多个 FRR 候选间做 tie-break 的运营负担。",
+    "scoring_points": [
+      "说明是基于 SR 的 FRR 机制、保护节点段和邻接段",
+      "指出建立在 LFA/RLFA/DLFA 概念之上、双连通网络可保证覆盖",
+      "解释“拓扑无关”：任何拓扑下均能提供无环备份路径",
+      "解释沿期望收敛后路径保护：备份路径即故障后的收敛路径",
+      "提到由 PLR 本地执行、备份路径预先计算并预装"
+    ],
+    "tags": ["RFC-2025", "RFC9855", "TI-LFA", "FRR"]
+  },
+  {
+    "id": 50,
+    "difficulty": "简单",
+    "category": {"scope": "其他", "protocol_layer": "传输层", "lifecycle": "其他"},
+    "scenario": "其他",
+    "device_type": "其他",
+    "question": "RFC 9868 为 UDP 引入了什么扩展机制？选项放在报文的什么位置？为什么 UDP 能支持该机制而 TCP 方式的选项位置不同？",
+    "answer": "它更新 RFC 768，为 UDP 定义传输层选项（UDP Options），位置在“富余区”（surplus area）：UDP 用户数据之后、IP 数据报结束之前的区域。UDP 能支持该机制是因为它有独立于 IP 长度的 UDP Length 字段，可将其视作尾部选项偏移；TCP 等协议的载荷长度由 IP 长度推导，选项只能放在头部。选项区以 2 字节 OCS 校验和开始，后跟 TLV 格式选项。",
+    "scoring_points": [
+      "指出为 UDP 定义了传输层选项（更新 RFC 768）",
+      "说明位置：UDP 用户数据之后、IP 数据报结束前的 surplus area",
+      "说明依据 UDP 自带 Length 字段区分用户数据与尾部空间",
+      "指出 TCP 等协议载荷长度由 IP 推导、选项须放头部",
+      "指出选项区以 OCS 开头、选项采用类似 TCP 的 TLV 语法"
+    ],
+    "tags": ["RFC-2025", "RFC9868", "UDP", "传输选项"]
+  }
+]

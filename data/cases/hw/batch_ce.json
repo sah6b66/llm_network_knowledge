@@ -1,0 +1,677 @@
+[
+  {
+    "id": 1,
+    "difficulty": "简单",
+    "category": {
+      "scope": "设备",
+      "protocol_layer": "其他",
+      "lifecycle": "其他"
+    },
+    "scenario": "数据中心",
+    "device_type": "交换机",
+    "question": "华为CE6800系列数据中心交换机（V200R025C00版本）支持M-LAG特性。请简述M-LAG是什么、它具备哪些优势，以及M-LAG涉及的基本概念（DFS Group、peer-link链路、双主检测链路、M-LAG成员接口）与建立过程。",
+    "answer": "M-LAG（Multichassis Link Aggregation Group）即跨设备链路聚合组，是一种实现跨设备链路聚合的机制：将SwitchA和SwitchB通过peer-link链路连接并以同一个状态和Switch进行链路聚合协商，从而把链路可靠性从单板级提高到设备级。优势：一是更高的可靠性，链路可靠性从单板级提高到设备级；二是简化组网及配置，M-LAG是一种横向虚拟化技术，将双归接入的两台设备在逻辑上虚拟成一台设备，本身提供了一个没有环路的二层拓扑同时实现冗余备份；三是独立升级，两台设备可以分别进行升级，保证一台正常工作即可，对业务几乎没有影响。基本概念：DFS Group（Dynamic Fabric Service Group，动态交换服务组）主要用于部署M-LAG设备之间的配对，双归设备之间的接口状态、表项等信息同步依赖DFS Group协议；DFS角色分主备，正常情况下主设备和备设备同时进行业务流量转发、转发行为没有区别，仅故障场景下行为有差别。peer-link链路是一条直连链路且必须做链路聚合，用于交换协商报文及传输部分流量，接口配置为peer-link接口后不能再配置其他业务，推荐多条链路聚合提高可靠性。双主检测链路又称心跳链路，是一条三层互通链路，用于主备设备间发送双主检测报文，正常情况下不参与M-LAG转发，仅在故障场景下检查是否出现双主。M-LAG成员接口是主备设备上连接用户侧主机（或交换设备）的Eth-Trunk接口，推荐配置为LACP模式，状态由Down先变为Up的成员接口为主。建立过程：设备通过peer-link发送DFS Group Hello报文完成配对（两台设备DFS Group编号需相同）；再根据DFS Group优先级及系统MAC协商主备（优先级高者为主，相同时MAC地址小者为主）；双主检测报文在45秒内互通则双活系统正常工作；之后通过peer-link实时同步MAC表项、ARP、STP等信息。",
+    "scoring_points": [
+      "M-LAG即跨设备链路聚合组，两台设备通过peer-link链路连接并以同一个状态与下游设备进行链路聚合协商，把链路可靠性从单板级提高到设备级",
+      "优势包括更高可靠性、简化组网及配置（横向虚拟化、无环路二层拓扑+冗余备份）、独立升级",
+      "DFS Group用于部署M-LAG设备之间的配对及接口状态、表项信息同步；DFS主备设备正常情况下同时转发、行为无区别",
+      "peer-link链路是直连链路且必须做链路聚合，接口配置为peer-link接口后不能再配置其他业务",
+      "双主检测链路又称心跳链路，是三层互通链路，正常不参与转发，仅故障场景下检测双主",
+      "M-LAG成员接口推荐LACP模式；DFS Group主备协商依据优先级，优先级相同比较系统MAC，MAC小者为主"
+    ],
+    "tags": [
+      "CE6800",
+      "V200R025C00",
+      "特性",
+      "M-LAG"
+    ]
+  },
+  {
+    "id": 2,
+    "difficulty": "简单",
+    "category": {
+      "scope": "设备",
+      "protocol_layer": "其他",
+      "lifecycle": "其他"
+    },
+    "scenario": "数据中心",
+    "device_type": "交换机",
+    "question": "某企业数据中心使用华为CE16800系列交换机（V200R025C00版本）构建大二层网络，计划采用VXLAN技术。请简述VXLAN的定义、它解决了传统网络的哪些问题、带来哪些收益，并结合手册说明VXLAN的典型应用场景。",
+    "answer": "定义：VXLAN（Virtual eXtensible Local Area Network）是RFC7348定义的VLAN扩展方案，采用MAC in UDP封装方式，是NVO3（Network Virtualization over Layer 3）中的一种网络虚拟化技术。解决的三大问题：一是虚拟机规模受网络规格限制，传统二层网络靠MAC地址表转发，MAC表容量限制虚拟机数量，VXLAN将虚拟机发出的数据包封装在UDP中，使用物理网络的IP、MAC地址作为外层头封装，极大降低大二层网络对MAC地址规格的需求；二是网络隔离能力限制，IEEE 802.1Q的VLAN Tag域只有12比特、仅能表示4096个VLAN，VXLAN引入24比特的VNI（VXLAN网络标识），支持多达16M个VXLAN段；三是虚拟机迁移范围受网络架构限制，VXLAN通过MAC in UDP封装延伸二层网络，以太报文封装在IP报文之上通过路由传输，路由网络无网络结构限制、具备大规模扩展、故障自愈和负载均衡能力。收益：海量租户隔离与标识、除VXLAN网络边缘设备外其他设备不需要识别虚拟机MAC地址从而减轻学习压力、物理网络和虚拟网络解耦。典型应用场景（手册VXLAN应用场景章节）：一是VXLAN网络内终端用户通信，Device1和Device2作为VXLAN二层网关建立VXLAN隧道实现同一网段终端用户互通，Device3作为VXLAN三层网关实现不同网段终端用户互通；二是VXLAN网络和传统网络互通，传统STP网络可通过VLAN方式或二层子接口方式接入VXLAN（二层子接口需继承主接口的环路状态实现破环）；三是虚拟机迁移，迁移时IP地址、MAC地址保持不变，VM迁移后发送免费ARP（IPv6为免费NA）报文，网关设备删除并更新原VM的MAC/ARP表项，实现迁移网络无感知；四是通过VXLAN实现数据中心互联（DCI）。部署方式分为单机方式和控制器方式（如iMaster NCE-Fabric）。",
+    "scoring_points": [
+      "VXLAN是RFC7348定义的VLAN扩展方案，采用MAC in UDP封装，属于NVO3网络虚拟化技术",
+      "解决虚拟机规模受MAC规格限制、VLAN仅12比特/4096个隔离能力不足、虚拟机迁移受网络架构限制三个问题",
+      "VNI由24比特组成，支持多达16M个VXLAN段",
+      "收益包括海量租户隔离、除边缘设备外无需识别虚拟机MAC、物理网络与虚拟网络解耦",
+      "应用场景含终端用户通信（二层网关同网段互通/三层网关跨网段互通）、与传统网络互通（VLAN或二层子接口接入）、虚拟机迁移、数据中心互联",
+      "虚拟机迁移后通过发送免费ARP/免费NA报文刷新网关的MAC/ARP（ND）表项，Overlay网络可为IPv4或IPv6"
+    ],
+    "tags": [
+      "CE16800",
+      "V200R025C00",
+      "场景",
+      "VXLAN"
+    ]
+  },
+  {
+    "id": 3,
+    "difficulty": "简单",
+    "category": {
+      "scope": "设备",
+      "protocol_layer": "其他",
+      "lifecycle": "其他"
+    },
+    "scenario": "数据中心",
+    "device_type": "交换机",
+    "question": "华为CE8800系列数据中心交换机（V300R025C10版本）支持EVPN VXLAN特性。请简述EVPN是什么、VXLAN为什么引入EVPN作为控制平面，以及BGP EVPN的Type2路由和Type3路由的作用与关键字段。",
+    "answer": "EVPN（Ethernet Virtual Private Network）是一种用于二层网络互联的VPN技术，采用类似于BGP/MPLS IP VPN的机制，在BGP协议的基础上定义了一种新的NLRI（网络层可达信息）即EVPN NLRI，其中定义了几种新的BGP EVPN路由类型，用于处在二层网络的不同站点之间的MAC地址学习和发布。原有VXLAN实现方案没有控制平面，通过数据平面的流量泛洪进行VTEP发现和主机信息（包括IP地址、MAC地址、VNI、网关VTEP IP地址）学习，导致数据中心网络存在很多泛洪流量；VXLAN引入EVPN作为控制平面后，通过在VTEP之间交换BGP EVPN路由实现VTEP自动发现、主机信息相互通告，避免了不必要的数据流量泛洪，使VTEP发现和主机信息学习从数据平面转移到控制平面。基于BGP EVPN方式建立的VXLAN通过部署EVPN协议实现VTEP自动发现和VXLAN隧道的动态创建，灵活性高，适合大规模VXLAN组网。Type 2路由即MAC/IP路由：用于发布主机MAC/IP信息，该路由中Ethernet Tag ID值为全0，主机MAC地址存放在MAC Address字段，二层VNI存放在MPLS Label1字段、三层VNI存放在MPLS Label2字段，路由下一跳属性携带本端VTEP IP地址；对端收到后检查路由携带的出方向VPN-Target与本端入方向VPN-Target相等才接收，并在本地MAC表中生成表项、出接口迭代到指向对端的VXLAN隧道。Type3路由即Inclusive Multicast路由：用于VTEP发现和隧道动态建立，由前缀和PMSI属性组成，VTEP IP地址存放在前缀的Originating Router's IP Address字段，VNI存放在PMSI属性的MPLS Label字段；两端接收路由（需VPN-Target匹配）且对端VTEP IP三层路由可达时建立VXLAN隧道，并创建基于VNI的头端复制表用于BUM报文转发。",
+    "scoring_points": [
+      "EVPN是用于二层网络互联的VPN技术，采用类似BGP/MPLS IP VPN的机制，在BGP上定义EVPN NLRI新路由类型用于站点间MAC地址学习和发布",
+      "原VXLAN无控制平面、靠数据平面泛洪学习VTEP和主机信息；引入EVPN控制平面可避免泛洪，使学习从数据平面转移到控制平面",
+      "Type2路由即MAC/IP路由，Ethernet Tag ID值为全0，MPLS Label1携带二层VNI、MPLS Label2携带三层VNI",
+      "Type3路由即Inclusive Multicast路由，VTEP IP存于前缀的Originating Router's IP Address字段，VNI存于PMSI属性的MPLS Label字段",
+      "接收EVPN路由需对端ERT与本端IRT相等；对端VTEP IP三层路由可达才建立VXLAN隧道并创建基于VNI的头端复制表",
+      "BGP EVPN方式实现VTEP自动发现和隧道动态创建，灵活性高、适合大规模VXLAN组网"
+    ],
+    "tags": [
+      "CE8800",
+      "V300R025C10",
+      "特性",
+      "EVPN"
+    ]
+  },
+  {
+    "id": 4,
+    "difficulty": "中",
+    "category": {
+      "scope": "设备",
+      "protocol_layer": "其他",
+      "lifecycle": "其他"
+    },
+    "scenario": "数据中心",
+    "device_type": "交换机",
+    "question": "某数据中心使用华为CE6800系列交换机（V200R025C00版本）组建VXLAN网络，为解决集中式网关转发路径不优化和ARP/ND表项规格瓶颈问题，要求在Leaf节点部署VXLAN分布式网关（BGP EVPN方式）。请给出配置思路与主要配置步骤。",
+    "answer": "配置思路：VXLAN分布式网关可解决集中式网关的转发路径不优化（所有三层流量都经集中网关转发）和三层网关ARP/ND表项规格瓶颈问题。其特点是同一Leaf节点既可以做VXLAN二层网关也可以做三层网关；Leaf只需学习自身连接的服务器以及对端需要互通的服务器的ARP/ND表项；支持ARP广播抑制和NS组播抑制。前置任务：网络中三层路由互通。主要配置步骤：①系统视图执行evpn-overlay enable，使能EVPN作为VXLAN的控制平面（缺省未使能）；②配置BGP EVPN对等体关系：bgp as-number进入BGP视图，peer ipv4-address as-number as-number将对端配置为对等体，l2vpn-family evpn进入BGP-EVPN地址族视图（缺省未使能），执行peer {ipv4-address|group-name} enable使能交换EVPN路由（缺省只有BGP-IPv4单播地址族的对等体是自动使能的）；如部署路由反射器RR，在RR上配置peer reflect-client，并执行undo policy vpn-target去使能对接收EVPN路由的VPN-Target过滤（缺省对接收到的路由进行VPN-Target过滤），否则RR无法接收和反射客户路由；③配置VXLAN业务接入点（二层子接口接入BD）；④配置VXLAN隧道：BD视图下bridge-domain bd-id后执行vxlan vni vni-id将VNI映射到BD，BD下创建EVPN实例并配置RD与VPN-Target；NVE接口视图interface nve下执行source ip-address配置源端VTEP的IP地址（推荐Loopback地址），并配置vni vni-id head-end peer-list protocol bgp头端复制；⑤配置VXLAN三层网关：创建VPN实例并在其下绑定三层VNI（vxlan vni），使能VPN实例IPv4地址族并配置RD、VPN-Target；创建interface vbdif bd-id，配置ip binding vpn-instance与ip address，多网关场景各Leaf的VBDIF配置相同IP并用mac-address配置相同虚拟MAC，执行vxlan anycast-gateway enable使能任播网关；⑥发布主机路由：IRB方式需在VBDIF接口下配置arp collect host enable收集主机信息，IP前缀方式配置arp direct-route enable并在BGP-VPN实例IPv4地址族下import-route direct后advertise l2vpn evpn。验证：display bridge-domain、display bgp evpn peer、display vxlan tunnel、display vxlan vni、display interface vbdif等，VXLAN隧道动态建立且状态Up即成功。",
+    "scoring_points": [
+      "分布式网关解决集中式网关转发路径不优化与ARP/ND表项规格瓶颈；前置任务为网络中三层路由互通",
+      "系统视图evpn-overlay enable使能EVPN作为VXLAN控制平面，缺省未使能",
+      "bgp下peer as-number指定对等体，l2vpn-family evpn进入BGP-EVPN地址族，peer enable使能交换EVPN路由；RR场景需peer reflect-client并undo policy vpn-target",
+      "BD视图vxlan vni将VNI映射到BD；NVE接口下source配置VTEP源IP（推荐Loopback）并配置vni head-end peer-list protocol bgp头端复制",
+      "三层网关：VPN实例绑定三层VNI，VBDIF配置相同IP与虚拟MAC并vxlan anycast-gateway enable使能任播网关",
+      "发布主机路由：IRB方式用arp collect host enable，IP前缀方式用arp direct-route enable"
+    ],
+    "tags": [
+      "CE6800",
+      "V200R025C00",
+      "配置方案",
+      "VXLAN"
+    ]
+  },
+  {
+    "id": 5,
+    "difficulty": "中",
+    "category": {
+      "scope": "设备",
+      "protocol_layer": "其他",
+      "lifecycle": "其他"
+    },
+    "scenario": "数据中心",
+    "device_type": "交换机",
+    "question": "某数据中心使用华为CE16800系列交换机（V300R025C10版本）部署M-LAG，要求M-LAG主备设备同时作为三层网关（双活网关）。请说明双活网关的前提条件、实现方式、配置步骤与关键参数，以及双归IP网络与双归VXLAN网络场景的差异。",
+    "answer": "前提条件：M-LAG成员接口已经加入对应的VLAN，或者M-LAG成员接口所属Eth-Trunk接口的二层子接口已加入对应的BD且BD下已配置VXLAN VNI。双归IP网络场景：M-LAG主备设备需要同时作为三层网关，必须保证M-LAG成员接口对应的VLANIF接口具有相同的IP地址和MAC地址，实现方式有两种：一是在VLANIF接口上配置相同的IP地址并使用mac-address命令配置相同的虚拟MAC地址（为简化MAC管理和运维，建议配置保留范围的虚MAC地址，格式为0000-5E00-01XX或0000-5E00-02XX）；二是在VLANIF接口上创建VRRP/VRRP6备份组（vrrp vrid virtual-router-id virtual-ip virtual-address），主备设备上备份组号和虚拟IP必须配置相同，且虚拟IP与VLANIF接口IP同一网段；在M-LAG基础上配置VRRP后，peer-link接口不允许VRRP/VRRP6报文上送本设备CPU，从而形成VRRP双主，实现双活网关。双归VXLAN网络场景：必须保证M-LAG成员接口对应的VBDIF接口具有相同IP和相同虚拟MAC（配置方式同上）；该场景不支持通过VRRP方式配置双活网关；当下行一条链路故障时业务流量需绕行peer-link链路，因此M-LAG设备之间必须配置静态Bypass VXLAN隧道，将绕行的业务流量引导至peer-link链路上。可选配置：protocol up-delay-time time配置接口三层协议状态延时Up时间，使协议层状态在ARP表项同步完成后再从Down变Up，避免协议报文被丢弃；缺省情况下VLANIF接口延时Up时间为1秒、VBDIF接口为0秒；缺省M-LAG成员端口上报Up状态的延时时间为240秒，需保证成员口延时Up时间长于VLANIF/VBDIF延时时间；为防止设备重启和peer-link故障导致STP网络震荡，推荐在M-LAG接口下配置延时Up时间30秒及以上。ARP/ND表项同步：系统视图可配置arp remote-backup-rate limit ratelimit调整ARP表项同步速率（缺省每秒通过M-LAG同步2000个ARP表项）；ND同步需在VLANIF/VBDIF接口配置ipv6 nd na glean（缺省收到合法NA报文不生成表项）。",
+    "scoring_points": [
+      "前提条件：M-LAG成员接口已加入VLAN，或成员口所属Eth-Trunk的二层子接口已入BD且BD已配置VNI",
+      "双归IP网络两种方式：VLANIF配相同IP+mac-address相同虚MAC（建议保留范围0000-5E00-01XX/0000-5E00-02XX），或创建VRRP/VRRP6备份组",
+      "VRRP方式下备份组号和虚拟IP必须相同，peer-link口不允许VRRP报文上送CPU从而形成VRRP双主",
+      "双归VXLAN场景须VBDIF配相同IP与虚MAC，不支持VRRP方式，且必须配置静态Bypass VXLAN隧道",
+      "protocol up-delay-time缺省VLANIF为1秒、VBDIF为0秒；M-LAG成员端口上报Up延时缺省240秒，推荐M-LAG接口延时Up配置30秒及以上",
+      "arp remote-backup-rate limit缺省每秒同步2000个ARP表项；ND同步需接口配置ipv6 nd na glean"
+    ],
+    "tags": [
+      "CE16800",
+      "V300R025C10",
+      "配置方案",
+      "M-LAG"
+    ]
+  },
+  {
+    "id": 6,
+    "difficulty": "中",
+    "category": {
+      "scope": "设备",
+      "protocol_layer": "其他",
+      "lifecycle": "其他"
+    },
+    "scenario": "数据中心",
+    "device_type": "交换机",
+    "question": "某数据中心使用两台华为CE12800系列交换机（V200R025C00版本，该版本手册中集群交换系统CSS称为堆叠）组建堆叠系统。请给出组建堆叠的配置流程，以及各步骤（成员ID、优先级、域编号、堆叠端口、使能堆叠）的关键命令与检查方法。",
+    "answer": "配置流程：规划堆叠方案（成员编号、成员角色、域编号、堆叠端口）→连接堆叠线缆→配置堆叠成员ID→配置堆叠优先级→配置堆叠域编号→配置堆叠端口→使能堆叠功能→检查堆叠是否组建成功。①配置堆叠成员ID：system-view进入系统视图后执行stack进入堆叠管理视图，stack member new-member-id配置堆叠成员ID，缺省情况下设备的堆叠成员ID为1，配置后需重启设备才能生效；设备堆叠功能已使能时命令格式为stack member member-id renumber new-member-id [inherit-config]，指定inherit-config则重启后继承重启前的堆叠相关配置（包括堆叠优先级、域编号、连接方式、堆叠物理成员端口配置），设备中存在新堆叠成员ID相关的离线配置时不能指定该参数；堆叠建立时成员ID冲突，主交换机会从1开始升序查找未被使用的ID重新分配。②配置堆叠优先级：堆叠管理视图下stack priority priority-value，缺省值为100，值越大优先级越高、越可能当选主交换机，需重启生效；堆叠模式下格式为stack member {member-id|all} priority priority-value。③配置堆叠域编号：stack domain domain-id，成员设备必须配置相同的堆叠域编号，否则无法组建堆叠。④配置堆叠端口：interface stack-port port-id创建堆叠端口（缺省未创建）；堆叠端口视图下port member-group interface interface-type {interface-number1 [to interface-number2]} &<1-32>添加成员端口，或在接口视图下执行stack-port port-id将端口加入堆叠端口；推荐至少使用2条或以上链路堆叠，仅1条链路时需在堆叠物理成员端口下配置carrier down-hold-time interval防止端口闪断导致堆叠不稳定；将物理端口加入堆叠端口前建议先shutdown，两端都加入后再undo shutdown，避免产生CRC错包导致Error-Down。⑤使能堆叠功能：先save保存配置，堆叠管理视图下执行stack enable（缺省堆叠功能关闭），使能后设备将重启并自动备份当前配置文件到flash:/目录。⑥检查：执行display stack查看堆叠系统成员信息，显示所有成员交换机（MemberID、Role、MAC、Priority、DeviceType）表示堆叠建立完成；也可通过指示灯检查，堆叠组建成功时主交换机STACK指示灯绿色常亮、备交换机闪烁；组建成功后建议立即save保存配置。",
+    "scoring_points": [
+      "流程：规划→连线→配置成员ID→优先级→域编号→堆叠端口→使能堆叠→检查",
+      "stack member new-member-id配置堆叠成员ID，缺省为1，需重启生效；堆叠已使能时用stack member member-id renumber new-member-id [inherit-config]",
+      "stack priority priority-value缺省100，值越大越可能当选主交换机，重启生效",
+      "stack domain domain-id配置域编号，成员设备必须配置相同域编号否则无法组建堆叠",
+      "interface stack-port创建堆叠端口，port member-group interface添加成员端口，推荐至少2条链路",
+      "stack enable使能堆叠（缺省关闭），使能后设备重启；display stack查看成员信息检查是否组建成功"
+    ],
+    "tags": [
+      "CE12800",
+      "V200R025C00",
+      "配置方案",
+      "CSS"
+    ]
+  },
+  {
+    "id": 7,
+    "difficulty": "中",
+    "category": {
+      "scope": "设备",
+      "protocol_layer": "其他",
+      "lifecycle": "其他"
+    },
+    "scenario": "数据中心",
+    "device_type": "交换机",
+    "question": "某数据中心使用华为CE5800系列交换机（V300R025C10版本）与上游设备之间需要捆绑多条物理链路以提高带宽与可靠性，计划部署Eth-Trunk链路聚合。请给出链路聚合模式的选择建议、Eth-Trunk的配置步骤与LACP模式关键参数配置。",
+    "answer": "模式选择建议（手册背景信息）：手工模式Eth-Trunk适用于对端设备不支持LACP协议的场景；动态LACP模式Eth-Trunk仅用于华为公司设备与服务器互连的场景；其他场景下建议部署静态LACP模式Eth-Trunk，如果部署动态LACP则网络会有成环风险。配置步骤：①执行system-view进入系统视图，interface eth-trunk trunk-id创建Eth-Trunk接口并进入其视图；②（可选）执行portswitch将Eth-Trunk接口切换为二层模式或undo portswitch切换为三层模式，接口的二三层模式不影响成员接口的加入；③配置链路聚合模式mode {manual load-balance|lacp-static|lacp-dynamic}，缺省情况下为manual load-balance；静态LACP模式可选lacp stable-preferred disable去使能稳定优选功能（缺省使能）；④向Eth-Trunk加入成员接口：在Eth-Trunk接口视图下批量执行trunkport interface-type {interface-number1 [to interface-number2]} &<1-16>或单个添加trunkport interface-type interface-number，也可在成员接口视图下执行eth-trunk trunk-id加入。注意事项：成员接口加入Eth-Trunk时必须为缺省的接口类型；Eth-Trunk链路两端相连物理接口的数量、速率、双工方式、流控配置必须一致；Eth-Trunk接口不能嵌套（成员接口不能是Eth-Trunk接口）；一个以太网接口只能加入一个Eth-Trunk接口；加入/退出Eth-Trunk前建议先shutdown再undo shutdown。LACP模式关键参数：系统视图下lacp priority priority配置LACP系统优先级，值越小优先级越高，高者为LACP主动端；优先级相同时比较lacp system-id mac-address（缺省为系统桥MAC，值越小越高）；活动接口选择方式lacp select {priority|speed}；lacp max active-linknumber link-number配置活动接口数上限阈值（超过上限的链路作为备份），least active-linknumber link-number配置下限阈值（缺省下限阈值为1，活动链路数小于下限时Eth-Trunk接口状态转为Down）；lacp timeout fast修改接收LACP协议报文的超时时间，缺省为90秒（slow，对端30秒周期发送），配置fast后本地超时3秒、对端1秒周期发送；lacp preempt enable开启LACP抢占功能（缺省关闭，开启后缺省抢占等待时间30秒，要求两端统一配置）。验证：display eth-trunk、display eth-trunk membership trunk-id。",
+    "scoring_points": [
+      "手工模式适用于对端不支持LACP；动态LACP仅用于华为设备与服务器互连；其他场景建议静态LACP，动态LACP有成环风险",
+      "interface eth-trunk trunk-id创建接口，mode {manual load-balance|lacp-static|lacp-dynamic}配置模式，缺省为manual load-balance",
+      "成员接口两种加入方式：Eth-Trunk视图trunkport批量/单个添加，成员接口视图eth-trunk trunk-id",
+      "两端物理接口数量、速率、双工方式、流控配置必须一致；Eth-Trunk不能嵌套；一个接口只能加入一个Eth-Trunk",
+      "lacp priority系统优先级值越小越高，高者为LACP主动端；缺省LACP系统ID为系统桥MAC，值越小越高",
+      "lacp timeout fast超时3秒/对端1秒发包（缺省slow为90秒/30秒）；lacp preempt enable缺省关闭、开启后抢占等待30秒；活动接口下限阈值缺省1"
+    ],
+    "tags": [
+      "CE5800",
+      "V300R025C10",
+      "配置方案",
+      "Eth-Trunk"
+    ]
+  },
+  {
+    "id": 8,
+    "difficulty": "中",
+    "category": {
+      "scope": "设备",
+      "protocol_layer": "其他",
+      "lifecycle": "其他"
+    },
+    "scenario": "数据中心",
+    "device_type": "交换机",
+    "question": "在华为CE6800系列交换机（V200R025C00版本）上创建VLAN时使用vlan与vlan batch命令。请给出两条命令的命令功能、完整语法、每个参数的含义与取值、命令视图、缺省情况、缺省级别与使用注意事项。",
+    "answer": "vlan命令属于VLAN配置命令。命令功能：vlan vlan-id用来创建VLAN并进入VLAN视图，如果该VLAN已存在则直接进入该VLAN视图；undo vlan用来删除指定VLAN；vlan batch用来批量创建VLAN。命令格式：vlan vlan-id；vlan batch {vlan-id1 [to vlan-id2]} &<1-10>；undo vlan vlan-id；undo vlan batch {vlan-id1 [to vlan-id2]} &<1-10>。参数说明：vlan-id指定VLAN ID，整数形式，取值范围是1～4094，保留VLAN ID（通过命令vlan reserved配置）除外；batch指定批量创建VLAN；vlan-id1 to vlan-id2指定批量创建的VLAN编号，vlan-id1为第一个VLAN编号、vlan-id2为最后一个VLAN编号，vlan-id2取值必须大于等于vlan-id1，不指定to vlan-id2则只创建vlan-id1指定的VLAN，两者均为整数形式、取值范围1～4094（保留VLAN除外）。视图：系统视图；缺省级别：2：配置级。缺省情况：缺省情况下，所有接口都加入到一个缺省的VLAN中，该VLAN标识为1。注意事项：VLAN 1是系统自带的VLAN，不需要创建，也不可以删除；多次使用vlan或vlan batch命令创建VLAN，配置按多次创建的累加结果生效，已存在的VLAN不会再重新创建，保留原来的VLAN和相关配置；删除VLAN前，必须先使用undo interface vlanif命令删除对应的VLANIF接口；设备配置GRE或将接口切换到三层模式后会占用设备内部转发资源，导致VLAN无法满规格配置到4063个；如果设备内部转发资源超规格，VLAN仍可配置，但设备重启后可能发生原来不生效的VLAN变为生效、原生效的VLAN反而不生效的情况。使用实例：system-view后执行vlan 100，创建编号是100的VLAN并进入VLAN100视图（已存在则直接进入）；需要创建多个VLAN时可使用vlan batch批量创建以简化配置。",
+    "scoring_points": [
+      "vlan vlan-id创建VLAN并进入VLAN视图（已存在则直接进入），undo vlan删除指定VLAN",
+      "vlan batch {vlan-id1 [to vlan-id2]} &<1-10>批量创建，vlan-id取值范围1～4094（保留VLAN除外），vlan-id2必须大于等于vlan-id1",
+      "缺省情况下所有接口都加入缺省VLAN 1；VLAN 1系统自带、不需要创建也不可以删除",
+      "命令视图为系统视图，缺省级别为2：配置级",
+      "删除VLAN前必须先用undo interface vlanif删除对应VLANIF接口",
+      "多次创建按累加结果生效，已存在的VLAN不会重新创建并保留原配置"
+    ],
+    "tags": [
+      "CE6800",
+      "V200R025C00",
+      "命令行",
+      "VLAN"
+    ]
+  },
+  {
+    "id": 9,
+    "difficulty": "中",
+    "category": {
+      "scope": "设备",
+      "protocol_layer": "其他",
+      "lifecycle": "其他"
+    },
+    "scenario": "数据中心",
+    "device_type": "交换机",
+    "question": "在华为CE6800系列交换机（V200R025C00版本）上配置以太网链路聚合时，会用到interface eth-trunk、eth-trunk、trunkport三条命令。请分别给出三条命令的命令功能、完整语法、参数与取值、命令视图、缺省情况与缺省级别。",
+    "answer": "①interface eth-trunk（以太网链路聚合配置命令，系统视图，缺省级别2：配置级）：命令格式interface eth-trunk trunk-id [.subnumber]，undo interface eth-trunk删除Eth-Trunk接口；命令功能为进入已经存在的Eth-Trunk接口，或创建并进入Eth-Trunk接口；缺省情况下未创建Eth-Trunk接口。参数：trunk-id指定Eth-Trunk编号，整数形式，可在键入\"?\"后根据设备提示信息选取；.subnumber为二层子接口或三层子接口编号，整数形式取值范围1～99999999，进入Eth-Trunk二层子接口的命令为interface eth-trunk trunk-id.subnumber mode l2（CE9860EI不支持二层子接口，仅支持VXLAN功能的设备支持二层子接口）。注意事项：删除Eth-Trunk时Eth-Trunk中不能有成员接口；Eth-Trunk接口通过undo portswitch切换到三层模式后才支持创建三层子接口。②eth-trunk（GE接口视图、10GE接口视图、25GE接口视图、40GE接口视图、100GE接口视图、400GE接口视图，缺省级别2：配置级）：命令格式eth-trunk trunk-id，undo eth-trunk；将当前接口加入到指定Eth-Trunk中/从Eth-Trunk中删除；缺省情况下当前接口没有加入任何Eth-Trunk；trunk-id为整数形式，键入\"?\"后根据提示选取。注意事项：使用interface eth-trunk创建Eth-Trunk后才能使用本命令；接口加入Eth-Trunk时部分属性必须是缺省值（接口链路类型、所属VLAN、QinQ协议号、接口优先级、是否允许BPDU报文通过、MAC地址学习功能等），否则无法加入；建议先shutdown接口再加入，两端接口都加入后undo shutdown，否则可能出现流量中断或短暂广播风暴。③trunkport（Eth-Trunk接口视图，缺省级别2：配置级）：命令格式trunkport interface-type {interface-number1 [to interface-number2]} &<1-16>及trunkport interface-name（CE6881、CE5881、CE6881K、CE6820、CE6863、CE6863E、CE6863K、CE6881E、CE9860EI形态）；其他形态为&<1-n>，n由命令assign forward eth-trunk mode确定；在Eth-Trunk接口视图下增加/删除成员接口，缺省情况下Eth-Trunk接口没有成员接口；CE6881等形态每个Eth-Trunk最多可加入128个成员口，CE9860EI最多64个。使用实例：[~HUAWEI] interface eth-trunk 1、[*HUAWEI-Eth-Trunk1] trunkport 10ge 1/0/1。",
+    "scoring_points": [
+      "interface eth-trunk trunk-id [.subnumber]进入或创建Eth-Trunk接口，系统视图，缺省未创建；删除时Eth-Trunk中不能有成员接口",
+      "子接口编号subnumber整数取值1～99999999，二层子接口命令为interface eth-trunk trunk-id.subnumber mode l2",
+      "eth-trunk trunk-id在接口视图下将当前接口加入Eth-Trunk，缺省未加入；接口属性须为缺省值（链路类型、所属VLAN等）才能加入",
+      "trunkport在Eth-Trunk接口视图下增加成员接口，CE6881等形态一次最多批量16个（&<1-16>），CE6881等最多128个成员口、CE9860EI最多64个",
+      "三条命令缺省级别均为2：配置级",
+      "接口加入Eth-Trunk前建议shutdown，两端都加入后再undo shutdown，否则可能流量中断或短暂广播风暴"
+    ],
+    "tags": [
+      "CE6800",
+      "V200R025C00",
+      "命令行",
+      "Eth-Trunk"
+    ]
+  },
+  {
+    "id": 10,
+    "difficulty": "中",
+    "category": {
+      "scope": "设备",
+      "protocol_layer": "其他",
+      "lifecycle": "其他"
+    },
+    "scenario": "数据中心",
+    "device_type": "交换机",
+    "question": "在华为CE8800系列交换机（V300R025C10版本）上配置VXLAN时，需要在桥域视图绑定VNI（vxlan vni命令），并在NVE接口视图配置源端VTEP地址（source命令）。请给出两条命令的命令功能、完整语法、参数含义与取值、命令视图、缺省情况与注意事项。",
+    "answer": "①vxlan vni（VXLAN配置命令）：命令功能为创建VNI（VXLAN Network Identifier）并关联广播域BD，undo vxlan vni vni-id删除VNI和BD的关联关系；缺省情况下系统没有创建VNI。命令格式：vxlan vni vni-id；undo vxlan vni vni-id。参数vni-id指定VNI ID，整数形式，取值范围是1～16777215。视图：桥域视图；缺省级别2:配置级。应用场景：VXLAN网络中的广播域VN是个虚拟广播域，必须通过vxlan vni将VNI映射到广播域BD，BD成为VXLAN网络的实体，通过BD转发流量。注意事项：在VPN实例下绑定的VNI不能与BD下配置的VNI的值相同；设备不支持peer-link口和值为4095×N-1的VNI（比如4094、8189）同时配置；M-LAG双归接入VXLAN场景中，若规划使用静态Bypass VXLAN和物理peer-link且VNI＞16000000，配置静态Bypass VXLAN、物理peer-link、BD绑定VNI时请勿最后配置静态Bypass VXLAN。使用实例：[~HUAWEI] bridge-domain 10、[*HUAWEI-bd10] vxlan vni 5000，将ID为5000的VNI与ID为10的BD关联。②source（NVE接口视图，VXLAN配置命令）：命令功能为配置源端VTEP（VXLAN Tunnel Endpoints）的IP地址，undo source [ip-address]删除配置的源端VTEP IP地址；缺省情况下VTEP没有配置IP地址。命令格式：source ip-address。参数ip-address指定源端VTEP的IP地址，点分十进制格式。视图：NVE接口视图；缺省级别2:配置级。使用指南：配置VXLAN隧道时必须通过source命令为源端VTEP配置IP地址，源端VTEP的地址就是VXLAN报文中的源IP地址，目的端VTEP的地址是VXLAN报文中的目的IP地址，一对VTEP地址就对应着一个VXLAN隧道；指定源端VTEP IP时可指定实际物理接口地址或Loopback接口地址，推荐使用Loopback接口地址；一般情况下不同设备的NVE接口需配置不同的VTEP地址，否则可能导致流量转发错误，特定场景（如M-LAG双归接入场景）要求多个设备对外体现为同一个NVE，则需为这些设备的NVE接口配置相同的VTEP地址。使用实例：[~HUAWEI] interface nve 1、[*HUAWEI-Nve1] source 1.1.1.1。",
+    "scoring_points": [
+      "vxlan vni vni-id创建VNI并关联广播域BD，桥域视图，vni-id整数取值1～16777215，缺省没有创建VNI",
+      "VPN实例下绑定的VNI不能与BD下配置的VNI值相同；不支持peer-link口和值为4095×N-1的VNI（如4094、8189）同时配置",
+      "source ip-address配置源端VTEP的IP地址，NVE接口视图，缺省VTEP没有配置IP地址，点分十进制格式",
+      "推荐使用Loopback接口地址作为源端VTEP地址",
+      "一般不同设备NVE接口配不同VTEP地址否则可能流量转发错误，M-LAG双归接入场景配置相同VTEP地址",
+      "源端VTEP地址即VXLAN报文中的源IP，一对VTEP地址对应一条VXLAN隧道"
+    ],
+    "tags": [
+      "CE8800",
+      "V300R025C10",
+      "命令行",
+      "VXLAN"
+    ]
+  },
+  {
+    "id": 11,
+    "difficulty": "中",
+    "category": {
+      "scope": "设备",
+      "protocol_layer": "其他",
+      "lifecycle": "其他"
+    },
+    "scenario": "数据中心",
+    "device_type": "交换机",
+    "question": "在华为CE8800系列交换机（V300R025C10版本）上配置BGP EVPN对等体时，需要使用l2vpn-family evpn命令进入BGP-EVPN地址族视图，并用peer enable命令使能对等体交换EVPN路由。请给出两条命令的命令功能、完整语法、参数与取值、命令视图、缺省情况与注意事项（含配置实例）。",
+    "answer": "①l2vpn-family evpn（VXLAN配置命令）：命令功能为使能并进入BGP-EVPN地址族视图，undo l2vpn-family evpn删除BGP-EVPN地址族视图；命令格式l2vpn-family evpn、undo l2vpn-family evpn，无参数；视图为BGP视图；缺省级别2:配置级；缺省情况下未使能BGP-EVPN地址族视图。使用指南：在BGP-EVPN地址族下进行配置前，需要先在BGP视图下用本命令使能BGP-EVPN地址族视图并进入该视图。注意事项：删除该地址族时，如果该地址族下存在BGP对等体，会导致其他地址族下该对等体的BGP连接断开并自动重新协商；执行undo l2vpn-family evpn命令会删除BGP EVPN地址族视图及其视图下所有命令行（系统提示Warning: This operation will cause all BGP EVPN services to be deleted），请谨慎操作。②peer enable（BGP-EVPN地址族视图、BGP多实例EVPN地址族视图，缺省级别2:配置级）：命令功能为使能与指定对等体之间交换相关的路由信息，undo peer ipv4-address enable禁止与指定对等体交换路由信息；命令格式peer ipv4-address enable、undo peer ipv4-address enable；参数ipv4-address指定对等体的IPv4地址，点分十进制格式；缺省情况下只有BGP-IPv4单播地址族的对等体是自动使能的（在BGP视图下配置peer as-number命令后系统自动配置相应的peer enable命令），其他地址族视图下都必须手动使能。注意事项：如果对等体在其他地址族下已经建立了邻居关系，执行peer enable可能使此对等体的所有邻居断连重建、导致路由震荡，执行时系统提示Warning: This operation will reset the peer session；从EVPN地址族下的IBGP对等体学习并交叉到BGP私网实例的路由会默认向其私网实例下的IBGP对等体发布，可能引发路由环路，建议配置SoO等防环机制。配置实例：[~HUAWEI] evpn-overlay enable、[*HUAWEI] bgp 100、[*HUAWEI-bgp] peer 1.1.1.9 as-number 100、[*HUAWEI-bgp] l2vpn-family evpn、[*HUAWEI-bgp-af-evpn] peer 1.1.1.9 enable。",
+    "scoring_points": [
+      "l2vpn-family evpn使能并进入BGP-EVPN地址族视图，视图为BGP视图，缺省未使能，无参数",
+      "undo l2vpn-family evpn会删除BGP EVPN地址族视图及其下所有命令行，需谨慎操作",
+      "peer ipv4-address enable使能与指定对等体交换EVPN路由，视图为BGP-EVPN地址族视图（及BGP多实例EVPN地址族视图）",
+      "缺省只有BGP-IPv4单播地址族的对等体自动使能，其他地址族须手动执行peer enable",
+      "执行peer enable可能使对等体所有邻居断连重建（reset session）；EVPN IBGP路由交叉发布可能引发环路，建议配置SoO防环",
+      "配置顺序：evpn-overlay enable→bgp 100→peer as-number→l2vpn-family evpn→peer enable"
+    ],
+    "tags": [
+      "CE8800",
+      "V300R025C10",
+      "命令行",
+      "BGP"
+    ]
+  },
+  {
+    "id": 12,
+    "difficulty": "中",
+    "category": {
+      "scope": "设备",
+      "protocol_layer": "其他",
+      "lifecycle": "其他"
+    },
+    "scenario": "数据中心",
+    "device_type": "交换机",
+    "question": "在华为CE16800系列交换机（V200R025C00版本）上配置堆叠时，需要修改堆叠成员ID与堆叠优先级。请给出stack member与stack priority两条命令的命令功能、完整语法（含非堆叠模式与堆叠模式格式）、参数含义与取值、命令视图、缺省值与注意事项。",
+    "answer": "①stack member（堆叠配置命令）：命令功能为修改设备的堆叠ID；缺省情况下设备的堆叠ID为1。命令格式：非堆叠模式为stack member new-member-id；堆叠模式为stack member member-id renumber new-member-id [inherit-config]。参数说明：member-id指定修改某台成员设备的堆叠ID，整数形式，取值范围1～2；renumber new-member-id指定修改后的堆叠ID（renumber参数仅可以在堆叠已使能的情况被指定），整数形式，取值范围1～2；inherit-config指定修改设备堆叠ID并重启设备后继承重启前的堆叠相关配置，如果不指定该参数则当前堆叠相关配置在重启后都会丢失，配置文件中新堆叠ID相关的配置生效，当设备中有新堆叠ID相关的离线配置时则不能指定该参数。视图：堆叠管理视图；缺省级别2：配置级。注意事项：堆叠ID用来标识和管理堆叠中的成员设备，所有成员设备的堆叠ID都唯一；修改设备堆叠成员ID后需要重新启动设备配置才能生效；堆叠已使能的情况下修改堆叠成员ID并重启设备后，普通业务口的配置（例如端口拆分配置）会丢失。②stack priority（堆叠配置命令）：命令功能为设置设备的堆叠优先级，undo stack priority恢复堆叠优先级为缺省值。命令格式：非堆叠模式为stack priority priority-value、undo stack priority [priority-value]；堆叠模式为stack member {member-id|all} priority priority-value、undo stack member {member-id|all} priority [priority-value]。参数：priority-value指定堆叠优先级，整数形式，取值范围1～255；member member-id指定修改某台成员设备的优先级（member-id取值1～2），all指定修改所有成员设备。视图：堆叠管理视图；缺省级别2：配置级；缺省情况下设备的堆叠优先级为100。使用指南：在堆叠角色选举过程中，交换机运行状态相同的情况下，堆叠优先级值越大优先级越高，越优先被选举为主交换机；修改堆叠优先级后需要重新启动设备配置才能生效。使用实例：[~HUAWEI] stack、[~HUAWEI-stack] stack priority 150，系统提示Info: The operation will take effect after reboot（重启后生效）。",
+    "scoring_points": [
+      "stack member用来修改设备的堆叠ID，缺省堆叠ID为1，member-id/new-member-id取值范围1～2，需重启生效",
+      "堆叠模式格式stack member member-id renumber new-member-id [inherit-config]，inherit-config重启后继承重启前堆叠配置（优先级、域编号、连接方式、堆叠物理成员端口配置）",
+      "设备中存在新堆叠ID相关离线配置时不能指定inherit-config；堆叠已使能时修改并重启后普通业务口配置丢失",
+      "stack priority priority-value设置堆叠优先级，缺省100，取值范围1～255，值越大越可能当选主交换机，重启生效",
+      "堆叠模式修改优先级格式为stack member {member-id|all} priority priority-value",
+      "两条命令均在堆叠管理视图（stack命令进入），缺省级别均为2：配置级"
+    ],
+    "tags": [
+      "CE16800",
+      "V200R025C00",
+      "命令行",
+      "堆叠"
+    ]
+  },
+  {
+    "id": 13,
+    "difficulty": "中",
+    "category": {
+      "scope": "设备",
+      "protocol_layer": "其他",
+      "lifecycle": "其他"
+    },
+    "scenario": "数据中心",
+    "device_type": "交换机",
+    "question": "在华为CE16800系列交换机（V200R025C00版本）上配置OSPF单播路由时，使用ospf、area、network三条命令完成进程、区域与网段的配置。请分别给出三条命令的命令功能、完整语法、参数含义与取值、命令视图、缺省情况与关键注意事项。",
+    "answer": "①ospf（OSPF配置命令，系统视图，缺省级别2：配置级）：命令功能为创建并运行OSPF进程，undo ospf关闭OSPF进程；缺省情况下系统不运行OSPF协议。命令格式：ospf process-id [router-id route-id|vpn-instance vpname]*。参数：process-id为OSPF进程号，整数形式，取值范围1～4294967295，缺省值是1；router-id为Router ID，点分十进制格式，每个OSPF进程的Router ID要保证在OSPF网络中唯一，否则会导致邻居不能正常建立、路由信息不正确；vpn-instance为VPN实例名称，字符串形式区分大小写、长度1～31，不能以“_public_”作为实例名。注意事项：OSPF支持多进程，同一台设备可运行多个互不影响的进程；设备的一个接口只能属于某一个OSPF进程；未手工指定Router ID时系统自动选取，优先从Loopback地址中选择最大的IP，没有Loopback接口则在接口地址中选取最大的IP；使用undo ospf关闭进程后，对端会保留该进程早先产生的已无效LSA直到超时（age达到3600秒）才删除。②area（OSPF视图，缺省级别2：配置级）：命令功能为创建OSPF区域并进入OSPF区域视图，undo area删除指定区域；缺省情况下系统未创建OSPF区域；命令格式area area-id；area-id指定区域标识，可以是十进制整数或点分十进制格式，整数形式时取值范围0～4294967295，区域号area-id是0的称为骨干区域；执行area命令前需先执行ospf启动进程。注意事项：区域的边界是交换机而不是链路；一个网段（链路）只能属于一个区域，每个运行OSPF的接口必须指明属于哪个区域；骨干区域负责区域之间的路由，非骨干区域之间的路由信息必须通过骨干区域转发，所有非骨干区域必须与骨干区域保持连通；undo area会将区域内相关配置全部删除。③network（OSPF区域视图，缺省级别2：配置级）：命令功能为指定运行OSPF协议的接口和接口所属的区域；缺省情况下接口不属于任何区域；命令格式network network-address wildcard-mask [description text]；network-address为接口所在网段地址（点分十进制）；wildcard-mask为IP地址的反码，相当于掩码反转（0变1、1变0），如0.0.0.255表示掩码长度24位；description text为网段描述信息，字符串形式支持空格、长度1～80。注意事项：接口的主IP地址必须在network命令指定的网段范围内；设备不支持基于接口从地址形成OSPF邻居关系；Loopback接口缺省以32位主机路由方式对外发布，与接口掩码长度无关，要发布网段路由需配置ospf network-type为广播或NBMA。使用实例：ospf 100→area 2→network 192.168.1.0 0.0.0.255。",
+    "scoring_points": [
+      "ospf process-id创建并运行OSPF进程，系统视图，process-id取值1～4294967295、缺省1，缺省不运行OSPF协议",
+      "Router ID缺省自动选取：优先Loopback最大IP，无Loopback则接口地址中最大IP",
+      "area area-id创建区域并进入OSPF区域视图，area-id可为十进制整数（0～4294967295）或点分十进制，区域号0为骨干区域",
+      "非骨干区域之间的路由必须经骨干区域转发，所有非骨干区域必须与骨干区域保持连通",
+      "network network-address wildcard-mask指定运行OSPF的接口，wildcard-mask为IP反码（0.0.0.255表示24位掩码），接口主IP必须在指定网段内",
+      "一个接口只能属于一个OSPF进程；Loopback接口缺省以32位主机路由发布"
+    ],
+    "tags": [
+      "CE16800",
+      "V200R025C00",
+      "命令行",
+      "OSPF"
+    ]
+  },
+  {
+    "id": 14,
+    "difficulty": "中",
+    "category": {
+      "scope": "设备",
+      "protocol_layer": "其他",
+      "lifecycle": "其他"
+    },
+    "scenario": "数据中心",
+    "device_type": "交换机",
+    "question": "在华为CE16800系列交换机（V300R025C10版本）上为防止非法用户接入，需在接口下配置端口安全功能（port-security系列命令）。请给出port-security各子命令的命令功能、完整语法、参数含义与取值、命令视图、缺省情况与三种保护动作的区别。",
+    "answer": "port-security（端口安全配置命令）各子命令功能与格式：port-security enable [maximum max-number]用来开启端口安全功能以及配置MAC学习的数量限制；port-security protect-action {protect|restrict|error-down}配置开启端口安全功能的接口学习到的MAC地址数达到限制后的保护动作；port-security mac-address sticky开启接口Sticky MAC功能；port-security aging-time time [type {absolute|inactivity|force}]配置安全动态MAC地址的老化时间。参数说明：maximum max-number指定MAC学习的数量限制，整数形式，取值范围1～4096；protect指定学习MAC达到接口限制数时接口丢弃源地址在MAC表以外的报文；restrict指定超过接口限制数时丢弃源地址在MAC表以外的报文同时发出告警；error-down指定产生error-down事件，接口将执行shutdown操作并且不会自动恢复，同时发出告警；aging-time time指定安全动态MAC地址的老化时间，整数形式，取值范围1～1440，单位是分钟；type指定老化类型，absolute按绝对时间老化、inactivity按相对时间老化、force按绝对时间强制老化。视图：100GE二层接口视图、10GE二层接口视图、25GE二层接口视图、400GE二层接口视图、40GE二层接口视图、Eth-Trunk二层接口视图、端口组视图；缺省级别2:配置级；该命令仅在E系列、EK系列、J系列、J2系列、P系列、SAN系列单板产品上支持。缺省情况：端口安全功能默认关闭；Sticky MAC功能默认关闭；配置了端口安全的接口安全动态MAC默认不老化；接口MAC地址学习限制数为1；学习到的MAC地址数达到限制后的保护动作是restrict。应用原理：端口安全指将接口学习到的动态MAC地址转换为安全MAC地址的安全功能，开启后接口之前学习到的动态MAC地址表项将被删除，重新学习的MAC数量达到上限后不再学习新的MAC地址，接口收到的二层转发报文如果源MAC地址在MAC表项中不存在均视为非法用户攻击并实施保护动作；三层报文不推荐使用此安全功能。前置条件：开启端口安全功能后才可以配置老化时间、MAC学习数量限制、保护动作和Sticky MAC功能。使用实例：interface 100GE 1/0/1→port-security enable→port-security protect-action protect；port-security enable maximum 5；port-security aging-time 6 type absolute。",
+    "scoring_points": [
+      "port-security enable [maximum max-number]开启端口安全并配置MAC学习数量限制，max-number整数取值1～4096，缺省限制数为1",
+      "三种保护动作：protect仅丢弃；restrict丢弃并发出告警（缺省动作）；error-down执行shutdown且不自动恢复并告警",
+      "port-security aging-time time取值1～1440分钟，type支持absolute/inactivity/force，缺省安全动态MAC不老化",
+      "缺省情况下端口安全功能关闭、Sticky MAC功能关闭",
+      "命令视图为各类二层接口视图（100GE/10GE/25GE/400GE/40GE二层接口视图）、Eth-Trunk二层接口视图及端口组视图，仅E/EK/J/J2/P/SAN系列单板支持",
+      "原理：动态MAC转换为安全MAC，达上限不再学习，源MAC不在MAC表的报文视为非法用户攻击"
+    ],
+    "tags": [
+      "CE16800",
+      "V300R025C10",
+      "命令行",
+      "端口安全"
+    ]
+  },
+  {
+    "id": 15,
+    "difficulty": "中",
+    "category": {
+      "scope": "设备",
+      "protocol_layer": "其他",
+      "lifecycle": "其他"
+    },
+    "scenario": "数据中心",
+    "device_type": "交换机",
+    "question": "在华为CE16800系列交换机（V300R025C10版本）上需要限制接口向外发送数据的速率（配置接口整形），使用qos lr命令。请给出该命令的命令功能、完整语法（区分单板系列）、每个参数的含义与取值、命令视图、缺省情况、缺省级别与注意事项。",
+    "answer": "qos lr（接口限速配置命令）：命令功能为限制接口向外发送数据的速率，即配置接口整形速率；undo qos lr取消接口向外发送数据时的速率限制；缺省情况下接口整形速率为接口的最大带宽。命令格式：对于P系列单板、SAN系列单板、E系列单板、EK系列单板、X系列单板：qos lr cir cir-value [kbps|mbps|gbps] [cbs cbs-value [bytes|kbytes|mbytes]] [outbound]；对于J系列单板、J2系列单板：qos lr cir cir-value [kbps|mbps|gbps] [outbound]（不支持cbs参数）；undo qos lr [outbound]。参数说明：cir cir-value指定承诺信息速率，即保证能够通过的平均速率，整数形式，取值范围是1～400000000，默认单位是kbps，可用kbps/mbps/gbps指定单位；cbs cbs-value指定承诺突发尺寸，即瞬间能够通过的承诺突发流量，仅E/EK/X/P/SAN系列单板支持——E/EK/P/SAN系列单位为byte时取值范围10000～33554432（kbyte为10～32768，mbyte为1～32），X系列单位为byte时取值范围16384～2097152（kbyte为16～2048，mbyte为1～2），cbs-value缺省为cir-value（kbit/s）的8倍；outbound指定在接口出方向进行速率限制。视图：100GE接口视图、10GE接口视图、25GE接口视图、400GE接口视图、40GE接口视图、端口组视图及对应的二层接口视图；缺省级别2:配置级。注意事项：本命令只能用在接口出方向上；流量整形与流量监管都限速，但流量整形将不符合速率要求的报文先送入队列缓存，令牌桶有足够令牌时再均匀向外发送（会增加网络传输延迟），流量监管则直接丢弃不符合速率要求的报文；qos lr命令为覆盖式命令，同一接口多次配置按最后一次配置生效；如果同一接口下既配置了接口队列整形（qos queue shaping）又配置了接口整形，则接口整形的CIR必须大于等于接口队列整形的CIR之和，否则会出现低优先级队列抢占高优先级队列带宽等异常现象；多个接口需要配置相同整形速率时可通过端口组配置减少重复工作。使用实例：[~HUAWEI] interface 100GE 1/0/1、[~HUAWEI-100GE1/0/1] qos lr cir 20000 kbps，限制接口向外发送数据的承诺信息速率为20000kbit/s。",
+    "scoring_points": [
+      "qos lr限制接口向外发送数据的速率即接口整形，缺省接口整形速率为接口的最大带宽",
+      "cir cir-value整数取值1～400000000，默认单位kbps；只能用于接口出方向（outbound）",
+      "cbs仅E/EK/X/P/SAN系列单板支持，E/EK/P/SAN系列byte单位取值10000～33554432，X系列byte单位取值16384～2097152，cbs缺省为cir（kbit/s）的8倍；J/J2系列不支持cbs参数",
+      "视图为100GE/10GE/25GE/400GE/40GE接口视图（含二层接口视图）及端口组视图，缺省级别2:配置级",
+      "qos lr为覆盖式命令，多次配置按最后一次生效；接口整形CIR必须大于等于接口队列整形CIR之和",
+      "流量整形缓存报文均匀发送、会增加延迟，流量监管直接丢弃报文"
+    ],
+    "tags": [
+      "CE16800",
+      "V300R025C10",
+      "命令行",
+      "QoS"
+    ]
+  },
+  {
+    "id": 16,
+    "difficulty": "中",
+    "category": {
+      "scope": "设备",
+      "protocol_layer": "其他",
+      "lifecycle": "其他"
+    },
+    "scenario": "数据中心",
+    "device_type": "交换机",
+    "question": "华为CE16800系列交换机（V300R025C10版本）作为SSH服务器提供STelnet登录服务，需要使用ssh user系列命令创建SSH用户并配置认证/服务方式，再用stelnet server enable命令开启STelnet服务。请给出相关命令的命令功能、完整语法、参数与取值、命令视图、缺省情况与注意事项。",
+    "answer": "①ssh user（SSH配置命令）：ssh user user-name命令用来创建SSH用户；ssh user user-name authentication-type {password|rsa|password-rsa|dsa|password-dsa|all|ecc|password-ecc|sm2|password-sm2|password-x509v3-rsa|x509v3-rsa|x509v3-ecdsa-sha2|password-x509v3-ecdsa-sha2|sm2-sm3|password-sm2-sm3}配置SSH用户的认证方式；ssh user user-name service-type {sftp|stelnet|snetconf}*配置SSH用户的服务方式（stelnet指定STelnet和SCP服务方式）；ssh user user-name assign {rsa-key|dsa-key|ecc-key|sm2-key} key-name为SSH用户分配公钥；ssh user user-name sftp-directory directoryname配置SFTP服务授权目录。参数：user-name指定SSH用户名，字符串形式、不区分大小写、长度范围1～253；key-name为客户端公共密钥名，字符串形式、不支持空格、长度1～40；directoryname字符串长度1～255。视图：系统视图；缺省级别3:管理级。缺省情况：没有创建SSH用户；没有为SSH用户分配公钥；SSH用户的认证方式是空（不支持任何认证方式）；服务方式是空；没有配置SFTP授权目录。注意事项：对新创建的SSH用户必须指定其验证方式，否则用户无法登录，新配置的验证方式在下次登录时生效；有两种方式创建SSH用户（直接执行ssh user，或执行authentication-type/service-type/sftp-directory命令时检测到用户不存在则自动新建）；为保证较高的安全性，请勿使用长度小于3072位的RSA算法作为认证类型，建议使用更安全的ECC认证算法；可执行display ssh user-information查看所有SSH用户配置信息。②stelnet server enable（系统视图，缺省级别3:管理级）：stelnet ipv4 server enable开启SSH服务端的IPv4 STelnet服务，stelnet ipv6 server enable开启IPv6 STelnet服务，undo命令关闭对应服务；缺省情况下SSH服务端的STelnet服务关闭。使用指南：执行本命令可以控制TCP 22号端口是否支持STelnet服务，只有SSH服务端的STelnet服务开启后，客户端才能以STelnet方式与SSH服务器建立连接；关闭SSH服务器的STelnet服务后，以STelnet方式登录的所有客户端将断开连接。",
+    "scoring_points": [
+      "ssh user user-name创建SSH用户，系统视图，缺省级别3:管理级，user-name字符串不区分大小写、长度1～253",
+      "缺省没有创建SSH用户，认证方式和服务方式均为空；新创建用户必须指定认证方式否则无法登录",
+      "service-type {sftp|stelnet|snetconf}*配置服务方式，stelnet指定STelnet和SCP服务方式",
+      "认证方式支持password、rsa、ecc、sm2、password-ecc、all等多种；勿用小于3072位的RSA算法，建议ECC",
+      "stelnet ipv4/ipv6 server enable开启SSH服务端STelnet服务，缺省STelnet服务关闭，缺省级别3:管理级",
+      "STelnet服务控制TCP 22号端口；关闭STelnet服务后所有以STelnet方式登录的客户端将断开连接"
+    ],
+    "tags": [
+      "CE16800",
+      "V300R025C10",
+      "命令行",
+      "SSH"
+    ]
+  },
+  {
+    "id": 17,
+    "difficulty": "中",
+    "category": {
+      "scope": "设备",
+      "protocol_layer": "其他",
+      "lifecycle": "其他"
+    },
+    "scenario": "数据中心",
+    "device_type": "交换机",
+    "question": "华为CE6800系列交换机（V200R025C00版本）输出告警hwBrdTempFatalAlarm。请说明该告警的含义（含告警ID与级别）、对系统的影响、可能原因与处理步骤。",
+    "answer": "告警含义：hwBrdTempFatalAlarm表示单板或子卡温度严重告警，Trap Buffer信息为\"The board temperature exceeded the fatal alarm threshold\"。告警属性：Trap OID为1.3.6.1.4.1.2011.5.25.219.2.10.15，MIB为HUAWEI-ENTITY-TRAP-MIB，告警ID为0x0813000B/0x813000B，Trap级别（Trap Severity）为Alert，告警类型为environmentalAlarm，属于Raise告警，对应恢复告警为hwBrdTempFatalResume。Trap Buffer参数：EntPhysicalIndex为实体索引，EntPhysicalName为实体名称，EntityThresholdType为实体阈值类型，EntityThresholdCritical为实体温度阈值，EntityThresholdCurrent为当前温度值，EntityTrapFaultID为故障码，Reason为告警产生原因。对系统的影响：原因1（EntityTrapFaultID=143872）单板温度过高，可能导致单板下电；原因2（EntityTrapFaultID=143873）子卡温度过高，可能导致单板复位。可能原因：原因1是单板温度过高（The board temperature was extremely high）；原因2是子卡温度过高（The card temperature was extremely high）。处理步骤（原因1）：1.检查风扇过滤网是否堵塞，如果堵塞请清理过滤网；2.检查环境温度是否过高，如果过高请降低环境温度；3.检查风扇是否有故障，如果有故障请处理风扇故障；4.检查未插单板槽位是否插入假面板，如果没有请插入假面板；5.请收集告警信息、日志信息和配置信息，并联系技术支持人员。处理步骤（原因2）：步骤同上，仅第4步改为检查未插子卡槽位是否插入假面板。",
+    "scoring_points": [
+      "告警含义：单板或子卡温度严重告警（超过严重告警阈值）",
+      "告警ID为0x0813000B/0x813000B，Trap Severity为Alert，MIB为HUAWEI-ENTITY-TRAP-MIB，OID为1.3.6.1.4.1.2011.5.25.219.2.10.15",
+      "影响：单板温度过高（143872）可能导致单板下电，子卡温度过高（143873）可能导致单板复位",
+      "处理步骤：检查并清理风扇过滤网、降低过高的环境温度、处理风扇故障、为空槽位插入假面板",
+      "无法解决时收集告警信息、日志信息和配置信息并联系技术支持人员",
+      "对应恢复告警为hwBrdTempFatalResume"
+    ],
+    "tags": [
+      "CE6800",
+      "V200R025C00",
+      "告警处理",
+      "温度"
+    ]
+  },
+  {
+    "id": 18,
+    "difficulty": "中",
+    "category": {
+      "scope": "设备",
+      "protocol_layer": "其他",
+      "lifecycle": "其他"
+    },
+    "scenario": "数据中心",
+    "device_type": "交换机",
+    "question": "华为CE8800系列交换机（V300R025C10版本）某下联端口出现物理Down，设备输出告警linkDown（IFNET_1.3.6.1.6.3.1.1.5.3）。请说明该告警的含义（含告警ID与级别）、对系统的影响、可能原因与处理步骤。",
+    "answer": "告警含义：linkDown表示接口状态改变（The interface status changes）。告警属性：Trap OID为1.3.6.1.6.3.1.1.5.3，MIB为IF-MIB，告警ID为0x08520003/0x8520003，Trap级别（Trap Severity）为Critical（Alarm Severity为Major），告警名称为linkDown，告警类型为equipmentAlarm，属于Raise告警，对应恢复告警（Match trap）为linkup（IFNET_1.3.6.1.6.3.1.1.5.4）。Trap Buffer参数：ifName为接口名称，ifAdminStatus为接口管理状态，ifOperStatus为接口当前的状态，Reason为告警产生原因，mainIf为主接口名称。对系统的影响：接口不能正常转发报文。可能原因包括：原因1接口物理链路变为Down状态；原因2 LACP协商失败；原因13虚通道Down；原因16接口被shutdown；原因17链路层协议变为Down状态；原因20主接口变为Down状态；原因26 BFD会话变为Down状态；原因36接口的链路协议状态为error-down；原因37接口误码率超过误码告警阈值（CRC ERR DOWN）；原因39传输速率和配置的速率不匹配；原因40端口插入了不支持的介质；原因41介质不支持negotiation配置；原因52接口处于standby状态等。处理步骤——原因1：1.在接口视图下执行display this，查看两端接口是否被shutdown（如是子接口还需查看两端是否配置了VLAN ID，子接口需配置正确的VLAN ID），接口被shutdown可执行undo shutdown打开接口；2.查看物理链路是否正常（包括网线、光模块等硬件是否松动或脱落），不正常则重新正确连接物理线路；3.请收集告警信息和配置信息，并联系技术支持工程师。原因2（LACP协商失败）：1.系统视图下执行display interface检查本端和对端端口是否Down，端口Down则在接口视图执行undo shutdown；2.执行display interface eth-trunk查看两端加入Eth-Trunk的成员口数目是否大于成员链路数上限阈值，如是则在Eth-Trunk接口视图配置合适的上限阈值；3.查看成员口数目是否小于下限阈值，如是则配置least active-linknumber调整下限阈值；4.请收集告警信息和配置信息，并联系技术支持工程师。",
+    "scoring_points": [
+      "告警含义：接口状态改变；告警ID为0x08520003/0x8520003，Trap Severity为Critical（Alarm Severity为Major），MIB为IF-MIB",
+      "对系统的影响：接口不能正常转发报文",
+      "可能原因：接口物理链路Down、LACP协商失败、接口被shutdown、链路层协议Down、error-down、CRC误码率超阈值、速率/介质不匹配等",
+      "处理（物理Down）：接口视图display this查两端是否shutdown并undo shutdown，检查网线/光模块是否松动脱落并重新连接",
+      "处理（LACP协商失败）：display interface查端口状态，display interface eth-trunk查成员口数目与上/下限阈值并调整",
+      "对应恢复告警为linkup（OID 1.3.6.1.6.3.1.1.5.4）"
+    ],
+    "tags": [
+      "CE8800",
+      "V300R025C10",
+      "告警处理",
+      "接口"
+    ]
+  },
+  {
+    "id": 19,
+    "difficulty": "中",
+    "category": {
+      "scope": "设备",
+      "protocol_layer": "其他",
+      "lifecycle": "其他"
+    },
+    "scenario": "数据中心",
+    "device_type": "交换机",
+    "question": "华为CE12800系列交换机（V200R025C00版本）组建的堆叠系统（CSS）输出告警hwStackMacInconsistence。请说明该告警的含义（含告警ID与级别）、对系统的影响、可能原因与处理步骤。",
+    "answer": "告警含义：hwStackMacInconsistence表示堆叠系统分裂后，系统的MAC地址非本系统任何成员设备的出厂MAC地址，Trap Buffer信息为\"The stack system's MAC address is not the manufacture MAC address of any member device.(hwStackSystemMac=[hwStackSystemMac])\"。告警属性：Trap OID为1.3.6.1.4.1.2011.5.25.183.1.22.33，MIB为HUAWEI-STACK-MIB，告警ID为0x09E02024/0x9E02024，Trap级别（Trap Severity）为Warning，告警类型为equipmentAlarm，属于Raise告警，对应恢复告警为hwStackMacInconsistenceResume。Trap Buffer参数：hwStackSystemMac为堆叠系统MAC地址。对系统的影响：可能导致MAC地址冲突。可能原因：原因1是配置的堆叠系统的MAC地址非本系统任何成员设备的出厂MAC地址；原因2是堆叠系统的MAC地址非本系统任何成员设备的出厂MAC地址。处理步骤——原因1：在分裂的堆叠系统上分别执行命令display system mac-address，查看配置的堆叠系统MAC地址及所有成员设备的出厂MAC地址；如果MAC地址没有冲突，可以在堆叠管理视图执行命令set system mac-address inconsistence-alarm off关闭该告警；如果MAC地址存在冲突，可以先在堆叠管理视图执行命令undo set system mac-address取消配置的堆叠系统MAC地址，然后执行命令set system mac-address switch-delay immediately使堆叠系统MAC地址切换成当前主交换机的MAC地址。原因2：同样先在分裂的堆叠系统上分别执行display system mac-address查看堆叠系统MAC地址及所有成员设备的出厂MAC地址；如果MAC地址没有冲突，可以在堆叠管理视图执行set system mac-address inconsistence-alarm off关闭该告警；如果MAC地址存在冲突，可以在堆叠管理视图执行set system mac-address switch-delay immediately使堆叠系统MAC地址切换成当前主交换机的MAC地址。",
+    "scoring_points": [
+      "告警含义：堆叠系统分裂后，系统MAC地址非本系统任何成员设备的出厂MAC地址",
+      "告警ID为0x09E02024/0x9E02024，Trap Severity为Warning，MIB为HUAWEI-STACK-MIB，告警类型equipmentAlarm",
+      "对系统的影响：可能导致MAC地址冲突",
+      "可能原因：配置的堆叠系统MAC地址非成员设备出厂MAC；或堆叠系统MAC地址非成员设备出厂MAC",
+      "处理：在分裂系统上分别执行display system mac-address查看系统MAC与成员出厂MAC",
+      "无冲突可set system mac-address inconsistence-alarm off关闭告警；有冲突可undo set system mac-address或set system mac-address switch-delay immediately切换为当前主交换机MAC"
+    ],
+    "tags": [
+      "CE12800",
+      "V200R025C00",
+      "告警处理",
+      "CSS"
+    ]
+  },
+  {
+    "id": 20,
+    "difficulty": "中",
+    "category": {
+      "scope": "设备",
+      "protocol_layer": "其他",
+      "lifecycle": "其他"
+    },
+    "scenario": "数据中心",
+    "device_type": "交换机",
+    "question": "华为CE16800系列交换机（V300R025C10版本）输出告警hwPowerFail。请说明该告警的含义（含告警ID与级别）、对系统的影响、可能原因与处理步骤。",
+    "answer": "告警含义：hwPowerFail表示电源局部功能失效，Trap Buffer信息为\"A power module experienced a partial failure.(EntPhysicalIndex=[EntPhysicalIndex], EntPhysicalName=[EntPhysicalName], EntityTrapFaultID=[EntityTrapFaultID], EntityOperStatus=[EntityOperStatus], Reason=[ReasonDsp])\"。告警属性：Trap OID为1.3.6.1.4.1.2011.5.25.219.2.5.3，MIB为HUAWEI-ENTITY-TRAP-MIB，告警ID为0x0813001D/0x813001D，Trap级别（Trap Severity）为Critical（Alarm Severity为Major），告警类型为equipmentAlarm，属于Raise告警，对应恢复告警为hwPowerFailResume。参数：EntPhysicalIndex为实体索引，EntPhysicalName为实体名称，EntityTrapFaultID为故障码，EntityOperStatus为告警状态信息，ReasonDsp为告警产生原因。对系统的影响：多数原因下电源模块供电不正常，可能会引起设备供电不足，导致单板复位，间接对业务有影响，需要处理（原因10电源内部风扇全速转不影响业务；原因11 EEPROM故障时电源正常工作但不能正常读取电源数据；原因15输出过流业务受到影响）。可能原因（共18类，含故障码）：电源与MPU通信故障（136704）、电源内部风扇风向异常（136732）、电源内部风扇堵转故障（136733）、电源开关故障（136720）、电源轻微不均流（136712）、电源内软件版本较低（136729）、电源内部电源模块故障（136707）、电源在位但输出异常（136735）、双CANBUS节点故障导致电源通信异常（136736）、电源内部风扇全速转（136737）、电源内部EEPROM模块故障（136738）、电源模块保护被触发（136739）、电源ID地址冲突（136743）、电源模块不均流故障（136714）、电源输出过流（136734）、电源PM模块缺相、A路/B路接入线缆与电源PM模块不匹配（136749/136750）等。处理步骤（典型）：原因1先拔插电源模块，未恢复则更换电源模块，仍未恢复请收集告警信息、日志信息和配置信息并联系技术支持人员；原因2/3/7/8等更换电源（风扇堵转需先将故障电源断电再更换）；原因4手动打开背板电源开关；原因5减少使用网线长度以降低单板功耗、给其他未上电电源上电或更换电源；原因6在诊断视图执行命令upgrade device power升级电源。",
+    "scoring_points": [
+      "告警含义：电源局部功能失效；告警ID为0x0813001D/0x813001D，Trap Severity为Critical（Alarm Severity为Major）",
+      "MIB为HUAWEI-ENTITY-TRAP-MIB，OID为1.3.6.1.4.1.2011.5.25.219.2.5.3，对应恢复告警hwPowerFailResume",
+      "影响：电源供电不正常可能引起供电不足、导致单板复位，间接影响业务",
+      "可能原因包括电源与MPU通信故障、电源内部风扇堵转、电源在位但输出异常、不均流、输出过流、缺相、线缆与PM不匹配等18类",
+      "处理：拔插或更换电源模块；电源开关故障手动打开背板电源开关；软件版本低在诊断视图upgrade device power升级电源",
+      "无法解决时收集告警信息、日志信息和配置信息并联系技术支持人员"
+    ],
+    "tags": [
+      "CE16800",
+      "V300R025C10",
+      "告警处理",
+      "电源"
+    ]
+  },
+  {
+    "id": 21,
+    "difficulty": "中",
+    "category": {
+      "scope": "设备",
+      "protocol_layer": "其他",
+      "lifecycle": "其他"
+    },
+    "scenario": "数据中心",
+    "device_type": "交换机",
+    "question": "华为CE6800系列交换机（V200R025C00版本）输出日志IFNET/2/linkDown_active。请说明该日志的日志信息格式、日志含义、日志参数、可能原因与处理步骤。",
+    "answer": "日志格式与示例：日志信息为\"IFNET/2/linkDown_active: The interface status changes. (ifName=[ifName], AdminStatus=[ifAdminStatus], OperStatus=[ifOperStatus], Reason=[Reason], mainIfname=[mainIf])\"，属于IFNET日志模块（接口管理），日志级别编号为2。日志含义：接口状态改变。日志参数：ifName为接口名称；ifAdminStatus为接口管理状态；ifOperStatus为接口当前的状态；Reason为告警产生原因；mainIf为主接口名称。可能原因：原因1接口物理链路变为Down状态；原因2 LACP协商失败；原因3～8收到ConfReq/ConfAck/Nak/Term/TermAck/CodeRej等PPP协商报文；原因10/11 CHAP/PAP认证失败；原因12 Keepalive超时；原因13虚通道Down；原因14 EFM会话连通性检测故障；原因15隧道变为Down状态或被删除；原因16接口被shutdown；原因17链路层协议变为Down状态；原因20主接口变为Down状态；原因25接口被删除；原因26 BFD会话变为Down状态；原因30 DLDP状态变为Down；原因32 VRRP状态变为Backup或Initialize状态；原因36接口的链路协议状态为error-down；原因37接口误码率超过误码告警阈值（CRC ERR DOWN）；原因39传输速率和配置的速率不匹配；原因40端口插入了不支持的介质；原因41介质不支持negotiation配置；原因48 CFM连通性检测故障；原因52接口处于standby状态。处理步骤——原因1（物理链路Down）：1.在接口视图下执行display this，查看两端接口是否被shutdown，如果接口被shutdown可执行undo shutdown打开接口；如果是子接口还需要查看两端接口是否配置了VLAN ID；2.查看物理链路是否正常（包括网线、光模块等硬件是否松动或脱落），不正常则重新正确连接物理线路后检查告警是否清除；3.请收集告警信息和配置信息，并联系技术支持工程师。原因2（LACP协商失败）：1.系统视图下执行display interface检查本端和对端端口是否Down，端口Down则在接口视图下执行undo shutdown；2.执行display interface eth-trunk查看成员口数目与成员链路数上下限阈值的关系，超过上限则调整上限阈值（lacp max active-linknumber），小于下限则配置least active-linknumber调整下限阈值；3.请收集告警信息和配置信息，并联系技术支持工程师。",
+    "scoring_points": [
+      "日志格式为\"IFNET/2/linkDown_active: The interface status changes. (ifName=..., AdminStatus=..., OperStatus=..., Reason=..., mainIfname=...)\"，级别编号2",
+      "日志含义：接口状态改变；参数ifName接口名称、ifAdminStatus接口管理状态、ifOperStatus接口当前状态、Reason告警产生原因、mainIf主接口名称",
+      "可能原因：接口物理链路Down、LACP协商失败、接口被shutdown、链路层协议Down、error-down、CRC误码率超阈值、速率/介质不匹配、BFD Down等",
+      "处理（物理链路Down）：接口视图display this查两端是否shutdown并undo shutdown，检查网线/光模块松动脱落并重新连接",
+      "处理（LACP协商失败）：display interface查端口状态，display interface eth-trunk查成员口数目并调整活动链路上/下限阈值",
+      "无法解决时收集告警信息和配置信息，联系技术支持工程师"
+    ],
+    "tags": [
+      "CE6800",
+      "V200R025C00",
+      "日志",
+      "接口"
+    ]
+  },
+  {
+    "id": 22,
+    "difficulty": "中",
+    "category": {
+      "scope": "设备",
+      "protocol_layer": "其他",
+      "lifecycle": "其他"
+    },
+    "scenario": "数据中心",
+    "device_type": "交换机",
+    "question": "华为CE8800系列交换机（V300R025C10版本）运行OSPF协议时输出日志OSPF/2/ospfNbrStateChange_active。请说明该日志的日志信息格式、日志含义、日志参数（NbrState与Reason取值）、可能原因与处理步骤。",
+    "answer": "日志格式与示例：日志信息为\"OSPF/2/ospfNbrStateChange_active: The status of the non-virtual neighbor has changed. (RouterId=[RouterId], NbrIpAddress=[NbrIpAddress], NbrRtrId=[NbrRtrId], NbrState=[NbrState], ProcessId=[ProcessId], AreaId=[AreaId], IfName=[IfName], VpnName=[VpnName], Reason=[NbrStateChangeReason], SubReason=[SubReason])\"，属于OSPF日志模块，日志级别编号为2。日志含义：设备非虚连接邻居的状态发生变化——邻居状态从Full或Init到Down的变化（广播网和NBMA网络中DR Other间的邻居状态由2-way变为Down）作为告警上报；邻居重新到达Full状态后业务恢复并上报清除信息；邻居被删除后不发送清除告警。日志参数：RouterId为路由器标识；NbrIpAddress为邻居地址；NbrRtrId为邻居路由器标识；NbrState为邻居状态（1:Down、2:Attempt、3:Init、4:2-Way、5:ExStart、6:Exchange、7:Loading、8:Full，邻居状态为Full时此Trap为业务恢复Trap）；ProcessId为进程标识；AreaId为区域标识；IfName为实接口名称；VpnName为VPN名称；Reason（NbrStateChangeReason）为邻居状态变化原因（【1】邻接保持定时器超时、【2】物理接口状态改变、【3】协议变化、【4】BFD状态改变、【5】配置改变、【6】邻居路由、【7】等待邻居稳定、【99】清除告警、【101】邻居删除、【102】邻居FULL、【103】接口静默、【104】接口删除、【105】DR/BDR改变）。可能原因：原因1邻接定时器超时（Adjacency holdTimer expired）；原因2物理接口变化；原因3协议原因；原因4 BFD会话断开；原因5 OSPF配置变化；原因6邻居设备原因。处理步骤：原因1执行ping命令查看到对端设备链路状态，不能ping通则检查传输设备、链路、接口并调整硬件恢复业务；原因2执行display ospf interface查看接口物理状态（down检查光功率/传输设备，*down为人为shutdown需undo shutdown）与协议状态（Down检查IP地址配置）；原因3在两端接口视图和OSPF视图执行display this检查两端是否使能相同协议与相同认证，执行display ospf peer查看邻居信息（Init为本端报文被丢弃，2-way检查ospf dr-priority，Loading可两端reset ospf process恢复，注意复位会导致OSPF邻接关系中断）；原因4 ping对端并在接口视图检查链路配置、display ospf peer检查邻居关系；原因5检查两端区域配置、opaque-capability使能、接口ospf network-type是否一致并修改一致；原因6检查对端是否他厂商设备或对端设备/OSPF进程是否重启；各原因无法解决时收集告警信息和配置信息并联系技术支持工程师。",
+    "scoring_points": [
+      "日志格式为\"OSPF/2/ospfNbrStateChange_active: The status of the non-virtual neighbor has changed.(...)\"，级别编号2，指非虚连接邻居状态变化",
+      "NbrState取值1~8对应Down/Attempt/Init/2-Way/ExStart/Exchange/Loading/Full，为Full时是业务恢复Trap",
+      "Reason取值包括邻接保持定时器超时、物理接口状态改变、协议变化、BFD状态改变、配置改变、邻居删除、DR/BDR改变等",
+      "可能原因：邻接定时器超时、物理接口变化、协议原因、BFD会话断开、OSPF配置变化、邻居设备原因",
+      "处理：ping检查链路、display ospf interface查接口物理/协议状态、display ospf peer查邻居信息、检查两端区域/认证/网络类型配置一致性",
+      "邻居状态Loading可两端reset ospf process恢复，但复位会导致OSPF邻接关系中断，须谨慎确认"
+    ],
+    "tags": [
+      "CE8800",
+      "V300R025C10",
+      "日志",
+      "OSPF"
+    ]
+  },
+  {
+    "id": 23,
+    "difficulty": "中",
+    "category": {
+      "scope": "设备",
+      "protocol_layer": "其他",
+      "lifecycle": "其他"
+    },
+    "scenario": "数据中心",
+    "device_type": "交换机",
+    "question": "华为CE16800系列交换机（V200R025C00版本）部署M-LAG时输出日志ETRUNK/4/hwMlagDfsPeerDown_active。请说明该日志的日志信息格式、日志含义、日志参数、可能原因与处理步骤。",
+    "answer": "日志格式与示例：日志信息为\"ETRUNK/4/hwMlagDfsPeerDown_active: The DFS peer status went Down. (Dfs-GroupId=[hwdfsGroupId], SystemId=[hwsysMac], Dfs-Type=[hwdfsType], PeerAddress=[hwdfsPeerAddress])\"，属于ETRUNK日志模块（以太网交换），日志级别编号为4。日志含义：DFS邻居状态变down。日志参数：hwdfsGroupId为DFS Group编号；hwsysMac为交换机的系统MAC，若DFS类型为Active-Active Gateway（多活网关）则SystemId显示全0；hwdfsType为DFS业务类型，取值为M-LAG或Active-Active Gateway；hwdfsPeerAddress为DFS的邻居地址。可能原因：本端或对端设备的链路状态异常。处理步骤：1.执行display dfs-group命令，根据Causation字段显示的M-LAG失败的原因，修改M-LAG配置；2.若问题未解决，请收集告警信息、日志信息和配置信息，并联系技术支持人员。相关背景：M-LAG系统中两台设备通过peer-link链路连接并以同一个状态和下游设备进行链路聚合协商，DFS Group用于设备配对及信息同步，DFS邻居状态变Down通常意味着M-LAG双活系统内部通道异常，需要结合display dfs-group的输出定位具体的失败原因（Causation字段）并进行相应配置修正；若自行排查无法恢复，应收集告警、日志与配置信息联系华为技术支持人员处理。",
+    "scoring_points": [
+      "日志格式为\"ETRUNK/4/hwMlagDfsPeerDown_active: The DFS peer status went Down. (Dfs-GroupId=..., SystemId=..., Dfs-Type=..., PeerAddress=...)\"，级别编号4",
+      "日志含义：DFS邻居状态变down",
+      "参数：hwdfsGroupId为DFS Group编号；hwsysMac为系统MAC（DFS类型为多活网关时显示全0）；hwdfsType取值M-LAG或Active-Active Gateway；hwdfsPeerAddress为DFS邻居地址",
+      "可能原因：本端或对端设备的链路状态异常",
+      "处理：执行display dfs-group命令，根据Causation字段显示的M-LAG失败原因修改M-LAG配置",
+      "问题未解决时收集告警信息、日志信息和配置信息并联系技术支持人员"
+    ],
+    "tags": [
+      "CE16800",
+      "V200R025C00",
+      "日志",
+      "M-LAG"
+    ]
+  },
+  {
+    "id": 24,
+    "difficulty": "中",
+    "category": {
+      "scope": "设备",
+      "protocol_layer": "其他",
+      "lifecycle": "其他"
+    },
+    "scenario": "数据中心",
+    "device_type": "交换机",
+    "question": "华为CE16800系列交换机（V300R025C10版本）的VXLAN网络中输出日志NVO3/4/NVO3_TUNNEL_DOWN。请说明该日志的日志信息格式、日志含义、日志参数、可能原因与处理步骤。",
+    "answer": "日志格式与示例：日志信息为\"NVO3/4/NVO3_TUNNEL_DOWN: The status of the vxlan tunnel changed to down. (SourceIpAddress=[SrcIpAddr], DestinationIpAddress=[DstIpAddr], TunnelStatus=[TnlStatus])\"，属于NVO3日志模块，日志级别编号为4；仅E系列单板、P系列单板、J系列单板、EK系列单板、J2系列单板、SAN系列单板形态支持此日志。日志含义：VXLAN隧道状态变为Down。日志参数：SrcIpAddr为VXLAN隧道源端VTEP地址；DstIpAddr为VXLAN隧道远端VTEP地址；TnlStatus为VXLAN隧道状态。可能原因：原因1终端用户下线；原因2网络拓扑变化，导致网络三层无法互通。处理步骤——原因1（终端用户下线）：1.请确认终端用户是否是正常下线，如果是则属于正常运行信息，无需处理；如果不是请执行步骤2；2.请确认终端用户异常下线原因，故障解决后查看告警是否仍然存在，如果仍存在则请执行步骤3；3.请收集日志信息和配置信息，并联系技术支持工程师。原因2（网络拓扑变化导致三层无法互通）：1.按实际组网拓扑检查设备间路由是否可达，如果不可达请执行步骤2，可达则执行步骤3；2.检查网络物理链路并正确修复，如果告警仍存在则请执行步骤3；3.请收集日志信息和配置信息，并联系技术支持工程师。相关背景：VXLAN隧道由一对VTEP IP地址确定，只要对端VTEP IP地址三层路由可达隧道即可建立，因此隧道状态变Down通常与VTEP间路由连通性或用户侧状态相关。",
+    "scoring_points": [
+      "日志格式为\"NVO3/4/NVO3_TUNNEL_DOWN: The status of the vxlan tunnel changed to down. (SourceIpAddress=..., DestinationIpAddress=..., TunnelStatus=...)\"，级别编号4",
+      "日志含义：VXLAN隧道状态变为Down；仅E/P/J/EK/J2/SAN系列单板形态支持此日志",
+      "参数：SrcIpAddr为源端VTEP地址、DstIpAddr为远端VTEP地址、TnlStatus为隧道状态",
+      "可能原因：终端用户下线；网络拓扑变化导致网络三层无法互通",
+      "处理：确认终端用户是否正常下线（正常下线无需处理）；按实际组网检查设备间路由是否可达并检查修复物理链路",
+      "无法解决时收集日志信息和配置信息并联系技术支持工程师"
+    ],
+    "tags": [
+      "CE16800",
+      "V300R025C10",
+      "日志",
+      "VXLAN"
+    ]
+  },
+  {
+    "id": 25,
+    "difficulty": "中",
+    "category": {
+      "scope": "设备",
+      "protocol_layer": "其他",
+      "lifecycle": "其他"
+    },
+    "scenario": "数据中心",
+    "device_type": "交换机",
+    "question": "华为CE6800系列交换机（V200R025C00版本）输出日志FEI/4/hwMacLimitOverThresholdAlarm_active。请说明该日志的日志信息格式、日志含义、日志参数、可能原因与处理步骤，以及对应的清除日志。",
+    "answer": "日志格式与示例：日志信息为\"FEI/4/hwMacLimitOverThresholdAlarm_active: MAC address learning reached the limit and MAC address flapping cannot occur in this broadcast domain. (IfName=[IfName], Vlan=[VLANID], MacLimitMaxMac=[MacLimitMaxMac], Vlan id 0 indicates that the limit alarm is not configured in the VLAN)\"，属于FEI日志模块，日志级别编号为4。日志含义：MAC地址学习达到限制数告警阈值，此广播域无法产生MAC漂移。日志参数：IfName为接口名称；VLANID为VLAN ID（VLAN ID为0表示该限制告警未在VLAN下配置）；MacLimitMaxMac为配置的可以学习到MAC的最大数。可能原因：学习的动态MAC数目超过了限制MAC表规则中规定的最大MAC学习的数目。处理步骤：确认MAC地址限制数配置是否满足当前业务场景需求；如果不满足，考虑删除无效MAC表项或者调整限制数值；如果满足，无需处理。对应的清除日志为FEI/4/hwMacLimitOverThresholdAlarm_clear，日志信息为\"MAC address learning is resumed. (IfName=[IfName], Vlan=[VLANID], MacLimitMaxMac=[MacLimitMaxMac])\"，含义是MAC地址学习个数恢复到限制数告警阈值以内。该日志反映了MAC地址学习限制功能的工作状态：当接口或VLAN学习到的动态MAC数量达到配置的最大MAC学习数后，设备不再学习新的MAC表项并上送该日志，运维人员应结合业务规模评估MAC限制规则（最大MAC数、告警阈值）设置是否合理，必要时清理无效MAC表项或放大限制值，避免正常用户的MAC地址无法学习而影响流量转发。",
+    "scoring_points": [
+      "日志格式为\"FEI/4/hwMacLimitOverThresholdAlarm_active: MAC address learning reached the limit...\"，级别编号4，属于FEI日志模块",
+      "日志含义：MAC地址学习达到限制数告警阈值，此广播域无法产生MAC漂移",
+      "参数：IfName接口名称、VLANID为VLAN ID（为0表示限制告警未在VLAN下配置）、MacLimitMaxMac为配置的可学习MAC最大数",
+      "可能原因：学习的动态MAC数目超过了限制MAC表规则中规定的最大MAC学习数目",
+      "处理：确认MAC限制数配置是否满足业务需求，不满足则删除无效MAC表项或调整限制数值，满足则无需处理",
+      "对应清除日志FEI/4/hwMacLimitOverThresholdAlarm_clear表示MAC学习个数恢复到限制阈值以内"
+    ],
+    "tags": [
+      "CE6800",
+      "V200R025C00",
+      "日志",
+      "MAC"
+    ]
+  }
+]

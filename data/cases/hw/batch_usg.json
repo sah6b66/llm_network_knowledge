@@ -1,0 +1,417 @@
+[
+  {
+    "id": 71,
+    "difficulty": "简单",
+    "category": {
+      "scope": "设备",
+      "protocol_layer": "其他",
+      "lifecycle": "其他"
+    },
+    "scenario": "通用",
+    "device_type": "防火墙",
+    "question": "在华为 USG6305E 防火墙（V600R007C20 版本）上，安全策略是一项核心特性。请介绍该特性是什么、它解决什么问题，以及安全策略的组成、匹配过程和报文处理流程。",
+    "answer": "安全策略是 FW（如 USG6305E）的核心特性。FW 的基本作用是对进出网络的访问行为进行控制，保护特定网络免受“不信任”网络的攻击，同时允许两个网络之间进行合法通信，这一访问控制就是通过安全策略技术实现的：只有符合安全策略的合法流量才能通过 FW 转发。安全策略是由匹配条件（例如五元组、用户、时间段等）和动作组成的控制规则，FW 收到流量后识别流量属性并与匹配条件比对，所有条件都匹配即成功命中该策略，随后执行策略动作。匹配条件均为可选、不选默认 any，包括：源/目的安全区域、源/目的地址或地区（取值可以是地址、地址组、域名组、地区或地区组）、用户（用户、用户组或安全组）、接入方式、终端设备、服务（协议类型或端口号）、应用、URL 分类、时间段、VLAN ID 等。动作包括：允许——未配置内容安全检测时直接放行，若引用了反病毒、入侵防御等内容安全配置文件，则根据内容安全检测结论决定是否放行；禁止——丢弃报文，还可向客户端或服务器发送反馈报文。多条策略按策略列表顺序自上而下逐条匹配，命中后不再匹配下一条，故应先配置条件精确的策略再配置宽泛的策略；系统存在缺省策略 default，位于列表最底部、优先级最低，所有匹配条件为 any，动作默认为禁止。报文处理流程上，只需在访问发起方向配置安全策略：首包匹配安全策略后建立会话表，后续报文直接匹配会话表转发，无需再匹配策略；若策略中配置了应用或 URL 分类，识别未完成时处于策略未决状态，先建立临时会话，识别完成后重新匹配策略并刷新会话。安全策略还可控制目的为 FW 自身或由 FW 发出的本地流量，此时 FW 所在区域为 Local 区域。典型应用中，内网接口加入 Trust 区域、外网接口加入 Untrust 区域，通过配置 Trust 到 Untrust 的安全策略控制内网用户访问外网的权限。",
+    "scoring_points": [
+      "指出安全策略是 FW 的核心特性，用于对通过 FW 的数据流进行检验与访问控制，只有符合安全策略的合法流量才能通过",
+      "说明安全策略由匹配条件（五元组、用户、时间段等）和动作组成，条件均不选时默认为 any",
+      "动作包括允许与禁止：允许时若配置内容安全检测则依检测结论决定放行，禁止时丢弃报文",
+      "多条策略按列表顺序自上而下匹配，先配置的策略优先级高，需先配精确策略再配宽泛策略；缺省策略 default 动作默认为禁止",
+      "说明过滤机制：首包匹配安全策略建立会话表，后续报文直接匹配会话表，反向流量无需再配置策略",
+      "提到配置应用或 URL 分类时存在策略未决状态，识别完成后重新匹配策略",
+      "本地流量的安全策略涉及 Local 区域"
+    ],
+    "tags": [
+      "USG6305E",
+      "V600R007C20",
+      "特性",
+      "安全策略"
+    ]
+  },
+  {
+    "id": 72,
+    "difficulty": "简单",
+    "category": {
+      "scope": "设备",
+      "protocol_layer": "其他",
+      "lifecycle": "其他"
+    },
+    "scenario": "通用",
+    "device_type": "防火墙",
+    "question": "华为 USG6605E-B 防火墙（V600R007C20 版本）支持双机热备（HRP）特性。请介绍该特性是什么、解决什么问题、心跳线的作用，以及双机热备的工作模式和典型组网要求。",
+    "answer": "双机热备是 FW（如 USG6605E-B）的高可靠性特性。FW 通常部署在网络出口位置，一旦发生故障会影响整网业务，为提升网络可靠性，需要部署两台 FW 组成双机热备：两台硬件和软件配置均相同的 FW 之间通过一条独立链路连接，该链路通常称为“心跳线”，两端的接口称为心跳接口。两台 FW 通过心跳线了解对端的健康状况，并向对端备份配置和表项（如会话表、IPSec SA 等）；当一台 FW 出现故障时，业务流量能平滑地切换到另一台设备上处理，使业务不中断。心跳线主要传递：心跳报文（Hello 报文，默认周期为 1 秒，互相发送以检测对端是否存活）、VGMP 报文（了解对端 VGMP 组状态，确定是否要进行故障切换）、配置和表项备份报文、心跳链路探测报文、配置一致性检查报文（检测安全策略、NAT 等关键配置是否一致）；这些报文均不受 FW 的安全策略控制，无需为其配置安全策略。工作模式有两种：主备备份模式——两台设备一主一备，正常情况下业务流量由主用设备处理，主用设备故障时备用设备接替；负载分担模式——两台设备互为主备，正常情况下共同分担整网业务流量，其中一台故障时另一台承担其业务。系统要求：组成双机热备的两台 FW 型号必须相同，安装的单板类型、数量以及单板安装位置必须相同；系统软件版本、系统补丁版本、动态加载的组件包、特征库版本等必须相同；双机热备功能自身不需要 License。心跳接口方面，建议规划专门接口作为心跳接口，建议将多个以太网接口绑定为 Eth-Trunk 并采用静态 LACP；建议至少配置 2 个心跳接口（一个主用、一个备份）；心跳接口带宽建议不低于峰值业务流量的 30%；MTU 值小于 1500 的接口不能作为心跳接口；两台 FW 心跳接口的类型、接口编号、链路协议类型必须相同，且必须加入相同的安全区域；MGMT 接口不能作为心跳接口。典型组网包括基于 VRRP 或基于动态路由实现的主备备份/负载分担双机热备。",
+    "scoring_points": [
+      "指出双机热备由两台硬件和软件配置均相同的 FW 通过心跳线组成，一台故障时业务平滑切换、业务不中断",
+      "说明心跳线传递心跳报文（默认周期 1 秒）、VGMP 报文、配置和表项备份报文、心跳链路探测报文、配置一致性检查报文",
+      "指出心跳报文等双机热备报文不受安全策略控制，无需配置安全策略",
+      "工作模式包括主备备份模式与负载分担模式，并能说明两者区别",
+      "系统要求：两台 FW 型号相同、单板类型数量位置相同、系统软件版本/补丁版本/组件包/特征库版本相同",
+      "心跳接口要求：建议至少 2 个心跳接口、带宽不低于峰值业务流量的 30%、MTU 不能小于 1500、两台设备心跳接口加入相同安全区域"
+    ],
+    "tags": [
+      "USG6605E-B",
+      "V600R007C20",
+      "特性",
+      "双机热备"
+    ]
+  },
+  {
+    "id": 73,
+    "difficulty": "中",
+    "category": {
+      "scope": "设备",
+      "protocol_layer": "其他",
+      "lifecycle": "其他"
+    },
+    "scenario": "通用",
+    "device_type": "防火墙",
+    "question": "某公司在网络边界部署华为 USG6305E 防火墙（V600R007C20 版本）作为安全网关，公司向 ISP 额外申请了公网地址 1.1.1.10，希望使私网 Web 服务器（10.2.0.7，端口 80）和 FTP 服务器（10.2.0.8，端口 21）对外提供服务，外网用户访问 1.1.1.10 的 8080 端口时流量送给 Web 服务器。请给出该 NAT Server 内部服务器发布方案的配置思路与配置步骤。",
+    "answer": "配置思路：（1）配置接口 IP 地址和安全区域，完成网络基本参数配置；（2）配置安全策略，允许外部网络用户访问内部服务器；（3）配置 NAT Server，分别映射内网 Web 服务器和 FTP 服务器；（4）在 FW 上配置缺省路由，使内网服务器对外提供的服务流量可以正常转发至 ISP 的路由器；（5）在 Router（ISP 接入网关）上配置到 NAT Server 公网地址的静态路由。配置步骤（以配置指南 CLI 举例为据）：1. 配置接口 IP 地址并加入安全区域：interface GigabitEthernet 0/0/1、ip address 1.1.1.1 24，该接口加入 Untrust 区域（firewall zone untrust 后 add interface GigabitEthernet 0/0/1）；interface GigabitEthernet 0/0/2、ip address 10.2.0.1 24，加入 DMZ 区域（firewall zone dmz 后 add interface GigabitEthernet 0/0/2），内网服务器需将 10.2.0.1 配置为默认网关。2. 配置安全策略：security-policy 下创建 rule name policy1，配置 source-zone untrust、destination-zone dmz、destination-address 10.2.0.0 24、action permit。3. 配置 NAT Server 功能：nat server policy_web protocol tcp global 1.1.1.10 8080 inside 10.2.0.7 www unr-route；nat server policy_ftp protocol tcp global 1.1.1.10 ftp inside 10.2.0.8 ftp unr-route。当 NAT Server 的 global 地址与公网接口地址不在同一网段时必须配置黑洞路由；在同一网段时建议配置黑洞路由；与公网接口地址一致时不产生路由环路、无需配置黑洞路由。4. 开启 FTP 协议的 NAT ALG 功能：firewall interzone dmz untrust 后执行 detect ftp。5. 配置缺省路由：ip route-static 0.0.0.0 0.0.0.0 1.1.1.254。6. 在 Router 上配置到服务器映射公网地址 1.1.1.10 的静态路由，下一跳为 1.1.1.1，使去往服务器的流量送给 FW，通常需联系 ISP 网络管理员配置。",
+    "scoring_points": [
+      "配置思路包含配置接口 IP 地址与安全区域、配置安全策略、配置 NAT Server、配置缺省路由、Router 上配置回程静态路由",
+      "接口与区域划分：GE0/0/1（1.1.1.1/24）加入 Untrust，GE0/0/2（10.2.0.1/24）加入 DMZ",
+      "安全策略 rule name policy1：source-zone untrust、destination-zone dmz、destination-address 10.2.0.0 24、action permit",
+      "NAT Server 映射命令：nat server policy_web protocol tcp global 1.1.1.10 8080 inside 10.2.0.7 www unr-route",
+      "FTP 服务器映射：nat server policy_ftp protocol tcp global 1.1.1.10 ftp inside 10.2.0.8 ftp unr-route",
+      "开启 FTP 的 NAT ALG：firewall interzone dmz untrust 视图下 detect ftp",
+      "缺省路由 ip route-static 0.0.0.0 0.0.0.0 1.1.1.254，并在 Router 上配置到 1.1.1.10 的静态路由",
+      "能说明 global 地址与公网接口地址不同网段时必须配置黑洞路由"
+    ],
+    "tags": [
+      "USG6305E",
+      "V600R007C20",
+      "配置方案",
+      "NAT Server"
+    ]
+  },
+  {
+    "id": 74,
+    "difficulty": "中",
+    "category": {
+      "scope": "设备",
+      "protocol_layer": "其他",
+      "lifecycle": "其他"
+    },
+    "scenario": "通用",
+    "device_type": "防火墙",
+    "question": "某企业分为总部和分支机构，总部部署华为 USG6605E-B 防火墙（V600R007C20 版本，接口 GE0/0/1 地址 1.1.3.1/24 属 Untrust 区域，GE0/0/3 地址 10.1.1.1/24 属 Trust 区域），分支机构 FW_B 通过固定公网地址 1.1.5.1 接入。要求分支机构 PC（10.1.2.0/24）与总部 PC（10.1.1.0/24）安全通信，总部采用 ISAKMP 方式安全策略组与分支建立 IPSec 隧道，认证方式为预共享密钥。请给出配置思路与总部 FW_A 的主要配置步骤。",
+    "answer": "配置思路：（1）完成接口基本配置、路由配置，并开启安全策略；（2）配置 ISAKMP 方式安全策略，包括配置 IPSec 策略的基本信息、配置待加密的数据流（ACL）、配置安全提议的协商参数。总部 FW_A 主要配置步骤：1. 基础配置：配置接口 IP 地址并将接口加入安全区域（GE0/0/3 加入 Trust、GE0/0/1 加入 Untrust）；配置 Trust 与 Untrust 域间安全策略放行总部与分支网段互访（rule name policy1：source-zone trust、destination-zone untrust、source-address 10.1.1.0 24、destination-address 10.1.2.0 24 与 10.1.3.0 24、action permit；反向 policy2 类似）；配置 Local 与 Untrust 域间安全策略放行 IKE 协商报文（policy3：source-zone local、destination-zone untrust、source-address 1.1.3.1 32、action permit；policy4 为反向），若使用协议、端口作为匹配条件则需放开 ESP 服务和 UDP 500 端口（NAT 穿越场景还需放开 4500 端口）；配置缺省路由 ip route-static 0.0.0.0 0.0.0.0 1.1.3.2。2. 定义被保护的数据流：acl 3000，rule 5 permit ip source 10.1.1.0 0.0.0.255 destination 10.1.2.0 0.0.0.255（到分支 2 再配 acl 3001）。3. 配置 IPSec 安全提议：ipsec proposal tran1，esp authentication-algorithm sha2-256，esp encryption-algorithm aes-256。4. 配置 IKE 安全提议：ike proposal 10，authentication-method pre-share，prf hmac-sha2-256，encryption-algorithm aes-256，dh group14，integrity-algorithm hmac-sha2-256。5. 配置 IKE Peer：ike peer b，ike-proposal 10，remote-address 1.1.5.1，pre-shared-key Test!1234。6. 配置 IPSec 策略组并在接口应用：ipsec policy map1 10 isakmp，security acl 3000，proposal tran1，ike-peer b；然后在接口视图 interface GigabitEthernet 0/0/1 下执行 ipsec policy map1 应用策略组。分支 FW_B 按对称方式配置接口、域间安全策略、ACL（source 10.1.2.0 0.0.0.255 destination 10.1.1.0 0.0.0.255）、安全提议、IKE Peer（remote-address 1.1.3.1）与 IPSec 策略并应用到接口。",
+    "scoring_points": [
+      "配置思路包括接口/路由/安全策略等基础配置与 ISAKMP 方式 IPSec 安全策略配置（待加密数据流、安全提议协商参数）",
+      "配置 Trust 与 Untrust 域间安全策略放行 10.1.1.0/24 与分支网段互访",
+      "配置 Local 与 Untrust 域间安全策略放行 IKE 协商报文，使用协议端口匹配时需放开 ESP 服务和 UDP 500 端口",
+      "用高级 ACL 定义被保护数据流：acl 3000 rule 5 permit ip source 10.1.1.0 0.0.0.255 destination 10.1.2.0 0.0.0.255",
+      "配置 IPSec 安全提议：ipsec proposal tran1，esp authentication-algorithm sha2-256、esp encryption-algorithm aes-256",
+      "配置 IKE 安全提议与 IKE Peer：ike proposal 10（pre-share、aes-256、dh group14 等），ike peer b 指定 remote-address 1.1.5.1 与 pre-shared-key",
+      "配置 ipsec policy map1 10 isakmp 并引用 security acl 3000、proposal tran1、ike-peer b",
+      "在公网接口 GigabitEthernet 0/0/1 视图下执行 ipsec policy map1 应用策略组"
+    ],
+    "tags": [
+      "USG6605E-B",
+      "V600R007C20",
+      "配置方案",
+      "IPSec VPN"
+    ]
+  },
+  {
+    "id": 75,
+    "difficulty": "中",
+    "category": {
+      "scope": "设备",
+      "protocol_layer": "其他",
+      "lifecycle": "其他"
+    },
+    "scenario": "通用",
+    "device_type": "防火墙",
+    "question": "在华为 USG6305E 防火墙（V600R007C20 版本）上，管理员需要创建自定义安全区域并把接口加入安全区域。请给出 firewall zone 命令与 add interface（安全区域视图）命令的完整语法、各参数含义与取值、命令所在视图，并说明缺省安全区域及其优先级。",
+    "answer": "一、firewall zone 命令（位于系统视图，缺省级别 2：配置级）：命令格式为 firewall zone zone-name、firewall zone name zone-name [ id id ]，删除用 undo firewall zone name zone-name。功能是创建安全区域并进入安全区域视图。参数说明：name——当创建一个新的安全区域或删除一个安全区域时使用该关键字；zone-name——安全区域的名称，字符串形式，区分大小写，名称中不含空格时长度范围是 1～32 个字符，名称中包含空格时需将名称包含在双引号内（例如\"user for test\"），此时包括双引号在内的长度范围是 3～34 个字符，名称中不可以包含\"?\"、\",\"、\"\"\"和\"-\"，且安全区域名称不能为 name 或 vpn-instance；id id——安全区域的 ID，整数形式，取值范围为 4～254。使用指南：FW 上保留四个缺省安全区域：本地区域（local，优先级为 100）、受信区域（trust，优先级为 85）、非军事化区域（dmz，优先级为 50）和非受信区域（untrust，优先级为 5），这四个区域无需创建也不能删除；创建或删除安全区域时需要使用 name 关键字，进入缺省安全区域或已建立的安全区域视图时不需要该关键字；删除安全区域时若被安全策略、NAT 策略等配置引用，需先删除引用关系再删除。二、add interface 命令（位于安全区域视图，缺省级别 2：配置级）：命令格式为 add interface interface-type { interface-number | interface-number.subinterface-number }，undo 形式相同。功能是将接口加入到安全区域。参数说明：interface-type interface-number——接口类型和接口编号，接口类型包括 GigabitEthernet 及其子接口、Eth-Trunk 及其子接口、Tunnel、Virtual-Template、Vlanif、Virtual-if、Dialer；subinterface-number——子接口编号，整数形式，取值范围为 1～4096，当 interface-type 取值为 Eth-Trunk 或 GigabitEthernet 时才可以指定子接口编号。使用指南：除 Local 区域外，所有其他安全区域在使用时需要与 FW 的特定接口相关联；可多次使用 add interface 命令为安全区域指定多个接口，一个安全区域所能支持的接口数量为 1024；Loopback、Null 接口不需要加入安全区域。配置示例：system-view 后 firewall zone name userzone 创建名为 userzone 的安全区域；firewall zone trust 进入 Trust 区域视图后执行 add interface GigabitEthernet 0/0/1 将接口加入。",
+    "scoring_points": [
+      "firewall zone 语法：firewall zone zone-name 或 firewall zone name zone-name [ id id ]，位于系统视图",
+      "zone-name 取值：不含空格 1～32 字符，含空格需双引号且含引号 3～34 字符，不能包含 ? , \" - 等字符",
+      "id 取值范围为 4～254；创建或删除安全区域必须使用 name 关键字",
+      "四个缺省安全区域及优先级：local 为 100、trust 为 85、dmz 为 50、untrust 为 5，不能删除",
+      "add interface（安全区域视图）语法：add interface interface-type { interface-number | interface-number.subinterface-number }",
+      "子接口编号取值 1～4096，且仅当接口类型为 Eth-Trunk 或 GigabitEthernet 时可指定",
+      "一个安全区域支持的接口数量为 1024，Loopback、Null 接口不需要加入安全区域"
+    ],
+    "tags": [
+      "USG6305E",
+      "V600R007C20",
+      "命令行",
+      "安全区域"
+    ]
+  },
+  {
+    "id": 76,
+    "difficulty": "中",
+    "category": {
+      "scope": "设备",
+      "protocol_layer": "其他",
+      "lifecycle": "其他"
+    },
+    "scenario": "通用",
+    "device_type": "防火墙",
+    "question": "在华为 USG6605E-B 防火墙（V600R007C20 版本）上，管理员要防范地址扫描攻击和端口扫描攻击，需要配置扫描速率阈值与黑名单超时时间。请给出 firewall defend ip-sweep 与 firewall defend port-scan 命令的完整语法、各参数含义与取值、缺省值、命令所在视图及生效前提。",
+    "answer": "一、firewall defend ip-sweep 命令（位于系统视图，缺省级别 2：配置级），用于配置地址扫描攻击防范参数。命令格式：firewall defend ip-sweep max-rate max-rate-number；firewall defend ip-sweep blacklist-timeout interval；对应 undo 形式为 undo firewall defend ip-sweep max-rate 与 undo firewall defend ip-sweep blacklist-timeout。参数说明：max-rate-number——最大速率，整数形式，取值范围为 1～10000，单位为 pps，缺省值为 4000pps；interval——黑名单超时时间，整数形式，取值范围为 1～1000，单位为分钟，缺省值为 20 分钟。使用指南：使用 firewall defend ip-sweep enable 命令开启 IP 地址扫描攻击防范功能后，IP 地址扫描攻击防范参数的配置才能生效。二、firewall defend port-scan 命令（同样位于系统视图，缺省级别 2：配置级），用于配置端口扫描攻击防范参数。命令格式：firewall defend port-scan max-rate max-rate-number；firewall defend port-scan blacklist-timeout interval；对应 undo 形式为 undo firewall defend port-scan max-rate 与 undo firewall defend port-scan blacklist-timeout。参数说明：max-rate-number——最大连接速率，整数形式，取值范围 1～10000，单位为 pps，缺省值为 4000pps；interval——黑名单超时时间，整数形式，取值范围 1～1000，单位为分钟，缺省值为 20 分钟。使用指南：使用 firewall defend port-scan enable 命令开启端口扫描攻击防范功能后，端口扫描攻击防范参数的配置才能生效。配置示例（开启 IP 地址扫描攻击防范功能，配置扫描速率阈值为 1000pps、黑名单超时时间为 5 分钟）：system-view 后依次执行 firewall defend ip-sweep enable、firewall defend ip-sweep max-rate 1000、firewall defend ip-sweep blacklist-timeout 5。端口扫描防范同理：firewall defend port-scan enable、firewall defend port-scan max-rate 1000、firewall defend port-scan blacklist-timeout 5。两条命令均属于单包攻击防范配置命令，必须先用对应的 enable 命令开启攻击防范功能，参数配置方能生效。",
+    "scoring_points": [
+      "firewall defend ip-sweep 语法：firewall defend ip-sweep max-rate max-rate-number 与 firewall defend ip-sweep blacklist-timeout interval，位于系统视图",
+      "max-rate-number 取值 1～10000、单位 pps、缺省值 4000pps",
+      "blacklist-timeout interval 取值 1～1000、单位分钟、缺省值 20 分钟",
+      "firewall defend port-scan 语法与 ip-sweep 对应（max-rate 与 blacklist-timeout 两个参数）",
+      "生效前提：必须先执行 firewall defend ip-sweep enable / firewall defend port-scan enable 开启对应攻击防范功能",
+      "两条命令均为缺省级别 2（配置级），属于单包攻击防范配置命令"
+    ],
+    "tags": [
+      "USG6605E-B",
+      "V600R007C20",
+      "命令行",
+      "攻击防范"
+    ]
+  },
+  {
+    "id": 77,
+    "difficulty": "中",
+    "category": {
+      "scope": "设备",
+      "protocol_layer": "其他",
+      "lifecycle": "其他"
+    },
+    "scenario": "通用",
+    "device_type": "防火墙",
+    "question": "在华为 USG6305E 防火墙（V600R007C20 版本）上，管理员需要通过命令行创建安全策略规则并配置源安全区域和动作。请给出 security-policy、rule name（安全策略视图）、source-zone（安全策略规则视图）、action（安全策略规则视图）命令的完整语法、各参数含义与取值及命令所在视图。",
+    "answer": "一、security-policy 命令：位于系统视图，缺省级别 2：配置级，格式为 security-policy，无参数，用来进入安全策略视图；安全策略规则的创建、复制、移动和重命名都在此视图下完成。二、rule name（安全策略视图）：格式为 rule name rule-name，删除用 undo rule { name rule-name | id rule-id | all }。功能是创建安全策略规则并进入安全策略规则视图。参数：rule-name——安全策略规则的名称，字符串形式，区分大小写，名称中不包含空格时长度范围是 1～32，包含空格时需使用双引号括起来（例如\"user for test\"），这时长度范围是 3～34，名称中不可以包含\"?\"和\"\"\"；id rule-id——表示删除指定规则 ID 的安全策略规则，必须为已存在的安全策略规则 ID，可通过 display security-policy rule all 命令查看；all——表示所有安全策略规则。使用指南：双机热备和跨数据中心集群场景下设备之间规则 ID 可能不一致，建议通过规则名称删除。三、source-zone（安全策略规则视图）：格式为 source-zone { zone-name &<1-6> | any }，undo source-zone { zone-name &<1-6> | all }。功能是配置安全策略规则的源安全区域。参数：zone-name &<1-6>——源安全区域的名称，必须为系统已经存在的安全区域名称，安全策略规则一次最多添加或删除 6 个安全区域；any——任意源安全区域；all——删除此安全策略规则的所有源安全区域。四、action（安全策略规则视图）：格式为 action { permit | deny }。功能是配置安全策略规则的动作。参数：permit——表示允许匹配该规则的流量通过；deny——表示禁止匹配该规则的流量通过。使用指南：未配置动作的安全策略规则不会生效。配置示例：system-view 后执行 security-policy 进入安全策略视图；rule name policy_sec 创建规则并进入规则视图；source-zone untrust 配置源安全区域；action permit 配置动作为允许。",
+    "scoring_points": [
+      "security-policy 位于系统视图、无参数，用于进入安全策略视图，规则的创建/复制/移动/重命名均在该视图完成",
+      "rule name rule-name 位于安全策略视图；名称不含空格长度 1～32，含空格需双引号且长度 3～34，不能包含 ? 和 \" 字符",
+      "删除规则：undo rule { name rule-name | id rule-id | all }，id 必须为已存在规则 ID",
+      "source-zone（安全策略规则视图）语法：source-zone { zone-name &<1-6> | any }，一次最多添加或删除 6 个安全区域",
+      "undo source-zone 使用 all 参数删除规则的所有源安全区域",
+      "action（安全策略规则视图）语法：action { permit | deny }，permit 允许通过、deny 禁止通过",
+      "未配置动作的安全策略规则不会生效"
+    ],
+    "tags": [
+      "USG6305E",
+      "V600R007C20",
+      "命令行",
+      "安全策略"
+    ]
+  },
+  {
+    "id": 78,
+    "difficulty": "中",
+    "category": {
+      "scope": "设备",
+      "protocol_layer": "其他",
+      "lifecycle": "其他"
+    },
+    "scenario": "通用",
+    "device_type": "防火墙",
+    "question": "在华为 USG6605E-B 防火墙（V600R007C20 版本）上，管理员需要通过命令行创建 NAT 策略规则、配置源安全区域并指定源 NAT 动作。请给出 nat-policy、rule name（NAT 策略视图）、source-zone（NAT 策略规则视图）、action（NAT 策略规则视图）命令的完整语法、各参数含义与取值及命令所在视图。",
+    "answer": "一、nat-policy 命令：位于系统视图，缺省级别 2：配置级，格式为 nat-policy，无参数，用来进入 NAT 策略视图；NAT 策略规则的创建、复制、移动和重命名都在此视图下完成。二、rule name（NAT 策略视图）：格式为 rule name rule-name，删除用 undo rule { name rule-name | id rule-id | all }。功能是创建 NAT 策略规则或进入 NAT 策略规则视图。参数：rule-name——NAT 策略规则的名称，字符串形式，区分大小写，名称中不包含空格时长度范围是 1～32，包含空格时需要使用双引号括起来（例如\"user for test\"），这时长度范围是 3～34，名称中不可以包含\"?\"和\"\"\"；id rule-id——表示删除指定规则 ID 的 NAT 策略规则，必须为已存在的 NAT 策略规则 ID，可通过 display nat-policy rule all 命令查看；all——表示所有 NAT 策略规则。三、source-zone（NAT 策略规则视图）：格式为 source-zone { zone-name &<1-6> | any }，undo source-zone { zone-name &<1-6> | all }。功能是配置 NAT 策略规则的源安全区域。参数：zone-name——源安全区域的名称，必须为已经存在的安全区域名称，NAT 策略规则一次最多配置或删除 6 个安全区域，字符串形式区分大小写，名称不含空格时长度范围 1～32、含空格时需双引号括起来（长度范围 3～34），名称中不可以包含\"?\"\",\"和\"\"\"；any——任意源安全区域；all——删除此 NAT 策略规则的所有源安全区域。缺省情况下，NAT 策略规则中没有配置源安全区域。四、action（NAT 策略规则视图）：格式为 action { source-nat { easy-ip | address-group address-group-name | static-mapping [ mapping-id ] } | no-nat }（另有 destination-nat 系列等格式）。参数：source-nat——对该数据流进行源地址 NAT 转换；easy-ip——使用该条流量最终出接口的 IP 地址作为转换后的源 IP 地址，双机热备或跨数据中心集群组网下建议配置为地址池转换方式，否则可能导致业务中断；address-group address-group-name——地址池的名称，必须为已经存在的地址池名称；static-mapping [ mapping-id ]——设备根据静态映射做 NAT 转换，mapping-id 必须为已经存在的静态映射索引编号；no-nat——不对该数据流进行 NAT 转换。配置示例：system-view 后 nat-policy 进入 NAT 策略视图，rule name abc 创建规则，source-zone trust 设置源安全区域为 trust。",
+    "scoring_points": [
+      "nat-policy 位于系统视图、无参数，用于进入 NAT 策略视图，规则创建/复制/移动/重命名均在该视图完成",
+      "rule name（NAT 策略视图）语法：rule name rule-name；名称不含空格长度 1～32，含空格需双引号且长度 3～34",
+      "删除规则：undo rule { name rule-name | id rule-id | all }，id 须为已存在规则 ID",
+      "source-zone（NAT 策略规则视图）语法：source-zone { zone-name &<1-6> | any }，一次最多配置或删除 6 个安全区域",
+      "缺省情况下 NAT 策略规则中没有配置源安全区域；undo 时用 all 删除全部源安全区域",
+      "action 语法：action { source-nat { easy-ip | address-group address-group-name | static-mapping [ mapping-id ] } | no-nat }",
+      "说明 easy-ip（出接口 IP 转换）与 address-group（地址池）区别，及双机热备组网下建议地址池方式"
+    ],
+    "tags": [
+      "USG6605E-B",
+      "V600R007C20",
+      "命令行",
+      "NAT策略"
+    ]
+  },
+  {
+    "id": 79,
+    "difficulty": "中",
+    "category": {
+      "scope": "设备",
+      "protocol_layer": "其他",
+      "lifecycle": "其他"
+    },
+    "scenario": "通用",
+    "device_type": "防火墙",
+    "question": "在华为 USG6305E 防火墙（V600R007C20 版本）上，管理员需要配置 AAA 认证方案并指定认证模式（例如先 RADIUS 认证、失败后转本地认证）。请给出 aaa 命令与 authentication-mode（认证方案视图）命令的完整语法、各参数含义与取值、缺省情况、命令所在视图及多认证模式的切换规则。",
+    "answer": "一、aaa 命令：位于系统视图，缺省级别 3：管理级，格式为 aaa，无参数。命令功能是进入 AAA 视图，执行后可进行有关用户接入方面的安全配置，例如：创建用户、设定用户级别、配置认证方案、配置授权方案、配置域等。二、authentication-mode（认证方案视图）命令：格式为 authentication-mode { ad | hwtacacs | ldap | local | radius } *，恢复缺省用 undo authentication-mode。功能是配置当前认证方案使用的认证模式；缺省情况下，认证模式为本地认证。参数说明：ad——指定认证模式为 AD 认证，使用 AD 方式认证必须配置 AD 服务器模板中的认证服务器；hwtacacs——指定认证模式为 HWTACACS 认证，需配置 HWTACACS 服务器模板中的认证服务器；ldap——指定认证模式为 LDAP 认证，需配置 LDAP 服务器模板中的认证服务器；local——指定认证模式为本地认证；radius——指定认证模式为 RADIUS 认证，需配置 RADIUS 服务器模板中的认证服务器。命令位于认证方案视图（先在 AAA 视图下通过 authentication-scheme 创建并进入认证方案），缺省级别 3：管理级。多认证模式切换规则：在一个认证方案中采用多种认证模式时，按配置顺序进行认证。当配置为先本地认证后远端认证时：登录账号在本地没有创建但在远端服务器上存在，认证模式由本地转入远端；若账号在本地和远端都已创建，本地认证因密码错误失败后不再转入远端认证。当配置为先远端认证后本地认证时：账号在远端服务器上没有创建但在本地存在，经远端认证时被认为认证失败，不再转入本地认证；只有远端服务器 Down 或无响应时才转入本地认证。使用多种认证模式可避免单一认证模式无响应造成认证失败，例如配置 authentication-mode radius local，当 RADIUS 认证服务器连接失败时跳转到本地认证；配置 authentication-mode local radius 时，若用户名在设备上存在但密码不一致则认证失败，用户名不存在时跳转到 RADIUS 认证。配置示例：system-view 后 aaa，authentication-scheme scheme1，authentication-mode radius。",
+    "scoring_points": [
+      "aaa 命令位于系统视图、无参数、缺省级别 3（管理级），用于进入 AAA 视图",
+      "authentication-mode（认证方案视图）语法：authentication-mode { ad | hwtacacs | ldap | local | radius } *",
+      "缺省情况下认证模式为本地认证（local）",
+      "能说明 ad/hwtacacs/ldap/radius 各认证模式均需先配置对应服务器模板中的认证服务器",
+      "多认证模式按配置顺序认证：先本地后远端时，本地密码错误失败不转入远端；账号本地不存在时转入远端",
+      "先远端后本地时，仅在远端服务器 Down 或无响应时才转入本地认证",
+      "命令需先创建认证方案（authentication-scheme）后在认证方案视图下配置"
+    ],
+    "tags": [
+      "USG6305E",
+      "V600R007C20",
+      "命令行",
+      "用户认证"
+    ]
+  },
+  {
+    "id": 80,
+    "difficulty": "中",
+    "category": {
+      "scope": "设备",
+      "protocol_layer": "其他",
+      "lifecycle": "其他"
+    },
+    "scenario": "通用",
+    "device_type": "防火墙",
+    "question": "华为 USG6305E 防火墙（V600R007C20 版本）产生 hwSecDDOSAttackBegin 告警。请说明该告警的含义（含告警 ID 与级别）、告警参数、对系统的影响、可能原因与处理步骤。",
+    "answer": "hwSecDDOSAttackBegin 是 DDoS 攻击开始告警，告警 ID 为 1.3.6.1.4.1.2011.6.122.1.2.1，告警级别为提示，告警类型为业务质量告警。告警格式：DDOS_ZONE/4/BEGIN:OID oid DDOS Attack Begin (AttackType:[hwSecDDOSAttackType], VsysID:[hwSecDDOSZoneId], VsysName:[hwSecDDOSZoneName], DestinationIP:[hwSecDDOSDstIP], BeginTime:[hwSecDDOSStartTime], DeviceType:[hwSecDDOSDeviceType])。告警参数含义：oid 为 MIB 节点号；hwSecDDOSAttackType 为 DDoS 攻击类型；hwSecDDOSZoneId 为受攻击的虚拟系统 ID 值，ID 为 0 表示根系统；hwSecDDOSZoneName 为受攻击的虚拟系统名称，public 表示根系统；hwSecDDOSDstIP 为受攻击的目的 IP 地址；hwSecDDOSStartTime 为攻击的开始时间；hwSecDDOSDeviceType 为产生告警的设备类型。对系统的影响：在设备遭受攻击的情况下，攻击报文可能会使得在线业务访问中断；如果频繁产生此告警，可能导致链路拥塞。可能原因：某种报文超过设定防御阈值产生告警，具体可能是设备遭受了某种类型的 DDoS 攻击，或对该攻击所设置的告警阈值太小，导致业务流量正常情况下也会产生告警。处理步骤：（1）检查是哪种攻击导致告警；（2）查看被攻击 IP 业务是否正常，如果业务受损，说明防御效果不佳，需要优化防御策略；（3）请收集该设备的告警信息、日志信息和配置信息，并联系华为技术支持工程师。",
+    "scoring_points": [
+      "告警含义为 DDoS 攻击开始告警，告警 ID 为 1.3.6.1.4.1.2011.6.122.1.2.1",
+      "告警级别为提示，告警类型为业务质量告警",
+      "能解读关键告警参数：hwSecDDOSAttackType（攻击类型）、hwSecDDOSDstIP（受攻击目的 IP）、hwSecDDOSZoneId 为 0 表示根系统",
+      "对系统的影响：攻击报文可能使在线业务访问中断，频繁告警可能导致链路拥塞",
+      "可能原因包括设备遭受 DDoS 攻击或告警阈值设置过小",
+      "处理步骤：检查攻击类型、查看被攻击 IP 业务并优化防御策略、收集信息联系华为技术支持"
+    ],
+    "tags": [
+      "USG6305E",
+      "V600R007C20",
+      "告警处理",
+      "DDoS攻击防范"
+    ]
+  },
+  {
+    "id": 81,
+    "difficulty": "中",
+    "category": {
+      "scope": "设备",
+      "protocol_layer": "其他",
+      "lifecycle": "其他"
+    },
+    "scenario": "通用",
+    "device_type": "防火墙",
+    "question": "华为 USG6605E-B 防火墙（V600R007C20 版本）在双机热备组网中产生 hwHrpStateChange 告警。请说明该告警的含义（含告警 ID 与级别）、告警参数、对系统的影响、可能原因与处理步骤。",
+    "answer": "hwHrpStateChange 表示 VGMP 组状态发生变化（双机热备主备切换相关告警），告警 ID 为 1.3.6.1.4.1.2011.6.122.51.2.2.1，告警级别为紧急，告警类型为通讯告警。告警格式：HRPI/1/CORE_STATE: [OID] The HRP core state changed due to [reason]. (old_state=[old-state], new_state=[new-state], local_priority=[local-priority], peer_priority=[peer-priority])。告警参数含义：OID 为 MIB 节点号；reason 为 VGMP 组状态发生变化的原因，可能取值包括 The object monitored or detected is Down（主设备上 HRP 监视的接口状态变成 Down）、VRRP change to Down（主设备上配置 VRRP 的接口状态变成 Down）、IP-Link change to Down（HRP 监视的 IP-Link 状态变成 Down）、BFD change to Down、BGP Peer change to Down、OSPF Neighbor change to Down、unknown（其他未知原因）；old-state/new_state 为 VGMP 组旧/新状态，取值 initial（初始化状态，双机热备功能未启用时处于该状态）、normal（VGMP 组状态正常）、abnormal(standby)（本端 VGMP 组处于 standby 状态，本端或对端 VGMP 组优先级低于初始优先级）、abnormal(active)（本端 VGMP 组处于 active 状态，本端或对端优先级低于初始优先级）；local-priority/peer-priority 为本端/对端 VGMP 组优先级。对系统的影响：经过 FW 的业务从主 FW 切换到备 FW，切换瞬间出现业务少量丢包。可能原因：双机热备场景下，设备满足参数中的 reason 而导致本端或者对端的 VGMP 组优先级发生了变化。处理步骤：不同 reason 对应的处理不同——当 reason 取值为 unknown 时，请联系技术支持工程师处理；当 reason 取值为 unknown 除外的其他值时，请在主备机上使用 display hrp state verbose 命令查看 VGMP 组监控的接口或链路的状态，如果有异常，请排查对应的接口或链路是否发生了故障；如果问题仍无法解决，请联系技术支持工程师处理。",
+    "scoring_points": [
+      "告警含义为 VGMP 组状态发生变化（双机热备切换），告警 ID 为 1.3.6.1.4.1.2011.6.122.51.2.2.1",
+      "告警级别为紧急，告警类型为通讯告警",
+      "能列举 reason 的典型取值：HRP 监视接口 Down、VRRP 接口 Down、IP-Link Down、BFD Down、BGP 邻居 Down、OSPF 邻居 Down、unknown",
+      "能说明 VGMP 组状态取值：initial、normal、abnormal(standby)、abnormal(active)",
+      "对系统的影响：业务从主 FW 切换到备 FW，切换瞬间出现业务少量丢包",
+      "处理步骤：reason 为 unknown 联系技术支持；其他值使用 display hrp state verbose 查看 VGMP 组监控的接口或链路状态并排查故障"
+    ],
+    "tags": [
+      "USG6605E-B",
+      "V600R007C20",
+      "告警处理",
+      "双机热备"
+    ]
+  },
+  {
+    "id": 82,
+    "difficulty": "中",
+    "category": {
+      "scope": "设备",
+      "protocol_layer": "其他",
+      "lifecycle": "其他"
+    },
+    "scenario": "通用",
+    "device_type": "防火墙",
+    "question": "华为 USG6605E-B 防火墙（V600R007C20 版本）产生 hwSecStatSessOverThreshold 告警。请说明该告警的含义（含告警 ID 与级别）、告警参数、对系统的影响、可能原因与处理步骤。",
+    "answer": "hwSecStatSessOverThreshold 表示 SPU 的单个 CPU IPv4 会话总数达到告警阈值（会话资源不足类告警），告警 ID 为 1.3.6.1.4.1.2011.6.122.15.3.2.1，告警级别为次要，告警类型为业务质量告警。告警格式：FWD/3/CPUSESSTRAP: [oid] Total number of sessions on SPU[hwSecStatSessTrapSlot] CPU[hwSecStatSessTrapCPU] is [hwSecStatSessTrapCount], exceeding threshold value [hwSecStatSessTrapThreshold]。告警参数含义：oid 为告警的 OID；hwSecStatSessTrapSlot 为槽位号；hwSecStatSessTrapCPU 为 CPU 号；hwSecStatSessTrapCount 为会话总数；hwSecStatSessTrapThreshold 为会话告警阈值。对系统的影响：设备的单个 CPU IPv4 会话总数达到上限后，将导致无法新建会话，并产生丢包。可能原因：FW 的单个 CPU IPv4 会话总数达到设定的告警阈值（告警阈值由 snmp-agent session trap threshold 命令配置）。处理步骤：查看设备的会话节点回收、老化是否正确。若确认业务量正常增长导致会话长期接近上限，应结合业务情况评估处理（依据告警说明，会话总数达到上限将无法新建会话并丢包）；同时可结合 display firewall session table 等运维手段分析会话来源（本条为运维补充，手册处理步骤要求先检查会话节点回收与老化）。当会话总数回落到阈值以下时可恢复正常。",
+    "scoring_points": [
+      "告警含义为 SPU 的单个 CPU IPv4 会话总数达到告警阈值，告警 ID 为 1.3.6.1.4.1.2011.6.122.15.3.2.1",
+      "告警级别为次要，告警类型为业务质量告警",
+      "能解读告警参数：槽位号、CPU 号、会话总数、会话告警阈值",
+      "对系统的影响：单个 CPU 会话总数达到上限后无法新建会话并产生丢包",
+      "告警阈值由 snmp-agent session trap threshold 命令配置",
+      "处理步骤：查看设备的会话节点回收、老化是否正确"
+    ],
+    "tags": [
+      "USG6605E-B",
+      "V600R007C20",
+      "告警处理",
+      "会话资源"
+    ]
+  },
+  {
+    "id": 83,
+    "difficulty": "中",
+    "category": {
+      "scope": "设备",
+      "protocol_layer": "其他",
+      "lifecycle": "其他"
+    },
+    "scenario": "通用",
+    "device_type": "防火墙",
+    "question": "华为 USG6305E 防火墙（V600R007C20 版本）输出 UM/6/UM_LOGOUT 日志。请说明该用户下线日志的信息含义（含日志格式与示例）、日志参数、可能原因与处理步骤。",
+    "answer": "UM/6/UM_LOGOUT 是上网用户下线日志。日志格式：UM/6/UM_LOGOUT(l): The user logged out. (User Name=[user-name], Vsys=[vsys-name], Source IP=[source-ip-address], Parent Group=[parent-group], Logon Time=[logon-time], Logout Time=[logout-time], Obverse Packets=[obv-packets-counts], Obverse Bytes=[obv-packets-bytes], Reverse Packets=[rev-packets-counts], Reverse Bytes=[rev-packets-bytes], Logout Reason=[Logout-Reason])。日志参数含义：user-name 为上网用户登录名；vsys-name 为上网用户所属的虚拟系统名称；source-ip-address 为上网用户源 IP 地址；parent-group 为上网用户所属父组；logon-time 为上网用户上线时间；logout-time 为上网用户下线时间；obv-packets-counts/obv-packets-bytes 为上网用户发送的报文数/字节数；rev-packets-counts/rev-packets-bytes 为上网用户接收的报文数/字节数；Logout-Reason 为上网用户下线原因。可能原因包括：上网用户注销、上网用户账号被删除、上网用户被强制下线、上网用户老化等。处理步骤：该日志为正常运行信息，无需处理。与上线日志对应的是 UM/6/USERLOGINSUCC：格式为 UM/6/USERLOGINSUCC(l): User login succeeded. (User IP=[user-ip-address], Vsys=[vsys-name], Authentication Mode=PORTAL)，表示自定义 Portal 用户登录成功，参数为用户 IP 地址与所属虚拟系统名称，同样属于正常运行信息、无需处理。运维中可通过 UM_LOGOUT 日志中的 Logout-Reason 字段分析用户下线的具体原因（注销/账号删除/强制下线/老化），结合上下行报文与字节统计评估用户流量情况。",
+    "scoring_points": [
+      "日志含义为上网用户下线，日志名为 UM/6/UM_LOGOUT",
+      "能写出日志格式主干：The user logged out.(User Name/Vsys/Source IP/Logon Time/Logout Time/Logout Reason 等字段)",
+      "能说明关键参数：user-name（登录名）、source-ip-address（源 IP）、logon-time/logout-time（上下线时间）、Logout-Reason（下线原因）",
+      "日志中包含用户发送与接收的报文数、字节数统计（Obverse/Reverse Packets、Bytes）",
+      "可能原因：上网用户注销、账号被删除、被强制下线、用户老化",
+      "处理步骤：正常运行信息，无需处理",
+      "能关联上线成功日志 UM/6/USERLOGINSUCC（自定义 Portal 用户登录成功，认证模式为 PORTAL）"
+    ],
+    "tags": [
+      "USG6305E",
+      "V600R007C20",
+      "日志",
+      "用户上下线"
+    ]
+  },
+  {
+    "id": 84,
+    "difficulty": "中",
+    "category": {
+      "scope": "设备",
+      "protocol_layer": "其他",
+      "lifecycle": "其他"
+    },
+    "scenario": "通用",
+    "device_type": "防火墙",
+    "question": "华为 USG6605E-B 防火墙（V600R007C20 版本）输出 NAT/6/PORT_NAT444 日志。请说明该 NAT 转换相关日志的信息含义（含日志格式与示例）、日志参数、可能原因与处理步骤。",
+    "answer": "NAT/6/PORT_NAT444 是系统采样记录 NAT444 端口冲突信息的日志，便于用户及时了解当前地址池的公网地址是否不足、是否受到攻击。日志格式：NAT/6/PORT_NAT444: SourceVrfID=[source-vrf-id], Pool id=[pool-id], Protocol=[protocol-id], SoureIP=[source-ip], SoureNATIP=[source-nat-ip], DestinationIP=[destination-ip], SourcePort=[source-port], SourceNATPort=[source-nat-port], DestinationPort=[destination-port] NAT port conflict discard。日志参数含义：source-vrf-id 为源虚拟系统 ID；pool-id 为地址池 ID；protocol-id 为协议 ID；source-ip 为源地址；source-nat-ip 为 NAT 地址池地址（转换后的公网地址）；destination-ip 为目的地址；source-port 为源端口；source-nat-port 为源 NAT 转换端口；destination-port 为目的端口。该日志记录的是因端口冲突而被丢弃的 NAT 转换报文的五元组信息。可能原因：公网地址不足或者遭到攻击。处理步骤：（1）查看公网地址是否够用，公网地址不足时增加公网地址（如扩充 NAT 地址池）；（2）查看是否遭到攻击。同系列的 NAT 转换相关日志还包括 NAT/6/PORT_DSLITE（DS-Lite 端口冲突）、NAT/6/PORT_NAT64（NAT64 端口冲突），参数与处理方式类似；NAT/4/ADDRINSUFFI 则表示地址池地址将耗尽（格式：NAT/4/ADDRINSUFFID(l): Address will be exhausted.(pool name=[pool-name], system name=[system-name])），亦提示需要关注地址池容量。综合来看，出现该日志说明 NAT 转换发生端口冲突丢包，应优先核查公网地址资源并排查攻击流量。",
+    "scoring_points": [
+      "日志含义为系统采样记录 NAT444 端口冲突信息，用于判断地址池公网地址是否不足或受到攻击",
+      "能写出日志格式主干：SourceVrfID/Pool id/Protocol/SoureIP/SoureNATIP/DestinationIP/SourcePort/SourceNATPort/DestinationPort NAT port conflict discard",
+      "能说明关键参数：source-nat-ip 为 NAT 地址池地址、source-nat-port 为源 NAT 转换端口、pool-id 为地址池 ID",
+      "可能原因：公网地址不足或者遭到攻击",
+      "处理步骤：查看公网地址是否够用、不足则增加公网地址；查看是否遭到攻击",
+      "能关联同类 NAT 日志（PORT_DSLITE、PORT_NAT64、ADDRINSUFFI 地址池地址将耗尽）"
+    ],
+    "tags": [
+      "USG6605E-B",
+      "V600R007C20",
+      "日志",
+      "NAT转换"
+    ]
+  },
+  {
+    "id": 85,
+    "difficulty": "中",
+    "category": {
+      "scope": "设备",
+      "protocol_layer": "其他",
+      "lifecycle": "其他"
+    },
+    "scenario": "通用",
+    "device_type": "防火墙",
+    "question": "华为 USG6605E-B 防火墙（V600R007C20 版本）输出 IKE/5/IKE_NEGO_FAIL 日志。请说明该 IPSec 协商相关日志的信息含义（含日志格式与示例）、日志参数、可能原因与处理步骤。",
+    "answer": "IKE/5/IKE_NEGO_FAIL 表示 IPSec 隧道建立失败（IPSec/IKE 协商失败日志）。日志格式：IKE/5/IKE_NEGO_FAIL: Vsys [vsys-name]: IPSec tunnel negotiation fails. (IfIndex=[ULONG], SeqNum=[ULONG], PeerAddress=[STRING], PeerPort=[ULONG], Reason=[STRING])。日志参数含义：vsys-name 为虚拟系统的名称，根系统显示为 Public；IfIndex 为应用 IPSec 安全策略的接口索引；SeqNum 为 IPSec 安全策略序列号；PeerAddress 为对端 IP 地址；PeerPort 为对端端口号；Reason 为 IPSec 隧道建立失败原因。可能原因（Reason 常见取值）：phase1 proposal mismatch（两端 IKE 安全提议参数不匹配）；phase2 proposal or pfs mismatch（两端 IPSec 安全提议参数、PFS 算法或 Security ACL 不匹配）；responder dh mismatch / initiator dh mismatch（响应方/发起方 DH 算法不匹配）；encapsulation mode mismatch（封装模式不匹配）；flow or peer mismatch（两端 Security ACL 或 IKE Peer 地址不匹配）；version mismatch（两端 IKE 版本号不匹配）；peer address mismatch（两端的 IKE Peer 地址不匹配）；config ID mismatch（根据 ID 未找到匹配的 IKE Peer）；exchange mode mismatch（协商模式不匹配）；authentication fail（身份认证失败）；rekey no find old sa / rekey fail（重协商相关）；no policy applied on interface（没有策略应用到接口上）；nat detection fail（NAT 探测失败）；license or specification limited（License 限制）；ipsec tunnel number reaches limitation（IPSec 隧道数达到规格）等。处理步骤（按原因）：phase1 proposal mismatch——查看两端的 IKE 安全提议参数并修改一致；phase2 proposal or pfs mismatch——查看两端的 IPSec 安全提议参数或 PFS 算法并修改一致；DH 不匹配——查看两端 DH 算法并修改一致；encapsulation mode mismatch——查看两端封装模式并修改一致；peer address mismatch——查看两端 IKE 对等体地址并修改；config ID mismatch——查看身份认证参数（ID 类型与 ID 值）并修改；authentication fail——查看两端 IKE 安全提议参数或 IKE 对等体参数并修改一致；no policy applied on interface——在接口上应用相应的 IPSec 策略；license 或规格类原因——申请 License 或扩容；非以上原因或问题仍未解决时，收集相应信息并联系技术支持人员。",
+    "scoring_points": [
+      "日志含义为 IPSec 隧道建立失败，日志名为 IKE/5/IKE_NEGO_FAIL",
+      "能写出日志格式主干：Vsys [vsys-name]: IPSec tunnel negotiation fails.(IfIndex/SeqNum/PeerAddress/PeerPort/Reason)",
+      "能说明参数含义：IfIndex 为应用 IPSec 安全策略的接口索引、SeqNum 为 IPSec 安全策略序列号、Reason 为失败原因、根系统显示为 Public",
+      "能列举常见原因：phase1/phase2 proposal mismatch、DH 不匹配、封装模式不匹配、ACL 或 IKE Peer 地址不匹配、认证失败等",
+      "处理步骤：根据 Reason 修改两端 IKE/IPSec 安全提议参数、PFS、DH 算法、封装模式、IKE 对等体地址等使其一致",
+      "no policy applied on interface 时需在接口上应用相应的 IPSec 策略；非已知原因时收集信息联系技术支持"
+    ],
+    "tags": [
+      "USG6605E-B",
+      "V600R007C20",
+      "日志",
+      "IPSec协商"
+    ]
+  }
+]

@@ -1,0 +1,176 @@
+[
+  {
+    "id": 41,
+    "difficulty": "中",
+    "category": {"scope": "其他", "protocol_layer": "IP层", "lifecycle": "其他"},
+    "scenario": "其他",
+    "device_type": "其他",
+    "question": "RFC 9692 定义的 RIFT 通过一组报文与定时器维护路由信息扩散。请说明：（1）LIE、TIE、TIDE、TIRE 四类报文各自的作用；（2）北向 TIE 与南向 TIE 分别携带什么内容、向哪个方向传播？（3）给出其传输封装要点与关键默认参数。",
+    "answer": "（1）LIE 在邻居间周期交换，用于建立维护邻接并协商层级；TIE 承载拓扑与路由信息；TIDE 声明本端持有的 TIE 集合；TIRE 用于请求或确认 TIE。（2）北向 TIE 携带本节点邻接与前缀信息（链路状态属性），逐级向 Spine 泛洪；南向 TIE 携带邻接信息、默认路由以及从下层反射来的前缀（距离矢量属性），逐级向 Leaf 下发。（3）LIE 经 UDP 端口 914 发往组播地址（IPv4 224.0.0.121、IPv6 ff02::a1f7），IPv4 TTL/IPv6 跳数限制取 1 或 255；TIE 经 UDP 端口 915 交换；TIE 默认生存期 604800 秒（1 周），purge 报文生存期 300 秒；ToF 默认层级 24、Leaf 为 0；LIE 默认每秒发送、保持时间 3 秒。",
+    "scoring_points": [
+      "正确区分四类报文：LIE 建邻、TIE 承载信息、TIDE 描述存储、TIRE 请求/确认",
+      "说明北向 TIE 含邻接与前缀、向 Spine 泛洪（链路状态属性）",
+      "说明南向 TIE 含默认路由与反射前缀、向 Leaf 下发（距离矢量属性）",
+      "给出封装要点：UDP 914/915、组播 224.0.0.121/ff02::a1f7、TTL 1 或 255",
+      "给出默认参数：TIE 生存期 604800 秒、purge 300 秒、ToF 层级 24、LIE 间隔与保持时间"
+    ],
+    "tags": ["RFC-2025", "RFC9692", "RIFT", "数据中心"]
+  },
+  {
+    "id": 42,
+    "difficulty": "中",
+    "category": {"scope": "其他", "protocol_layer": "其他", "lifecycle": "其他"},
+    "scenario": "其他",
+    "device_type": "其他",
+    "question": "RFC 9704 的“验证式拆分水平 DNS”依赖声明（claim）、令牌（token）与验证记录三要素。请描述：（1）一条声明包含哪些组成部分？（2）令牌如何计算？（3）验证记录如何发布？声明通过哪些途径传递给客户端？",
+    "answer": "（1）声明包含：ADN（被授权的解析器名）、其所属父区、被授权的子域列表（可用 * 表示整个区）、ZONEMD 散列算法标识与盐值 salt（不超过 255 字节）。（2）计算令牌时先将声明规范化：子域名按字典序排序，父区后缀替换为单个零字节，得到待散列串 $X；随后按 1 字节盐长、盐、$X 的顺序做 ZONEMD 散列，输出即令牌 $TOKEN。（3）令牌以 base64url（无填充）编码，作为内容为 token= 的 TXT 记录、置于父区中带 _splitdns-challenge 标签的记录名下发布；客户端取得声明后向父区查询该 TXT 记录并重算比对。声明本身可经两种途径传递：DHCP 的 Authentication 选项（Protocol 字段取 4、RDM 取 0x00），或 PvD 附加信息中的 splitDnsClaims 字段。",
+    "scoring_points": [
+      "列出声明组成：ADN、父区、子域列表（* 表示全部子域）、散列算法与盐",
+      "指出盐值不超过 255 字节、长度以 1 字节前缀参与散列",
+      "描述令牌计算：子域排序、父区后缀替换为零字节后做 ZONEMD 散列",
+      "说明验证记录为 TXT、内容 token=base64url（无填充）且置于父区",
+      "说明传递途径：DHCP Authentication 选项（Protocol 4/RDM 0x00）与 PvD splitDnsClaims"
+    ],
+    "tags": ["RFC-2025", "RFC9704", "DNS", "本地解析"]
+  },
+  {
+    "id": 43,
+    "difficulty": "中",
+    "category": {"scope": "其他", "protocol_layer": "传输层", "lifecycle": "其他"},
+    "scenario": "其他",
+    "device_type": "其他",
+    "question": "RFC 9743（BCP 133）除规定评估流程外，还给出新拥塞控制算法必须满足的通用要求。请说明：（1）对持续丢包下的完全退避（full backoff）要求是什么？为什么必须有？（2）文档以哪个算法作为缺乏退避能力的反例？（3）评估新算法时必须与哪些既有算法比较？对无线环境有何专门要求？",
+    "answer": "（1）要求算法在持续丢包时执行完全退避：将发送速率降至每 RTT 一个包，并以指数级慢速试探恢复，直到不再丢包；这是防止算法在极端拥塞下不退让、持续占用容量并引发缓冲膨胀与其他流被饿死的基础要求，呼应 RFC 2914 原则。（2）以 BBRv1 为反例：其在瓶颈缓存小于约 1.5 倍 BDP 且高丢包的路径上会持续丢包而无法收敛，被文档点名作为教训。（3）新算法必须与 Reno（RFC 5681）、QUIC 丢包恢复（RFC 9002）与 CUBIC（RFC 9438）比较评估，包括考察在共享瓶颈下对其他算法造成饥饿（starvation）的倾向；还必须在无线/无线接入等真实环境评估，验证其对无线丢包与容量变化的处理，不能只做有线仿真。",
+    "scoring_points": [
+      "说明完全退避要求：降至每 RTT 一包并指数慢速恢复",
+      "说明其目的：避免不退让引发缓冲膨胀/其他流饥饿，符合 RFC 2914",
+      "指出 BBRv1 为反例：高丢包与小缓存（约 1.5 倍 BDP）下持续丢包",
+      "列出必须对比的算法：Reno、QUIC 恢复、CUBIC，并考察饥饿问题",
+      "指出必须在无线等真实环境评估（无线丢包、容量变化）"
+    ],
+    "tags": ["RFC-2025", "RFC9743", "拥塞控制", "BCP"]
+  },
+  {
+    "id": 44,
+    "difficulty": "中",
+    "category": {"scope": "其他", "protocol_layer": "IP层", "lifecycle": "其他"},
+    "scenario": "其他",
+    "device_type": "其他",
+    "question": "RFC 9762 在 RA 的 PIO 中定义了 P 标志。请详细说明主机与路由器两侧的行为规则：（1）主机如何维护 P 标志状态并在其变化时动作？（2）主机在 SLAAC 与地址请求上有哪些配套约束？（3）路由器侧的默认行为与配置约束是什么？",
+    "answer": "（1）主机在每个接口上维护一份 P 位置位且首选生存期非零的 PIO 列表：P 从 0 变 1 时应发起 DHCPv6-PD 请求，变回 0 时应停止请求；已持有委派前缀期间列表发生新增或删除则必须触发 REBIND（按 RFC 8415）。（2）配套约束：P 位不改变前缀长度提示，该前缀长度须仍适合 SLAAC 使用；对 P 与 A 同时置位的 PIO，主机不应再从中执行 SLAAC；当全部 PIO 均置 P 时主机不应同时请求 IA_NA 地址（允许回退以保连通）。（3）路由器默认应通告 P=0，必须允许独立于 A 配置 P，且改变 P 不得改变 A；主机不得把缺少 P 位解读为网络不支持 PD。",
+    "scoring_points": [
+      "说明主机维护 P 位置位且首选生存期非零的 PIO 列表",
+      "说明 0→1 应请求 PD、变回 0 应停止请求，持约期间列表变化必须 REBIND",
+      "指出对 P 与 A 同置位的 PIO 不应再做 SLAAC",
+      "指出全部 PIO 置 P 时不应请求 IA_NA（允许回退保连通）",
+      "说明路由器默认 P=0、P 可独立于 A 配置、改变 P 不改变 A",
+      "指出不得将缺少 P 位解读为不支持 PD"
+    ],
+    "tags": ["RFC-2025", "RFC9762", "IPv6", "DHCPv6 PD"]
+  },
+  {
+    "id": 45,
+    "difficulty": "中",
+    "category": {"scope": "其他", "protocol_layer": "IP层", "lifecycle": "其他"},
+    "scenario": "其他",
+    "device_type": "其他",
+    "question": "RFC 9777 将 MLDv2 提升为互联网标准（STD 101）。请说明其报文机制与定时器：（1）MLDv2 使用哪些 ICMPv6 报文类型？查询有哪三种变体、何时使用？（2）报告与查询分别发往哪些组播地址？报文封装有何共同要求？（3）报告中定义哪六类组播地址记录？给出查询端默认参数。",
+    "answer": "（1）类型 130 为查询（v2）、143 为 v2 报告，另有 131（v1 报告）与 132（Done）用于向后兼容与离开；查询分通用查询、组播地址特定查询、组播地址与源特定查询三种变体，后两种仅在收到状态变更报告后作为响应发送。（2）v2 报告发往 ff02::16（所有 MLDv2 路由器），通用查询发往 ff02::1；报文均以链路本地源地址发送，跳数限制为 1，并携带路由器告警（Router Alert）逐跳选项。（3）六类记录：当前状态记录 IS_IN 与 IS_EX、过滤模式变更 TO_IN 与 TO_EX、源列表变更 ALLOW 与 BLOCK；查询端默认参数：鲁棒变量 2、查询间隔 125 秒、查询响应间隔 10 秒，组播地址侦听超时由这些参数推算。",
+    "scoring_points": [
+      "给出类型：130 查询、143 v2 报告，131/132 为 v1 兼容与 Done",
+      "列出三种查询变体，指出特定查询仅在响应状态变更报告时发送",
+      "说明 v2 报告发往 ff02::16、通用查询发往 ff02::1",
+      "说明链路本地源地址、跳数限制 1、路由器告警逐跳选项",
+      "列出六类记录：IS_IN/IS_EX/TO_IN/TO_EX/ALLOW/BLOCK",
+      "给出默认参数：鲁棒变量 2、查询间隔 125 秒、响应间隔 10 秒"
+    ],
+    "tags": ["RFC-2025", "RFC9777", "MLD", "组播"]
+  },
+  {
+    "id": 46,
+    "difficulty": "中",
+    "category": {"scope": "其他", "protocol_layer": "IP层", "lifecycle": "其他"},
+    "scenario": "其他",
+    "device_type": "其他",
+    "question": "RFC 9800 定义了 SRv6 段列表压缩的两种 flavor。请说明：（1）NEXT-CSID 容器中各 CSID 如何布局？执行节点在 Argument 非零与为零时分别如何更新目的地址？（2）REPLACE-CSID 的 SRH 结构与执行节点的处理方式？（3）对 CSID 长度与取值有何规定？源节点压缩前须做什么校验？",
+    "answer": "（1）NEXT-CSID 容器为完整 128 位 SID：Locator-Block（B）后跟第一个 CSID，其余 CSID 装入 Argument，容器可容纳 K=floor((128-LBL)/LNFL) 个 CSID。Argument 非零时，执行节点把 Argument 中首个 CSID 复制到 B 之后（覆盖后续位并零填充），Segments Left 不变；Argument 为零则把 SRH 下一表项整体复制到 DA。（2）REPLACE-CSID：SRH 首表项为普通 SID，其余表项为打包容器，每个 128 位表项容纳 K=floor(128/LNFL) 个 CSID；执行节点处理完当前 CSID 后按 DA.Arg.Index（或 Segments Left）推进，把容器中下一个 CSID 写入 B 之后。（3）端点与源都必须支持 32 位 CSID 长度；CSID 取值 0 被保留，表示容器内不再有后续 CSID；源节点压缩前必须校验 SID 结构合法（Locator-Block 与 Locator-Node 长度及整体布局一致）。",
+    "scoring_points": [
+      "说明 NEXT-CSID 容器布局：B 后第一个 CSID、其余在 Argument、K=floor((128-LBL)/LNFL)",
+      "说明 Argument 非零时复制到 B 后前进（SL 不变）、为零时复制下一 SRH 表项到 DA",
+      "说明 REPLACE-CSID 的 SRH：首表项普通 SID、其余为 K=floor(128/LNFL) 打包容器",
+      "说明执行节点按 Arg.Index/SL 推进并把下一 CSID 写入 B 之后",
+      "指出必须支持 32 位 CSID 长度、CSID 取值 0 保留表示容器结束",
+      "说明源节点压缩前必须校验 SID 结构合法性"
+    ],
+    "tags": ["RFC-2025", "RFC9800", "SRv6", "CSID"]
+  },
+  {
+    "id": 47,
+    "difficulty": "中",
+    "category": {"scope": "其他", "protocol_layer": "传输层", "lifecycle": "其他"},
+    "scenario": "其他",
+    "device_type": "其他",
+    "question": "RFC 9813（BCP 243）规定了在 RADIUS/TLS 与 RADIUS/DTLS 中使用 TLS-PSK 的要求。请说明：（1）对 PSK 本身的强度与来源有何要求？（2）PSK 与 TLS 版本、RADIUS 共享密钥的关系上有何禁令？（3）服务器端在 PSK 校验前应做什么？对会话恢复有何规定？",
+    "answer": "（1）实现必须支持至少 32 字节的 PSK（建议 64 字节以上），且必须要求 PSK 不少于 16 字节；PSK 须来自密码学安全的随机源或密钥推导，不得以口令（password）充当。（2）同一 PSK 不得同时用于 TLS 1.3 与更早 TLS 版本；RADIUS 共享密钥不得挪用作 TLS-PSK，同一 PSK 不得在多个客户端间复用，实现必须拒绝把同一 PSK 配置给多个客户端。（3）服务器应先按源 IP 过滤，对不在允许范围内的连接在任何 PSK 身份检查之前即拒绝；PSK 校验失败必须关闭连接。会话恢复不被推荐，恢复用 PSK/票据的存储不得超过 604800 秒（7 天），且恢复时必须重新执行授权评估，避免授权信息沿用导致的 TOCTOU 风险。",
+    "scoring_points": [
+      "给出强度要求：支持不少于 32 字节（建议 64 以上）、必须不少于 16 字节、须随机源而非口令",
+      "指出同一 PSK 不得跨 TLS 1.3 与更早版本使用",
+      "指出 RADIUS 共享密钥不得作 TLS-PSK、不得多客户端复用（实现须拒绝该配置）",
+      "说明服务器先按源 IP 过滤再校验 PSK、校验失败关闭连接",
+      "说明会话恢复不推荐、票据存储不超过 604800 秒且恢复时须重新评估授权"
+    ],
+    "tags": ["RFC-2025", "RFC9813", "TLS-PSK", "RADIUS"]
+  },
+  {
+    "id": 48,
+    "difficulty": "中",
+    "category": {"scope": "其他", "protocol_layer": "IP层", "lifecycle": "其他"},
+    "scenario": "其他",
+    "device_type": "其他",
+    "question": "RFC 9815 扩展 BGP 以 SPF 作为决策过程。请说明：（1）使用哪个 AFI/SAFI 组合？需交换什么能力？（2）SPF Status TLV 的类型号与取值语义是什么？（3）Sequence Number TLV 如何工作？收到多份 NLRI 拷贝时按什么规则择优？（4）链路故障时如何通告以加速收敛？",
+    "answer": "（1）使用 AFI 16388（BGP-LS）与 SAFI 80（BGP-LS-SPF），对等体间必须交换多协议扩展能力。（2）SPF Status TLV 类型 1184：Node NLRI 取 1 表示不可达、2 表示不为过路流量转发，Link 与 Prefix NLRI 取 1 表示不可达；不含该 TLV 即为正常可用，携带状态的新版本会隐式撤销旧版本。（3）Sequence Number TLV 类型 1181、8 字节，同一节点对自身 NLRI 的每个新版本严格递增，高 32 位可作环绕/重启计数；择优顺序：本端直连且自身始发的 NLRI 优先，来自同一对等体的新拷贝总是替换，再比较最高序列号，最后比较更大的 BGP Identifier，忽略 ORIGIN/MED/LOCAL_PREF。（4）链路故障时始发节点先以更高序列号通告带 SPF Status（down）的新版本、再考虑撤销，LinkStatusDownAdvertise 定时器默认 2 秒。",
+    "scoring_points": [
+      "给出 AFI 16388 与 SAFI 80，以及多协议扩展能力交换要求",
+      "给出 SPF Status TLV 1184 的取值语义（Node 1/2、Link/Prefix 1、缺失即正常）",
+      "说明 Sequence Number TLV 1181：8 字节、逐版本严格递增、高 32 位作计数",
+      "给出择优顺序：自身始发直连优先、同对等体新拷贝替换、最高序列号、大 BGP Identifier",
+      "说明先通告状态 down 的新版本再撤销、LinkStatusDownAdvertise 默认 2 秒"
+    ],
+    "tags": ["RFC-2025", "RFC9815", "BGP-LS", "SPF"]
+  },
+  {
+    "id": 49,
+    "difficulty": "中",
+    "category": {"scope": "其他", "protocol_layer": "IP层", "lifecycle": "其他"},
+    "scenario": "其他",
+    "device_type": "其他",
+    "question": "RFC 9855 定义了基于 Segment Routing 的 TI-LFA。请说明：（1）P 空间、扩展 P 空间与 Q 空间如何定义？（2）修复列表 RL 如何构成？按 P 与 Q 的关系分哪四种情况？（3）备份路径在转发面如何插入？给出文档附录中关于所需 SID 数量的统计结论。",
+    "answer": "（1）P(R,X) 指从 R 出发沿收敛前最短路径（含等价路径分支）不经过故障节点 X 即可到达的路由器集合；扩展 P 空间 P' 为 R 的各邻居的 P 空间之并（排除经 X 可达的邻居）；Q 空间为不经过 X 即可沿最短路径到达目的 D 的路由器集合。（2）RL=(Node-SID(P), EP(P,Q))，EP 为 P 到 Q 的显式路径；四种情况：故障邻接对端 F 本身在 P' 或 Q 中则 RL 为空（直连邻居）；存在同属 P' 与 Q 的 PQ 节点时仅单个 Node-SID；P 与 Q 相邻时为 Node-SID(P) 加 Adj-SID(P→Q)；相距较远时再追加显式路径 EP。（3）活动段为节点段时保持不变、在其后插入 RL；活动段为邻接段 S→F 时先 NEXT 再 PUSH RL，若 RL 不终结于 F 还需先压入 node-SID(F)。附录统计：链路/本地 SRLG 保护中超过 99% 的场景单个 SID 足够，节点保护中约 99% 的场景不超过两个 SID。",
+    "scoring_points": [
+      "定义 P 空间（含等价路径、绕开 X）与扩展 P 空间（各邻居 P 空间之并）",
+      "定义 Q 空间（绕开 X 沿最短路径到达目的 D）",
+      "给出 RL 构成 (Node-SID(P), EP(P,Q)) 与四种情况对应的段数量",
+      "说明活动段为节点段/邻接段时的插入操作（NEXT/PUSH、补 node-SID(F)）",
+      "给出附录统计：链路/SRLG 保护单 SID 超过 99%、节点保护两 SID 约 99%"
+    ],
+    "tags": ["RFC-2025", "RFC9855", "TI-LFA", "FRR"]
+  },
+  {
+    "id": 50,
+    "difficulty": "中",
+    "category": {"scope": "其他", "protocol_layer": "传输层", "lifecycle": "其他"},
+    "scenario": "其他",
+    "device_type": "其他",
+    "question": "RFC 9868 为 UDP 定义了传输选项（UDP Options）。请说明：（1）富余区（surplus area）与 OCS 的定位规则？对齐填充出错如何处理？（2）OCS 校验失败时如何处理？必须支持的选项集合是什么？（3）SAFE 与 UNSAFE 选项如何划分？UNSAFE 有何使用限制？（4）FRAG 选项的格式与重组规则是什么？",
+    "answer": "（1）富余区指 UDP 用户数据之后、IP 数据报结束之前的区域；选项区以 2 字节 OCS 校验和开头，起始位置相对 IP 数据报起点按 2 字节边界对齐，填充字节必须为零，非零则忽略全部选项并丢弃富余区。（2）OCS 校验失败时忽略全部选项，但 UDP 校验和有效时用户数据仍正常交付；必须支持的封闭集合为 Kind 0-7：EOL/NOP/APC/FRAG/MDS/MRDS/REQ/RES，且须置于其他 SAFE 选项之前。（3）Kind 0-191 为 SAFE，192-255 为 UNSAFE（如 UCMP=192、UENC=193）；UNSAFE 选项只能出现在用户数据为空的 UDP 分片中，重组后若含不支持的 UNSAFE 选项则丢弃重组数据。（4）FRAG 非终结项长度 10、终结项长度 12（多出 RDOS 指针字段），32 位 Identification 与 IP/UDP 五元组共同标识原数据报；分片不得重叠（重叠则放弃重组、丢弃数据、不发 ICMP），重组过期时间默认不超过 2 分钟。",
+    "scoring_points": [
+      "说明富余区定义与 OCS 2 字节开头、相对 IP 数据报起点按 2 字节边界对齐",
+      "指出填充字节必须为零，非零则忽略全部选项并丢弃富余区",
+      "说明 OCS 校验失败仍可交付用户数据（UDP 校验和有效时）",
+      "列出必须支持的 Kind 0-7 集合并说明置于其他 SAFE 选项之前",
+      "说明 SAFE/UNSAFE 划分（0-191 与 192-255）、UNSAFE 仅限空载荷分片且不支持时丢弃重组数据",
+      "给出 FRAG 长度 10/12、32 位标识加五元组定位原数据报、分片不得重叠、重组过期不超过 2 分钟"
+    ],
+    "tags": ["RFC-2025", "RFC9868", "UDP", "传输选项"]
+  }
+]

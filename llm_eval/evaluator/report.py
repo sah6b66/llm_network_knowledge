@@ -5,22 +5,67 @@
 from __future__ import annotations
 
 import json
+import re
 from collections import defaultdict
 from pathlib import Path
 
 from .config import AppConfig
 from .runner import sanitize_name
 
+DIFFICULTY_ORDER = ["难", "中", "简单"]
+
 DIMENSIONS = (
-    ("difficulty", "难度", lambda it: it.get("difficulty")),
-    ("scope", "范围", lambda it: (it.get("category") or {}).get("scope")),
+    ("difficulty", "难度", lambda it: it.get("difficulty"),
+     DIFFICULTY_ORDER),
+    ("scope", "范围", lambda it: (it.get("category") or {}).get("scope"),
+     ["网络", "设备", "其他"]),
     ("protocol_layer", "协议层",
-     lambda it: (it.get("category") or {}).get("protocol_layer")),
+     lambda it: (it.get("category") or {}).get("protocol_layer"),
+     ["传输层", "IP层", "链路层", "物理层", "其他"]),
     ("lifecycle", "生命周期",
-     lambda it: (it.get("category") or {}).get("lifecycle")),
-    ("scenario", "场景", lambda it: it.get("scenario")),
-    ("device_type", "设备类型", lambda it: it.get("device_type")),
+     lambda it: (it.get("category") or {}).get("lifecycle"),
+     ["规划", "建设", "维护", "优化", "其他"]),
+    ("scenario", "场景", lambda it: it.get("scenario"),
+     ["园区", "宽带城域", "数据中心", "Internet", "通用"]),
+    ("device_type", "设备类型", lambda it: it.get("device_type"),
+     ["交换机", "路由器", "防火墙", "WLAN", "不限定"]),
 )
+
+RFC_YEAR_ORDER = ["2021", "2022", "2023", "2024", "2025"]
+
+HW_FAMILY_ORDER = ["CE交换机", "S交换机", "路由器", "AR路由", "防火墙", "WLAN"]
+HW_QTYPE_ORDER = ["特性", "场景", "配置方案", "命令行", "告警处理", "日志"]
+_HW_MODEL_PREFIXES = [("NetEngine", "路由器"), ("AirEngine", "WLAN"),
+                      ("USG", "防火墙"), ("AR", "AR路由"),
+                      ("CE", "CE交换机"), ("S", "S交换机")]
+
+
+def _rfc_year(it: dict) -> str | None:
+    for t in it.get("tags") or []:
+        if t.startswith("RFC-") and t[4:].isdigit():
+            return t[4:]
+    return None
+
+
+def _hw_family(it: dict) -> str | None:
+    tags = it.get("tags") or []
+    model = tags[0] if tags and isinstance(tags[0], str) else ""
+    for prefix, fam in _HW_MODEL_PREFIXES:
+        if re.match(rf"^{re.escape(prefix)}\d", model):
+            return fam
+    return None
+
+
+def _dim_stats(groups: dict, order: list) -> dict:
+    # 按预定义顺序输出;顺序表外的取值排在末尾
+    keys = ([k for k in order if k in groups]
+            + sorted(k for k in groups if k not in order))
+    return {
+        k: {"count": len(groups[k]),
+            "dist": {n: sum(1 for s in groups[k] if s == n) for n in range(0, 6)},
+            "avg": round(sum(groups[k]) / len(groups[k]), 2)}
+        for k in keys
+    }
 
 
 def _valid_scores(items):
@@ -45,18 +90,43 @@ def compute_stats(files: list[Path]) -> dict:
         distribution[s] += 1
 
     dims = {}
-    for dim_key, _dim_name, getter in DIMENSIONS:
+    if items and all(_rfc_year(it) is not None for it in items):
+        # RFC 专项数据集(全部条目带 RFC-YYYY 标签):
+        # 维度得分分布按年份 + 难度(简单=basic,中=detail)统计
         groups = defaultdict(list)
         for it, ev in answered:
-            key = getter(it)
-            if key:
-                groups[key].append(ev["score"])
-        dims[dim_key] = {
-            k: {"count": len(v),
-                "dist": {n: sum(1 for s in v if s == n) for n in range(0, 6)},
-                "avg": round(sum(v) / len(v), 2)}
-            for k, v in sorted(groups.items())
-        }
+            y = _rfc_year(it)
+            if y:
+                groups[y].append(ev["score"])
+        dims["year"] = _dim_stats(groups, RFC_YEAR_ORDER)
+        groups = defaultdict(list)
+        for it, ev in answered:
+            if it.get("difficulty"):
+                groups[it["difficulty"]].append(ev["score"])
+        dims["difficulty"] = _dim_stats(groups, DIFFICULTY_ORDER)
+    elif items and all(_hw_family(it) is not None for it in items):
+        # 华为设备数据集(全部条目 tags[0] 为可识别的华为设备型号):
+        # 维度得分分布按设备类别 + 问题类型统计
+        groups = defaultdict(list)
+        for it, ev in answered:
+            fam = _hw_family(it)
+            if fam:
+                groups[fam].append(ev["score"])
+        dims["hw_family"] = _dim_stats(groups, HW_FAMILY_ORDER)
+        groups = defaultdict(list)
+        for it, ev in answered:
+            tags = it.get("tags") or []
+            if len(tags) > 2:
+                groups[tags[2]].append(ev["score"])
+        dims["hw_qtype"] = _dim_stats(groups, HW_QTYPE_ORDER)
+    else:
+        for dim_key, _dim_name, getter, order in DIMENSIONS:
+            groups = defaultdict(list)
+            for it, ev in answered:
+                key = getter(it)
+                if key:
+                    groups[key].append(ev["score"])
+            dims[dim_key] = _dim_stats(groups, order)
 
     hit = defaultdict(lambda: [0, 0])  # point -> [hits, total]
     point_ids = defaultdict(list)
@@ -112,7 +182,10 @@ def compute_stats(files: list[Path]) -> dict:
     }
 
 
-DIM_LABELS = {k: n for k, n, _ in DIMENSIONS}
+DIM_LABELS = {k: n for k, n, *_ in DIMENSIONS}
+DIM_LABELS["year"] = "年份"
+DIM_LABELS["hw_family"] = "设备类别"
+DIM_LABELS["hw_qtype"] = "问题类型"
 
 
 def _overview_block(per_stem: dict[str, dict]) -> list[str]:
@@ -120,17 +193,6 @@ def _overview_block(per_stem: dict[str, dict]) -> list[str]:
     for stem, s in per_stem.items():
         lines.append(f"- {stem}:总数 {s['total']},完全通过(5分) {s['passed']},"
                      f"不通过(≠5分) {s['failed_count']},综合评分 {s['avg']:.2f}")
-    lines += ["", "### 不满足项总体说明", ""]
-    for stem, s in per_stem.items():
-        lines.append(f"- {stem}(命中率<50% 评分点 {len(s['gaps'])} 个):")
-        if s["gaps"]:
-            for point, h, t, ids in s["gaps"]:
-                id_str = ",".join(
-                    f"{d['id']}[{d['difficulty']}/{d['protocol_layer']}]"
-                    for d in ids)
-                lines.append(f"  - {point}(命中 {h}/{t},涉及题 id:{id_str})")
-        else:
-            lines.append("  - 无")
     lines.append("")
     return lines
 

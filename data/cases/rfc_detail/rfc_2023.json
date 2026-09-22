@@ -1,0 +1,219 @@
+[
+  {
+    "id": 21,
+    "difficulty": "中",
+    "category": {
+      "scope": "其他",
+      "protocol_layer": "IP层",
+      "lifecycle": "其他"
+    },
+    "scenario": "其他",
+    "device_type": "其他",
+    "question": "请说明 RFC 9352 定义的 SRv6 Locator TLV（类型 27）中每个 locator 条目的字段格式，以及 End SID sub-TLV（类型 5）的格式与约束。",
+    "answer": "SRv6 Locator TLV（类型 27）中每个 locator 条目包含：Metric（4 字节）、Flags（1 字节，其中 D-flag 表示 up/down 方向）、Algorithm（1 字节）、Loc-Size（1 字节，取值 1-128，非法则忽略整个 TLV）、Locator（1-16 字节）及可选 sub-TLV。End SID sub-TLV（类型 5）格式为：Flags（1 字节）、Endpoint Behavior（2 字节）、SID（16 字节）；SID 必须从关联的 locator 空间分配，否则该 sub-TLV 被忽略；End SID 继承所属 locator 的拓扑与算法，且同一 locator 可通告多个 End SID。",
+    "scoring_points": [
+      "locator 条目含 Metric（4 字节）、Flags（1 字节，D-flag 表 up/down）、Algorithm（1 字节）",
+      "Loc-Size 取值 1-128，非法时忽略整个 TLV；Locator 长 1-16 字节",
+      "End SID sub-TLV（类型 5）含 Flags（1 字节）、Endpoint Behavior（2 字节）、SID（16 字节）",
+      "SID 必须从关联 locator 的空间分配，否则被忽略",
+      "End SID 继承 locator 的拓扑与算法；同一 locator 可通告多个 End SID"
+    ],
+    "tags": ["RFC-2023", "RFC9352", "IS-IS", "SRv6"]
+  },
+  {
+    "id": 22,
+    "difficulty": "中",
+    "category": {
+      "scope": "其他",
+      "protocol_layer": "其他",
+      "lifecycle": "其他"
+    },
+    "scenario": "其他",
+    "device_type": "其他",
+    "question": "RFC 9364 汇总了哪些 DNSSEC 扩展机制与算法相关规范？请分类列举对应的 RFC 编号。",
+    "answer": "RFC 9364（BCP 237）汇总的扩展机制包括：RFC 5011 自动化信任锚更新（2018 年根密钥滚动使用）；RFC 7344 通过 CDS/CDNSKEY 记录自动化 DS 管理；RFC 8198 已验证缓存内容的积极使用（aggressive use）；RFC 7583 密钥滚动时间安排；RFC 7646 negative trust anchors；RFC 7958 根信任锚的发布与签名；RFC 8901 multi-signer 操作；RFC 9276 NSEC3 参数使用指南。算法方面：ECDSA 见 RFC 6605，EdDSA 见 RFC 8080，算法实现与使用要求由 RFC 8624 规定。",
+    "scoring_points": [
+      "RFC 5011 为自动化信任锚更新（2018 年根 KSK 滚动使用）",
+      "RFC 7344 为 CDS/CDNSKEY 自动 DS 管理；RFC 8198 为 aggressive use of validated cache",
+      "RFC 7583 为密钥滚动时序；RFC 7646 为 negative trust anchors",
+      "RFC 7958 根信任锚发布；RFC 8901 multi-signer；RFC 9276 NSEC3 指南",
+      "ECDSA 对应 RFC 6605，EdDSA 对应 RFC 8080",
+      "算法实现与使用要求由 RFC 8624 规定"
+    ],
+    "tags": ["RFC-2023", "RFC9364", "DNSSEC", "DNS"]
+  },
+  {
+    "id": 23,
+    "difficulty": "中",
+    "category": {
+      "scope": "其他",
+      "protocol_layer": "传输层",
+      "lifecycle": "其他"
+    },
+    "scenario": "其他",
+    "device_type": "其他",
+    "question": "QUIC v2（RFC 9369）相对 v1 修改了哪些密钥派生与版本协商细节？请说明 Initial salt、HKDF 标签的变化及跨版本约束。",
+    "answer": "QUIC v2 使用新的 Initial salt（0x0dede3def700a6db819381be6e269dcbf9bd2ed9，即字符串 \"QUICv2 salt\" 的 SHA-256 前 20 字节），HKDF 标签由 v1 的 \"quic key/iv/hp/ku\" 改为 \"quicv2 key/iv/hp/ku\"。v2 端点必须发送并校验 version_information 传输参数以防降级攻击。客户端从首个版本字段不同的长包头中学习协商出的版本；Handshake 与 1-RTT 包使用协商版本；Retry 包必须使用原始版本。会话票据与 NEW_TOKEN 不得跨版本使用。",
+    "scoring_points": [
+      "v2 使用新 Initial salt（0x0dede3def700a6db819381be6e269dcbf9bd2ed9，源自 \"QUICv2 salt\" 的 SHA-256 前 20 字节）",
+      "HKDF 标签由 \"quic key/iv/hp/ku\" 改为 \"quicv2 key/iv/hp/ku\"",
+      "必须发送并校验 version_information 传输参数（防降级）",
+      "客户端从首个版本字段不同的长包头学习协商版本；Handshake/1-RTT 包使用协商版本",
+      "Retry 包必须使用原始版本（版本协商不改变 Retry 版本）",
+      "会话票据与 NEW_TOKEN 不得跨版本复用"
+    ],
+    "tags": ["RFC-2023", "RFC9369", "QUIC", "版本协商"]
+  },
+  {
+    "id": 24,
+    "difficulty": "中",
+    "category": {
+      "scope": "其他",
+      "protocol_layer": "传输层",
+      "lifecycle": "其他"
+    },
+    "scenario": "其他",
+    "device_type": "其他",
+    "question": "请给出 RFC 9406 中 HyStart++ 的关键常量定义，以及 CSS（Conservative Slow Start）的增长与退出规则。",
+    "answer": "RttThresh = max(4ms, min(lastRoundMinRTT/8, 16ms))，即 MIN_RTT_THRESH=4ms、MAX_RTT_THRESH=16ms、MIN_RTT_DIVISOR=8；每轮至少 8 个样本（N_RTT_SAMPLE=8），当当前轮最小 RTT ≥ lastRoundMinRTT + RttThresh 时退出慢启动。CSS 中每收到一个 ACK，cwnd 增加 min(N, L*SMSS)/4（CSS_GROWTH_DIVISOR=4，实现必须 ≥2）；若 currentRoundMinRTT < cssBaselineMinRtt 则恢复慢启动；CSS 最多持续 5 轮（CSS_ROUNDS=5），或发生丢包/ECN 时进入拥塞避免并将 ssthresh 设为当前 cwnd。L 在启用 pacing 时无限制，未启用时为 8。",
+    "scoring_points": [
+      "RttThresh = max(4ms, min(lastRoundMinRTT/8, 16ms))：下限 4ms、上限 16ms、除数为 8",
+      "每轮至少 8 个 RTT 样本；当前轮最小 RTT 达到 lastRoundMinRTT + RttThresh 即退出慢启动",
+      "CSS 中 cwnd 按 min(N, L*SMSS)/4 增长；CSS_GROWTH_DIVISOR=4 且实现必须 ≥2",
+      "currentRoundMinRTT < cssBaselineMinRtt 时恢复慢启动",
+      "CSS 最多 5 轮（CSS_ROUNDS=5）；丢包/ECN 时进入拥塞避免，ssthresh 设为 cwnd",
+      "L 值：启用 pacing 时无限制，未启用时为 8"
+    ],
+    "tags": ["RFC-2023", "RFC9406", "TCP", "拥塞控制"]
+  },
+  {
+    "id": 25,
+    "difficulty": "中",
+    "category": {
+      "scope": "其他",
+      "protocol_layer": "其他",
+      "lifecycle": "其他"
+    },
+    "scenario": "其他",
+    "device_type": "其他",
+    "question": "请说明 RFC 9418 中依赖类型 informational 与 impacting 的区别、symptom 的键构成及时间约束，以及服务器对依赖环的处理。",
+    "answer": "dependency-type 为 informational 时，被依赖 subservice 的异常仅作信息参考，不影响依赖方的健康评估；为 impacting 时则会影响依赖方的健康评估。symptom 以 start-date-time、agent-id、symptom-id 三个字段组合为键；stop-date-time 必须晚于 start-date-time，症状仍在进行时该值为空。服务器在每次图修改时都必须检查依赖环，任何会引入环的修改必须被拒绝。此外模型定义了 health-score-weight（取值 0-100）用于依赖的加权计算。",
+    "scoring_points": [
+      "informational 依赖不影响依赖方健康，impacting 依赖会影响",
+      "symptom 的键由 start-date-time、agent-id、symptom-id 组成",
+      "stop-date-time 必须晚于 start-date-time；进行中症状该值为空",
+      "服务器在每次图修改时必须检查依赖环，引入环的修改必须被拒绝",
+      "health-score-weight 取值 0-100，用于依赖加权"
+    ],
+    "tags": ["RFC-2023", "RFC9418", "YANG", "网络保障"]
+  },
+  {
+    "id": 26,
+    "difficulty": "中",
+    "category": {
+      "scope": "其他",
+      "protocol_layer": "其他",
+      "lifecycle": "其他"
+    },
+    "scenario": "其他",
+    "device_type": "其他",
+    "question": "请说明 SVCB/HTTPS 记录（RFC 9460）中 SvcParams 的线上编码格式与解析约束，并列出初始注册的 SvcParamKey 及 HTTPS 记录的强制参数规则。",
+    "answer": "每个 SvcParam 以 2 字节 SvcParamKey + 2 字节长度 + 值在线上编码，键必须严格按数值递增排列，违反时整个 RRset 解析失败（不可忽略）。初始注册键值：mandatory=0、alpn=1、no-default-alpn=2、port=3、ipv4hint=4、ech=5、ipv6hint=6；65280-65534 为私有用途，65535 无效。HTTPS 记录中 port 与 no-default-alpn 自动成为 mandatory 参数；客户端不得为 http/https 查询 SVCB 记录（只查询 HTTPS 记录）。",
+    "scoring_points": [
+      "SvcParam 编码：2 字节 key + 2 字节长度 + 值",
+      "key 必须严格按数值递增，违规导致整个 RRset 被拒绝",
+      "初始键值：mandatory=0、alpn=1、no-default-alpn=2、port=3、ipv4hint=4、ech=5、ipv6hint=6",
+      "私有区间为 65280-65534；65535 无效",
+      "HTTPS 记录中 port 与 no-default-alpn 自动成为 mandatory",
+      "客户端不得为 http/https 查询 SVCB 记录"
+    ],
+    "tags": ["RFC-2023", "RFC9460", "DNS", "SVCB"]
+  },
+  {
+    "id": 27,
+    "difficulty": "中",
+    "category": {
+      "scope": "其他",
+      "protocol_layer": "IP层",
+      "lifecycle": "其他"
+    },
+    "scenario": "其他",
+    "device_type": "其他",
+    "question": "请说明 RFC 9486 对在 IPv6 网络中部署 IOAM 提出的约束条件（C1-C4）及域边界的安全处理要求。",
+    "answer": "C1：IOAM 必须限定在 IOAM-Domain（由同一管理实体管理的节点集合）内使用。C2：添加 IOAM 不得改变节点的转发决策（如 ECMP 哈希行为保持一致），且必须在每个节点按接口显式启用，未启用的路由器必须忽略 IOAM 选项。C3：MTU/PMTU 处理必须容忍 IOAM 带来的报文膨胀（不得因此产生 ICMP Packet Too Big）。C4：RFC 8200 不允许向在途报文的原始 IPv6 头插入扩展头，因此中间节点封装时必须额外添加一个外层 IPv6 头。安全方面：IOAM 报文不得泄漏到域外，边界路由器必须对进入和离开两个方向的 IOAM 流量进行过滤。",
+    "scoring_points": [
+      "C1：IOAM 必须限于同一管理实体管理的 IOAM-Domain 内",
+      "C2：添加 IOAM 不得改变转发决策（ECMP 行为一致）；须逐节点逐接口显式启用，未启用则忽略 IOAM 选项",
+      "C3：MTU/PMTU 必须容忍 IOAM 开销，不得触发 ICMP Packet Too Big",
+      "C4：基于 RFC 8200 不得修改在途报文，中间插入须封装新的外层 IPv6 头",
+      "IOAM 报文不得泄漏出域；边界路由器必须双向（进入和离开）过滤 IOAM 流量"
+    ],
+    "tags": ["RFC-2023", "RFC9486", "IPv6", "IOAM"]
+  },
+  {
+    "id": 28,
+    "difficulty": "中",
+    "category": {
+      "scope": "其他",
+      "protocol_layer": "IP层",
+      "lifecycle": "其他"
+    },
+    "scenario": "其他",
+    "device_type": "其他",
+    "question": "请描述 RFC 9494 中 LLGR 能力的元组字段构成、LLST 定时器行为，以及 LLGR_STALE 路由的再通告规则。",
+    "answer": "LLGR 能力值由一个或多个元组构成：AFI（16 位）、SAFI（8 位）、Flags（8 位，最高位 F 位表示转发状态保留，其余保留位必须为 0）、LLST（24 位，单位秒，是 GR Restart Time 之外的额外保持时间）。帮助路由器在 LLGR 期开始时按 AFI/SAFI 启动 LLST 定时器，超时后删除该 AFI/SAFI 的陈旧路由；路由保留总时长不超过 Restart Time 与 LLST 之和。不应向未通告 LLGR 能力的邻居通告 LLGR_STALE 路由；LLGR_STALE 路由再次被通告时不得移除该团体属性。",
+    "scoring_points": [
+      "元组含 AFI（16 位）、SAFI（8 位）、Flags（8 位，F 位为最高位）、LLST（24 位，单位秒）",
+      "LLST 是 GR Restart Time 之外的额外保持时间；F 位表示转发状态保留",
+      "LLGR 期开始时按 AFI/SAFI 启动 LLST 定时器，超时删除该 AFI/SAFI 的陈旧路由",
+      "路由保留时长不超过 Restart Time 与 LLST 之和",
+      "不应向未通告 LLGR 能力的邻居通告 LLGR_STALE 路由",
+      "LLGR_STALE 路由再通告时不得移除该团体属性"
+    ],
+    "tags": ["RFC-2023", "RFC9494", "BGP", "优雅重启"]
+  },
+  {
+    "id": 29,
+    "difficulty": "中",
+    "category": {
+      "scope": "其他",
+      "protocol_layer": "传输层",
+      "lifecycle": "其他"
+    },
+    "scenario": "其他",
+    "device_type": "其他",
+    "question": "请说明 RFC 9525 中参考标识（reference identifier）的构造方法与优先级顺序，以及 DNS 与 IP 地址的比较规则。",
+    "answer": "参考标识由源域与应用服务类型推导得出，独立于证书中呈现的标识。优先级顺序：应用程序使用形式化 URI 时用 URI-ID；通过 DNS SRV 记录发现服务时用 SRV-ID；以 IP 地址访问时用 IP-ID；否则用 DNS-ID。DNS 部分的比较不区分大小写，按 ASCII 标签逐个比较，IDN 的 U-label 需先转为 A-label；通配符 \"*\" 仅匹配单个完整标签。IP-ID 按字节逐一精确匹配（octet-for-octet），不支持部分匹配。比较失败时，自动化客户端应以 bad certificate 错误终止连接。",
+    "scoring_points": [
+      "参考标识由源域与应用服务类型推导，独立于证书呈现的标识",
+      "优先级：URI-ID → SRV-ID → IP-ID → DNS-ID（按应用场景选择）",
+      "DNS 比较不区分大小写、逐 ASCII 标签比较；U-label 需转为 A-label",
+      "通配符 \"*\" 仅匹配单个完整标签",
+      "IP-ID 要求字节级（octet-for-octet）精确匹配",
+      "匹配失败时自动化客户端应以 bad certificate 错误终止连接"
+    ],
+    "tags": ["RFC-2023", "RFC9525", "TLS", "证书验证"]
+  },
+  {
+    "id": 30,
+    "difficulty": "中",
+    "category": {
+      "scope": "其他",
+      "protocol_layer": "IP层",
+      "lifecycle": "其他"
+    },
+    "scenario": "其他",
+    "device_type": "其他",
+    "question": "请描述 BGP-LS（RFC 9552）NLRI 的公共头部结构、Node Descriptors 的 TLV 组成，以及 TLV 排序与未知 TLV 的处理规则。",
+    "answer": "NLRI 含 2 字节 Type、Total NLRI Length、（VPN 时 8 字节 RD）、1 字节 Protocol-ID（1=IS-IS L1、2=IS-IS L2、3=OSPFv2、6=OSPFv3）和 8 字节 Identifier（Instance-ID，区分 IGP 域）。Local Node Descriptors 为 TLV 256（必含），Remote 为 TLV 257（Link NLRI 必含），sub-TLV 有 512=AS、513=BGP-LS Identifier（已弃用）、514=OSPF Area-ID、515=IGP Router-ID。NLRI 内 TLV 必须按 Type 升序（同 Type 按 Length、Value），否则为畸形；属性 TLV 建议升序但无序不畸形。未知 TLV 必须保留并传播。",
+    "scoring_points": [
+      "NLRI 头部：2 字节 Type + Total NLRI Length +（VPN 时 8 字节 RD）+ 1 字节 Protocol-ID + 8 字节 Identifier（Instance-ID）",
+      "Protocol-ID 示例：1=IS-IS Level 1、2=IS-IS Level 2、3=OSPFv2、6=OSPFv3",
+      "Local Node Descriptors 为 TLV 256（必含）；Remote Node Descriptors 为 TLV 257（Link NLRI 必含）",
+      "sub-TLV：512=AS、513=BGP-LS Identifier（已弃用）、514=OSPF Area-ID、515=IGP Router-ID",
+      "NLRI 内 TLV 必须按 Type 升序，违规视为 malformed；属性 TLV 无序不视为 malformed",
+      "未知 TLV 必须保留并继续传播"
+    ],
+    "tags": ["RFC-2023", "RFC9552", "BGP-LS", "链路状态"]
+  }
+]

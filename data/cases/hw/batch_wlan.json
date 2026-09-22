@@ -1,0 +1,414 @@
+[
+  {
+    "id": 86,
+    "difficulty": "简单",
+    "category": {
+      "scope": "设备",
+      "protocol_layer": "其他",
+      "lifecycle": "其他"
+    },
+    "scenario": "园区",
+    "device_type": "WLAN",
+    "question": "在由华为 AirEngine9703-S (V600R025C10) 无线接入控制器(WAC)管理的园区 WLAN 网络中,WLAN 业务采用模板化方式部署。请概述该平台 WLAN 的基本组网架构与业务配置流程,并说明 SSID 与 VAP 两个关键特性分别是什么、各解决什么问题,以及 SSID 模板和 VAP 模板的典型部署(引用)方式。",
+    "answer": "WLAN 是基于 802.11 标准系列(802.11a/b/g/n、802.11ac、802.11ax、802.11be 等)、以 2.4GHz/5GHz 等高频信号为传输介质的无线局域网,解决有线网络铺设成本高、位置固定、移动性差的问题;凡自由空间均可连接网络,在办公大楼、机场候机厅、商务酒店、体育场馆等场所尤为适用,对地铁、公路交通监控等难于布线的场所也可免去或减少繁杂布线,部署灵活、成本低。组网上,FIT AP 通过 CAPWAP 隧道受 WAC 统一管理,基本业务配置流程为:配置 CAPWAP(保证设备互通并配置源接口)、配置 AP 上线、配置 SSID 管理、配置 WLAN 用户管理(由 WAC 为 FIT AP 下发业务,实现无线终端上线),业务采用模板化方式部署。SSID 即服务集标识符,表示无线网络的标识,用来区分不同的无线网络,终端搜索到的网络名称就是 SSID;SSID 模板用于配置 SSID 名称,需应用到 VAP 模板。VAP 即虚拟接入点,是 AP 上虚拟出来的业务功能实体,在一个 AP 上创建不同的 VAP 可为不同用户群体提供无线接入服务,解决多业务/多群体共享同一 AP 的服务隔离问题。典型部署:先创建 VAP 模板,在 VAP 模板下引用 SSID 模板,再把 VAP 模板应用到 AP 组或 AP 的射频(应用时可指定 WLAN ID、射频与业务 VLAN),AP 上即生成 VAP;AP 上线时加入且只能加入一个 AP 组,优先使用 AP 视图配置,否则使用 AP 组配置。",
+    "scoring_points": [
+      "WLAN 基于 802.11 标准系列,以 2.4GHz/5GHz 等高频信号为传输介质,解决有线网络成本高、移动性差的问题",
+      "WLAN 基本业务配置流程包括配置 CAPWAP、配置 AP 上线、配置 SSID 管理、配置 WLAN 用户管理四个阶段",
+      "SSID 是服务集标识符,代表无线网络名称,用于区分不同的无线网络;SSID 模板用于配置 SSID 名称",
+      "VAP 是 AP 上虚拟出来的业务功能实体,一个 AP 可创建多个 VAP 为不同用户群体提供无线接入服务",
+      "SSID 模板需应用到 VAP 模板,VAP 模板再应用到 AP 组或 AP 的射频,AP 上才会生成 VAP",
+      "WLAN 业务采用模板化部署;AP 优先使用 AP 视图配置,无配置时使用 AP 组配置"
+    ],
+    "tags": [
+      "AirEngine9703-S",
+      "V600R025C10",
+      "特性",
+      "SSID",
+      "VAP"
+    ]
+  },
+  {
+    "id": 87,
+    "difficulty": "中",
+    "category": {
+      "scope": "设备",
+      "protocol_layer": "其他",
+      "lifecycle": "其他"
+    },
+    "scenario": "园区",
+    "device_type": "WLAN",
+    "question": "组网需求:某办公室部署一台华为 AirEngine5700 (V600R025C10) 系列 FAT AP,上行连接不支持配置 VLAN 的家用光猫,需要创建 SSID 为 office 的无线网络供员工接入,并通过业务 VLAN 传输无线业务数据报文。请给出在 FAT AP Web 网管上完成该需求的配置思路与配置步骤。",
+    "answer": "配置思路:SSID 即 Wi-Fi 名称,配置的 SSID 在 AP 上生效后会生成 VAP,AP 发出 Wi-Fi 信号供终端接入,AP 支持配置多个 SSID 对应多个 VAP;先完成上网配置,再新建 SSID 并绑定射频、指定业务 VLAN;因上行网关(家用光猫)不支持配置 VLAN,业务 VLAN ID 使用默认值 VLAN 1。配置步骤:1.通过 HTTPS 登录 AP 的 Web 网管;2.(可选)单击上网配置,选择上网模式(桥接模式:Leader AP 不做网关,上行使用独立网关;网关模式:Leader AP 作为网关);3.依次单击无线管理 > Wi-Fi 管理,进入 Wi-Fi 列表,单击新建进入新建 SSID 页面;4.配置基础参数:Wi-Fi 名称(SSID,如 office)、绑定射频(指定信号配置生效的 AP 射频)、业务 VLAN ID(传输业务数据报文的业务 VLAN,不支持配置 VLAN 的上行网关设备建议使用默认值 VLAN 1);5.(可选)高级配置:绑定 AP Zone、隐藏 SSID、最大用户数、达到最大用户数时的处理策略、关联超时时间、DTIM 周期、VAP 自动关闭及时间段等;6.保存配置;7.验证:依次单击监控 > 无线 > Vap 进入 VAP 列表,可按 AP ID、AP 名称、射频 ID、WLAN ID 和 SSID 搜索查看 VAP 信息。",
+    "scoring_points": [
+      "SSID 在 AP 上生效后会生成 VAP,AP 支持配置多个 SSID 对应多个 VAP",
+      "上行网关为不支持配置 VLAN 的设备(如家用光猫)时,业务 VLAN ID 使用默认值 VLAN 1",
+      "操作路径为无线管理 > Wi-Fi 管理,在 Wi-Fi 列表单击新建进入新建 SSID 页面",
+      "基础配置包括 Wi-Fi 名称、绑定射频、业务 VLAN ID 三项",
+      "可选高级功能包括隐藏 SSID、最大用户数及达到最大用户数的处理策略、VAP 自动关闭等",
+      "配置后可通过监控 > 无线 > VAP 列表按 AP ID/AP 名称/射频 ID/WLAN ID/SSID 查看验证"
+    ],
+    "tags": [
+      "AirEngine5700",
+      "V600R025C10",
+      "配置方案",
+      "SSID",
+      "VAP"
+    ]
+  },
+  {
+    "id": 88,
+    "difficulty": "中",
+    "category": {
+      "scope": "设备",
+      "protocol_layer": "其他",
+      "lifecycle": "其他"
+    },
+    "scenario": "园区",
+    "device_type": "WLAN",
+    "question": "组网需求:某企业在办公楼部署多个 AP,AP 通过接入交换机 Switch_A 与华为 AirEngine9703-S (V600R025C10) WAC 相连(AP 组名称为 ap-group1),因 AP 数量较多,逐一手工配置信道等射频参数非常繁琐,客户希望 WAC 能根据无线网络环境自动为 AP 分配信道。请给出在该 WAC 上完成此需求的配置思路与配置步骤。",
+    "answer": "配置思路:配置射频调优功能,由 WAC 根据无线网络环境自动为 AP 分配工作信道(配置前确保网络互通及 AP 正常上线);调优不适用于 AP 相互无法感知的场景(定向天线、相隔较远或被阻隔)及高密、轨交、室外定向天线覆盖场景,监控模式射频不参与调优。配置步骤:1.在 wlan 视图进入 ap-group name ap-group1,分别在 radio 0 和 radio 1 下执行 calibrate auto-channel-select enable 与 calibrate auto-txpower-select enable(缺省已使能);2.创建空口扫描模板 air-scan-profile name wlan-airscan,配置 scan-channel-set country-channel、scan-period 80、scan-interval 10000;3.分别创建 2.4G/5G 射频模板 radio-2g-profile name wlan-radio2g、radio-5g-profile name wlan-radio5g,并均引用 air-scan-profile wlan-airscan;4.在 AP 组下引用射频模板:radio-2g-profile wlan-radio2g radio 0、radio-5g-profile wlan-radio5g radio 1;5.执行 calibrate manual startup 手动触发射频调优;6.用 display radio all 检查调优效果(回显中 CH/BW 为信道/带宽,CE/ME 为当前/最大 EIRP,CU 为信道利用率);7.调优完成后推荐改为定时调优并将时间定在业务空闲时段,如 calibrate enable schedule time 03:00:00。",
+    "scoring_points": [
+      "配置思路是通过 WAC 自动为 AP 分配工作信道,需使能信道与发送功率自动选择功能",
+      "calibrate auto-channel-select enable 和 calibrate auto-txpower-select enable 在 AP 组射频视图下配置,缺省已使能",
+      "空口扫描模板 air-scan-profile 下可配置 scan-channel-set、scan-period、scan-interval",
+      "射频模板 radio-2g-profile/radio-5g-profile 需引用空口扫描模板后应用到 AP 组对应射频(radio 0/radio 1)",
+      "calibrate manual startup 手动触发射频调优,调优后推荐配置定时调优(如 calibrate enable schedule time 03:00:00)",
+      "display radio all 用于查看调优后的信道/带宽、EIRP、信道利用率等射频信息",
+      "调优不适用于 AP 相互无法感知、高密、轨交和室外定向天线覆盖场景,监控模式射频不参与调优"
+    ],
+    "tags": [
+      "AirEngine9703-S",
+      "V600R025C10",
+      "配置方案",
+      "射频调优"
+    ]
+  },
+  {
+    "id": 89,
+    "difficulty": "中",
+    "category": {
+      "scope": "设备",
+      "protocol_layer": "其他",
+      "lifecycle": "其他"
+    },
+    "scenario": "园区",
+    "device_type": "WLAN",
+    "question": "在华为 AirEngine5700 (V600R025C10) 系列 FAT AP 上,运维人员需要检查已创建的 SSID 模板的配置信息(如 SSID 名称、SSID 隐藏开关、最大接入用户数、Beacon 发送速率等)以及模板被引用的情况。应使用哪条命令?请给出该命令的完整语法、每个参数的含义与取值、命令所在视图及典型用法。",
+    "answer": "使用 display ssid-profile 命令,该命令用来查看 SSID 模板的配置信息和引用信息。命令格式:display ssid-profile { all | name profile-name }。参数说明:all——查看所有 SSID 模板的信息,无附加取值;name profile-name——查看指定 SSID 模板的信息,取值必须是已存在的 SSID 模板名称。视图:所有视图;缺省级别:1:监控级。典型用法:1.执行 display ssid-profile all 查看所有 SSID 模板,回显包含 Profile name(模板名)、Beacon 2.4G/5G/6G rate(Mbps)(Beacon 发送速率)、Reference(被引用次数)、SSID 等字段;2.执行 display ssid-profile name default 查看名为 default 的 SSID 模板,回显包含 Profile ID、SSID、SSID hide(是否隐藏)、Radio type(如 802.11be)、Association timeout(min)(STA 关联老化时间)、Max STA number(最大接入用户数)、Action upon reaching the max STA number、DTIM interval、Beacon 2.4G/5G/6G rate、802.11r/802.11k/802.11v、U-APSD、MU-MIMO 等配置项,据此可核对 SSID 模板配置是否符合预期。",
+    "scoring_points": [
+      "使用 display ssid-profile 命令查看 SSID 模板的配置信息和引用信息",
+      "命令格式为 display ssid-profile { all | name profile-name }",
+      "all 查看所有 SSID 模板;name profile-name 查看指定模板,取值必须是已存在的 SSID 模板名称",
+      "命令可在所有视图执行,缺省级别为 1:监控级",
+      "单模板回显包含 SSID、SSID hide、Max STA number、DTIM interval、Beacon 速率、802.11r/k/v 等参数"
+    ],
+    "tags": [
+      "AirEngine5700",
+      "V600R025C10",
+      "命令行",
+      "ssid-profile"
+    ]
+  },
+  {
+    "id": 90,
+    "difficulty": "中",
+    "category": {
+      "scope": "设备",
+      "protocol_layer": "其他",
+      "lifecycle": "其他"
+    },
+    "scenario": "园区",
+    "device_type": "WLAN",
+    "question": "在华为 AirEngine9703-S (V600R025C10) WAC 上,管理员需要创建名为 security-profile1 的安全模板,并在名为 ChinaNet 的 VAP 模板中应用该安全模板,使安全配置对使用该 VAP 模板的所有用户生效。请给出所使用命令的完整语法、每个参数的含义与取值、命令所在视图及配置步骤。",
+    "answer": "需要使用两条命令:1.security-profile(WLAN 视图):创建安全模板或者进入安全模板视图,undo security-profile 删除安全模板。命令格式:security-profile name profile-name;undo security-profile { name profile-name | all }。参数:name profile-name——指定安全模板的名称,字符串类型,区分大小写,可输入的字符串长度为 1~35 个字符,可见字符,不能包含\"?\"和空格,双引号不能出现在字符串的首尾;all——删除所有的用户创建的安全模板,系统中缺省的名称为 default 的安全模板无法被删除。视图:WLAN 视图;缺省级别:2:配置级;缺省情况下,系统已经创建名称为 default 的安全模板;安全模板创建后,模板下默认未配置认证和加密,需要先配置模板,然后在模板内指定某种认证方式。2.security-profile(VAP 模板视图):在指定 VAP 模板中应用安全模板,undo security-profile 删除应用。命令格式:security-profile profile-name;undo security-profile。参数:profile-name——接入安全模板的名称,取值必须是已存在的安全模板的名称。视图:VAP 模板视图;缺省级别:2:配置级;缺省情况下,VAP 模板应用了名称为 default 的安全模板。配置步骤示例:system-view → wlan → security-profile name security-profile1 → quit → vap-profile name ChinaNet → security-profile security-profile1。注意:缺省情况下安全模板上未配置安全策略,仅当配置安全策略后,对应射频上才能成功创建 VAP。",
+    "scoring_points": [
+      "在 WLAN 视图执行 security-profile name profile-name 创建/进入安全模板,undo security-profile { name profile-name | all } 删除",
+      "模板名称为 1~35 个字符的字符串,区分大小写,不能包含\"?\"和空格,双引号不能出现在首尾",
+      "缺省存在名为 default 的安全模板且无法删除;新建模板下默认未配置认证和加密",
+      "在 VAP 模板视图执行 security-profile profile-name 应用安全模板,参数必须是已存在的安全模板名称",
+      "VAP 模板缺省应用名为 default 的安全模板;仅当配置安全策略后对应射频上才能成功创建 VAP",
+      "配置路径:先在 wlan 视图创建模板,再进入 vap-profile 视图引用"
+    ],
+    "tags": [
+      "AirEngine9703-S",
+      "V600R025C10",
+      "命令行",
+      "security-profile"
+    ]
+  },
+  {
+    "id": 91,
+    "difficulty": "中",
+    "category": {
+      "scope": "设备",
+      "protocol_layer": "其他",
+      "lifecycle": "其他"
+    },
+    "scenario": "园区",
+    "device_type": "WLAN",
+    "question": "在华为 AirEngine5700 (V600R025C10) 系列 FAT AP 上,运维人员需要查看 AP 射频当前的工作状态信息(如信道/带宽、当前 EIRP、最大 EIRP、信道利用率等),并希望分别按 AP 组、按 AP ID 过滤显示。应使用哪条命令?请给出该命令的完整语法、每个参数的含义与取值、命令所在视图。",
+    "answer": "使用 display radio 命令,该命令用来查看 AP 的射频信息,用户可以通过该命令查看 AP 射频当前的工作状态信息。命令格式:display radio { all | ap-group ap-group-name | ap-id ap-id }。参数说明:all——查看所有 AP 的射频信息;ap-group ap-group-name——查看指定 AP 组下的所有 AP 的射频信息,取值为字符串类型,可输入的字符串长度为 1~35 个字符,支持中文字符,也支持中英文字符混合,可见字符,不能包含\"?\",不能只有双引号;如果 AP 组名称包含空格,输入时应以\"\"\"开头并以\"\"\"结束(如\"huawei name1\",前后引号各占用一个字符);并且必须是已存在的 AP 组名称;仅支持使用 UTF-8 编码格式的命令行编辑器编辑中文字符;ap-id ap-id——查看指定 ID 的 AP 的射频信息,整数形式,取值范围是 0~127。视图:所有视图;缺省级别:1:监控级。回显字段说明:CH/BW 表示 Channel/Bandwidth(信道/带宽),CE 表示 Current EIRP(dBm,当前 EIRP),ME 表示 Max EIRP(dBm,最大 EIRP),CU 表示 Channel utilization(信道利用率),据此可评估射频工作状态。",
+    "scoring_points": [
+      "使用 display radio 命令查看 AP 射频当前的工作状态信息",
+      "命令格式为 display radio { all | ap-group ap-group-name | ap-id ap-id }",
+      "ap-group 参数为 1~35 个字符的已存在 AP 组名称,支持中文,含空格时需用双引号包围",
+      "ap-id 为整数形式,取值范围是 0~127",
+      "命令在所有视图均可执行,缺省级别为 1:监控级",
+      "回显中 CH/BW 表示信道/带宽,CE/ME 表示当前/最大 EIRP,CU 表示信道利用率"
+    ],
+    "tags": [
+      "AirEngine5700",
+      "V600R025C10",
+      "命令行",
+      "display radio"
+    ]
+  },
+  {
+    "id": 92,
+    "difficulty": "中",
+    "category": {
+      "scope": "设备",
+      "protocol_layer": "其他",
+      "lifecycle": "其他"
+    },
+    "scenario": "园区",
+    "device_type": "WLAN",
+    "question": "在华为 AirEngine9703-S (V600R025C10) WAC 上,要求以 VLANIF 100 接口(已配置 IP 地址 192.168.1.1/24)作为 AP 与 WAC 之间建立 CAPWAP 隧道通信的源接口。请给出所用命令的完整语法、每个参数的含义与取值、命令所在视图、配置示例及使用注意事项。",
+    "answer": "使用 capwap source interface 命令,该命令用来配置 CAPWAP 服务端建立 CAPWAP 隧道使用的接口,作为服务端设备的源接口;undo capwap source interface 命令用来配置 CAPWAP 服务端不再使用接口作为源接口;缺省情况下,未配置 CAPWAP 服务端设备的源接口。命令格式:capwap source interface loopback loopback-number;capwap source interface vlanif vlan-id;undo capwap source interface { loopback loopback-number | vlanif vlan-id }。参数说明:loopback loopback-number——指定 LoopBack 接口为源接口,整数形式,取值范围是 0~1023;vlanif vlan-id——指定 VLANIF 接口为源接口,整数形式,取值范围是 1~4094。视图:系统视图;缺省级别:2:配置级;前置条件是已配置了 LoopBack 或 VLANIF 接口地址。配置示例:system-view → interface vlanif 100 → ip address 192.168.1.1 24 → quit → capwap source interface vlanif 100。使用注意事项:每台 AC 都必须指定源地址或源接口,该 AC 管理的 AP 学习到此地址用于 AC 和 AP 间建立 CAPWAP隧道通信;已配置源接口后不能再通过 capwap source { ip-address | ipv6-address } 命令配置源 IP 地址;如果 LoopBack 或 VLANIF 接口上的 IP 地址是动态获取的,则该接口不能作为 CAPWAP 源接口;CAPWAP 源接口或源地址最多仅支持配置一个 IPv4 的地址和一个 IPv6 的地址;已配置为源接口的接口不能再增加另一个 IP 地址、不能删除或修改其 IP 地址、也不能删除该接口;执行 undo capwap source interface 会导致所有 FIT AP 从 WAC 下线,请谨慎操作;首次配置 CAPWAP 源接口或源地址时会检查安全相关配置(DTLS 加密的 PSK、登录 AP 的用户名和密码、全局离线管理 VAP 的登录密码)是否已存在,均已存在才能成功配置。",
+    "scoring_points": [
+      "命令格式为 capwap source interface vlanif vlan-id / loopback loopback-number,在系统视图下配置",
+      "vlan-id 取值范围 1~4094,loopback-number 取值范围 0~1023",
+      "缺省情况下未配置 CAPWAP 服务端设备的源接口;命令缺省级别为 2:配置级",
+      "示例:interface vlanif 100 配置 IP 后执行 capwap source interface vlanif 100",
+      "undo capwap source interface 会导致所有 FIT AP 从 WAC 下线,需谨慎操作",
+      "IP 地址动态获取的接口不能作为源接口;源接口/源地址最多支持一个 IPv4 和一个 IPv6 地址",
+      "首次配置源接口时要求 DTLS PSK、登录 AP 用户名密码、全局离线管理 VAP 密码等安全配置已存在"
+    ],
+    "tags": [
+      "AirEngine9703-S",
+      "V600R025C10",
+      "命令行",
+      "CAPWAP"
+    ]
+  },
+  {
+    "id": 93,
+    "difficulty": "中",
+    "category": {
+      "scope": "设备",
+      "protocol_layer": "其他",
+      "lifecycle": "其他"
+    },
+    "scenario": "园区",
+    "device_type": "WLAN",
+    "question": "在华为 AirEngine9703-S (V600R025C10) WAC 上进行 WLAN 业务部署时,需要创建 AP 组 group1 用于对多台 AP 批量下发配置,并创建域管理模板 domain1 提供国家码等配置供 AP 使用。请给出 ap-group 与 regulatory-domain-profile 两条命令的完整语法、每个参数的含义与取值、命令所在视图及注意事项。",
+    "answer": "1.ap-group(WLAN 视图):创建 AP 组并进入 AP 组视图,若 AP 组已存在则直接进入 AP 组视图;undo ap-group 删除 AP 组,缺省情况下系统上存在名为 default 的 AP 组。命令格式:ap-group name group-name;undo ap-group { name group-name | all }。参数:name group-name——指定 AP 组的名称,字符串类型,可输入的字符串长度为 1~35 个字符,支持中文字符,也支持中英文字符混合,可见字符,不能包含\"?\"和\"/\",空格和双引号不能出现在字符串的首尾,如果 AP 组名称包含空格,输入时应以双引号包围(如\"huawei name1\",前后引号各占用一个字符);all——删除所有的 AP 组。视图:WLAN 视图;缺省级别:2:配置级。注意事项:当需要对多个 AP 进行同样的配置时,可将 AP 加入同一 AP 组批量配置;如果 AP 在 AP 组和 AP 视图下都存在配置,优先使用 AP 视图下的配置;AP 组下存在 AP 时该 AP 组不能删除,default AP 组也不能删除;AP 组默认引用了名为 default 的 AP 系统模板、2.4G 射频模板、5G 射频模板、域管理模板;AP 组数量上限:AirEngine 9701-L 和 AC9701S-L 最多 256 个,AirEngine 9703-S 最多 2048 个,AirEngine 9703-H 最多 5120 个;后续任务是通过 ap-group(AP 视图)或 ap-regroup 将 AP 加入到 AP 组。2.regulatory-domain-profile(WLAN 视图):创建域管理模板并进入模板视图,若模板已存在则直接进入模板视图;undo regulatory-domain-profile 删除域管理模板,缺省情况下系统上已存在名为 default 的域管理模板。命令格式:regulatory-domain-profile name profile-name;undo regulatory-domain-profile { name profile-name | all }。参数:name profile-name——指定域管理模板的名称,字符串类型,区分大小写,长度范围是 1-35,不能包含\"?\"和空格,双引号不能出现在字符串的首尾;all——删除所有的域管理模板。视图:WLAN 视图;缺省级别:2:配置级。注意事项:域管理模板提供国家码等配置,模板下的配置对使用了此域管理模板的 AP 生效;名为 default 的缺省域管理模板不能删除;AP 或 AP 组已经应用的域管理模板不能删除,要删除需先解除应用;创建模板后需在 AP 视图或 AP 组视图下执行 regulatory-domain-profile 应用域管理模板后才能生效。配置示例:system-view → wlan → ap-group name group1;regulatory-domain-profile name domain1。",
+    "scoring_points": [
+      "ap-group name group-name 在 WLAN 视图创建 AP 组,undo ap-group { name group-name | all } 删除",
+      "AP 组名称为 1~35 个字符,不能包含\"?\"和\"/\",空格和双引号不能出现在字符串首尾",
+      "缺省存在 default AP 组且不能删除;AP 组下存在 AP 时该 AP 组不能删除",
+      "AirEngine 9703-S 最多支持创建 2048 个 AP 组(9701-L/AC9701S-L 为 256,9703-H 为 5120)",
+      "regulatory-domain-profile name profile-name 创建域管理模板,名称为 1-35 个字符,区分大小写",
+      "域管理模板提供国家码等配置,需在 AP 视图或 AP 组视图下应用后才生效",
+      "缺省 default 域管理模板及已被 AP/AP 组应用的模板不能删除,需先解除应用"
+    ],
+    "tags": [
+      "AirEngine9703-S",
+      "V600R025C10",
+      "命令行",
+      "ap-group",
+      "regulatory-domain-profile"
+    ]
+  },
+  {
+    "id": 94,
+    "difficulty": "中",
+    "category": {
+      "scope": "设备",
+      "protocol_layer": "其他",
+      "lifecycle": "其他"
+    },
+    "scenario": "园区",
+    "device_type": "WLAN",
+    "question": "在华为 AirEngine9703-S (V600R025C10) WAC 上,需要为某个 VAP 定制特定的优先级映射、流量抑制等功能,计划创建名称为 p1 的流量模板并引用到 VAP 模板中。请给出所使用命令的完整语法、每个参数的含义与取值、命令所在视图及注意事项。",
+    "answer": "使用 traffic-profile(WLAN 视图)命令,该命令用来创建流量模板并进入模板视图,若模板已存在则直接进入模板视图;undo traffic-profile 命令用来删除流量模板;缺省情况下,存在名为 default 的流量模板。命令格式:traffic-profile name profile-name;undo traffic-profile { all | name profile-name }。参数说明:name profile-name——指定流量模板的名称,字符串类型,区分大小写,可输入的字符串长度为 1~35 个字符,可见字符,不能包含\"?\"和空格,双引号不能出现在字符串的首尾;all——删除所有的流量模板。视图:WLAN 视图;缺省级别:2:配置级。应用场景:当需要为某个 VAP 定制特定的优先级映射、流量抑制等功能时,可以创建相应的流量模板并引用到 VAP 模板中;当需要修改某个 VAP 的优先级映射、流量抑制功能时,进入该 VAP 对应的流量模板视图中修改相应的参数;当某个流量模板不再需要应用时,可以将其删除。注意事项:创建模板时,必须要输入模板名称;VAP 模板已经引用的流量模板不能删除,如果要删除,需要先在 VAP 模板视图下解除引用的流量模板。配置示例:system-view → wlan → traffic-profile name p1,进入 [HUAWEI-wlan-traffic-prof-p1] 视图后即可配置优先级映射、流量抑制等参数,再在 VAP 模板视图下引用该流量模板,配置即对使用该 VAP 模板的用户生效。",
+    "scoring_points": [
+      "traffic-profile name profile-name 在 WLAN 视图创建流量模板并进入模板视图,模板已存在则直接进入",
+      "模板名称为 1~35 个字符的字符串,区分大小写,不能包含\"?\"和空格,双引号不能出现在首尾",
+      "undo traffic-profile { all | name profile-name } 删除模板;缺省存在名为 default 的流量模板",
+      "命令缺省级别为 2:配置级;创建模板时必须要输入模板名称",
+      "流量模板用于为 VAP 定制优先级映射、流量抑制等功能,需引用到 VAP 模板",
+      "VAP 模板已引用的流量模板不能直接删除,需先在 VAP 模板视图下解除引用"
+    ],
+    "tags": [
+      "AirEngine9703-S",
+      "V600R025C10",
+      "命令行",
+      "traffic-profile"
+    ]
+  },
+  {
+    "id": 95,
+    "difficulty": "中",
+    "category": {
+      "scope": "设备",
+      "protocol_layer": "其他",
+      "lifecycle": "其他"
+    },
+    "scenario": "园区",
+    "device_type": "WLAN",
+    "question": "华为 AirEngine5700 (V600R025C10) 系列 FAT AP 设备上报告警 hwApPortTrafficLimitedTrap(AP 接口流量转发受限)。请说明该告警的含义(含告警 ID 与级别)、对系统的影响、可能原因及处理步骤。",
+    "answer": "告警含义:Trap Buffer 信息为 Traffic forwarding was limited on the interface. (APMAC=[APMAC], APName=[APName], APID=[APID], InterfaceName=[InterfaceName]),即 AP 接口流量转发受限。告警属性:Alarm ID 为 0x00F1FDE8/0xF1FDE8,告警级别为 Warning,Trap OID 为 1.3.6.1.4.1.2011.6.139.13.1.1.187,所属 MIB 为 HUAWEI-WLAN-AP-MIB,告警类型为 qualityOfServiceAlarm(服务质量告警);对应的恢复告警为 WLAN_1.3.6.1.4.1.2011.6.139.13.1.1.188 hwApPortTrafficLimitedRestoreTrap。Trap 参数:APMAC(AP 的 MAC 地址)、APName(AP 的名称)、APID(AP 编号)、InterfaceName(接口名称)。对系统的影响:用户业务流量不通。可能原因:AP 对接的设备非华为交换机。处理步骤:更换 AP 对接设备为支持范围的华为交换机。更换后可观察告警是否清除(恢复告警 hwApPortTrafficLimitedRestoreTrap 上报)。",
+    "scoring_points": [
+      "告警含义为 AP 接口流量转发受限,Trap Buffer 携带 APMAC/APName/APID/InterfaceName 参数",
+      "告警 ID 为 0x00F1FDE8/0xF1FDE8,告警级别为 Warning",
+      "告警 OID 为 1.3.6.1.4.1.2011.6.139.13.1.1.187,类型为 qualityOfServiceAlarm",
+      "恢复告警为 hwApPortTrafficLimitedRestoreTrap(...1.1.188)",
+      "对系统的影响是用户业务流量不通",
+      "可能原因是 AP 对接的设备非华为交换机,处理为更换 AP 对接设备为支持范围的华为交换机"
+    ],
+    "tags": [
+      "AirEngine5700",
+      "V600R025C10",
+      "告警处理",
+      "hwApPortTrafficLimitedTrap"
+    ]
+  },
+  {
+    "id": 96,
+    "difficulty": "中",
+    "category": {
+      "scope": "设备",
+      "protocol_layer": "其他",
+      "lifecycle": "其他"
+    },
+    "scenario": "园区",
+    "device_type": "WLAN",
+    "question": "华为 AirEngine5700 (V600R025C10) 系列设备上报告警 hwPoePowerOverUtilizationThreshold(PoE 电源消耗总功率大于等于告警上限)。请说明该告警的含义(含告警 ID 与级别)、对系统的影响、可能原因及处理步骤。",
+    "answer": "告警含义:Trap Buffer 为 PoE power consumption has exceeded the upper limit. (DeviceID=[DeviceID], ConsumingPower=[ConsumingPower], PowerThreshold=[PowerThreshold]),即 PoE 电源消耗总功率大于等于告警上限。告警属性:Alarm ID 为 0x00F10413/0xF10413,告警级别为 Warning,Trap OID 为 1.3.6.1.4.1.2011.5.25.195.40.17,类型为 equipmentAlarm(设备告警);恢复告警为 POE_1.3.6.1.4.1.2011.5.25.195.40.18 hwPoePowerOverUtilizationThresholdResume。Trap 参数:DeviceID(设备编号)、ConsumingPower(当前消耗的功率)、PowerThreshold(功率门限)。对系统的影响:系统一直处于该告警状态时,可能因电源供电能力不足导致所有 PD 断电。可能原因:所有的 PD 消耗的实际总功率大于等于系统设置的告警上限。处理步骤:1.确认 PD 消耗功率是否是必须的、不需要上报告警——是,则结束;否,则进入步骤 2;2.请收集告警信息和配置信息,并联系技术支持人员。",
+    "scoring_points": [
+      "告警含义为 PoE 电源消耗总功率大于等于告警上限,Trap 携带 DeviceID/ConsumingPower/PowerThreshold 参数",
+      "告警 ID 为 0x00F10413/0xF10413,告警级别为 Warning,类型为 equipmentAlarm",
+      "恢复告警为 hwPoePowerOverUtilizationThresholdResume(OID ...195.40.18)",
+      "长期处于该告警状态可能因电源供电能力不足导致所有 PD 断电",
+      "可能原因是所有 PD 实际消耗总功率大于等于系统设置的告警上限",
+      "处理:先确认 PD 消耗功率是否必需,否则收集告警信息和配置信息并联系技术支持人员"
+    ],
+    "tags": [
+      "AirEngine5700",
+      "V600R025C10",
+      "告警处理",
+      "PoE"
+    ]
+  },
+  {
+    "id": 97,
+    "difficulty": "中",
+    "category": {
+      "scope": "设备",
+      "protocol_layer": "其他",
+      "lifecycle": "其他"
+    },
+    "scenario": "园区",
+    "device_type": "WLAN",
+    "question": "华为 AirEngine9703-S (V600R025C10) WAC 管理的 AP 上报告警 hwApCpuOverloadTrap(AP 的 CPU 占用率过高)。请说明该告警的含义(含告警 ID 与级别)、对系统的影响、可能原因及处理步骤。",
+    "answer": "告警含义:Trap Buffer 为 AP CPU overload notify. (APMAC=[APMAC], APName=[APName], ApCpuRate=[ApCpuRate], ApCpuRateInfo=[ApCpuRateInfo], APID=[APID]),即 AP 的 CPU 占用率过高。告警属性:Alarm ID 为 0x00F1042C/0xF1042C,告警级别 Warning,类型 equipmentAlarm,恢复告警为 hwApCpuOverloadRestoreTrap(OID 1.3.6.1.4.1.2011.6.139.13.1.1.8)。参数:APMAC(AP 的 MAC 地址)、APName(AP 名称)、ApCpuRate(AP 的 CPU 占用率)、ApCpuRateInfo(CPU 占用率 Top 3 线程信息)、APID(AP ID)。对系统的影响:阈值不高(如 50、60)时对业务无影响;阈值较高(如 90)而上报告警,AP 可能丢包甚至下线。可能原因:1.CPU 告警阈值设置太低;2.设备支持的业务太多;3.设备受攻击导致 CPU 占用过高。处理步骤:1.用 display ap-system-profile 查看 CPU 告警阈值,合理则转 3;2.用 cpu-usage threshold 设置合理阈值,仍告警转 3,否则转 6;3.确认是否有大量繁忙业务(如频繁漫游、大量用户频繁上下线),确有且系统正常则先忽略,否则转 4;4.登录 AP 在诊断视图用 display cpu-usage 查看各任务占用率,裁减不需要的业务和配置,仍告警转 5;5.收集告警、日志、配置及 CPU 占用率明细并联系技术支持;6.告警清除,结束。",
+    "scoring_points": [
+      "告警含义为 AP 的 CPU 占用率过高,Trap 携带 APMAC/APName/ApCpuRate/ApCpuRateInfo(Top3 线程)/APID",
+      "告警 ID 为 0x00F1042C/0xF1042C,告警级别为 Warning,恢复告警为 hwApCpuOverloadRestoreTrap(...1.1.8)",
+      "阈值设置不高(如 50、60)时对业务无影响,阈值较高(如 90)时 AP 可能丢包甚至下线",
+      "可能原因包括 CPU 告警阈值设置太低、设备支持的业务太多、设备受到攻击",
+      "使用 display ap-system-profile 查看阈值,使用 cpu-usage threshold 设置合理阈值",
+      "登录 AP 在诊断视图下用 display cpu-usage 查看各任务 CPU 占用率并裁减不需要的业务",
+      "无法解决时收集告警、日志、配置信息和 CPU 占用率明细并联系技术支持人员"
+    ],
+    "tags": [
+      "AirEngine9703-S",
+      "V600R025C10",
+      "告警处理",
+      "hwApCpuOverloadTrap"
+    ]
+  },
+  {
+    "id": 98,
+    "difficulty": "中",
+    "category": {
+      "scope": "设备",
+      "protocol_layer": "其他",
+      "lifecycle": "其他"
+    },
+    "scenario": "园区",
+    "device_type": "WLAN",
+    "question": "华为 AirEngine5700 (V600R025C10) 系列设备输出日志 CM/5/USER_ACCESSRESULT 与 CM/5/USER_OFFLINERESULT(用户上线认证结果/用户下线结果日志)。请说明这两条日志的信息含义(含日志格式)、可能原因及处理步骤。",
+    "answer": "日志格式:简化格式为 模块名/日志级别/信息摘要/日志详细信息,实际输出还含时间戳、主机名、进程名等字段;级别共 8 级,数字越小越严重;CM/5 为 CM 模块、级别 5(Notice)。CM/5/USER_ACCESSRESULT:格式为 CM/5/USER_ACCESSRESULT: USER_INFO_AUTHENTICATION. ([info]),在用户认证时发送。参数 info 含 USER_INFO_AUTHENTICATION(有线用户认证)、DEVICEMAC(设备 MAC)、DEVICENAME(设备名)、USER(用户名)、MAC(用户 MAC)、IPADDRESS、ERRCODE(认证失败错误码)、RESULT(认证结果)、AUTHENPLACE(认证地点)、INTERFACE(接入接口)、ACCESS_TYPE(接入类型)、VLAN、RDSIP(认证 RADIUS 服务器 IP)、AUTHPROTOCOL(CHAP/EAP/PAP)等。可能原因:用户发起认证、预认证或用户组授权信息修改。处理:认证失败时根据原因定位或联系技术支持,成功无需处理。CM/5/USER_OFFLINERESULT:格式为 CM/5/USER_OFFLINERESULT: USER_INFO_OFFLINE. ([info]),在用户离线时发送。参数另含 EXTENDINFO(下线用户信号强度)、ERRCODE(离线错误码)、RESULT(离线结果),离线无 IP 时显示\"-\"。可能原因:用户离线。处理:异常下线时根据原因定位或联系技术支持,正常下线无需处理。",
+    "scoring_points": [
+      "日志简化格式为 模块名/日志级别/信息摘要/日志详细信息,级别 0-7 共 8 级,数字越小越严重",
+      "USER_ACCESSRESULT 在用户认证时发送,格式为 CM/5/USER_ACCESSRESULT: USER_INFO_AUTHENTICATION. ([info])",
+      "info 参数包含用户名、用户 MAC、IP 地址、认证结果 RESULT、错误码 ERRCODE、接入接口、接入类型、VLAN、RADIUS 服务器 IP 等",
+      "USER_OFFLINERESULT 在用户离线时发送,另含下线用户信号强度 EXTENDINFO、离线错误码与离线结果",
+      "USER_ACCESSRESULT 可能原因:用户发起认证、预认证或用户组授权信息修改",
+      "处理:认证失败/异常下线时根据原因定位或联系技术支持,认证成功/正常下线无需处理"
+    ],
+    "tags": [
+      "AirEngine5700",
+      "V600R025C10",
+      "日志",
+      "用户上线",
+      "用户下线"
+    ]
+  },
+  {
+    "id": 99,
+    "difficulty": "中",
+    "category": {
+      "scope": "设备",
+      "protocol_layer": "其他",
+      "lifecycle": "其他"
+    },
+    "scenario": "园区",
+    "device_type": "WLAN",
+    "question": "华为 AirEngine9703-S (V600R025C10) WAC 输出日志 WLAN/3/CAPWAP_RESET(CAPWAP 链路重置)。请说明该日志的信息含义(含日志格式与示例)、可能原因及处理步骤。",
+    "answer": "日志格式:本手册中日志信息格式简化为 模块名/日志级别/信息摘要/日志详细信息(实际输出还含时间戳、主机名、进程等字段);日志级别共分 8 级,等级越低表示信息越严重,WLAN/3 表示 WLAN 模块、级别 3(Error,错误的操作或设备的异常流程,需要关注和原因分析)。日志信息:WLAN/3/CAPWAP_RESET: Reset capwap link. (LinkID=[LinkID], SRC-IP=[SRC-IP],DST-IP=[DST-IP], Reason=[Reason])。日志含义:CAPWAP 链路重置。日志参数:LinkID——CAPWAP 链路索引;SRC-IP——CAPWAP 链路源 IP 地址;DST-IP——CAPWAP 链路目的 IP 地址;Reason——CAPWAP 链路被重置的原因。可能原因:手动操作命令重置 CAPWAP 链路。处理步骤:手动操作命令,无需处理;排查时可结合 Reason 与源/目的 IP 判断被重置的链路。若伴随其他 CAPWAP 异常日志(如 WLAN/4/hwCapwapContinuousDecryptFailTrap_active 表示 CAPWAP 持续解密失败,格式为 (Fail counts=[CapwapDecrptFail]),原因为 CAPWAP 内部解密失败,需收集信息联系技术支持),应进一步定位隧道质量。",
+    "scoring_points": [
+      "日志简化格式为 模块名/日志级别/信息摘要/日志详细信息;WLAN/3 表示 WLAN 模块、级别 3(Error)",
+      "日志格式为 WLAN/3/CAPWAP_RESET: Reset capwap link. (LinkID=, SRC-IP=, DST-IP=, Reason=)",
+      "日志含义是 CAPWAP 链路重置",
+      "参数 LinkID/SRC-IP/DST-IP/Reason 分别为链路索引、源 IP、目的 IP、重置原因",
+      "可能原因是手动操作命令重置 CAPWAP 链路,属手动操作无需处理",
+      "相关的 CAPWAP 持续解密失败日志为 WLAN/4/hwCapwapContinuousDecryptFailTrap_active,需收集信息联系技术支持"
+    ],
+    "tags": [
+      "AirEngine9703-S",
+      "V600R025C10",
+      "日志",
+      "CAPWAP"
+    ]
+  },
+  {
+    "id": 100,
+    "difficulty": "中",
+    "category": {
+      "scope": "设备",
+      "protocol_layer": "其他",
+      "lifecycle": "其他"
+    },
+    "scenario": "园区",
+    "device_type": "WLAN",
+    "question": "华为 AirEngine9703-S (V600R025C10) WAC 输出日志 WLAN/3/AP_RESET(AP 重启)。请说明该日志的信息含义(含日志格式与示例)、可能原因及处理步骤。",
+    "answer": "日志格式:本手册中日志信息格式简化为 模块名/日志级别/信息摘要/日志详细信息(实际输出还含时间戳、主机名、进程等字段);日志级别共分 8 级,等级越低表示信息越严重,WLAN/3 表示 WLAN 模块、级别 3(Error,错误的操作或设备的异常流程,不会影响后续业务,但需要关注和原因分析)。日志信息:WLAN/3/AP_RESET: AP would be reset. (MAC=[MAC], ApID=[ApID], Sysname=[Sysname], Reason=[Reason])。日志含义:AP 重启。日志参数:MAC——AP 的 MAC 地址;ApID——AP 索引;Sysname——AP 的系统名称;Reason——AP 重启原因,为 config-fail 时表示 AP 上线过程中配置下发失败引起的 AP 重启。可能原因:AP 上线过程中配置下发失败,AP 重启。处理步骤:1.查看 AP 重启后是否正常上线,是则转步骤 3 结束,否则转步骤 2;2.请收集告警信息、日志信息和配置信息,联系技术支持人员进行处理;3.结束。此外 WAC 上还有相关日志 WLAN/3/AP_RESET_FAIL(AP 重启失败),可结合其信息一起定位。",
+    "scoring_points": [
+      "日志简化格式为 模块名/日志级别/信息摘要/日志详细信息;WLAN/3 表示 WLAN 模块、级别 3(Error)",
+      "日志格式为 WLAN/3/AP_RESET: AP would be reset. (MAC=, ApID=, Sysname=, Reason=)",
+      "日志含义是 AP 重启",
+      "参数 Reason 为 config-fail 时表示 AP 上线过程中配置下发失败引起的 AP 重启",
+      "可能原因是 AP 上线过程中配置下发失败导致 AP 重启",
+      "处理:查看 AP 重启后是否正常上线;若未正常上线,收集告警、日志和配置信息并联系技术支持人员"
+    ],
+    "tags": [
+      "AirEngine9703-S",
+      "V600R025C10",
+      "日志",
+      "AP_RESET"
+    ]
+  }
+]

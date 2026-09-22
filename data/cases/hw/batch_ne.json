@@ -1,0 +1,560 @@
+[
+  {
+    "id": 36,
+    "difficulty": "简单",
+    "category": {
+      "scope": "设备",
+      "protocol_layer": "其他",
+      "lifecycle": "其他"
+    },
+    "scenario": "通用",
+    "device_type": "路由器",
+    "question": "华为NetEngine8000路由器（V800R025C10版本）支持SRv6（Segment Routing IPv6）特性。请说明SRv6是什么、它解决什么问题，并结合手册介绍其典型应用场景。",
+    "answer": "SRv6（Segment Routing IPv6）是基于源路由理念设计、基于IPv6转发平面的段路由协议：通过在IPv6报文中插入路由扩展头SRH，在SRH中压入一个显式的IPv6地址栈，由中间节点不断更新目的地址和偏移地址栈完成逐跳转发。解决的问题：面向5G和云时代的承载网需要化繁为简、低时延、SDN化，用户希望借用IPv6地址更简单地实现VPN。SRv6采用现有IPv6转发技术，将一些IPv6地址定义为实例化的SID（Segment ID），每个SID有显式的作用，通过不同SID操作实现简化的VPN及灵活的路径规划。受益：一是简化网络配置，更简易地实现VPN；二是基于IPv6转发、不使用MPLS，完全兼容现有IPv6网络，中间Transit节点可不支持SRv6而按正常路由转发含SRH的报文；三是结合RLFA形成TI-LFA FRR算法，原理上支持任意拓扑保护；四是便于IPv6转发路径的流量调优，头节点可灵活规划显式路径。典型应用：在IP承载网中实现协议极简（去MPLS化，仅保留IGP与BGP）、业务快速开通（SRv6 BE业务仅两端部署，SRv6 TE Policy专线开通缩短到1天）和可持续演进（基于SRH可编程性实现网络与业务解耦）；在跨域云骨干专线中通过SRv6 Overlay实现一跳入云、按需升级演进和对不同云上应用提供差异化SLA保障。",
+    "scoring_points": [
+      "SRv6是基于源路由理念设计的、基于IPv6转发平面的段路由协议，通过SRH扩展头携带显式IPv6地址栈逐跳转发",
+      "SRv6基于IPv6转发、不使用MPLS，中间Transit节点可不支持SRv6，兼容现有IPv6网络",
+      "通过实例化的SID（Segment ID）实现简化VPN和灵活路径规划",
+      "结合RLFA形成TI-LFA FRR，原理上支持任意拓扑保护",
+      "在IP承载网中的应用：协议极简（仅保留IGP与BGP）、业务快速开通（专线开通缩短到1天）、可持续演进",
+      "在跨域云骨干专线中实现一跳入云、差异化SLA保障等应用"
+    ],
+    "tags": [
+      "NetEngine8000",
+      "V800R025C10",
+      "特性",
+      "SRv6"
+    ]
+  },
+  {
+    "id": 37,
+    "difficulty": "简单",
+    "category": {
+      "scope": "设备",
+      "protocol_layer": "其他",
+      "lifecycle": "其他"
+    },
+    "scenario": "通用",
+    "device_type": "路由器",
+    "question": "华为NetEngine8000路由器（V800R025C10版本）支持L3VPN特性。请介绍BGP/MPLS IP VPN（L3VPN）是什么、基本模型由哪些角色组成、解决什么问题，并说明其典型组网应用。",
+    "answer": "BGP/MPLS IP VPN是一种L3VPN：使用BGP在服务提供商骨干网上发布VPN路由，使用MPLS在SP骨干网上转发VPN报文。基本模型由CE、PE、P组成：CE（用户网络边缘设备）直接与SP网络相连，感知不到VPN的存在，无需支持MPLS；PE（服务商边缘设备）与CE直接相连，对VPN的所有处理都发生在PE上；P（骨干设备）不与CE直接相连，只需具备基本MPLS转发能力，不维护VPN信息。解决的问题：不同VPN的地址空间可能重叠，传统BGP无法区分不同VPN中相同的IP前缀。为此PE上引入VPN实例（VRF），各VPN实例之间以及与公网路由表相互隔离；使用VPN-IPv4地址族，VPN-IPv4地址共12字节，包括8字节RD和4字节IPv4前缀，RD用于区分使用相同地址空间的前缀并保证全局唯一；并用VPN Target控制路由收发：本地PE为路由设置Export Target并随路由发布，收端PE将其与本实例的Import Target比较，匹配则加入该VPN路由表；PE间通过MP-BGP的VPN-IPv4地址族发布路由，报文在骨干网经隧道转发，外层标签指示到达BGP下一跳、内层标识所属VPN。典型组网：基本BGP/MPLS IP VPN、Hub&Spoke、跨域VPN、运营商的运营商、HVPN、Multi-VPN-Instance CE等。",
+    "scoring_points": [
+      "BGP/MPLS IP VPN是L3VPN，用BGP发布VPN路由、用MPLS在骨干网转发VPN报文",
+      "基本模型由CE、PE、P三种角色组成，VPN处理都发生在PE上，P设备不维护VPN信息",
+      "通过VPN实例（VRF）隔离各VPN及公网路由，解决VPN地址空间重叠问题",
+      "VPN-IPv4地址共12字节＝8字节RD＋4字节IPv4前缀，RD区分相同地址空间的前缀",
+      "通过VPN Target（ERT/IRT）属性控制VPN路由的发布和接收",
+      "典型组网：基本BGP/MPLS IP VPN、Hub&Spoke、跨域VPN、HVPN、Multi-VPN-Instance CE等"
+    ],
+    "tags": [
+      "NetEngine8000",
+      "V800R025C10",
+      "特性",
+      "L3VPN"
+    ]
+  },
+  {
+    "id": 38,
+    "difficulty": "中",
+    "category": {
+      "scope": "设备",
+      "protocol_layer": "其他",
+      "lifecycle": "其他"
+    },
+    "scenario": "通用",
+    "device_type": "路由器",
+    "question": "在华为NetEngine8000路由器（V800R025C10版本）上进行OSPF多区域部署：所有路由器都运行OSPF，整个自治系统划分为3个区域（Area 0、Area 1、Area 2），其中DeviceA和DeviceB作为ABR转发区域之间的路由，配置完成后每台路由器都应学到自治系统内所有网段的路由，并在骨干区域部署密文认证。请给出配置思路与配置步骤。",
+    "answer": "配置思路：1.在各路由器上使能OSPF；2.指定不同区域内的网段（ABR需同时属于骨干区域和普通区域）；3.配置骨干区域的密文验证模式；4.验证配置结果。注意事项：所有非骨干区域必须与骨干区域保持连通，骨干区域自身也必须保持连通；Hello、Dead、Poll报文时间间隔要与邻接路由器一致，认证密码须两端一致。配置步骤（以DeviceA为例，Router ID 1.1.1.1）：配置各接口IP地址后，系统视图执行router id 1.1.1.1；执行ospf 1创建进程；进入area 0视图执行network 192.168.0.0 0.0.0.255宣告骨干区域网段；进入area 1视图执行network 192.168.1.0 0.0.0.255宣告区域1网段；在area 0视图执行authentication-mode hmac-sha256 1 cipher YsHsjx_202206配置区域密文验证（DeviceB配置相同密码）；执行commit提交。DeviceB同理属于area 0和area 2并在两区域宣告网段；其余设备分别在所属区域宣告各自网段。验证：display ospf peer查看邻居状态为Full，display ospf routing查看区域内和区域间路由，display ospf lsdb查看LSDB，最后用ping测试连通性。",
+    "scoring_points": [
+      "配置思路：先在各路由器使能OSPF，再指定不同区域内的网段，最后配置区域密文验证模式",
+      "在系统视图配置router id，创建ospf进程后进入area视图用network命令宣告网段（反掩码0.0.0.255）",
+      "ABR（DeviceA/DeviceB）需同时在骨干区域Area 0和普通区域（Area 1/Area 2）宣告网段",
+      "骨干区域配置authentication-mode hmac-sha256 1 cipher密文认证，且DeviceA与DeviceB密码必须相同",
+      "所有非骨干区域必须与骨干区域保持连通，骨干区域自身也必须保持连通",
+      "验证命令：display ospf peer（邻居Full）、display ospf routing、display ospf lsdb，并用ping测试连通性",
+      "配置后需执行commit提交"
+    ],
+    "tags": [
+      "NetEngine8000",
+      "V800R025C10",
+      "配置方案",
+      "OSPF多区域"
+    ]
+  },
+  {
+    "id": 39,
+    "difficulty": "中",
+    "category": {
+      "scope": "设备",
+      "protocol_layer": "其他",
+      "lifecycle": "其他"
+    },
+    "scenario": "通用",
+    "device_type": "路由器",
+    "question": "在华为NetEngine8000路由器（V800R025C10版本）上部署BGP邻居与路由策略：DeviceB、DeviceC、DeviceD处于AS 200且内部运行OSPF，DeviceA处于AS 100并从Internet网络接收路由。要求DeviceA仅提供172.16.17.0/24、172.16.18.0/24、172.16.19.0/24给DeviceB，DeviceC仅接收路由172.16.18.0/24，DeviceD接收DeviceB提供的全部路由。请给出配置思路与配置步骤。",
+    "answer": "思路：先在AS 200内配OSPF，再配EBGP/IBGP邻居，DeviceA引入静态路由后用前缀列表＋filter-policy控制发布与接收。步骤：1.各设备执行ospf 1并在area 0宣告互连网段；2.DeviceA执行bgp 100、router-id 1.1.1.1、peer 192.168.1.2 as-number 200建EBGP邻居，DeviceB执行bgp 200并与DeviceA、DeviceC/DeviceD分别建EBGP/IBGP邻居；3.DeviceA用ip route-static配置172.16.16.0/24～172.16.20.0/24共5条静态路由并import-route static引入BGP；4.配置ip ip-prefix a2b，index 10/20/30分别permit 172.16.17.0/18.0/19.0 24，执行filter-policy ip-prefix a2b export static；5.DeviceC配置ip ip-prefix in index 10 permit 172.16.18.0 24，执行filter-policy ip-prefix in import。验证：display bgp routing-table，DeviceB仅收3条路由、DeviceC仅1条；注意前缀列表名称区分大小写。",
+    "scoring_points": [
+      "配置思路：AS 200内先配OSPF，再配置EBGP/IBGP邻居，然后引入静态路由，最后用地址前缀列表＋filter-policy分别控制发布与接收",
+      "BGP基本配置：bgp 100/200进入BGP视图、router-id指定Router ID、peer x.x.x.x as-number建立EBGP/IBGP邻居",
+      "DeviceA用ip route-static配置静态路由并用import-route static引入BGP",
+      "DeviceA配置ip ip-prefix a2b（index 10/20/30分别permit 172.16.17.0/18.0/19.0 24）",
+      "发布策略：filter-policy ip-prefix a2b export static；接收策略：filter-policy ip-prefix in import",
+      "验证方法：display bgp routing-table，DeviceB应只收到3条路由、DeviceC只收到172.16.18.0/24一条路由",
+      "注意事项：地址前缀列表名称区分大小写，需准确指定前缀范围"
+    ],
+    "tags": [
+      "NetEngine8000",
+      "V800R025C10",
+      "配置方案",
+      "BGP路由策略"
+    ]
+  },
+  {
+    "id": 40,
+    "difficulty": "中",
+    "category": {
+      "scope": "设备",
+      "protocol_layer": "其他",
+      "lifecycle": "其他"
+    },
+    "scenario": "通用",
+    "device_type": "路由器",
+    "question": "在华为NetEngine8000路由器（V800R025C10版本）上部署IS-IS：DeviceA、DeviceB、DeviceC和DeviceD之间通过IS-IS协议实现IP网络互连，DeviceA、DeviceB和DeviceC属于区域10，DeviceD属于区域20；DeviceA和DeviceB是Level-1设备，DeviceC是Level-1-2设备，DeviceD是Level-2设备；DeviceA与DeviceC之间需要对Hello报文进行认证。请给出配置思路与配置步骤。",
+    "answer": "配置思路：1.在各路由器上使能IS-IS进程，配置level级别并指定网络实体名；2.在各接口使能IS-IS并将链路配置为P2P类型；3.配置DeviceA与DeviceC之间Hello报文的认证模式和密码；4.验证配置。配置步骤（以DeviceA为例）：执行isis 1创建进程，用is-level level-1配置级别，并用network-entity 10.0000.0000.0001.00指定网络实体名；DeviceB同为level-1；DeviceC为level-1-2；DeviceD执行is-level level-2、network-entity 20.0000.0000.0004.00。第二步在接口视图执行isis enable 1使能IS-IS，并用isis circuit-type p2p配置P2P链路类型。第三步在DeviceA接口视图执行isis authentication-mode hmac-sha256 key-id 1 cipher YsHsjx_202206，DeviceC对接接口配置相同认证模式和密码。每步后commit提交。验证：display isis lsdb查看LSDB——DeviceA、DeviceB只有Level-1数据库；DeviceC同时维护Level-1和Level-2两个数据库；DeviceD只维护Level-2数据库。",
+    "scoring_points": [
+      "配置思路：各路由器使能IS-IS并配置level级别与网络实体名，接口使能IS-IS并配置P2P链路类型，最后配置接口认证",
+      "创建进程用isis 1，用is-level指定level-1/level-1-2/level-2级别",
+      "用network-entity指定网络实体名（区域地址），区域10如10.0000.0000.0001.00，区域20如20.0000.0000.0004.00",
+      "接口视图下isis enable 1使能IS-IS，isis circuit-type p2p配置P2P链路类型",
+      "DeviceA与DeviceC对接接口配置isis authentication-mode hmac-sha256 key-id 1 cipher相同密码",
+      "验证：display isis lsdb查看LSDB，Level-1-2设备同时维护Level-1和Level-2数据库",
+      "每步配置后需commit提交"
+    ],
+    "tags": [
+      "NetEngine8000",
+      "V800R025C10",
+      "配置方案",
+      "IS-IS部署"
+    ]
+  },
+  {
+    "id": 41,
+    "difficulty": "中",
+    "category": {
+      "scope": "设备",
+      "protocol_layer": "其他",
+      "lifecycle": "其他"
+    },
+    "scenario": "通用",
+    "device_type": "路由器",
+    "question": "在华为NetEngine8000路由器（V800R025C10版本）上，IS-IS通过SPF算法总是将流量沿最优路径转发，容易造成负载不均衡。若希望统一调整某个IS-IS进程下所有接口的链路开销值，使流量沿不同物理链路转发，应使用哪条命令？请给出完整命令语法、参数含义与取值、命令所在视图及使用注意事项。",
+    "answer": "使用circuit-cost命令（IS-IS视图）。命令功能：circuit-cost命令用来配置指定IS-IS进程下所有接口的链路开销值，undo circuit-cost恢复缺省值；ipv6 circuit-cost命令用来设置IS-IS中用于SPF计算的所有IPv6接口的开销值（IPv6全局开销值）。命令格式：circuit-cost { cost } [ level-1 | level-2 ]；ipv6 circuit-cost { cost } [ level-1 | level-2 ]；undo circuit-cost [ cost ] [ level-1 | level-2 ]。参数说明：cost指定接口的链路开销值，整数形式，取值范围由开销类型（cost-style命令配置）决定——当开销类型为narrow、narrow-compatible或compatible时取值范围是1～63；当开销类型为wide或wide-compatible时取值范围是1～16777214；取值maximum表示取最大开销值16777215，只有开销类型为wide或wide-compatible时才可配置。level-1指定配置Level-1接口的链路开销值，level-2指定配置Level-2接口的链路开销值；如果命令中没有指定Level-1或Level-2，则缺省为配置Level-1和Level-2接口的链路开销值。视图：IS-IS视图（该命令在IS-IS视图下配置仅对基本拓扑生效）。缺省情况：IS-IS进程下Loopback接口的链路开销值为0，其余接口的链路开销值为10。前置条件：执行isis命令启动IS-IS进程；配置ipv6 circuit-cost前必须先使能IS-IS进程的IPv6能力（ipv6 enable）。注意事项：isis cost命令配置的接口级链路开销值优先级高于circuit-cost配置的值；改变接口链路开销值会造成整个网络的路由重新计算、引起流量转发路径变化；对于IGP-Shortcut的TE Tunnel接口，链路开销值优先选择mpls te igp metric命令配置的值。使用实例：system-view后执行isis进入IS-IS视图，执行circuit-cost 30配置所有接口的缺省开销值为30。",
+    "scoring_points": [
+      "使用circuit-cost命令，所在视图为IS-IS视图",
+      "完整语法：circuit-cost { cost } [ level-1 | level-2 ]",
+      "cost取值由开销类型决定：narrow/narrow-compatible/compatible为1～63，wide/wide-compatible为1～16777214，maximum表示16777215（仅wide类支持）",
+      "不指定level-1/level-2时缺省对Level-1和Level-2接口同时生效",
+      "缺省开销：Loopback接口为0，其余接口为10",
+      "接口级isis cost命令的优先级高于circuit-cost；修改开销会导致整网路由重新计算",
+      "ipv6 circuit-cost用于设置IPv6全局开销，前置条件是先使能进程IPv6能力"
+    ],
+    "tags": [
+      "NetEngine8000",
+      "V800R025C10",
+      "命令行",
+      "IS-IS命令"
+    ]
+  },
+  {
+    "id": 42,
+    "difficulty": "中",
+    "category": {
+      "scope": "设备",
+      "protocol_layer": "其他",
+      "lifecycle": "其他"
+    },
+    "scenario": "通用",
+    "device_type": "路由器",
+    "question": "在华为NetEngine8000路由器（V800R025C10版本）上配置BGP时，需要创建对等体并指定其AS号，还需要把OSPF或IS-IS进程的路由引入BGP。请分别给出这两条命令的完整语法、参数含义与取值、命令所在视图及使用注意事项。",
+    "answer": "第一条：peer as-number命令（BGP视图），用来创建对等体并为指定对等体配置AS号，undo peer ipv4-address删除指定对等体。命令格式：peer ipv4-address as-number as-number。参数：ipv4-address指定对等体的IPv4地址，点分十进制格式；as-number指定AS号，对整数形式的AS号取值范围是1～4294967295，对点分形式的AS号格式为x.y，x和y都是整数，x取值范围1～65535、y取值范围0～65535。视图：BGP视图。缺省情况下没有创建BGP对等体。注意事项：undo peer命令会在所有地址族下删除与该对等体相关的配置，请谨慎操作；本端向IBGP邻居发送路由时AS_Path不携带本地AS号，发给EBGP邻居时携带。第二条：import-route命令（BGP-IPv4单播地址族视图/BGP-Labeled地址族视图），用来引入其他协议路由信息，缺省情况下BGP不引入其他协议路由。命令格式：import-route { ospf | isis | rip } process-id [ [ med med ] | [ [ route-policy route-policy-name ] | [ route-filter route-filter-name ] ] ] *。参数：ospf/isis/rip分别指定引入OSPF、ISIS、RIP路由；process-id指定进程号，整数形式取值1～4294967295；med med指定引入路由的MED度量值，取值0～4294967295；route-policy route-policy-name指定过滤和修改属性的Route-Policy，字符串区分大小写、长度1～200。使用实例：system-view后执行bgp 100，执行peer 10.1.1.1 as-number 100；执行ipv4-family unicast进入BGP-IPv4单播地址族视图后执行import-route ospf 1引入OSPF进程1的路由。注意事项：import-route route-policy与route-filter相互覆盖；配置import-route ospf引入OSPF路由时若未配置MED值，引入后BGP路由的MED值为OSPF路由的Cost值加一；同一路由在不同协议间相互引入会导致防环属性丢失，建议引入时指定路由策略。",
+    "scoring_points": [
+      "创建对等体并指定AS号用peer ipv4-address as-number as-number命令，视图为BGP视图",
+      "as-number整数形式取值1～4294967295，点分形式x.y中x为1～65535、y为0～65535",
+      "undo peer会删除所有地址族下该对等体相关配置，需谨慎",
+      "引入IGP路由用import-route { ospf | isis | rip } process-id命令，视图为BGP-IPv4单播地址族视图（或BGP-Labeled地址族视图）",
+      "process-id取值1～4294967295，med取值0～4294967295，route-policy名称长度1～200且区分大小写",
+      "引入OSPF路由未配置MED时，BGP路由MED值为OSPF路由Cost值加一",
+      "缺省情况下BGP不引入其他协议路由"
+    ],
+    "tags": [
+      "NetEngine8000",
+      "V800R025C10",
+      "命令行",
+      "BGP命令"
+    ]
+  },
+  {
+    "id": 43,
+    "difficulty": "中",
+    "category": {
+      "scope": "设备",
+      "protocol_layer": "其他",
+      "lifecycle": "其他"
+    },
+    "scenario": "通用",
+    "device_type": "路由器",
+    "question": "在华为NetEngine8000路由器（V800R025C10版本）上部署SRv6时，需要在IS-IS进程中使能SRv6能力并引用已配置的Locator。应使用哪条命令？请给出完整命令语法、参数含义与取值、命令所在视图及前置条件。",
+    "answer": "使用segment-routing ipv6 locator命令（IS-IS视图）。命令功能：用来使能IS-IS SRv6能力，undo segment-routing ipv6 locator命令用来去使能IS-IS SRv6能力；缺省情况下，未使能IS-IS SRv6能力。命令格式：segment-routing ipv6 locator locator-name [ auto-end-x protected ]；undo segment-routing ipv6 locator locator-name [ auto-end-x protected ]；segment-routing ipv6 locator locator-name auto-sid-disable；undo segment-routing ipv6 locator locator-name auto-sid-disable。参数说明：locator-name指定SID的节点路由段名称，通过locator命令配置，字符串形式，区分大小写，长度范围1～31（当输入字符串两端使用双引号时可在字符串中输入空格）；配置该参数后，IS-IS支持从配置的locator-name下引入静态的End和End.X SID。auto-end-x protected指定打开保护End.X动态分配能力，如果满足分配动态End.X SID的条件，会自动分配动态保护End.X SID。auto-sid-disable指定关闭End和End.X SID动态分配能力，表示取消动态分配、完全从指定Locator下引入静态的End和End.X SID属性；如果没有配置该参数，则支持动态分配：存在静态End和End.X SID时使用静态SID，没有静态SID时使用动态分配的SID。视图：IS-IS视图。缺省级别为2（配置级），任务名称isis，操作类型write。前置条件：需先在系统视图执行segment-routing ipv6命令使能SRv6功能并进入SRv6视图，并用locator命令配置好Locator；注意执行undo segment-routing ipv6（系统视图）之前必须保证所有使能了SRv6相关功能的进程已经全部去使能，否则命令执行不成功。",
+    "scoring_points": [
+      "使用segment-routing ipv6 locator命令，所在视图为IS-IS视图，用于使能IS-IS SRv6能力",
+      "完整语法：segment-routing ipv6 locator locator-name [ auto-end-x protected ]及segment-routing ipv6 locator locator-name auto-sid-disable",
+      "locator-name为通过locator命令配置的节点路由段名称，字符串区分大小写，长度1～31",
+      "auto-end-x protected表示打开动态保护End.X SID分配能力",
+      "auto-sid-disable表示关闭动态SID分配、完全使用指定Locator下的静态End和End.X SID；未配置时优先用静态、无静态则动态分配",
+      "缺省情况下未使能IS-IS SRv6能力",
+      "前置条件：系统视图先执行segment-routing ipv6使能SRv6功能，且需已用locator命令配置Locator"
+    ],
+    "tags": [
+      "NetEngine8000",
+      "V800R025C10",
+      "命令行",
+      "SRv6命令"
+    ]
+  },
+  {
+    "id": 44,
+    "difficulty": "中",
+    "category": {
+      "scope": "设备",
+      "protocol_layer": "其他",
+      "lifecycle": "其他"
+    },
+    "scenario": "通用",
+    "device_type": "路由器",
+    "question": "在华为NetEngine8000路由器（V800R025C10版本）上配置GRE、CR-LSP或IPv6 over IPv4等隧道时，需要创建Tunnel接口并为该接口配置隧道封装模式。应使用哪些命令？请给出创建Tunnel接口的命令以及隧道模式命令的完整语法、参数含义、命令所在视图及缺省情况。",
+    "answer": "创建Tunnel接口使用interface命令（系统视图）：interface命令用来进入已经存在的接口，或创建并进入逻辑接口（Tunnel接口属于逻辑接口），undo interface命令删除指定的逻辑接口。命令格式：interface { interface-name | interface-type interface-number } [ routerType ]，其中interface-name为接口名称（字符串形式，不支持空格，长度1～63）、interface-type/interface-number指定接口类型和编号；缺省情况下不创建此类型接口。配置隧道封装模式使用tunnel-protocol命令（Tunnel接口视图）：tunnel-protocol命令用来配置Tunnel接口的隧道模式，undo tunnel-protocol恢复缺省设置；缺省情况下，Tunnel接口没有配置任何隧道模式。命令格式：tunnel-protocol { mpls te | ipv6-ipv4 [ 6to4 | 6rd ] | gre [ ipv6 | p2mp ] | none | ipsec | ipv4-ipv6 }。参数含义：mpls te指定CR-LSP隧道模式；ipv6-ipv4指定IPv6 over IPv4手动配置隧道模式，手动隧道为点到点模式，需静态指定隧道源和目的IPv4地址；6to4指定6to4隧道模式，为点到多点模式，与手动隧道的主要区别是可以点到多点连接、并非成对配置；6rd配置6RD隧道模式；gre指定GRE隧道模式，ipv6指定IPv6 GRE隧道模式，p2mp指定点到多点的GRE模式；none配置NONE隧道模式，该模式不具备任何功能，必须切换为其他模式才能使用该隧道接口；ipsec配置IPSec隧道封装模式；ipv4-ipv6指定IPv4 over IPv6隧道模式（点到点，需静态指定源和目的IPv6地址）。应用场景：在配置GRE、CR-LSP、IPv6 over IPv4隧道时，需要先创建Tunnel接口，再使用tunnel-protocol命令根据网络拓扑和应用选择配置该Tunnel接口的封装模式。",
+    "scoring_points": [
+      "创建并进入Tunnel接口使用interface命令（系统视图），Tunnel接口属于逻辑接口",
+      "隧道封装模式命令为tunnel-protocol，所在视图为Tunnel接口视图，缺省情况下Tunnel接口没有配置任何隧道模式",
+      "完整语法：tunnel-protocol { mpls te | ipv6-ipv4 [ 6to4 | 6rd ] | gre [ ipv6 | p2mp ] | none | ipsec | ipv4-ipv6 }",
+      "mpls te对应CR-LSP隧道模式，ipv6-ipv4为IPv6 over IPv4手动隧道（点到点）",
+      "6to4为点到多点隧道模式，与手动隧道的主要区别是并非成对配置",
+      "gre为GRE模式，可选ipv6（IPv6 GRE）与p2mp（点到多点GRE）；none模式不具备任何功能",
+      "ipv4-ipv6为IPv4 over IPv6隧道模式"
+    ],
+    "tags": [
+      "NetEngine8000",
+      "V800R025C10",
+      "命令行",
+      "隧道接口命令"
+    ]
+  },
+  {
+    "id": 45,
+    "difficulty": "中",
+    "category": {
+      "scope": "设备",
+      "protocol_layer": "其他",
+      "lifecycle": "其他"
+    },
+    "scenario": "通用",
+    "device_type": "路由器",
+    "question": "在华为NetEngine8000路由器（V800R025C10版本）上部署L3VPN时，需要在PE上创建VPN实例并为其配置RD（路由标识）。请给出这两条命令的完整语法、参数含义与取值、命令所在视图及缺省情况。",
+    "answer": "第一条：ip vpn-instance命令（系统视图），用来创建VPN实例并进入VPN实例视图，undo ip vpn-instance删除指定VPN实例；缺省情况下未创建VPN实例。命令格式：ip vpn-instance vpn-instance-name。参数：vpn-instance-name指定VPN实例名称，字符串形式，区分大小写，不支持空格，长度范围1～31，不能以“_public_”作为VPN实例名称（“_public_”是指公网VPN实例）；当输入字符串两端使用双引号时可在字符串中输入空格。应用场景：当私网数据要通过公网传送时，需要在公网边缘设备PE上配置VPN实例，所有涉及L3VPN的操作都必须配置VPN实例；创建VPN实例相当于在PE上创建一个虚拟的路由转发表，会占用PE资源。第二条：route-distinguisher命令（VPN实例视图），用来为VPN实例配置RD，undo route-distinguisher删除配置；缺省情况下没有为VPN实例配置RD。命令格式：route-distinguisher route-distinguisher。参数取值（RD格式）：（1）2字节自治系统号：4字节用户自定义数，例如1:3，自治系统号取值0～65535，用户自定义数取值0～4294967295，二者不能同时为0（RD不能是0:0）；（2）整数形式4字节自治系统号：2字节用户自定义数，自治系统号取值65536～4294967295，用户自定义数取值0～65535，例如65537:3；（3）点分形式4字节自治系统号：2字节用户自定义数，例如0.0:3，x和y取值都是0～65535；（4）32位IP地址：2字节用户自定义数，例如192.168.122.15:1，用户自定义数取值0～65535。背景：传统BGP无法正确处理地址空间重叠的VPN路由，BGP/MPLS IP VPN使用VPN-IPv4地址族，VPN-IPv4地址共12字节，包括8字节RD和4字节IPv4地址前缀，PE从CE收到IPv4路由后转换为全局唯一的VPN-IPv4路由发布；建议为VPN实例配置的RD全网唯一，否则可能导致路由重叠。",
+    "scoring_points": [
+      "创建VPN实例用ip vpn-instance vpn-instance-name命令，视图为系统视图，缺省未创建VPN实例",
+      "vpn-instance-name为字符串，区分大小写、不支持空格、长度1～31，且不能以_public_作为名称（_public_为公网实例）",
+      "配置RD用route-distinguisher命令，视图为VPN实例视图，缺省未配置RD",
+      "RD支持2字节AS号:4字节用户自定义数格式（如1:3），AS号0～65535、用户数0～4294967295，且不能为0:0",
+      "RD还支持整数4字节AS号:2字节用户数（如65537:3）、点分形式（如0.0:3）和IP地址:2字节用户数（如192.168.122.15:1）格式",
+      "VPN-IPv4地址共12字节＝8字节RD＋4字节IPv4前缀，用于区分地址空间重叠的VPN路由",
+      "建议RD全网唯一，否则可能导致路由重叠"
+    ],
+    "tags": [
+      "NetEngine8000",
+      "V800R025C10",
+      "命令行",
+      "VPN实例命令"
+    ]
+  },
+  {
+    "id": 46,
+    "difficulty": "中",
+    "category": {
+      "scope": "设备",
+      "protocol_layer": "其他",
+      "lifecycle": "其他"
+    },
+    "scenario": "通用",
+    "device_type": "路由器",
+    "question": "在华为NetEngine8000路由器（V800R025C10版本）上，需要对路由进行过滤并修改通过过滤路由的开销值：先创建一个Route-Policy，在其节点中基于IP地址前缀列表匹配路由，再为通过匹配的路由设置开销。请给出所用各命令的完整语法、参数含义与取值、命令所在视图及匹配逻辑。",
+    "answer": "共三条命令配合使用。第一条：route-policy命令（系统视图），创建Route-Policy并进入该Route-Policy视图，undo route-policy删除。命令格式：route-policy route-policy-name matchMode node node。参数：route-policy-name指定Route-Policy名称，字符串形式，区分大小写，不支持空格，长度范围1～200（两端使用双引号时可含空格）；matchMode指定匹配模式，枚举类型permit（允许）或deny（拒绝）；node node指定节点索引，整数形式取值范围0～65535，引用该Route-Policy过滤路由时node值小的节点先进行测试。第二条：if-match ip-prefix命令（Route-Policy视图），设置基于IP地址前缀列表的匹配规则。命令格式：if-match ip-prefix ip-prefix-name。参数：ip-prefix-name指定IP地址前缀列表名称，字符串形式，取值范围1～169，不支持空格，区分大小写。第三条：apply cost命令（Route-Policy视图），设置BGP路由的MED值或其他类型路由信息的开销值。命令格式：apply cost [ + | - ] cost，以及apply cost inherit、apply cost none。参数：+表示增加开销值（增加后大于4294967295则按4294967295处理）；-表示减少开销值（减小后小于0则按0处理）；cost指定固定开销值，整数形式取值范围0～4294967295。匹配逻辑：一个Route-Policy由多个节点构成，节点间的过滤关系是“或”，只要通过一个节点的过滤即可通过该Route-Policy；同一节点中针对不同属性的多个if-match子句是“与”的关系，需全部满足才能通过该节点，针对相同属性的多个if-match子句是“或”的关系；如不指定if-match子句，则所有路由信息都会通过该节点的过滤。",
+    "scoring_points": [
+      "创建Route-Policy用route-policy route-policy-name matchMode node node命令，视图为系统视图",
+      "route-policy-name长度1～200区分大小写；matchMode取permit（允许）或deny（拒绝）；node取值0～65535且值小的节点先测试",
+      "if-match ip-prefix ip-prefix-name在Route-Policy视图配置基于IP地址前缀列表的匹配规则，名称长度1～169区分大小写",
+      "apply cost [ + | - ] cost设置路由开销/BGP MED，cost取值0～4294967295，加超上限按4294967295、减低于0按0处理",
+      "节点之间是“或”关系，通过一个节点即通过整个Route-Policy",
+      "同一节点内不同属性的if-match子句是“与”关系，相同属性的是“或”关系",
+      "不配置if-match子句时该节点允许所有路由通过"
+    ],
+    "tags": [
+      "NetEngine8000",
+      "V800R025C10",
+      "命令行",
+      "路由策略命令"
+    ]
+  },
+  {
+    "id": 47,
+    "difficulty": "中",
+    "category": {
+      "scope": "设备",
+      "protocol_layer": "其他",
+      "lifecycle": "其他"
+    },
+    "scenario": "通用",
+    "device_type": "路由器",
+    "question": "在华为NetEngine8000路由器（V800R025C10版本）上需要快速检测链路故障：创建一个绑定对端IP的静态BFD会话并进入BFD会话视图，随后调整BFD报文期望接收间隔和本地检测倍数。请给出所用命令的完整语法、参数含义与取值、命令所在视图、缺省值及前置条件。",
+    "answer": "创建BFD会话使用bfd bind peer-ip命令（系统视图）：用来创建BFD会话绑定信息并进入BFD会话视图，缺省情况下未创建BFD会话绑定信息。命令格式：bfd session-name bind peer-ip peer-ip [ vpn-instance vpn-name ] [ [ interface { interface-name | interface-type interface-number } ] [ source-ip source-ip ] | [ source-ip source-ip ] ]。参数说明：session-name指定BFD会话名称，字符串形式，不区分大小写，不支持空格，长度范围1～64；peer-ip指定BFD会话绑定的对端IP地址，点分十进制格式；vpn-instance vpn-name指定绑定的VPN实例名称，字符串区分大小写、长度1～31、不能以“_public_”命名；interface指定BFD会话绑定的本端三层接口；source-ip指定BFD报文携带的源IPv4地址，不配置时系统以本地路由表中到对端IP出接口的IP地址作为源地址，通常无需配置。前置条件：需先在系统视图执行bfd命令全局使能BFD功能。调整接收间隔使用min-rx-interval命令（BFD会话视图）：配置BFD报文的期望接收间隔，缺省情况下BFD报文接收间隔是10毫秒。命令格式：min-rx-interval rx-interval，rx-interval为整数形式，取值范围3～20000，单位毫秒。会话Down时系统自动将本端接收间隔调整为大于1000毫秒的随机值以节省资源，会话重新Up后恢复为用户配置值；异步模式的检测时间＝远端Detect Mult × max（本地RMRI，接收到的DMTI）。调整检测倍数使用detect-multiplier命令（BFD会话视图）：配置BFD会话的本地检测倍数，缺省情况下BFD会话本地检测倍数为3；命令格式：detect-multiplier multiplier，multiplier为整数形式，取值范围3～50；链路较稳定时可增大检测倍数，不太稳定的链路若配置过小可能导致会话震荡，建议配置较大值。",
+    "scoring_points": [
+      "创建静态BFD会话用bfd session-name bind peer-ip peer-ip命令，视图为系统视图，随后进入BFD会话视图",
+      "session-name不区分大小写、不支持空格、长度1～64；peer-ip为点分十进制；可选vpn-instance（长度1～31、不能用_public_）、interface、source-ip参数",
+      "前置条件：先在系统视图执行bfd命令全局使能BFD功能",
+      "min-rx-interval rx-interval配置期望接收间隔，取值3～20000毫秒，缺省10毫秒，视图为BFD会话视图",
+      "会话Down后本端接收间隔自动调整为大于1000毫秒的随机值，Up后恢复配置值",
+      "detect-multiplier multiplier配置本地检测倍数，取值3～50，缺省3",
+      "异步模式检测时间＝远端Detect Mult × max（本地RMRI，接收到的DMTI）"
+    ],
+    "tags": [
+      "NetEngine8000",
+      "V800R025C10",
+      "命令行",
+      "BFD命令"
+    ]
+  },
+  {
+    "id": 48,
+    "difficulty": "中",
+    "category": {
+      "scope": "设备",
+      "protocol_layer": "其他",
+      "lifecycle": "其他"
+    },
+    "scenario": "通用",
+    "device_type": "路由器",
+    "question": "华为NetEngine8000路由器（V800R025C10版本）上报BGP邻居中断告警hwBgpPeerBackwardTransition。请说明该告警的含义（含告警ID与级别）、对系统的影响、可能原因及处理步骤。",
+    "answer": "告警含义：hwBgpPeerBackwardTransition表示BGP状态机的状态值从高值状态变为低值状态，且前一个状态是Openconfirm或Established状态，即BGP邻居中断连接。告警属性：Trap OID为1.3.6.1.4.1.2011.5.25.177.1.3.10，告警ID为0x00F1039C/0xF1039C，告警级别Major。对系统的影响：BGP邻居中断连接，路由不可达，BGP转发业务中断。可能原因：1.BGP配置导致邻居断连；2.收到Notification报文；3.收到错误包；4.Hold定时器超时；5.远端对等体不可达；6.直连接口断开；7.路由数超过上限；8.系统内存过载。处理步骤：若为配置导致，查看是否自身配置造成邻居断开，是则取消造成断开的配置即可恢复；并检查是否重置过BGP连接，是则短暂等待后查看是否恢复。若收到Notification，执行display bgp peer <ip-address> log-info查看断连信息：Error Code为4表示Holdtimer超时未收到Keepalive报文，按Hold定时器超时思路处理；为5表示BGP有限状态机发生错误，按FSM错误分支处理。无法恢复时收集告警信息和配置信息，联系技术支持工程师。",
+    "scoring_points": [
+      "告警含义：BGP状态机从高值状态变为低值状态且前一状态为Openconfirm或Established，即BGP邻居中断",
+      "告警ID为0x00F1039C/0xF1039C，告警级别为Major，Trap OID为1.3.6.1.4.1.2011.5.25.177.1.3.10",
+      "对系统的影响：BGP邻居中断连接、路由不可达、BGP转发业务中断",
+      "可能原因包括：配置导致断连、收到Notification报文、收到错误包、Hold定时器超时、远端不可达、直连接口Down、路由超限、系统内存过载",
+      "配置原因处理：检查并取消造成邻居断开的配置，检查是否重置过BGP连接",
+      "使用display bgp peer <ip-address> log-info查看Notification信息，Error Code 4对应Holdtimer超时、5对应FSM错误",
+      "无法恢复时收集告警信息和配置信息并联系技术支持工程师"
+    ],
+    "tags": [
+      "NetEngine8000",
+      "V800R025C10",
+      "告警处理",
+      "BGP告警"
+    ]
+  },
+  {
+    "id": 49,
+    "difficulty": "中",
+    "category": {
+      "scope": "设备",
+      "protocol_layer": "其他",
+      "lifecycle": "其他"
+    },
+    "scenario": "通用",
+    "device_type": "路由器",
+    "question": "华为NetEngine8000路由器（V800R025C10版本）上报OSPF邻居状态变化告警ospfNbrStateChange（邻居Down）。请说明该告警的含义（含告警ID与级别）、对系统的影响、可能原因及处理步骤。",
+    "answer": "告警含义：ospfNbrStateChange表示设备非虚连接邻居的状态发生变化：邻居状态从full或init到down的变化（广播/NBMA网DR Other间2-way变down）作为告警上报；邻居重新到达full状态后业务恢复并上报清除告警。告警属性：Trap OID为1.3.6.1.2.1.14.16.2.2，告警ID为0x08900005/0x8900005，告警级别Major。对系统的影响：邻居状态由低变高属正常运行；由高变低可能导致业务中断。可能原因：1.邻接保持定时器超时；2.物理接口状态变化；3.协议原因；4.BFD会话断开；5.OSPF配置变化；6.邻居设备原因。处理步骤：定时器超时用ping检查对端链路；物理接口变化时执行display ospf interface查看接口状态，为down检查光功率和传输设备，为“*down”说明被人为shutdown，需undo shutdown恢复；协议原因时用display this检查两端使能的协议和认证是否相同，用display ospf peer查看邻居状态（Init为本端报文被丢、2-way与DR优先级为0有关、Loading可考虑两端reset ospf process恢复，注意复位会中断邻接关系）；配置变化时检查两端区域、opaque-capability与网络类型是否一致。无法恢复则收集信息联系技术支持。",
+    "scoring_points": [
+      "告警含义：非虚连接邻居状态从full或init到down（广播/NBMA网络DR Other由2-way到down）时作为告警上报，重新Full后上报告警清除",
+      "告警ID为0x08900005/0x8900005，告警级别为Major，Trap OID为1.3.6.1.2.1.14.16.2.2",
+      "影响：邻居状态由高变低可能导致业务中断；由低变高属正常运行无需关注",
+      "可能原因：邻接定时器超时、物理接口变化、协议原因、BFD会话断开、OSPF配置变化、邻居设备原因",
+      "处理：执行ping检查链路；display ospf interface检查接口物理/协议状态（*down需undo shutdown恢复）",
+      "display ospf peer查看邻居状态，检查两端认证、区域、网络类型配置是否一致",
+      "Loading状态可两端reset ospf process恢复，但复位会中断邻接关系需谨慎确认"
+    ],
+    "tags": [
+      "NetEngine8000",
+      "V800R025C10",
+      "告警处理",
+      "OSPF告警"
+    ]
+  },
+  {
+    "id": 50,
+    "difficulty": "中",
+    "category": {
+      "scope": "设备",
+      "protocol_layer": "其他",
+      "lifecycle": "其他"
+    },
+    "scenario": "通用",
+    "device_type": "路由器",
+    "question": "华为NetEngine8000路由器（V800R025C10版本）上报单板告警hwBoardRoleAbnormal。请说明该告警的含义（含告警ID与级别）、对系统的影响、可能原因及处理步骤。",
+    "answer": "告警含义：hwBoardRoleAbnormal表示单板硬件故障，主备角色发生异常。Trap信息为“The board hardware is faulty, and the active/standby role is abnormal”，携带物理索引和实体名称参数，需要重启的单板编号可从告警描述信息中查看；VS模式下该告警仅在Admin VS支持。告警属性：Trap OID为1.3.6.1.4.1.2011.5.25.19.2.53.1，告警ID为0x00F1FE92/0xF1FE92，告警级别Critical；对应恢复告警为hwBoardRoleAbnormalResume。对系统的影响：影响业务运行。可能原因：1.单板硬件故障；2.单板未插稳，接触不良。处理步骤（按顺序执行，每步后检查告警是否重新上报）：1.重启硬件主备角色异常的单板（编号从告警描述信息获得），单板启动后等待60秒检查告警是否重新上报，不再上报则处理结束；2.重启设备，启动后等待60秒检查告警是否重新上报；3.更换该异常单板，检查告警是否仍上报；4.更换另一块主控板，检查告警是否仍上报；5.以上均无效时收集告警信息和日志信息，联系技术支持工程师处理。",
+    "scoring_points": [
+      "告警含义：单板硬件故障，主备角色发生异常；VS模式下仅在Admin VS支持",
+      "告警ID为0x00F1FE92/0xF1FE92，告警级别为Critical，Trap OID为1.3.6.1.4.1.2011.5.25.19.2.53.1",
+      "对系统的影响：影响业务运行",
+      "可能原因：单板硬件故障；单板未插稳、接触不良",
+      "第一步重启异常单板，启动后等待60秒检查告警是否重新上报",
+      "后续依次重启设备、更换异常单板、更换另一块主控板",
+      "以上均无效时收集告警信息和日志信息并联系技术支持工程师"
+    ],
+    "tags": [
+      "NetEngine8000",
+      "V800R025C10",
+      "告警处理",
+      "单板告警"
+    ]
+  },
+  {
+    "id": 51,
+    "difficulty": "中",
+    "category": {
+      "scope": "设备",
+      "protocol_layer": "其他",
+      "lifecycle": "其他"
+    },
+    "scenario": "通用",
+    "device_type": "路由器",
+    "question": "华为NetEngine8000路由器（V800R025C10版本）上报存储资源告警hwStorageUtilizationRisingAlarm（单板cfCard存储空间使用率超门限，子告警号75265）。请说明该告警的含义（含告警ID与级别）、对系统的影响、可能原因及处理步骤。",
+    "answer": "告警含义：hwStorageUtilizationRisingAlarm表示存储介质使用率超过预设过载门限——系统对存储介质使用率持续采样，一个采样周期中每次采样的使用率均大于过载门限则产生该告警；VS模式下仅Admin VS支持。Trap信息为“The storage usage exceeded the pre-set overload threshold”，携带PhysicalName、UsageType、UsageValue、UsageThreshold等参数；UsageType过载类型：1表示CPU、2表示内存、3表示磁盘、4表示闪存flash、5表示cfcard、6表示物理内存。告警属性：Trap OID为1.3.6.1.4.1.2011.5.25.129.2.6.1，告警ID为0x00010085/0x10085，告警级别Major。对系统的影响：业务申请不到内存时系统会自动重启；存储介质空间不足则影响日志功能和软件升级。可能原因（子告警号75265）：单板cfCard存储空间使用率超过默认设定的过载门限，过载门限缺省值为85%。处理步骤：1.执行cd进入相应cfCard目录，用dir查看cfCard存储空间使用率；高于门限则执行步骤2，低于则执行步骤3；2.删除不需要的文件降低使用率，检查告警是否恢复，不再产生则问题解决；3.收集日志文件，联系技术支持工程师。",
+    "scoring_points": [
+      "告警含义：采样周期内每次采样的存储介质使用率均大于过载门限时产生该告警；仅Admin VS支持",
+      "告警ID为0x00010085/0x10085，告警级别为Major，Trap OID为1.3.6.1.4.1.2011.5.25.129.2.6.1",
+      "UsageType区分过载类型：1为CPU、2为内存、3为磁盘、4为flash、5为cfcard、6为物理内存",
+      "影响：业务申请不到内存时系统自动重启；存储介质空间不足影响日志功能和软件升级",
+      "可能原因：单板cfCard存储空间使用率超过默认过载门限，门限缺省值85%",
+      "处理：cd进入cfCard目录后用dir查看使用率",
+      "使用率高于门限时删除不需要的文件降低使用率；仍不恢复则收集日志联系技术支持"
+    ],
+    "tags": [
+      "NetEngine8000",
+      "V800R025C10",
+      "告警处理",
+      "存储告警"
+    ]
+  },
+  {
+    "id": 52,
+    "difficulty": "中",
+    "category": {
+      "scope": "设备",
+      "protocol_layer": "其他",
+      "lifecycle": "其他"
+    },
+    "scenario": "通用",
+    "device_type": "路由器",
+    "question": "华为NetEngine8000路由器（V800R025C10版本）输出日志“ISIS/2/isisAdjacencyChange_active”。请说明该日志的含义与信息格式、可能原因及处理步骤。",
+    "answer": "日志含义：isisAdjacencyChange_active表示IS-IS邻居状态发生改变，模块/级别/名称为ISIS/2/isisAdjacencyChange_active。日志格式：ISIS adjacency state change. (SysInstance=[IS-IS进程号], SysLevel=[邻居类型], AdjState=[邻居状态：1为Down、2为Init、3为Up、4为Fail], IfName=[接口名], Reason=[原因], SubReason=[详细原因])。SubReason如：5无效hello报文、6认证失败、9区域不匹配、10HoldTimer超时、11接口down。可能原因：1.邻居HoldTimer超时；2.物理接口Down；3.协议原因；4.BFD检测到邻居Down；5.配置变化；6.对端设备原因。处理步骤（以HoldTimer超时为例）：用ping检查对端链路状态；执行display current-configuration configuration isis检查对端IS-IS配置是否正确，不正确则修改并检查邻居是否Up；用display cpu-usage查看CPU占用率，过高则删除不必要的配置；接口Down时用display isis interface检查接口状态并恢复；无法恢复则收集告警和配置信息联系技术支持。",
+    "scoring_points": [
+      "日志含义：IS-IS邻居状态发生改变，模块/级别/名称为ISIS/2/isisAdjacencyChange_active",
+      "日志格式：ISIS adjacency state change.，携带SysInstance、SysLevel、AdjState、IfName、Reason、SubReason等参数",
+      "AdjState取值：1为Down、2为Init、3为Up、4为Fail",
+      "SubReason常见取值：如5收到无效hello报文、6 Hello认证失败、9区域不匹配、10邻接HoldTimer超时、11接口down",
+      "可能原因：HoldTimer超时、物理接口Down、协议原因、BFD检测邻居Down、配置变化、对端设备原因",
+      "处理：ping检查链路；display current-configuration configuration isis检查对端配置；display cpu-usage检查CPU占用率",
+      "接口Down时用display isis interface检查接口状态；无法恢复时收集信息联系技术支持"
+    ],
+    "tags": [
+      "NetEngine8000",
+      "V800R025C10",
+      "日志",
+      "IS-IS日志"
+    ]
+  },
+  {
+    "id": 53,
+    "difficulty": "中",
+    "category": {
+      "scope": "设备",
+      "protocol_layer": "其他",
+      "lifecycle": "其他"
+    },
+    "scenario": "通用",
+    "device_type": "路由器",
+    "question": "华为NetEngine8000路由器（V800R025C10版本）输出日志“BFD/4/hwBfdSessDown”。请说明该日志的含义与信息格式、可能原因及处理步骤。",
+    "answer": "日志含义：hwBfdSessDown表示BFD会话状态由其他状态变为Down，模块/级别/名称为BFD/4/hwBfdSessDown。日志格式：Session changes to DOWN. (Index=[会话索引], ConfigurationName=[会话名], PeerIp=[目的IP地址], BindIfName=[绑定接口], Diagnosis=[会话诊断字], SessionType=[会话建立方式], BindType=[检测对象])。Diagnosis常见取值：1检测时间DOWN、2回声检测DOWN、3邻居通告DOWN、5路径DOWN、7管理DOWN、9对端管理DOWN等。SessionType：1为Static静态配置、2为Dynamic动态触发、3为Entire_Dynamic完全动态触发、4为Static_Auto。可能原因：1.会话绑定的接口状态变为Down；2.对端BFD会话被删除或被shutdown；3.链路Down或链路堵塞导致转发不通。处理步骤：1.用display interface查看端口物理状态是否Up，不是则转步骤6；2.检查会话状态是否自动恢复；3.用display bfd session all检查两端会话是否被删除；4.用ping <ip-address>检查链路是否通；5.收集日志和配置信息联系技术支持工程师；6.结束。",
+    "scoring_points": [
+      "日志含义：BFD会话状态由其他状态变为Down，模块/级别/名称为BFD/4/hwBfdSessDown",
+      "日志格式：Session changes to DOWN.，携带Index、ConfigurationName、PeerIp、BindIfName、Diagnosis、SessionType等参数",
+      "Diagnosis诊断字：1为检测时间DOWN、2为回声检测DOWN、3为邻居通告DOWN、5为路径DOWN、7为管理DOWN等",
+      "SessionType：1为Static、2为Dynamic、3为Entire_Dynamic、4为Static_Auto",
+      "可能原因：绑定接口Down、对端会话被删除或shutdown、链路Down或堵塞导致转发不通",
+      "处理：display interface查端口物理状态；检查会话是否自动恢复；display bfd session all检查两端会话是否被删除",
+      "用ping <ip-address>检查所检测链路转发是否通；无法恢复时收集日志和配置联系技术支持"
+    ],
+    "tags": [
+      "NetEngine8000",
+      "V800R025C10",
+      "日志",
+      "BFD日志"
+    ]
+  },
+  {
+    "id": 54,
+    "difficulty": "中",
+    "category": {
+      "scope": "设备",
+      "protocol_layer": "其他",
+      "lifecycle": "其他"
+    },
+    "scenario": "通用",
+    "device_type": "路由器",
+    "question": "华为NetEngine8000路由器（V800R025C10版本）输出日志“VRRP/4/vrrpNewMaster”。请说明该日志的含义与信息格式、可能原因及处理建议。",
+    "answer": "日志含义：vrrpNewMaster表示有设备变成Master状态，即VRRP备份组发生了状态切换，模块/级别/名称为VRRP/4/vrrpNewMaster。日志格式：The VRRP status changed to master. (ifIndex=[VRRP所在接口索引], VrId=[VRRP备份组号], MasterIPAddress=[Master的主IP地址], sysName=[系统名称], ifName=[VRRP所在接口名称], ChangeReason=[状态变化原因])。可能原因：1.网络故障，导致主用设备VRRP协商超时而触发升主；2.执行vrrp vrid virtual-router-id priority priority-value修改了设备在备份组中的优先级；3.执行vrrp vrid virtual-router-id [ virtual-ip virtual-address ]指定了备份组的虚拟IP地址；4.管理VRRP备份组发生倒换，联动导致设备变成Master状态；5.执行vrrp passive使能passive模式，设备强制升主。处理建议：该日志属于正常运行信息，无需处理。日常运维中可结合ChangeReason确认升主由网络故障（需排查链路）还是人为调整优先级、虚拟IP、passive模式等配置操作引起。",
+    "scoring_points": [
+      "日志含义：有设备变成Master状态，即VRRP备份组发生状态切换，模块/级别/名称为VRRP/4/vrrpNewMaster",
+      "日志格式：The VRRP status changed to master.，携带ifIndex、VrId、MasterIPAddress、sysName、ifName、ChangeReason参数",
+      "VrId为备份组号，MasterIPAddress为主IP地址，ChangeReason为状态变化原因",
+      "可能原因之一：网络故障导致主用设备VRRP协商超时",
+      "可能原因之二：执行vrrp vrid priority命令修改优先级或vrrp vrid命令指定虚拟IP地址",
+      "可能原因之三：管理VRRP备份组倒换联动，或执行vrrp passive使能passive模式强制升主",
+      "处理建议：正常运行信息，无需处理；可结合ChangeReason判断是否为预期内切换"
+    ],
+    "tags": [
+      "NetEngine8000",
+      "V800R025C10",
+      "日志",
+      "VRRP日志"
+    ]
+  },
+  {
+    "id": 55,
+    "difficulty": "中",
+    "category": {
+      "scope": "设备",
+      "protocol_layer": "其他",
+      "lifecycle": "其他"
+    },
+    "scenario": "通用",
+    "device_type": "路由器",
+    "question": "华为NetEngine8000路由器（V800R025C10版本）输出日志“SYSTEM/1/hwCPUUtilizationRisingAlarm_active”。请说明该日志的含义与信息格式、可能原因及处理步骤。",
+    "answer": "日志含义：hwCPUUtilizationRisingAlarm_active表示CPU占用率超过预设过载门限——系统对CPU利用率持续采样，一个采样周期中每次采样的CPU利用率均大于过载门限则产生该告警，采样周期缺省值是8分钟；VS模式下仅Admin VS支持。日志格式：SYSTEM/1/hwCPUUtilizationRisingAlarm_active: The CPU usage exceeded the pre-set overload threshold. (PhysicalName=[单板名称], UsageType=[过载类型], CpuUsage=[当前CPU使用率], CpuUsageThreshold=[CPU门限值]等)。可能原因：1.单板CPU利用率超过设定的过载门限；2.（原因74240）在不区分业务的情况下，单板CPU利用率超过设定的过载门限。处理步骤：1.执行display cpu-usage service、display cpu-usage configuration查看CPU利用率及过载门限值，高于门限则执行步骤2；2.减少不需要的业务和配置，降低CPU利用率，检查告警是否恢复，不再产生则处理结束；3.执行set cpu-usage threshold调整过载门限值，检查告警是否恢复；4.仍不恢复则收集告警信息和配置信息，联系技术支持工程师。",
+    "scoring_points": [
+      "日志含义：采样周期内每次采样的CPU利用率均大于过载门限时产生，采样周期缺省8分钟；VS模式下仅Admin VS支持",
+      "日志格式：The CPU usage exceeded the pre-set overload threshold.，携带CpuUsage、CpuUsageThreshold、PhysicalName等参数",
+      "可能原因：单板CPU利用率超过设定的过载门限（含不区分业务的情况，原因74240）",
+      "第一步：执行display cpu-usage service、display cpu-usage configuration查看CPU利用率及门限值",
+      "第二步：减少不需要的业务和配置以降低CPU利用率，检查告警是否恢复",
+      "第三步：执行set cpu-usage threshold调整过载门限值",
+      "仍不恢复则收集告警信息和配置信息并联系技术支持工程师"
+    ],
+    "tags": [
+      "NetEngine8000",
+      "V800R025C10",
+      "日志",
+      "CPU日志"
+    ]
+  }
+]

@@ -1,0 +1,1802 @@
+[
+  {
+    "id": 1,
+    "difficulty": "简单",
+    "category": {
+      "scope": "设备",
+      "protocol_layer": "其他",
+      "lifecycle": "其他"
+    },
+    "scenario": "数据中心",
+    "device_type": "交换机",
+    "topic": "M-LAG(跨设备链路聚合)特性与典型组网应用",
+    "tags": [
+      "CE6800",
+      "V200R025C00",
+      "特性",
+      "M-LAG"
+    ]
+  },
+  {
+    "id": 2,
+    "difficulty": "简单",
+    "category": {
+      "scope": "设备",
+      "protocol_layer": "其他",
+      "lifecycle": "其他"
+    },
+    "scenario": "数据中心",
+    "device_type": "交换机",
+    "topic": "数据中心 VXLAN 大二层组网场景概述",
+    "tags": [
+      "CE16800",
+      "V200R025C00",
+      "场景",
+      "VXLAN"
+    ]
+  },
+  {
+    "id": 3,
+    "difficulty": "简单",
+    "category": {
+      "scope": "设备",
+      "protocol_layer": "其他",
+      "lifecycle": "其他"
+    },
+    "scenario": "数据中心",
+    "device_type": "交换机",
+    "topic": "EVPN VXLAN 特性与典型应用",
+    "tags": [
+      "CE8800",
+      "V300R025C10",
+      "特性",
+      "EVPN"
+    ]
+  },
+  {
+    "id": 4,
+    "difficulty": "中",
+    "category": {
+      "scope": "设备",
+      "protocol_layer": "其他",
+      "lifecycle": "其他"
+    },
+    "scenario": "数据中心",
+    "device_type": "交换机",
+    "topic": "VXLAN 分布式网关配置方案",
+    "tags": [
+      "CE6800",
+      "V200R025C00",
+      "配置方案",
+      "VXLAN"
+    ]
+  },
+  {
+    "id": 5,
+    "difficulty": "中",
+    "category": {
+      "scope": "设备",
+      "protocol_layer": "其他",
+      "lifecycle": "其他"
+    },
+    "scenario": "数据中心",
+    "device_type": "交换机",
+    "topic": "M-LAG 双活网关配置方案",
+    "tags": [
+      "CE16800",
+      "V300R025C10",
+      "配置方案",
+      "M-LAG"
+    ]
+  },
+  {
+    "id": 6,
+    "difficulty": "中",
+    "category": {
+      "scope": "设备",
+      "protocol_layer": "其他",
+      "lifecycle": "其他"
+    },
+    "scenario": "数据中心",
+    "device_type": "交换机",
+    "topic": "堆叠(CSS)组建配置方案",
+    "tags": [
+      "CE12800",
+      "V200R025C00",
+      "配置方案",
+      "CSS"
+    ]
+  },
+  {
+    "id": 7,
+    "difficulty": "中",
+    "category": {
+      "scope": "设备",
+      "protocol_layer": "其他",
+      "lifecycle": "其他"
+    },
+    "scenario": "数据中心",
+    "device_type": "交换机",
+    "topic": "Eth-Trunk 链路聚合配置方案",
+    "tags": [
+      "CE5800",
+      "V300R025C10",
+      "配置方案",
+      "Eth-Trunk"
+    ]
+  },
+  {
+    "id": 8,
+    "difficulty": "中",
+    "category": {
+      "scope": "设备",
+      "protocol_layer": "其他",
+      "lifecycle": "其他"
+    },
+    "scenario": "数据中心",
+    "device_type": "交换机",
+    "topic": "VLAN 相关命令(vlan/vlan batch)语法与参数",
+    "tags": [
+      "CE6800",
+      "V200R025C00",
+      "命令行",
+      "VLAN"
+    ]
+  },
+  {
+    "id": 9,
+    "difficulty": "中",
+    "category": {
+      "scope": "设备",
+      "protocol_layer": "其他",
+      "lifecycle": "其他"
+    },
+    "scenario": "数据中心",
+    "device_type": "交换机",
+    "topic": "链路聚合相关命令(interface eth-trunk/trunkport)语法与参数",
+    "tags": [
+      "CE6800",
+      "V200R025C00",
+      "命令行",
+      "Eth-Trunk"
+    ]
+  },
+  {
+    "id": 10,
+    "difficulty": "中",
+    "category": {
+      "scope": "设备",
+      "protocol_layer": "其他",
+      "lifecycle": "其他"
+    },
+    "scenario": "数据中心",
+    "device_type": "交换机",
+    "topic": "VXLAN 相关命令(vxlan vni/source)语法与参数",
+    "tags": [
+      "CE8800",
+      "V300R025C10",
+      "命令行",
+      "VXLAN"
+    ]
+  },
+  {
+    "id": 11,
+    "difficulty": "中",
+    "category": {
+      "scope": "设备",
+      "protocol_layer": "其他",
+      "lifecycle": "其他"
+    },
+    "scenario": "数据中心",
+    "device_type": "交换机",
+    "topic": "BGP EVPN 相关命令(bgp/l2vpn-family/peer)语法与参数",
+    "tags": [
+      "CE8800",
+      "V300R025C10",
+      "命令行",
+      "BGP"
+    ]
+  },
+  {
+    "id": 12,
+    "difficulty": "中",
+    "category": {
+      "scope": "设备",
+      "protocol_layer": "其他",
+      "lifecycle": "其他"
+    },
+    "scenario": "数据中心",
+    "device_type": "交换机",
+    "topic": "堆叠相关命令(stack member/stack priority)语法与参数",
+    "tags": [
+      "CE16800",
+      "V200R025C00",
+      "命令行",
+      "堆叠"
+    ]
+  },
+  {
+    "id": 13,
+    "difficulty": "中",
+    "category": {
+      "scope": "设备",
+      "protocol_layer": "其他",
+      "lifecycle": "其他"
+    },
+    "scenario": "数据中心",
+    "device_type": "交换机",
+    "topic": "OSPF 相关命令(ospf/area/network)语法与参数",
+    "tags": [
+      "CE16800",
+      "V200R025C00",
+      "命令行",
+      "OSPF"
+    ]
+  },
+  {
+    "id": 14,
+    "difficulty": "中",
+    "category": {
+      "scope": "设备",
+      "protocol_layer": "其他",
+      "lifecycle": "其他"
+    },
+    "scenario": "数据中心",
+    "device_type": "交换机",
+    "topic": "端口安全相关命令(port-security)语法与参数",
+    "tags": [
+      "CE16800",
+      "V300R025C10",
+      "命令行",
+      "端口安全"
+    ]
+  },
+  {
+    "id": 15,
+    "difficulty": "中",
+    "category": {
+      "scope": "设备",
+      "protocol_layer": "其他",
+      "lifecycle": "其他"
+    },
+    "scenario": "数据中心",
+    "device_type": "交换机",
+    "topic": "QoS 限速相关命令(qos lr)语法与参数",
+    "tags": [
+      "CE16800",
+      "V300R025C10",
+      "命令行",
+      "QoS"
+    ]
+  },
+  {
+    "id": 16,
+    "difficulty": "中",
+    "category": {
+      "scope": "设备",
+      "protocol_layer": "其他",
+      "lifecycle": "其他"
+    },
+    "scenario": "数据中心",
+    "device_type": "交换机",
+    "topic": "SSH 登录相关命令(ssh user/stelnet)语法与参数",
+    "tags": [
+      "CE16800",
+      "V300R025C10",
+      "命令行",
+      "SSH"
+    ]
+  },
+  {
+    "id": 17,
+    "difficulty": "中",
+    "category": {
+      "scope": "设备",
+      "protocol_layer": "其他",
+      "lifecycle": "其他"
+    },
+    "scenario": "数据中心",
+    "device_type": "交换机",
+    "topic": "设备温度过高告警的含义与处理",
+    "tags": [
+      "CE6800",
+      "V200R025C00",
+      "告警处理",
+      "温度"
+    ]
+  },
+  {
+    "id": 18,
+    "difficulty": "中",
+    "category": {
+      "scope": "设备",
+      "protocol_layer": "其他",
+      "lifecycle": "其他"
+    },
+    "scenario": "数据中心",
+    "device_type": "交换机",
+    "topic": "接口状态改变告警(linkDown)的含义与处理",
+    "tags": [
+      "CE8800",
+      "V300R025C10",
+      "告警处理",
+      "接口"
+    ]
+  },
+  {
+    "id": 19,
+    "difficulty": "中",
+    "category": {
+      "scope": "设备",
+      "protocol_layer": "其他",
+      "lifecycle": "其他"
+    },
+    "scenario": "数据中心",
+    "device_type": "交换机",
+    "topic": "堆叠 MAC 不一致告警(hwStackMacInconsistence)的含义与处理",
+    "tags": [
+      "CE12800",
+      "V200R025C00",
+      "告警处理",
+      "CSS"
+    ]
+  },
+  {
+    "id": 20,
+    "difficulty": "中",
+    "category": {
+      "scope": "设备",
+      "protocol_layer": "其他",
+      "lifecycle": "其他"
+    },
+    "scenario": "数据中心",
+    "device_type": "交换机",
+    "topic": "电源异常告警的含义与处理",
+    "tags": [
+      "CE16800",
+      "V300R025C10",
+      "告警处理",
+      "电源"
+    ]
+  },
+  {
+    "id": 21,
+    "difficulty": "中",
+    "category": {
+      "scope": "设备",
+      "protocol_layer": "其他",
+      "lifecycle": "其他"
+    },
+    "scenario": "数据中心",
+    "device_type": "交换机",
+    "topic": "接口链路状态变化日志的含义与处理",
+    "tags": [
+      "CE6800",
+      "V200R025C00",
+      "日志",
+      "接口"
+    ]
+  },
+  {
+    "id": 22,
+    "difficulty": "中",
+    "category": {
+      "scope": "设备",
+      "protocol_layer": "其他",
+      "lifecycle": "其他"
+    },
+    "scenario": "数据中心",
+    "device_type": "交换机",
+    "topic": "OSPF 邻居状态变化日志的含义与处理",
+    "tags": [
+      "CE8800",
+      "V300R025C10",
+      "日志",
+      "OSPF"
+    ]
+  },
+  {
+    "id": 23,
+    "difficulty": "中",
+    "category": {
+      "scope": "设备",
+      "protocol_layer": "其他",
+      "lifecycle": "其他"
+    },
+    "scenario": "数据中心",
+    "device_type": "交换机",
+    "topic": "M-LAG DFS 邻居 Down 日志(ETRUNK/4/hwMlagDfsPeerDown_active)的含义与处理",
+    "tags": [
+      "CE16800",
+      "V200R025C00",
+      "日志",
+      "M-LAG"
+    ]
+  },
+  {
+    "id": 24,
+    "difficulty": "中",
+    "category": {
+      "scope": "设备",
+      "protocol_layer": "其他",
+      "lifecycle": "其他"
+    },
+    "scenario": "数据中心",
+    "device_type": "交换机",
+    "topic": "VXLAN 隧道状态日志的含义与处理",
+    "tags": [
+      "CE16800",
+      "V300R025C10",
+      "日志",
+      "VXLAN"
+    ]
+  },
+  {
+    "id": 25,
+    "difficulty": "中",
+    "category": {
+      "scope": "设备",
+      "protocol_layer": "其他",
+      "lifecycle": "其他"
+    },
+    "scenario": "数据中心",
+    "device_type": "交换机",
+    "topic": "MAC 学习数超上限日志(FEI/4/hwMacLimitOverThresholdAlarm_active)的含义与处理",
+    "tags": [
+      "CE6800",
+      "V200R025C00",
+      "日志",
+      "MAC"
+    ]
+  },
+  {
+    "id": 26,
+    "difficulty": "简单",
+    "category": {
+      "scope": "设备",
+      "protocol_layer": "其他",
+      "lifecycle": "其他"
+    },
+    "scenario": "园区",
+    "device_type": "交换机",
+    "topic": "iStack 堆叠特性与典型组网",
+    "tags": [
+      "S5735",
+      "V600R025C00",
+      "特性",
+      "iStack"
+    ]
+  },
+  {
+    "id": 27,
+    "difficulty": "中",
+    "category": {
+      "scope": "设备",
+      "protocol_layer": "其他",
+      "lifecycle": "其他"
+    },
+    "scenario": "园区",
+    "device_type": "交换机",
+    "topic": "MSTP 防环配置方案",
+    "tags": [
+      "S5735",
+      "V600R025C00",
+      "配置方案",
+      "MSTP"
+    ]
+  },
+  {
+    "id": 28,
+    "difficulty": "中",
+    "category": {
+      "scope": "设备",
+      "protocol_layer": "其他",
+      "lifecycle": "其他"
+    },
+    "scenario": "园区",
+    "device_type": "交换机",
+    "topic": "端口隔离相关命令(port-isolate)语法与参数",
+    "tags": [
+      "S5735",
+      "V600R025C00",
+      "命令行",
+      "端口隔离"
+    ]
+  },
+  {
+    "id": 29,
+    "difficulty": "中",
+    "category": {
+      "scope": "设备",
+      "protocol_layer": "其他",
+      "lifecycle": "其他"
+    },
+    "scenario": "园区",
+    "device_type": "交换机",
+    "topic": "DHCP Snooping 相关命令语法与参数",
+    "tags": [
+      "S5735",
+      "V600R025C00",
+      "命令行",
+      "DHCP Snooping"
+    ]
+  },
+  {
+    "id": 30,
+    "difficulty": "中",
+    "category": {
+      "scope": "设备",
+      "protocol_layer": "其他",
+      "lifecycle": "其他"
+    },
+    "scenario": "园区",
+    "device_type": "交换机",
+    "topic": "流量抑制(storm suppression)相关命令语法与参数",
+    "tags": [
+      "S6730",
+      "V600R025C00",
+      "命令行",
+      "风暴抑制"
+    ]
+  },
+  {
+    "id": 31,
+    "difficulty": "中",
+    "category": {
+      "scope": "设备",
+      "protocol_layer": "其他",
+      "lifecycle": "其他"
+    },
+    "scenario": "园区",
+    "device_type": "交换机",
+    "topic": "PoE 供电告警的含义与处理",
+    "tags": [
+      "S5735",
+      "V600R025C00",
+      "告警处理",
+      "PoE"
+    ]
+  },
+  {
+    "id": 32,
+    "difficulty": "中",
+    "category": {
+      "scope": "设备",
+      "protocol_layer": "其他",
+      "lifecycle": "其他"
+    },
+    "scenario": "园区",
+    "device_type": "交换机",
+    "topic": "堆叠异常告警的含义与处理",
+    "tags": [
+      "S6730",
+      "V600R025C00",
+      "告警处理",
+      "堆叠"
+    ]
+  },
+  {
+    "id": 33,
+    "difficulty": "中",
+    "category": {
+      "scope": "设备",
+      "protocol_layer": "其他",
+      "lifecycle": "其他"
+    },
+    "scenario": "园区",
+    "device_type": "交换机",
+    "topic": "风扇告警的含义与处理",
+    "tags": [
+      "S5735",
+      "V600R025C00",
+      "告警处理",
+      "风扇"
+    ]
+  },
+  {
+    "id": 34,
+    "difficulty": "中",
+    "category": {
+      "scope": "设备",
+      "protocol_layer": "其他",
+      "lifecycle": "其他"
+    },
+    "scenario": "园区",
+    "device_type": "交换机",
+    "topic": "STP 拓扑变化日志的含义与处理",
+    "tags": [
+      "S5735",
+      "V600R025C00",
+      "日志",
+      "STP"
+    ]
+  },
+  {
+    "id": 35,
+    "difficulty": "中",
+    "category": {
+      "scope": "设备",
+      "protocol_layer": "其他",
+      "lifecycle": "其他"
+    },
+    "scenario": "园区",
+    "device_type": "交换机",
+    "topic": "SSH 用户登录日志的含义与处理",
+    "tags": [
+      "S6730",
+      "V600R025C00",
+      "日志",
+      "SSH"
+    ]
+  },
+  {
+    "id": 36,
+    "difficulty": "简单",
+    "category": {
+      "scope": "设备",
+      "protocol_layer": "其他",
+      "lifecycle": "其他"
+    },
+    "scenario": "通用",
+    "device_type": "路由器",
+    "topic": "SRv6 段路由特性与典型应用",
+    "tags": [
+      "NetEngine8000",
+      "V800R025C10",
+      "特性",
+      "SRv6"
+    ]
+  },
+  {
+    "id": 37,
+    "difficulty": "简单",
+    "category": {
+      "scope": "设备",
+      "protocol_layer": "其他",
+      "lifecycle": "其他"
+    },
+    "scenario": "通用",
+    "device_type": "路由器",
+    "topic": "L3VPN 特性与典型组网应用",
+    "tags": [
+      "NetEngine8000",
+      "V800R025C10",
+      "特性",
+      "L3VPN"
+    ]
+  },
+  {
+    "id": 38,
+    "difficulty": "中",
+    "category": {
+      "scope": "设备",
+      "protocol_layer": "其他",
+      "lifecycle": "其他"
+    },
+    "scenario": "通用",
+    "device_type": "路由器",
+    "topic": "OSPF 多区域部署配置方案",
+    "tags": [
+      "NetEngine8000",
+      "V800R025C10",
+      "配置方案",
+      "OSPF多区域"
+    ]
+  },
+  {
+    "id": 39,
+    "difficulty": "中",
+    "category": {
+      "scope": "设备",
+      "protocol_layer": "其他",
+      "lifecycle": "其他"
+    },
+    "scenario": "通用",
+    "device_type": "路由器",
+    "topic": "BGP 邻居与路由策略部署配置方案",
+    "tags": [
+      "NetEngine8000",
+      "V800R025C10",
+      "配置方案",
+      "BGP路由策略"
+    ]
+  },
+  {
+    "id": 40,
+    "difficulty": "中",
+    "category": {
+      "scope": "设备",
+      "protocol_layer": "其他",
+      "lifecycle": "其他"
+    },
+    "scenario": "通用",
+    "device_type": "路由器",
+    "topic": "IS-IS 部署配置方案",
+    "tags": [
+      "NetEngine8000",
+      "V800R025C10",
+      "配置方案",
+      "IS-IS部署"
+    ]
+  },
+  {
+    "id": 41,
+    "difficulty": "中",
+    "category": {
+      "scope": "设备",
+      "protocol_layer": "其他",
+      "lifecycle": "其他"
+    },
+    "scenario": "通用",
+    "device_type": "路由器",
+    "topic": "IS-IS 相关命令(isis/circuit-cost)语法与参数",
+    "tags": [
+      "NetEngine8000",
+      "V800R025C10",
+      "命令行",
+      "IS-IS命令"
+    ]
+  },
+  {
+    "id": 42,
+    "difficulty": "中",
+    "category": {
+      "scope": "设备",
+      "protocol_layer": "其他",
+      "lifecycle": "其他"
+    },
+    "scenario": "通用",
+    "device_type": "路由器",
+    "topic": "BGP 相关命令(peer/import-route)语法与参数",
+    "tags": [
+      "NetEngine8000",
+      "V800R025C10",
+      "命令行",
+      "BGP命令"
+    ]
+  },
+  {
+    "id": 43,
+    "difficulty": "中",
+    "category": {
+      "scope": "设备",
+      "protocol_layer": "其他",
+      "lifecycle": "其他"
+    },
+    "scenario": "通用",
+    "device_type": "路由器",
+    "topic": "SRv6 相关命令(segment-routing/locator)语法与参数",
+    "tags": [
+      "NetEngine8000",
+      "V800R025C10",
+      "命令行",
+      "SRv6命令"
+    ]
+  },
+  {
+    "id": 44,
+    "difficulty": "中",
+    "category": {
+      "scope": "设备",
+      "protocol_layer": "其他",
+      "lifecycle": "其他"
+    },
+    "scenario": "通用",
+    "device_type": "路由器",
+    "topic": "隧道接口相关命令(interface tunnel/tunnel-protocol)语法与参数",
+    "tags": [
+      "NetEngine8000",
+      "V800R025C10",
+      "命令行",
+      "隧道接口命令"
+    ]
+  },
+  {
+    "id": 45,
+    "difficulty": "中",
+    "category": {
+      "scope": "设备",
+      "protocol_layer": "其他",
+      "lifecycle": "其他"
+    },
+    "scenario": "通用",
+    "device_type": "路由器",
+    "topic": "VPN 实例相关命令(ip vpn-instance/route-distinguisher)语法与参数",
+    "tags": [
+      "NetEngine8000",
+      "V800R025C10",
+      "命令行",
+      "VPN实例命令"
+    ]
+  },
+  {
+    "id": 46,
+    "difficulty": "中",
+    "category": {
+      "scope": "设备",
+      "protocol_layer": "其他",
+      "lifecycle": "其他"
+    },
+    "scenario": "通用",
+    "device_type": "路由器",
+    "topic": "路由策略相关命令(route-policy/if-match/apply)语法与参数",
+    "tags": [
+      "NetEngine8000",
+      "V800R025C10",
+      "命令行",
+      "路由策略命令"
+    ]
+  },
+  {
+    "id": 47,
+    "difficulty": "中",
+    "category": {
+      "scope": "设备",
+      "protocol_layer": "其他",
+      "lifecycle": "其他"
+    },
+    "scenario": "通用",
+    "device_type": "路由器",
+    "topic": "BFD 相关命令(bfd/min-rx-interval)语法与参数",
+    "tags": [
+      "NetEngine8000",
+      "V800R025C10",
+      "命令行",
+      "BFD命令"
+    ]
+  },
+  {
+    "id": 48,
+    "difficulty": "中",
+    "category": {
+      "scope": "设备",
+      "protocol_layer": "其他",
+      "lifecycle": "其他"
+    },
+    "scenario": "通用",
+    "device_type": "路由器",
+    "topic": "BGP 邻居中断告警的含义与处理",
+    "tags": [
+      "NetEngine8000",
+      "V800R025C10",
+      "告警处理",
+      "BGP告警"
+    ]
+  },
+  {
+    "id": 49,
+    "difficulty": "中",
+    "category": {
+      "scope": "设备",
+      "protocol_layer": "其他",
+      "lifecycle": "其他"
+    },
+    "scenario": "通用",
+    "device_type": "路由器",
+    "topic": "OSPF 邻居 Down 告警的含义与处理",
+    "tags": [
+      "NetEngine8000",
+      "V800R025C10",
+      "告警处理",
+      "OSPF告警"
+    ]
+  },
+  {
+    "id": 50,
+    "difficulty": "中",
+    "category": {
+      "scope": "设备",
+      "protocol_layer": "其他",
+      "lifecycle": "其他"
+    },
+    "scenario": "通用",
+    "device_type": "路由器",
+    "topic": "单板/子卡异常告警的含义与处理",
+    "tags": [
+      "NetEngine8000",
+      "V800R025C10",
+      "告警处理",
+      "单板告警"
+    ]
+  },
+  {
+    "id": 51,
+    "difficulty": "中",
+    "category": {
+      "scope": "设备",
+      "protocol_layer": "其他",
+      "lifecycle": "其他"
+    },
+    "scenario": "通用",
+    "device_type": "路由器",
+    "topic": "存储空间不足告警的含义与处理",
+    "tags": [
+      "NetEngine8000",
+      "V800R025C10",
+      "告警处理",
+      "存储告警"
+    ]
+  },
+  {
+    "id": 52,
+    "difficulty": "中",
+    "category": {
+      "scope": "设备",
+      "protocol_layer": "其他",
+      "lifecycle": "其他"
+    },
+    "scenario": "通用",
+    "device_type": "路由器",
+    "topic": "IS-IS 邻接状态变化日志的含义与处理",
+    "tags": [
+      "NetEngine8000",
+      "V800R025C10",
+      "日志",
+      "IS-IS日志"
+    ]
+  },
+  {
+    "id": 53,
+    "difficulty": "中",
+    "category": {
+      "scope": "设备",
+      "protocol_layer": "其他",
+      "lifecycle": "其他"
+    },
+    "scenario": "通用",
+    "device_type": "路由器",
+    "topic": "BFD 会话 Down 日志的含义与处理",
+    "tags": [
+      "NetEngine8000",
+      "V800R025C10",
+      "日志",
+      "BFD日志"
+    ]
+  },
+  {
+    "id": 54,
+    "difficulty": "中",
+    "category": {
+      "scope": "设备",
+      "protocol_layer": "其他",
+      "lifecycle": "其他"
+    },
+    "scenario": "通用",
+    "device_type": "路由器",
+    "topic": "VRRP 备份组状态切换日志的含义与处理",
+    "tags": [
+      "NetEngine8000",
+      "V800R025C10",
+      "日志",
+      "VRRP日志"
+    ]
+  },
+  {
+    "id": 55,
+    "difficulty": "中",
+    "category": {
+      "scope": "设备",
+      "protocol_layer": "其他",
+      "lifecycle": "其他"
+    },
+    "scenario": "通用",
+    "device_type": "路由器",
+    "topic": "CPU 占用率过高日志的含义与处理",
+    "tags": [
+      "NetEngine8000",
+      "V800R025C10",
+      "日志",
+      "CPU日志"
+    ]
+  },
+  {
+    "id": 56,
+    "difficulty": "简单",
+    "category": {
+      "scope": "设备",
+      "protocol_layer": "其他",
+      "lifecycle": "其他"
+    },
+    "scenario": "通用",
+    "device_type": "路由器",
+    "topic": "IPSec VPN 特性与典型应用",
+    "tags": [
+      "AR6140E",
+      "V600R025C10",
+      "特性",
+      "IPSec"
+    ]
+  },
+  {
+    "id": 57,
+    "difficulty": "中",
+    "category": {
+      "scope": "设备",
+      "protocol_layer": "其他",
+      "lifecycle": "其他"
+    },
+    "scenario": "通用",
+    "device_type": "路由器",
+    "topic": "出接口 NAT(Easy IP)配置方案",
+    "tags": [
+      "AR6140E",
+      "V600R025C10",
+      "配置方案",
+      "NAT"
+    ]
+  },
+  {
+    "id": 58,
+    "difficulty": "中",
+    "category": {
+      "scope": "设备",
+      "protocol_layer": "其他",
+      "lifecycle": "其他"
+    },
+    "scenario": "通用",
+    "device_type": "路由器",
+    "topic": "GRE 隧道配置方案",
+    "tags": [
+      "AR6710",
+      "V600R025C10",
+      "配置方案",
+      "GRE"
+    ]
+  },
+  {
+    "id": 59,
+    "difficulty": "中",
+    "category": {
+      "scope": "设备",
+      "protocol_layer": "其他",
+      "lifecycle": "其他"
+    },
+    "scenario": "通用",
+    "device_type": "路由器",
+    "topic": "4G/5G 蜂窝接口拨号配置方案",
+    "tags": [
+      "AR5710",
+      "V600R025C10",
+      "配置方案",
+      "Cellular"
+    ]
+  },
+  {
+    "id": 60,
+    "difficulty": "中",
+    "category": {
+      "scope": "设备",
+      "protocol_layer": "其他",
+      "lifecycle": "其他"
+    },
+    "scenario": "通用",
+    "device_type": "路由器",
+    "topic": "NAT 相关命令(nat outbound/nat address-group)语法与参数",
+    "tags": [
+      "AR6140E",
+      "V600R025C10",
+      "命令行",
+      "NAT"
+    ]
+  },
+  {
+    "id": 61,
+    "difficulty": "中",
+    "category": {
+      "scope": "设备",
+      "protocol_layer": "其他",
+      "lifecycle": "其他"
+    },
+    "scenario": "通用",
+    "device_type": "路由器",
+    "topic": "ACL 相关命令(acl/rule)语法与参数",
+    "tags": [
+      "AR6140E",
+      "V600R025C10",
+      "命令行",
+      "ACL"
+    ]
+  },
+  {
+    "id": 62,
+    "difficulty": "中",
+    "category": {
+      "scope": "设备",
+      "protocol_layer": "其他",
+      "lifecycle": "其他"
+    },
+    "scenario": "通用",
+    "device_type": "路由器",
+    "topic": "DHCP 相关命令(dhcp enable/ip pool)语法与参数",
+    "tags": [
+      "AR6710",
+      "V600R025C10",
+      "命令行",
+      "DHCP"
+    ]
+  },
+  {
+    "id": 63,
+    "difficulty": "中",
+    "category": {
+      "scope": "设备",
+      "protocol_layer": "其他",
+      "lifecycle": "其他"
+    },
+    "scenario": "通用",
+    "device_type": "路由器",
+    "topic": "Cellular 接口拨号相关命令(自动拨号/自动呼叫间隔)语法与参数",
+    "tags": [
+      "AR5710",
+      "V600R025C10",
+      "命令行",
+      "Cellular"
+    ]
+  },
+  {
+    "id": 64,
+    "difficulty": "中",
+    "category": {
+      "scope": "设备",
+      "protocol_layer": "其他",
+      "lifecycle": "其他"
+    },
+    "scenario": "通用",
+    "device_type": "路由器",
+    "topic": "VRRP 相关命令(vrrp vrid virtual-ip/priority)语法与参数",
+    "tags": [
+      "AR6710",
+      "V600R025C10",
+      "命令行",
+      "VRRP"
+    ]
+  },
+  {
+    "id": 65,
+    "difficulty": "中",
+    "category": {
+      "scope": "设备",
+      "protocol_layer": "其他",
+      "lifecycle": "其他"
+    },
+    "scenario": "通用",
+    "device_type": "路由器",
+    "topic": "电源异常告警的含义与处理",
+    "tags": [
+      "AR6140E",
+      "V600R025C10",
+      "告警处理",
+      "电源"
+    ]
+  },
+  {
+    "id": 66,
+    "difficulty": "中",
+    "category": {
+      "scope": "设备",
+      "protocol_layer": "其他",
+      "lifecycle": "其他"
+    },
+    "scenario": "通用",
+    "device_type": "路由器",
+    "topic": "IPSec 协商相关告警的含义与处理",
+    "tags": [
+      "AR6140E",
+      "V600R025C10",
+      "告警处理",
+      "IPSec"
+    ]
+  },
+  {
+    "id": 67,
+    "difficulty": "中",
+    "category": {
+      "scope": "设备",
+      "protocol_layer": "其他",
+      "lifecycle": "其他"
+    },
+    "scenario": "通用",
+    "device_type": "路由器",
+    "topic": "CPU 占用率过高告警的含义与处理",
+    "tags": [
+      "AR5710",
+      "V600R025C10",
+      "告警处理",
+      "CPU"
+    ]
+  },
+  {
+    "id": 68,
+    "difficulty": "中",
+    "category": {
+      "scope": "设备",
+      "protocol_layer": "其他",
+      "lifecycle": "其他"
+    },
+    "scenario": "通用",
+    "device_type": "路由器",
+    "topic": "接口物理状态变化日志的含义与处理",
+    "tags": [
+      "AR6140E",
+      "V600R025C10",
+      "日志",
+      "接口"
+    ]
+  },
+  {
+    "id": 69,
+    "difficulty": "中",
+    "category": {
+      "scope": "设备",
+      "protocol_layer": "其他",
+      "lifecycle": "其他"
+    },
+    "scenario": "通用",
+    "device_type": "路由器",
+    "topic": "Cellular 拨号失败日志(WWAN_DIALER_FAILED)的含义与处理",
+    "tags": [
+      "AR5710",
+      "V600R025C10",
+      "日志",
+      "Cellular"
+    ]
+  },
+  {
+    "id": 70,
+    "difficulty": "中",
+    "category": {
+      "scope": "设备",
+      "protocol_layer": "其他",
+      "lifecycle": "其他"
+    },
+    "scenario": "通用",
+    "device_type": "路由器",
+    "topic": "系统启动与单板插拔日志的含义与处理",
+    "tags": [
+      "AR6710",
+      "V600R025C10",
+      "日志",
+      "系统"
+    ]
+  },
+  {
+    "id": 71,
+    "difficulty": "简单",
+    "category": {
+      "scope": "设备",
+      "protocol_layer": "其他",
+      "lifecycle": "其他"
+    },
+    "scenario": "通用",
+    "device_type": "防火墙",
+    "topic": "安全策略特性与报文处理流程",
+    "tags": [
+      "USG6305E",
+      "V600R007C20",
+      "特性",
+      "安全策略"
+    ]
+  },
+  {
+    "id": 72,
+    "difficulty": "简单",
+    "category": {
+      "scope": "设备",
+      "protocol_layer": "其他",
+      "lifecycle": "其他"
+    },
+    "scenario": "通用",
+    "device_type": "防火墙",
+    "topic": "双机热备(HRP)特性与典型组网",
+    "tags": [
+      "USG6605E-B",
+      "V600R007C20",
+      "特性",
+      "双机热备"
+    ]
+  },
+  {
+    "id": 73,
+    "difficulty": "中",
+    "category": {
+      "scope": "设备",
+      "protocol_layer": "其他",
+      "lifecycle": "其他"
+    },
+    "scenario": "通用",
+    "device_type": "防火墙",
+    "topic": "NAT Server 内部服务器发布配置方案",
+    "tags": [
+      "USG6305E",
+      "V600R007C20",
+      "配置方案",
+      "NAT Server"
+    ]
+  },
+  {
+    "id": 74,
+    "difficulty": "中",
+    "category": {
+      "scope": "设备",
+      "protocol_layer": "其他",
+      "lifecycle": "其他"
+    },
+    "scenario": "通用",
+    "device_type": "防火墙",
+    "topic": "IPSec VPN 对接配置方案",
+    "tags": [
+      "USG6605E-B",
+      "V600R007C20",
+      "配置方案",
+      "IPSec VPN"
+    ]
+  },
+  {
+    "id": 75,
+    "difficulty": "中",
+    "category": {
+      "scope": "设备",
+      "protocol_layer": "其他",
+      "lifecycle": "其他"
+    },
+    "scenario": "通用",
+    "device_type": "防火墙",
+    "topic": "安全区域相关命令(firewall zone)语法与参数",
+    "tags": [
+      "USG6305E",
+      "V600R007C20",
+      "命令行",
+      "安全区域"
+    ]
+  },
+  {
+    "id": 76,
+    "difficulty": "中",
+    "category": {
+      "scope": "设备",
+      "protocol_layer": "其他",
+      "lifecycle": "其他"
+    },
+    "scenario": "通用",
+    "device_type": "防火墙",
+    "topic": "攻击防范相关命令(anti-attack)语法与参数",
+    "tags": [
+      "USG6605E-B",
+      "V600R007C20",
+      "命令行",
+      "攻击防范"
+    ]
+  },
+  {
+    "id": 77,
+    "difficulty": "中",
+    "category": {
+      "scope": "设备",
+      "protocol_layer": "其他",
+      "lifecycle": "其他"
+    },
+    "scenario": "通用",
+    "device_type": "防火墙",
+    "topic": "安全策略相关命令(security-policy/rule)语法与参数",
+    "tags": [
+      "USG6305E",
+      "V600R007C20",
+      "命令行",
+      "安全策略"
+    ]
+  },
+  {
+    "id": 78,
+    "difficulty": "中",
+    "category": {
+      "scope": "设备",
+      "protocol_layer": "其他",
+      "lifecycle": "其他"
+    },
+    "scenario": "通用",
+    "device_type": "防火墙",
+    "topic": "NAT 策略相关命令(nat policy)语法与参数",
+    "tags": [
+      "USG6605E-B",
+      "V600R007C20",
+      "命令行",
+      "NAT策略"
+    ]
+  },
+  {
+    "id": 79,
+    "difficulty": "中",
+    "category": {
+      "scope": "设备",
+      "protocol_layer": "其他",
+      "lifecycle": "其他"
+    },
+    "scenario": "通用",
+    "device_type": "防火墙",
+    "topic": "用户认证相关命令(aaa/authentication-mode)语法与参数",
+    "tags": [
+      "USG6305E",
+      "V600R007C20",
+      "命令行",
+      "用户认证"
+    ]
+  },
+  {
+    "id": 80,
+    "difficulty": "中",
+    "category": {
+      "scope": "设备",
+      "protocol_layer": "其他",
+      "lifecycle": "其他"
+    },
+    "scenario": "通用",
+    "device_type": "防火墙",
+    "topic": "DDoS 攻击防范告警(hwSecDDOSAttackBegin)的含义与处理",
+    "tags": [
+      "USG6305E",
+      "V600R007C20",
+      "告警处理",
+      "DDoS攻击防范"
+    ]
+  },
+  {
+    "id": 81,
+    "difficulty": "中",
+    "category": {
+      "scope": "设备",
+      "protocol_layer": "其他",
+      "lifecycle": "其他"
+    },
+    "scenario": "通用",
+    "device_type": "防火墙",
+    "topic": "双机热备(HRP)切换告警的含义与处理",
+    "tags": [
+      "USG6605E-B",
+      "V600R007C20",
+      "告警处理",
+      "双机热备"
+    ]
+  },
+  {
+    "id": 82,
+    "difficulty": "中",
+    "category": {
+      "scope": "设备",
+      "protocol_layer": "其他",
+      "lifecycle": "其他"
+    },
+    "scenario": "通用",
+    "device_type": "防火墙",
+    "topic": "会话资源不足告警的含义与处理",
+    "tags": [
+      "USG6605E-B",
+      "V600R007C20",
+      "告警处理",
+      "会话资源"
+    ]
+  },
+  {
+    "id": 83,
+    "difficulty": "中",
+    "category": {
+      "scope": "设备",
+      "protocol_layer": "其他",
+      "lifecycle": "其他"
+    },
+    "scenario": "通用",
+    "device_type": "防火墙",
+    "topic": "用户上线/下线日志的含义与处理",
+    "tags": [
+      "USG6305E",
+      "V600R007C20",
+      "日志",
+      "用户上下线"
+    ]
+  },
+  {
+    "id": 84,
+    "difficulty": "中",
+    "category": {
+      "scope": "设备",
+      "protocol_layer": "其他",
+      "lifecycle": "其他"
+    },
+    "scenario": "通用",
+    "device_type": "防火墙",
+    "topic": "NAT 转换日志的含义与处理",
+    "tags": [
+      "USG6605E-B",
+      "V600R007C20",
+      "日志",
+      "NAT转换"
+    ]
+  },
+  {
+    "id": 85,
+    "difficulty": "中",
+    "category": {
+      "scope": "设备",
+      "protocol_layer": "其他",
+      "lifecycle": "其他"
+    },
+    "scenario": "通用",
+    "device_type": "防火墙",
+    "topic": "IPSec 协商相关日志的含义与处理",
+    "tags": [
+      "USG6605E-B",
+      "V600R007C20",
+      "日志",
+      "IPSec协商"
+    ]
+  },
+  {
+    "id": 86,
+    "difficulty": "简单",
+    "category": {
+      "scope": "设备",
+      "protocol_layer": "其他",
+      "lifecycle": "其他"
+    },
+    "scenario": "园区",
+    "device_type": "WLAN",
+    "topic": "WLAN 组网架构与 VAP/SSID 特性概述",
+    "tags": [
+      "AirEngine9703-S",
+      "V600R025C10",
+      "特性",
+      "SSID"
+    ]
+  },
+  {
+    "id": 87,
+    "difficulty": "中",
+    "category": {
+      "scope": "设备",
+      "protocol_layer": "其他",
+      "lifecycle": "其他"
+    },
+    "scenario": "园区",
+    "device_type": "WLAN",
+    "topic": "SSID 创建与业务 VLAN 传输配置方案",
+    "tags": [
+      "AirEngine5700",
+      "V600R025C10",
+      "配置方案",
+      "SSID"
+    ]
+  },
+  {
+    "id": 88,
+    "difficulty": "中",
+    "category": {
+      "scope": "设备",
+      "protocol_layer": "其他",
+      "lifecycle": "其他"
+    },
+    "scenario": "园区",
+    "device_type": "WLAN",
+    "topic": "射频调优配置方案",
+    "tags": [
+      "AirEngine9703-S",
+      "V600R025C10",
+      "配置方案",
+      "射频调优"
+    ]
+  },
+  {
+    "id": 89,
+    "difficulty": "中",
+    "category": {
+      "scope": "设备",
+      "protocol_layer": "其他",
+      "lifecycle": "其他"
+    },
+    "scenario": "园区",
+    "device_type": "WLAN",
+    "topic": "SSID 模板查看命令(display ssid-profile)语法与参数",
+    "tags": [
+      "AirEngine5700",
+      "V600R025C10",
+      "命令行",
+      "ssid-profile"
+    ]
+  },
+  {
+    "id": 90,
+    "difficulty": "中",
+    "category": {
+      "scope": "设备",
+      "protocol_layer": "其他",
+      "lifecycle": "其他"
+    },
+    "scenario": "园区",
+    "device_type": "WLAN",
+    "topic": "安全模板相关命令(security-profile)语法与参数",
+    "tags": [
+      "AirEngine9703-S",
+      "V600R025C10",
+      "命令行",
+      "security-profile"
+    ]
+  },
+  {
+    "id": 91,
+    "difficulty": "中",
+    "category": {
+      "scope": "设备",
+      "protocol_layer": "其他",
+      "lifecycle": "其他"
+    },
+    "scenario": "园区",
+    "device_type": "WLAN",
+    "topic": "射频状态查看命令(display radio)语法与参数",
+    "tags": [
+      "AirEngine5700",
+      "V600R025C10",
+      "命令行",
+      "display radio"
+    ]
+  },
+  {
+    "id": 92,
+    "difficulty": "中",
+    "category": {
+      "scope": "设备",
+      "protocol_layer": "其他",
+      "lifecycle": "其他"
+    },
+    "scenario": "园区",
+    "device_type": "WLAN",
+    "topic": "CAPWAP 源接口相关命令(capwap source interface)语法与参数",
+    "tags": [
+      "AirEngine9703-S",
+      "V600R025C10",
+      "命令行",
+      "CAPWAP"
+    ]
+  },
+  {
+    "id": 93,
+    "difficulty": "中",
+    "category": {
+      "scope": "设备",
+      "protocol_layer": "其他",
+      "lifecycle": "其他"
+    },
+    "scenario": "园区",
+    "device_type": "WLAN",
+    "topic": "AP 组与域管理模板相关命令(ap-group/regulatory-domain-profile)语法与参数",
+    "tags": [
+      "AirEngine9703-S",
+      "V600R025C10",
+      "命令行",
+      "ap-group"
+    ]
+  },
+  {
+    "id": 94,
+    "difficulty": "中",
+    "category": {
+      "scope": "设备",
+      "protocol_layer": "其他",
+      "lifecycle": "其他"
+    },
+    "scenario": "园区",
+    "device_type": "WLAN",
+    "topic": "流量模板相关命令(traffic-profile)语法与参数",
+    "tags": [
+      "AirEngine9703-S",
+      "V600R025C10",
+      "命令行",
+      "traffic-profile"
+    ]
+  },
+  {
+    "id": 95,
+    "difficulty": "中",
+    "category": {
+      "scope": "设备",
+      "protocol_layer": "其他",
+      "lifecycle": "其他"
+    },
+    "scenario": "园区",
+    "device_type": "WLAN",
+    "topic": "AP 接口流量转发受限告警(hwApPortTrafficLimitedTrap)的含义与处理",
+    "tags": [
+      "AirEngine5700",
+      "V600R025C10",
+      "告警处理",
+      "hwApPortTrafficLimitedTrap"
+    ]
+  },
+  {
+    "id": 96,
+    "difficulty": "中",
+    "category": {
+      "scope": "设备",
+      "protocol_layer": "其他",
+      "lifecycle": "其他"
+    },
+    "scenario": "园区",
+    "device_type": "WLAN",
+    "topic": "AP 供电告警的含义与处理",
+    "tags": [
+      "AirEngine5700",
+      "V600R025C10",
+      "告警处理",
+      "PoE"
+    ]
+  },
+  {
+    "id": 97,
+    "difficulty": "中",
+    "category": {
+      "scope": "设备",
+      "protocol_layer": "其他",
+      "lifecycle": "其他"
+    },
+    "scenario": "园区",
+    "device_type": "WLAN",
+    "topic": "AP CPU 占用率过高告警(hwApCpuOverloadTrap)的含义与处理",
+    "tags": [
+      "AirEngine9703-S",
+      "V600R025C10",
+      "告警处理",
+      "hwApCpuOverloadTrap"
+    ]
+  },
+  {
+    "id": 98,
+    "difficulty": "中",
+    "category": {
+      "scope": "设备",
+      "protocol_layer": "其他",
+      "lifecycle": "其他"
+    },
+    "scenario": "园区",
+    "device_type": "WLAN",
+    "topic": "用户上线/下线结果日志(CM/5/USER_ACCESSRESULT)的含义与处理",
+    "tags": [
+      "AirEngine5700",
+      "V600R025C10",
+      "日志",
+      "用户上线"
+    ]
+  },
+  {
+    "id": 99,
+    "difficulty": "中",
+    "category": {
+      "scope": "设备",
+      "protocol_layer": "其他",
+      "lifecycle": "其他"
+    },
+    "scenario": "园区",
+    "device_type": "WLAN",
+    "topic": "CAPWAP 链路状态日志的含义与处理",
+    "tags": [
+      "AirEngine9703-S",
+      "V600R025C10",
+      "日志",
+      "CAPWAP"
+    ]
+  },
+  {
+    "id": 100,
+    "difficulty": "中",
+    "category": {
+      "scope": "设备",
+      "protocol_layer": "其他",
+      "lifecycle": "其他"
+    },
+    "scenario": "园区",
+    "device_type": "WLAN",
+    "topic": "AP 重启日志(WLAN/3/AP_RESET)的含义与处理",
+    "tags": [
+      "AirEngine9703-S",
+      "V600R025C10",
+      "日志",
+      "AP_RESET"
+    ]
+  }
+]

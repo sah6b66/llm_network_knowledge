@@ -1,0 +1,172 @@
+[
+  {
+    "id": 11,
+    "difficulty": "简单",
+    "category": {"scope": "其他", "protocol_layer": "其他", "lifecycle": "其他"},
+    "scenario": "其他",
+    "device_type": "其他",
+    "question": "RFC 9114 定义的 HTTP/3 是什么?它依赖哪个传输层协议、解决了 HTTP/2 over TCP 的什么核心问题?",
+    "answer": "HTTP/3 是 HTTP 语义在 QUIC 传输协议上的映射。QUIC 提供流多路复用、每流(per-stream)流量控制和低时延连接建立,并将 TLS 1.3 集成在传输层。它解决了 HTTP/2 over TCP 中丢包或乱序导致所有并行事务停顿的传输层队头阻塞问题。每个请求-响应对占用一个客户端发起的双向 QUIC 流,流之间相互独立;字段压缩改用 QPACK 替代依赖有序传输的 HPACK,连接以 ALPN token \"h3\" 标识。",
+    "scoring_points": [
+      "HTTP/3 是 HTTP 语义到 QUIC 传输协议的映射",
+      "解决 HTTP/2 over TCP 的传输层队头阻塞(丢包/乱序使所有并行事务停顿)",
+      "QUIC 提供流多路复用、每流流量控制、低时延连接建立,并在传输层集成 TLS 1.3",
+      "每个请求-响应对使用一个客户端发起的双向 QUIC 流,流之间相互独立",
+      "字段压缩采用 QPACK 替代 HPACK,连接建立以 ALPN token \"h3\" 标识"
+    ],
+    "tags": ["RFC-2022", "RFC9114", "HTTP/3", "QUIC"]
+  },
+  {
+    "id": 12,
+    "difficulty": "简单",
+    "category": {"scope": "其他", "protocol_layer": "其他", "lifecycle": "其他"},
+    "scenario": "其他",
+    "device_type": "其他",
+    "question": "RFC 9129 定义的 OSPF YANG 数据模型的目的与整体结构是什么?",
+    "answer": "RFC 9129 定义用于配置和管理 OSPF 的 YANG 模块 ietf-ospf,基于 YANG 1.1(RFC 7950)并遵循 NMDA(RFC 8342),配置与运行状态放在同一棵树中。模型增强(augment)ietf-routing 模块的 /routing/control-plane-protocols/control-plane-protocol 路径,单个 ospf 容器代表一个 OSPF 协议实例,由强制的 version 字段区分 OSPFv2 或 OSPFv3;其下包含 areas(area 以 area-id 为键,含 virtual-links、sham-links、interfaces)以及支持 multi-topology 特性时的 topologies 容器。",
+    "scoring_points": [
+      "定义 YANG 模块 ietf-ospf,基于 YANG 1.1(RFC 7950)、符合 NMDA(RFC 8342)",
+      "增强 ietf-routing 模块的 /routing/control-plane-protocols/control-plane-protocol 路径(仅增强 routing 容器而非 routing-state)",
+      "顶层为单个 ospf 容器,代表一个 OSPF 协议实例(实例即一个 control-plane-protocol 实例)",
+      "通过强制的 version 字段同时支持 OSPFv2 与 OSPFv3",
+      "结构包含 areas(area* 以 area-id 为键,含 virtual-links、sham-links、interfaces)及 multi-topology 特性下的 topologies 容器"
+    ],
+    "tags": ["RFC-2022", "RFC9129", "YANG", "OSPF"]
+  },
+  {
+    "id": 13,
+    "difficulty": "简单",
+    "category": {"scope": "其他", "protocol_layer": "传输层", "lifecycle": "其他"},
+    "scenario": "其他",
+    "device_type": "其他",
+    "question": "DTLS 1.3(RFC 9147)是什么?它与 TLS 1.3 的关系如何,为适应不可靠数据报传输做了哪些核心改造?",
+    "answer": "DTLS 1.3 基于 TLS 1.3,提供与之等效的安全保证,但除外顺序保护/防重放性,并保留底层传输的数据报语义,用于 UDP 等不可靠传输,废弃 RFC 6347。为容忍丢包、乱序与分片,DTLS 1.3 修改握手报文头(增加 message_seq 与分片偏移/长度字段)并引入重传定时器,新增 ACK 内容类型用于握手消息的可靠交付,复用 TLS 1.3 的 cookie 扩展提供回程可达性检查以防范 DoS 放大攻击;记录层增加 epoch 与序列号。",
+    "scoring_points": [
+      "DTLS 1.3 基于 TLS 1.3,安全保证等效,但除外顺序保护/防重放(non-replayability)",
+      "保留底层传输的数据报语义,面向 UDP 等不可靠传输,废弃 RFC 6347",
+      "握手报文头增加 message_seq 与 fragment offset/length,支持握手消息分片与重组",
+      "引入重传定时器并新增 ACK 内容类型,实现握手消息的可靠交付",
+      "复用 TLS 1.3 的 cookie 扩展做回程可达性检查,防范 DoS 攻击"
+    ],
+    "tags": ["RFC-2022", "RFC9147", "DTLS", "TLS 1.3"]
+  },
+  {
+    "id": 14,
+    "difficulty": "简单",
+    "category": {"scope": "其他", "protocol_layer": "其他", "lifecycle": "其他"},
+    "scenario": "其他",
+    "device_type": "其他",
+    "question": "RFC 9182 定义的 L3VPN 网络模型(L3NM)的定位是什么?它与 L3SM 及其他 YANG 模型是什么关系?",
+    "answer": "L3NM(模块 ietf-l3vpn-ntw)提供面向网络(network-centric)的 L3VPN 视角,作为面向客户的 L3SM(RFC 8299,用于客户与服务提供商之间通信)的补充:供网络控制器推导要下发给网络设备的配置,并支持业务编排器与网络控制器/编排器之间的通信。L3NM 最初由 L3SM \"prune and extend\" 而来,但并未定义为对 L3SM 的 augment,公共类型与 grouping 复用自 ietf-vpn-common(RFC 9181);该模型聚焦于基于 BGP PE 的 L3VPN。",
+    "scoring_points": [
+      "L3NM 提供面向网络(network-centric)的 L3VPN 服务视图,模块名为 ietf-l3vpn-ntw",
+      "L3SM(RFC 8299)是客户与服务提供商之间的客户服务模型,L3NM 是其补充",
+      "L3NM 供网络控制器推导下发给网络设备的配置,并便于业务编排器与网络控制器/编排器通信",
+      "L3NM 由 L3SM \"prune and extend\" 而来,但不是对 L3SM 的 augment",
+      "复用 ietf-vpn-common(RFC 9181)的公共类型与 grouping,聚焦基于 BGP PE 的 L3VPN"
+    ],
+    "tags": ["RFC-2022", "RFC9182", "YANG", "L3VPN"]
+  },
+  {
+    "id": 15,
+    "difficulty": "简单",
+    "category": {"scope": "其他", "protocol_layer": "其他", "lifecycle": "其他"},
+    "scenario": "其他",
+    "device_type": "其他",
+    "question": "DNS over QUIC(DoQ,RFC 9250)是什么?其设计目标与基本的连接建立方式是什么?",
+    "answer": "DoQ 定义 DNS 消息如何在 QUIC 上传输,即 DNS 查询/响应到 QUIC 流的映射。它提供与 DoT 相当的隐私保护,同时避免 DoH 引入的 HTTP 层开销,更适合递归到权威、区域传送等较少涉及中间件的场景。DoQ 连接按 QUIC 传输规范建立,在加密握手中以 ALPN token \"doq\" 指示支持;服务器默认在专用 UDP 端口 853 监听。DoQ 不支持服务器发起的事务,因此不满足 DSO 适用传输的条件。",
+    "scoring_points": [
+      "DoQ 定义 DNS 消息到 QUIC 传输的映射(查询/响应如何使用 QUIC 流)",
+      "隐私保护与 DoT(RFC 7858)相当,相比 DoH 避免 HTTP 层开销",
+      "连接建立遵循 QUIC 规范,以 ALPN token \"doq\" 协商",
+      "支持 DoQ 的 DNS 服务器默认必须在专用 UDP 端口 853 监听",
+      "不支持服务器发起的事务(DSO),因为不保证消息按序交付"
+    ],
+    "tags": ["RFC-2022", "RFC9250", "DNS", "QUIC"]
+  },
+  {
+    "id": 16,
+    "difficulty": "简单",
+    "category": {"scope": "其他", "protocol_layer": "IP层", "lifecycle": "其他"},
+    "scenario": "其他",
+    "device_type": "其他",
+    "question": "RFC 9252 如何在 SRv6 数据平面上承载 EVPN 等 BGP 业务?其基本工作机制是什么?",
+    "answer": "出口 PE 在 BGP 业务路由中通告 SRv6 Service SID;入口 PE 将客户报文封装进外层 IPv6 头,其目的地址即该 Service SID。尽力而为连通场景下,PE 之间的承载网只需支持普通 IPv6 转发。需要 SLA 保障时,出口 PE 用 Color Extended Community 为路由着色,入口 PE 依据 SR Policy 将关联的 SRv6 段列表放入 SRH 引导流量。Service SID 及其信息通过 BGP Prefix-SID 属性中新增的 SRv6 L3/L2 Service TLV 编码传递。",
+    "scoring_points": [
+      "出口 PE 在 BGP 业务路由中随路由通告 SRv6 Service SID",
+      "入口 PE 用外层 IPv6 头封装报文,目的地址为出口 PE 的 Service SID",
+      "尽力而为场景下承载网(underlay)只需支持普通 IPv6 转发",
+      "有 SLA 需求时出口 PE 用 Color Extended Community 着色,入口 PE 借助 SR Policy(SRH 段列表)引导",
+      "Service SID 经 BGP Prefix-SID 属性中新增的 SRv6 L3 Service TLV 与 SRv6 L2 Service TLV 编码"
+    ],
+    "tags": ["RFC-2022", "RFC9252", "EVPN", "SRv6"]
+  },
+  {
+    "id": 17,
+    "difficulty": "简单",
+    "category": {"scope": "其他", "protocol_layer": "IP层", "lifecycle": "其他"},
+    "scenario": "其他",
+    "device_type": "其他",
+    "question": "SR Policy 架构(RFC 9256)中,SR Policy 由哪些要素标识与构成?候选路径和段列表扮演什么角色?",
+    "answer": "SR Policy 是段路由的流量工程架构,由三元组 <Headend, Color, Endpoint> 唯一标识:Headend 是策略实例化/实现的节点,Endpoint 是策略目的节点,Color 为非零 32 位无符号整数,用于关联意图(如低时延)。每个 SR Policy 关联一个或多个候选路径(Candidate Path),它是向 headend 传递 SR Policy 的信令基本单位,分为显式(explicit)、动态(dynamic)与复合(composite)三类。段列表(Segment List)表示具体的源路由路径,是候选路径的属性;一个候选路径可关联多个段列表并按权重加权负载分担。",
+    "scoring_points": [
+      "SR Policy 由 <Headend, Color, Endpoint> 三元组标识(特定 headend 语境下为 <Color, Endpoint>)",
+      "Headend 是策略实例化的节点,Endpoint 是目的节点,Color 为非零 32 位整数、关联意图",
+      "候选路径是向 headend 信令 SR Policy 的基本单位",
+      "候选路径分为显式(explicit)、动态(dynamic)、复合(composite)三类",
+      "段列表表示源路由路径,是候选路径的属性;多个段列表按权重做加权负载分担"
+    ],
+    "tags": ["RFC-2022", "RFC9256", "SR Policy", "流量工程"]
+  },
+  {
+    "id": 18,
+    "difficulty": "简单",
+    "category": {"scope": "其他", "protocol_layer": "IP层", "lifecycle": "其他"},
+    "scenario": "其他",
+    "device_type": "其他",
+    "question": "BIER-TE(RFC 9262)是什么?它与(非 TE 的)BIER 的根本区别以及核心工作方式是什么?",
+    "answer": "BIER-TE 是 BIER 的树工程扩展:BitString 中的位位置(BP)不再像 BIER 那样表示接收者 BFER,而是表示网络中的邻接(adjacency),从而显式编码期望的转发树。BIER-TE 控制器(典型为 SDN 控制器)计算树并把位/邻接下推到各 BFR 的 BIFT。除可选的 forward_routed 邻接外,BIER-TE 不依赖路由底层,可无需 IGP 等路由协议运行;同一组 BFER 在不同流或策略下可使用不同 BitString(如最短路径树、Steiner 树、不相交树),转发过程中清除已处理位以防环路。",
+    "scoring_points": [
+      "BIER-TE 对 BIER 做显式树工程:位位置编码邻接而非接收者 BFER",
+      "BIER-TE 控制器计算期望的转发树,并将 BP/邻接下推到各 BFR 的 BIFT",
+      "除可选 forward_routed 邻接外不依赖路由底层,可不需要 IGP 等路由协议",
+      "同一组 BFER 可按流/策略使用不同 BitString(最短路径树、Steiner 树、多样性树等)",
+      "转发时清除本 BFR 拥有邻接的位,以避免环路与重复"
+    ],
+    "tags": ["RFC-2022", "RFC9262", "BIER", "组播"]
+  },
+  {
+    "id": 19,
+    "difficulty": "简单",
+    "category": {"scope": "其他", "protocol_layer": "传输层", "lifecycle": "其他"},
+    "scenario": "其他",
+    "device_type": "其他",
+    "question": "RFC 9293 对 TCP 的定位与规范范围是什么?TCP 提供哪些核心机制?",
+    "answer": "RFC 9293 是 TCP 的规范,STD 7,它把 RFC 793 发布以来的零散修改汇集到一起,并废止 RFC 793、879、2873、6093、6429、6528、6691。TCP 是互联网协议栈中重要的面向连接的可靠传输层协议,通过序列号/确认号与校验和提供按序可靠交付和差错检测,以 Window 字段提供流量控制;拥塞控制是 TCP 的要求,但具体算法不在该文档中详述。连接按状态机演进,经历 LISTEN、SYN-SENT、SYN-RECEIVED、ESTABLISHED、FIN-WAIT、TIME-WAIT 等状态。",
+    "scoring_points": [
+      "RFC 9293 是 TCP 规范(STD 7),废止 RFC 793 及 879、2873、6093、6429、6528、6691",
+      "TCP 是面向连接、提供可靠按序字节流交付的传输层协议",
+      "通过序列号/确认号与 16 位校验和实现可靠交付与差错检测",
+      "提供基于 Window 字段的流量控制",
+      "拥塞控制是 TCP 的要求但不在该文档详述;连接按状态机演进(LISTEN、SYN-SENT、SYN-RECEIVED、ESTABLISHED 等)"
+    ],
+    "tags": ["RFC-2022", "RFC9293", "TCP", "互联网标准"]
+  },
+  {
+    "id": 20,
+    "difficulty": "简单",
+    "category": {"scope": "其他", "protocol_layer": "其他", "lifecycle": "其他"},
+    "scenario": "其他",
+    "device_type": "其他",
+    "question": "RFC 9298 定义的用 HTTP 代理 UDP 的机制是什么?客户端如何指定代理目标?",
+    "answer": "类似 HTTP CONNECT 方法代理 TCP,RFC 9298 定义 \"connect-udp\" 升级 token,使 HTTP 客户端能够通过充当 UDP 代理的 HTTP 服务器建立 UDP 通信隧道。隧道目标由 URI Template 的 target_host 与 target_port 两个变量指示,客户端配置的模板必须包含这两个变量;文档给出默认模板 https://$PROXY_HOST:$PROXY_PORT/.well-known/masque/udp/{target_host}/{target_port}/。隧道使用 Capsule Protocol 交换 HTTP Datagram;在 HTTP/2 和 HTTP/3 中通过 Extended CONNECT 发起请求。",
+    "scoring_points": [
+      "定义 \"connect-udp\" 升级 token,在 HTTP 中建立 UDP 隧道(类比 CONNECT 代理 TCP)",
+      "隧道目标由 URI Template 的 target_host 和 target_port 变量指示,模板必须包含这两个变量",
+      "默认模板为 /.well-known/masque/udp/{target_host}/{target_port}/(前缀 https://$PROXY_HOST:$PROXY_PORT)",
+      "UDP 隧道使用 Capsule Protocol,以 HTTP Datagram 承载数据",
+      "HTTP/2 与 HTTP/3 中通过 Extended CONNECT 发起代理请求"
+    ],
+    "tags": ["RFC-2022", "RFC9298", "MASQUE", "代理"]
+  }
+]

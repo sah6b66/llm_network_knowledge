@@ -1,0 +1,235 @@
+[
+  {
+    "id": 31,
+    "difficulty": "中",
+    "category": {
+      "scope": "其他",
+      "protocol_layer": "其他",
+      "lifecycle": "其他"
+    },
+    "scenario": "其他",
+    "device_type": "其他",
+    "question": "RFC 9499（DNS 术语，BCP 219）系统更新了递归、迭代、转发等术语，并调整了服务器角色命名。请说明：迭代模式下服务器向解析器返回什么；转发（forwarding）在文中的定义是什么、执行转发的服务器如何称呼；primary/secondary 命名取代了什么；以及除术语澄清外该文档还更新了哪份 RFC、引入了哪些新术语（举出三个即可）。",
+    "answer": "迭代（iterative）模式下，服务器不代替请求者继续查询，而是向解析器返回参照（referral），指明更靠近答案的其他权威服务器。转发在文中被定义为将一个 RD=1 的查询发送给另一台服务器（转发器 forwarder）并期望其代为完成解析的行为；执行转发的服务器称为 forwarding resolver 或 forwarder。命名方面，RFC 9499 用 primary/secondary 取代了旧的 master/slave 称谓，secondary 服务器通过 zone transfer 从 primary 获取区数据。术语澄清之外，RFC 9499 还更新了 RFC 2308（否定缓存），并引入了 RDoT、ADoT、Passive DNS、open resolver、view（split DNS）、Classic DNS 等新术语。",
+    "scoring_points": [
+      "迭代模式下服务器向解析器返回参照（referral）",
+      "转发定义为将 RD=1 的查询发给另一台服务器并期望其完成解析",
+      "执行转发的服务器称为 forwarder / forwarding resolver",
+      "primary/secondary 取代 master/slave 命名",
+      "secondary 服务器通过 zone transfer 从 primary 获取区数据",
+      "RFC 9499 更新了 RFC 2308（否定缓存相关内容）",
+      "引入的新术语如 RDoT、ADoT、Passive DNS、open resolver 等（举出三个即可）"
+    ],
+    "tags": ["RFC-2024", "RFC9499", "DNS", "术语"]
+  },
+  {
+    "id": 32,
+    "difficulty": "中",
+    "category": {
+      "scope": "其他",
+      "protocol_layer": "IP层",
+      "lifecycle": "其他"
+    },
+    "scenario": "其他",
+    "device_type": "其他",
+    "question": "RFC 9545 规定了 SR-MPLS 中 PSID 在标签栈中的位置与各节点的处理行为，并列举了多项应用。请说明：ingress 压入的 PSID 在标签栈中必须处于什么位置、在中间节点与倒数第二跳分别是栈顶还是非栈顶；PSID 的 S 位与 TTL 如何设置；egress 节点对 PSID 的处理义务；以及 RFC 9545 为 PSID 列举了哪些典型应用（至少四项）。",
+    "answer": "PSID 由 ingress 压栈时必须紧跟 SR 路径（segment list）的最后一个标签之后；在路径中间节点处 PSID 不在栈顶（不是该节点处理的顶层标签），但在倒数第二跳执行 PHP 弹出顶层标签后，PSID 可能成为栈顶标签。当 PSID 为栈底标签时其 S 位（Bottom of Stack）置 1；TTL 可为任意非 0 值。egress 节点必须（MUST）弹出 PSID。典型应用包括：支撑 RFC 7799 的性能测量（passive、active、hybrid）；关联双向 SR 路径的两条单向路径；1+1 Live-Live 保护场景；以及与 BSID 嵌套使用（外层 s-PSID 标识子路径、内层 e-PSID 标识端到端路径）。此外文中说明 PSID 标识的是 SID 列表而非实际 ECMP 路径。",
+    "scoring_points": [
+      "PSID 必须紧跟 SR 路径最后一个标签之后（由 ingress 压入）",
+      "PSID 在中间节点不在栈顶，但在倒数第二跳 PHP 之后可能成为栈顶",
+      "PSID 位于栈底时 S 位置 1，TTL 可为非 0 的任意值",
+      "egress 节点必须（MUST）弹出 PSID",
+      "应用包括 RFC 7799 性能测量（passive/active/hybrid）",
+      "应用包括双向 SR 路径关联与 1+1 Live-Live 保护",
+      "应用包括与 BSID 嵌套（s-PSID 与 e-PSID）",
+      "PSID 标识 SID 列表而非实际 ECMP 路径"
+    ],
+    "tags": ["RFC-2024", "RFC9545", "SR-MPLS", "Path Segment"]
+  },
+  {
+    "id": 33,
+    "difficulty": "中",
+    "category": {
+      "scope": "其他",
+      "protocol_layer": "IP层",
+      "lifecycle": "其他"
+    },
+    "scenario": "其他",
+    "device_type": "其他",
+    "question": "RFC 9568（VRRPv3）规定了 ADVERTISEMENT 报文的封装、虚拟 MAC 以及失效检测定时器。请说明：IPv4 与 IPv6 各自的组播地址、IP 协议号/下一报头与 TTL/Hop Limit 要求；两种版本校验和计算的差异；两类虚拟 MAC 的格式；Max Advertise Interval 字段的长度、单位与默认值；以及 Skew_Time 与 Active_Down_Interval 的计算公式。",
+    "answer": "IPv4 中 VRRP 报文发往组播地址 224.0.0.18，IP 协议号为 112，TTL 必须为 255；IPv6 中发往 ff02::12，下一报头为 112，Hop Limit 必须为 255。校验和方面，IPv4 的 UDP 式校验和仅覆盖 VRRP 报文本身（不含伪首部），而 IPv6 的校验和计算须包含 IPv6 伪首部。虚拟 MAC 为 IPv4 的 00-00-5E-00-01-{VRID} 与 IPv6 的 00-00-5E-00-02-{VRID}。Max Advertise Interval 字段长 12 位，单位为厘秒（centisecond），默认值 100 厘秒（即 1 秒）。Skew_Time = ((256 − Priority) × Active_Adver_Interval) / 256；Active_Down_Interval = (3 × Active_Adver_Interval) + Skew_Time。",
+    "scoring_points": [
+      "IPv4 使用组播地址 224.0.0.18、协议号 112、TTL 255",
+      "IPv6 使用组播地址 ff02::12、下一报头 112、Hop Limit 255",
+      "IPv4 校验和不含伪首部，IPv6 校验和包含 IPv6 伪首部",
+      "虚拟 MAC：IPv4 为 00-00-5E-00-01-{VRID}，IPv6 为 00-00-5E-00-02-{VRID}",
+      "Max Advertise Interval 为 12 位字段，单位厘秒，默认 100 厘秒",
+      "Skew_Time = ((256 − Priority) × Active_Adver_Interval) / 256",
+      "Active_Down_Interval = (3 × Active_Adver_Interval) + Skew_Time"
+    ],
+    "tags": ["RFC-2024", "RFC9568", "VRRP", "网关冗余"]
+  },
+  {
+    "id": 34,
+    "difficulty": "中",
+    "category": {
+      "scope": "其他",
+      "protocol_layer": "其他",
+      "lifecycle": "其他"
+    },
+    "scenario": "其他",
+    "device_type": "其他",
+    "question": "RFC 9572 为 EVPN 定义了跨 AS/跨区域的分段（segmentation）机制，使大型网络中的 BUM 分发对 PE 透明。请说明：区域边界路由器 RBR 重通告 I-PMSI 路由时的下一跳处理及为何不使用 S-NH 扩展团体；ingress PE 如何在分段场景确定叶子集合（IMET PTA 的 L 标志如何设置）；每区域 I-PMSI 重通告对 DF Election 扩展团体（RFC 8584）的要求及无 legacy PE 时的处理；以及该机制在 Multicast Flags 扩展团体中使用的标志位。",
+    "answer": "RBR（如 ASBR）在区域边界重通告 I-PMSI（IMET）路由时会改写 BGP 下一跳指向自己，但不使用 S-NH 扩展团体，使 ingress/egress PE 对分段完全透明，且 inter-AS 与 inter-region 两种场景的处理保持一致。ingress PE 在 IMET 路由的 PTA 中不设置 L 标志（不声称自己是叶子），而是根据收到的各 IMET 路由的 BGP 下一跳（远端 AS 的 PE 由本 AS 的 ASBR 代理）推导出实际叶子集合。为保证每区域只有一个 ASBR 重通告，被选中的指定 ASBR 发出的每区域 I-PMSI 重通告必须携带 DF Election 扩展团体（RFC 8584）且 AC-DF 位清零；若区域内不存在 legacy PE，则 MUST NOT 携带该团体，且收到时必须移除。该分段能力通过 IANA Multicast Flags 扩展团体的 bit 8（Segmentation Support）标识。",
+    "scoring_points": [
+      "RBR 重通告 IMET 路由时改写 BGP 下一跳指向自己",
+      "RBR 不使用 S-NH 扩展团体，从而对 ingress/egress PE 透明",
+      "inter-AS 与 inter-region 场景处理方式一致（统一机制）",
+      "ingress PE 在 IMET PTA 中不设置 L 标志",
+      "ingress PE 依据收到 IMET 路由的 BGP 下一跳（远端 PE 由本 AS ASBR 代理）确定叶子集合",
+      "指定 ASBR 的每区域 I-PMSI 重通告必须携带 DF Election 扩展团体（RFC 8584）且 AC-DF 位清零",
+      "无 legacy PE 时 MUST NOT 携带该团体并须移除收到的该团体",
+      "分段能力使用 IANA Multicast Flags 扩展团体 bit 8（Segmentation Support）标识"
+    ],
+    "tags": ["RFC-2024", "RFC9572", "EVPN", "BUM"]
+  },
+  {
+    "id": 35,
+    "difficulty": "中",
+    "category": {
+      "scope": "其他",
+      "protocol_layer": "传输层",
+      "lifecycle": "其他"
+    },
+    "scenario": "其他",
+    "device_type": "其他",
+    "question": "RFC 9599 归纳了隧道两端点配合传播 ECN 拥塞指示的四种部署模式，并给出解封装时的标记合并规则。请写出四种模式的名称，并逐条说明 RFC 6040 隧道解封装规则中：内层 Not-ECT 且外层 CE 时、外层 Not-ECT 且内层为 ECT 或 CE 时、以及外层 CE 且内层 ECT 时的处理结果；再说明该 BCP 对监控提出的基线要求及其配套规范。",
+    "answer": "四种模式为 Feed-Forward-and-Up（前馈上传）、Feed-Up-and-Forward（上传转发）、Feed-Backward（反馈）与 Null（不用）。解封装规则（RFC 6040，\"更严重的标记获胜\"）：当内层为 Not-ECT 而外层为 CE 时，解封装点必须丢弃该报文，因为内层不支持 ECN 却经历了拥塞；当外层为 Not-ECT 而内层为 ECT 或 CE 时，报文原样转发，内层标记保持不变；当外层为 CE 而内层为 ECT 时，须将内层标记为 CE 后转发。监控方面，该 BCP 要求建立标准的 ECN 监控基线，配套规范为 RFC 9601。",
+    "scoring_points": [
+      "四种模式：Feed-Forward-and-Up、Feed-Up-and-Forward、Feed-Backward、Null",
+      "内层 Not-ECT 且外层 CE 时必须丢弃该报文",
+      "外层 Not-ECT 且内层 ECT/CE 时原样转发、内层标记不变",
+      "外层 CE 且内层 ECT 时将内层标记为 CE 后转发",
+      "合并规则遵循 RFC 6040 的\"更严重的标记获胜\"原则",
+      "要求建立标准的 ECN 监控基线，配套规范为 RFC 9601"
+    ],
+    "tags": ["RFC-2024", "RFC9599", "ECN", "拥塞控制"]
+  },
+  {
+    "id": 36,
+    "difficulty": "中",
+    "category": {
+      "scope": "其他",
+      "protocol_layer": "其他",
+      "lifecycle": "其他"
+    },
+    "scenario": "其他",
+    "device_type": "其他",
+    "question": "RFC 9625（EVPN OISM）规定了组播流量经 SBD 隧道转发时的数据平面处理与控制平面路由发布规则。请说明：同一子网（intra-subnet）与跨子网（inter-subnet）组播在转发时对 MAC SA、IP TTL 与 IP 处理的差异；报文到达未配置真实源 BD 的 egress PE 时 apparent source BD 如何判定；IMET 与 SMET 路由在租户域内如何发布；以及为何域内 ASM 场景无需 PIM RP。",
+    "answer": "同子网转发的帧保持原 MAC SA 不变，不进行 IP 层处理（TTL 不递减、IP 首部校验和不修改）；跨子网转发时由 ingress PE 执行完整的 IP 处理：MAC SA 改写为 PE 自身 MAC、IP TTL 减 1、更新校验和，必要时分片。报文通过隧道携带原始 MAC SA 与 IP 首部，由 egress PE 完成 IP 处理。当 egress PE 未配置流量的真实源 BD 时，若 egress 附着于该 BD 则 apparent source BD 等于实际源 BD，否则以 SBD 作为 apparent source BD。控制平面上，每个 OISM PE 的 IMET 路由发布给租户域内所有 PE，SMET 路由以 per-Tenant-Domain 方式在 SBD 上（使用 SBD-RT）发布。由于发送者与接收者均可达，域内 ASM 场景不需要 PIM RP。",
+    "scoring_points": [
+      "intra-subnet 转发保持 MAC SA 不变、不做 IP 处理（TTL 不减、校验和不动）",
+      "inter-subnet 转发时 MAC SA 改为 PE 自身 MAC、TTL 减 1、更新校验和（且可能分片）",
+      "隧道中携带原始 MAC SA 与 IP 首部，由 egress PE 完成 IP 处理",
+      "egress 未配置真实源 BD 时：egress 附着该 BD 则用实际源 BD，否则以 SBD 为 apparent source BD",
+      "IMET 路由发布给租户域内所有 PE",
+      "SMET 路由以 per-Tenant-Domain 方式经 SBD（SBD-RT）发布",
+      "域内 ASM 场景无需 PIM RP"
+    ],
+    "tags": ["RFC-2024", "RFC9625", "EVPN", "组播"]
+  },
+  {
+    "id": 37,
+    "difficulty": "中",
+    "category": {
+      "scope": "其他",
+      "protocol_layer": "其他",
+      "lifecycle": "其他"
+    },
+    "scenario": "其他",
+    "device_type": "其他",
+    "question": "RFC 9648 的 ietf-tcp 模块为每条连接暴露状态枚举、统计计数器并提供重置操作。请说明：state 叶的全部枚举取值范围及 CLOSED 连接是否出现在列表中；statistics 容器包含哪些计数器（至少五个）；reset 操作的访问控制约束、输入与输出参数；以及 keepalives 容器的启用条件与 TCP-AO 相对 MD5 的地位。",
+    "answer": "state 叶的枚举取值从 closed（1）、listen（2）、syn-sent（3）、syn-received（4）、established（5）到 fin-wait-1（6）、fin-wait-2（7）、close-wait（8）、last-ack（9）、closing（10）、time-wait（11）；已完全 CLOSED 的连接不会保留在 connections 列表中。statistics 容器（config false）包含 active-opens、passive-opens、attempt-fails、establish-resets、currently-established（gauge32）、in-segments、out-segments、retransmitted-segments、in-errors、out-resets、auth-failures 等计数器。reset 是一个 action，标注 nacm:default-deny-all，输入为 reset-at，输出为 reset-finished-at（后者为 TCP MIB 所没有的新能力）。keepalives 容器含 idle-time、max-probes、probe-interval，须三者全部设置才能启用 keepalive。安全性方面，模型认为 TCP-AO 优于 MD5 签名（RECOMMENDED）。",
+    "scoring_points": [
+      "state 枚举涵盖 closed、listen、syn-sent、syn-received、established、fin-wait-1、fin-wait-2、close-wait、last-ack、closing、time-wait",
+      "完全 CLOSED 的连接不出现在 connections 列表中",
+      "statistics 容器包含 active-opens、passive-opens、attempt-fails、establish-resets、currently-established、in-segments、out-segments、retransmitted-segments、in-errors、out-resets 等计数器（举出五个即可）",
+      "reset 为 action 且标注 nacm:default-deny-all",
+      "reset 的输入为 reset-at，输出为 reset-finished-at（TCP MIB 中没有）",
+      "keepalives 容器含 idle-time、max-probes、probe-interval，须全部设置才能启用",
+      "TCP-AO 被认为优于 MD5（RECOMMENDED 使用 TCP-AO）"
+    ],
+    "tags": ["RFC-2024", "RFC9648", "YANG", "TCP"]
+  },
+  {
+    "id": 38,
+    "difficulty": "中",
+    "category": {
+      "scope": "其他",
+      "protocol_layer": "IP层",
+      "lifecycle": "其他"
+    },
+    "scenario": "其他",
+    "device_type": "其他",
+    "question": "RFC 9673 修订了 IPv6 Hop-by-Hop 选项头中选项动作位（action bits）的处理，并对新选项的准入提出标准。请说明：路由器无法或未配置处理某选项时 SHOULD 如何行动、Hdr Ext Len 字段的单位是什么；三种非零动作组合各自允许的行为及发送 ICMP 的条件；Router Alert 选项作为例外如何处理与如何自我保护；以及新选项应满足的准入标准（至少四条）。",
+    "answer": "当路由器无法或未配置处理某个选项时，SHOULD 按动作位 \"00\" 处理：跳过该选项继续转发报文；Hdr Ext Len 以 8 字节为单位（不含第一个 8 字节），被跳过的选项内容无需验证。动作位 \"01\" 允许（MAY）在配置时丢弃报文；\"10\" 允许（MAY）丢弃报文，并允许发送 ICMPv6 Parameter Problem（Code 2）指认无法处理的选项；\"11\" 允许（MAY）丢弃报文，仅当目的地址不是组播地址时才允许发送相应的 ICMP 差错。Router Alert 选项（RFC 2711）是唯一面向控制平面的例外：其 2 字节 Value 指明需要检查该报文的上层协议，节点必须通过仅信任来自可信节点的报文（ACL）以及限速（RFC 6398）等手段自我保护。新选项的准入标准包括：能够在全转发速率（Full Forwarding Rate）下处理；动作位应为 \"00\"；尺寸受限；允许只处理选项子集；以及设计上容忍报文丢弃（\"racing\"）。此外，扩展头链小于 40 字节有助于提升投递概率。",
+    "scoring_points": [
+      "无法/未配置处理时 SHOULD 按动作位 \"00\" 跳过该选项并继续转发",
+      "Hdr Ext Len 以 8 字节为单位，被跳过的选项无需验证",
+      "动作位 \"01\" MAY 在配置时丢弃报文",
+      "动作位 \"10\" MAY 丢弃报文并可发送 ICMP Parameter Problem（Code 2）",
+      "动作位 \"11\" MAY 丢弃报文，仅当目的地址非组播时才 MAY 发送 ICMP",
+      "Router Alert（RFC 2711）是唯一控制平面例外，2 字节 Value 标明上层协议",
+      "节点须以可信来源 ACL 与限速（RFC 6398）自我保护",
+      "新选项须能以 Full Forwarding Rate 处理、动作位为 00、尺寸受限、容忍丢弃（举出四条即可）"
+    ],
+    "tags": ["RFC-2024", "RFC9673", "IPv6", "Hop-by-Hop"]
+  },
+  {
+    "id": 39,
+    "difficulty": "中",
+    "category": {
+      "scope": "其他",
+      "protocol_layer": "IP层",
+      "lifecycle": "其他"
+    },
+    "scenario": "其他",
+    "device_type": "其他",
+    "question": "RFC 9685 将 2 位 P 字段引入多个邻居发现报文与选项，并扩展了 RPL 的组播支持。请说明：P 字段在 EARO、RTO 与 EDAR 中分别位于哪些位、EDAR 中哪个字段被改作此用途；收到 P 值为未分配值（3）时 RTO 与 EARO/EDAR 的不同处理方式；RPL MOP 5 的含义及 DAO 对组播地址的使用限制；以及 6CIO 中新标志位与 Type 42 CUO 选项的格式要点。",
+    "answer": "P 字段位于 EARO 的第 2-3 位、RTO 的第 2-3 位；在 EDAR 报文中，原 Status 字段被改作 Flags 使用，P 字段占其第 0-1 位。收到未分配值 3 时：RTO 必须忽略该值并按 0（单播）处理；EARO 与 EDAR 则必须丢弃报文，并可通过 ARO 返回状态码 12（Invalid Registration）。RPL MOP 5 表示 Non-Storing 模式且组播采用入口复制（ingress replication）：DAO 消息中组播地址只能作为 Target 出现、绝不作为 Transit 父节点地址，由 Root 基于源路由完成入口复制。6CIO 中新增 X 标志（bit 8）。Type 42 的 CUO 选项长度固定为 1（8 字节），含 6 位 Uptime 指数与 10 位 Uptime 尾数（单位毫秒）、S 标志（指示可能休眠）、U 标志，以及 12 位 NSSI 与 12 位 Peer NSSI。",
+    "scoring_points": [
+      "P 字段位于 EARO 的第 2-3 位与 RTO 的第 2-3 位",
+      "EDAR 中原 Status 字段改作 Flags，P 字段占第 0-1 位",
+      "P 值为 3 时 RTO 必须忽略并按 0（单播）处理",
+      "P 值为 3 时 EARO/EDAR 必须丢弃，可返回 ARO 状态码 12（Invalid Registration）",
+      "RPL MOP 5 表示 Non-Storing 且采用入口复制（ingress replication）组播",
+      "DAO 中组播地址只能作 Target、绝不能作 Transit，由 Root 完成源路由的入口复制",
+      "6CIO 新增 X 标志，位于 bit 8",
+      "Type 42 CUO：6 位指数 + 10 位尾数（毫秒）的 Uptime、S/U 标志、12 位 NSSI 与 Peer NSSI"
+    ],
+    "tags": ["RFC-2024", "RFC9685", "IPv6", "邻居发现"]
+  },
+  {
+    "id": 40,
+    "difficulty": "中",
+    "category": {
+      "scope": "其他",
+      "protocol_layer": "IP层",
+      "lifecycle": "其他"
+    },
+    "scenario": "其他",
+    "device_type": "其他",
+    "question": "RFC 9687 将 Send Hold Timer 集成进 BGP 有限状态机与报文处理。请说明：该机制在会话属性与事件编号中的位置；OpenConfirm 状态下收到 KEEPALIVE 时对两个定时器的处理及状态迁移；Established 状态下 SendHoldTimer 到期（Event 29）触发的完整处理序列；每发送一条 BGP 报文对该定时器的影响及哪些情况下该定时器停止；以及相应 NOTIFICATION 与 IANA 错误码的编码。",
+    "answer": "RFC 9687 在会话属性中新增第 14 项 SendHoldTimer 与第 15 项 SendHoldTime，并新增 Event 29（SendHoldTimer_Expires，可选）。OpenConfirm 状态收到 KEEPALIVE（Event 26）时重启 HoldTimer，并在 SendHoldTime 非零时启动 SendHoldTimer，随后迁移到 Established。Established 状态下 Event 29 触发的处理序列为：可选地发送 NOTIFICATION（\"Send Hold Timer Expired\"，仅当不存在延迟时）；记录错误日志；释放所有与该邻居相关的 BGP 资源；将 ConnectRetryTimer 置 0；断开 TCP 连接；ConnectRetryCounter 加 1；可选执行 DampPeerOscillations；最后迁移到 Idle。每发送一条 BGP 报文即重启 SendHoldTimer，除非 SendHoldTime 或协商的 HoldTime 为 0（此时保持停止）；任何离开 Established 的迁移都会停止该定时器。相应 NOTIFICATION 使用子码 0 且不携带数据，IANA 分配的 BGP Error Code 为 8。",
+    "scoring_points": [
+      "会话属性新增 14) SendHoldTimer 与 15) SendHoldTime，并定义 Event 29（SendHoldTimer_Expires）",
+      "OpenConfirm 收到 KEEPALIVE 时重启 HoldTimer 并在 SendHoldTime 非零时启动 SendHoldTimer，随后进入 Established",
+      "Established 下 Event 29：可选发送 NOTIFICATION、记录日志、释放全部 BGP 资源",
+      "处理序列还包括 ConnectRetryTimer 置 0、断开 TCP、ConnectRetryCounter 加 1、可选 DampPeerOscillations、迁移到 Idle",
+      "每发送一条 BGP 报文重启 SendHoldTimer",
+      "SendHoldTime 或协商 HoldTime 为 0 时定时器停止，离开 Established 也停止",
+      "NOTIFICATION 子码为 0 且无附加数据，IANA BGP Error Code 为 8"
+    ],
+    "tags": ["RFC-2024", "RFC9687", "BGP", "会话安全"]
+  }
+]
