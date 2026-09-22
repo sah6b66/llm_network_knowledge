@@ -1,0 +1,5 @@
+[
+  { "id": 1, "difficulty": "简单", "category": { "scope": "设备", "protocol_layer": "物理层", "lifecycle": "建设" }, "scenario": "通用", "device_type": "交换机", "topic": "光模块规格与单模/多模判别", "tags": [] },
+  { "id": 2, "difficulty": "中", "category": { "scope": "网络", "protocol_layer": "链路层", "lifecycle": "维护" }, "scenario": "园区", "device_type": "交换机", "topic": "MSTP 实例与 VLAN 映射错误导致的环路", "tags": [] },
+  { "id": 3, "difficulty": "难", "category": { "scope": "网络", "protocol_layer": "IP层", "lifecycle": "优化" }, "scenario": "数据中心", "device_type": "不限定", "topic": "大规模 BGP 组网的 RR 分层与路由收敛优化", "tags": [] }
+]

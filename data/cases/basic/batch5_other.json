@@ -1,0 +1,431 @@
+[
+  {
+    "id": 76,
+    "difficulty": "中",
+    "category": {"scope": "设备", "protocol_layer": "其他", "lifecycle": "规划"},
+    "scenario": "数据中心",
+    "device_type": "防火墙",
+    "question": "规划华为 USG 系列防火墙接入数据中心与 Internet。请回答：（1）四个默认安全区域 Trust、Untrust、DMZ、Local 的安全级别相对高低如何？用户能否自定义区域？（2）域间方向 Inbound/Outbound 是依据什么定义的？以 Trust 访问 Untrust 为例说明方向归属。（3）Local 区域的特殊性是什么？哪些流量会涉及 Local 域间策略？（4）给出区域规划的两条实践建议。",
+    "answer": "（1）四个默认区域的级别由高到低为 Local、Trust、DMZ、Untrust（Local 最高，内网高于对外服务区，对外服务区高于外网）；用户可自定义新区域并指定级别。（2）域间方向由两区域安全级别决定：从低级别区域进入高级别区域为 Inbound（入方向），反之为 Outbound（出方向）；Trust 访问 Untrust 是从高到低，为 Outbound。（3）Local 代表防火墙自身，级别最高，凡是终结于防火墙本机的流量（管理登录、SNMP、防火墙发起/接收的路由协议、IPsec/SSL VPN 协商等）都表现为 Local 与其他区域之间的域间流量，需显式配置策略放通。（4）建议：按业务信任度划区（内部业务区高、Internet 低、对外服务放 DMZ），区域间默认全部拒绝、按最小化原则显式放行；对本机管理面仅开放管理区到 Local 的指定协议与源地址。",
+    "scoring_points": [
+      "给出四区域级别相对高低：Local 最高、Trust 高于 DMZ、DMZ 高于 Untrust",
+      "说明方向由安全级别高低定义：低→高为 Inbound，高→低为 Outbound",
+      "正确判断 Trust→Untrust 为 Outbound",
+      "说明 Local 代表设备自身，管理/路由协议/VPN 等本机流量涉及 Local 域间策略",
+      "给出按信任度划区、默认拒绝显式放行等实践建议"
+    ],
+    "tags": ["防火墙", "安全区域"]
+  },
+  {
+    "id": 77,
+    "difficulty": "中",
+    "category": {"scope": "设备", "protocol_layer": "其他", "lifecycle": "建设"},
+    "scenario": "园区",
+    "device_type": "防火墙",
+    "question": "园区出口部署状态检测防火墙，内网用户需访问外网 FTP 服务器，安全策略仅放行了 TCP 21 端口。（1）说明 FTP 主动模式与被动模式下数据连接的建立方式（PORT 与 PASV 命令的作用）。（2）为什么没有 ALG 时数据连接会被防火墙阻断？（3）FTP ALG 的处理机制是什么？以华为防火墙为例说明配置方式。（4）ALG 带来哪些风险与限制？",
+    "answer": "（1）FTP 控制连接使用 TCP 21：主动模式下客户端通过 PORT 命令在控制通道上报自己的 IP 与端口，服务器从 TCP 20 主动向该地址发起数据连接；被动模式下客户端发送 PASV，服务器在应答中返回自己的 IP 与临时端口，由客户端主动发起数据连接。（2）数据连接的地址与端口在应用层报文中动态协商，且常使用非知名端口；状态检测防火墙只放行策略命中与已建立会话的流量，仅放行 21 时数据连接既不匹配策略也无对应会话而被丢弃。（3）FTP ALG 解析控制通道报文：提取 PORT/PASV 携带的地址端口，配合 NAT 改写其中内容，并动态生成临时会话表项（server-map 类）放行数据连接；华为防火墙在域间视图下配置 detect ftp 开启。（4）风险与限制：ALG 需深入解析应用层，实现缺陷可能被利用绕过策略（如 FTP bounce 场景），应限制 ALG 生效范围；控制通道加密（FTPS/SFTP）后 ALG 无法解析，需要代理类方案替代。",
+    "scoring_points": [
+      "正确描述主动模式 PORT/服务器 20 端口发起、被动模式 PASV/客户端发起",
+      "指出数据连接端口在应用层动态协商、仅放行 21 时无表项可匹配",
+      "说明 ALG 机制：解析控制通道、改写地址端口、生成动态表项放行数据连接",
+      "给出华为域间视图 detect ftp 配置",
+      "指出加密控制通道无法 ALG 及安全风险中的至少一条"
+    ],
+    "tags": ["防火墙", "ALG"]
+  },
+  {
+    "id": 78,
+    "difficulty": "中",
+    "category": {"scope": "网络", "protocol_layer": "其他", "lifecycle": "维护"},
+    "scenario": "宽带城域",
+    "device_type": "防火墙",
+    "question": "华为防火墙上部署了 NAT，故障排查中发现流量未按预期转换。（1）twice NAT（双 NAT）在同一流上转换什么？列举两个典型应用场景。（2）如何利用 display firewall session table 的输出排查 NAT 转换？方括号中的地址表示什么？（3）NAT 策略与安全策略的地址匹配关系上，最常见的配置错误是什么？",
+    "answer": "（1）twice NAT 对同一报文同时转换源地址和目的地址。典型场景：两家地址重叠的企业并购后互访，双方报文的源与目的都需转换到不重叠的中间地址段；内网用户通过公网域名访问内部服务器（回流/hairpin 场景），目的地址从公网 IP 转为服务器私网 IP，同时源地址转为另一段地址保证来回路径一致，避免非对称路由。（2）会话表条目中方括号内为转换后地址，据此可确认源 NAT 与目的 NAT 是否按预期命中，并检查转换前后五元组与往返方向是否对称；配合 display nat-policy all 查看策略命中计数可定位命中了哪条 NAT 策略。（3）华为防火墙安全策略匹配的是目的 NAT 之后、源 NAT 之前的地址，最常见错误是在安全策略中配置了转换前/后错误的地址（如用公网地址而非转换后私网地址），导致策略不命中被默认拒绝；此外 server-map 表项与 NAT 策略不一致也会导致首包异常。",
+    "scoring_points": [
+      "说明 twice NAT 同时转换源与目的地址",
+      "给出地址重叠互访或内网回流（域名访问内部服务器）典型场景",
+      "会话表判读：方括号为转换后地址，可验证源/目的转换与方向对称性",
+      "指出安全策略按目的 NAT 后、源 NAT 前的地址匹配，配置错地址导致不命中",
+      "提到 display nat-policy all 或 server-map 排查手段"
+    ],
+    "tags": ["防火墙", "NAT", "故障诊断"]
+  },
+  {
+    "id": 79,
+    "difficulty": "难",
+    "category": {"scope": "设备", "protocol_layer": "其他", "lifecycle": "维护"},
+    "scenario": "数据中心",
+    "device_type": "防火墙",
+    "question": "数据中心采用两台华为防火墙做双机热备。（1）VGMP 与 VRRP 是什么关系？VGMP 如何保证多个接口的 VRRP 状态一致性？（2）HRP 同步哪些内容？主备倒换由什么触发？（3）抢占模式的工作方式与风险是什么？（4）给出倒换异常时的排查思路。",
+    "answer": "（1）每台防火墙将各接口上承载业务的多个 VRRP 备份组纳入一个 VGMP（VRRP 组管理协议）管理组，由 VGMP 统一决定本机整体处于 Active 还是 Standby：VGMP 监控成员 VRRP 组与被跟踪接口状态，故障时降低本组优先级，使整机所有 VRRP 组统一切换，避免出现部分接口主、部分接口备导致的双主或来回绕行。（2）HRP（华为冗余协议）通过心跳线在主备间同步会话表、Server-map、黑名单、策略与部分配置等，保证倒换后已有业务不中断；倒换触发条件包括主设备业务接口/链路故障导致 VGMP 优先级下降、心跳超时判定对端故障、手工强制切换等。（3）抢占指原主设备故障恢复且 VGMP 优先级恢复后重新接管流量；必须配置抢占延迟，否则链路抖动会引发反复倒换、会话反复重建，造成业务震荡。（4）排查：display hrp state 确认当前主备与心跳状态，检查心跳口物理/路由连通；查看各 VRRP 组与 VGMP 优先级变化是否同步；核查跟踪接口配置与抢占延迟配置；对比两机同步的会话数量是否正常增长。",
+    "scoring_points": [
+      "说明 VGMP 统一管理多个 VRRP 组、维护整机 Active/Standby 一致性",
+      "解释 VGMP 通过优先级（接口故障降级）统一裁决，避免双主或绕行",
+      "列出 HRP 同步内容（会话表/Server-map/策略等）",
+      "给出倒换触发条件：接口故障、心跳超时、手工切换",
+      "说明抢占需配置延迟，风险是链路抖动引发反复倒换",
+      "给出 display hrp state 等可操作的排查思路"
+    ],
+    "tags": ["防火墙", "双机热备"]
+  },
+  {
+    "id": 80,
+    "difficulty": "难",
+    "category": {"scope": "设备", "protocol_layer": "其他", "lifecycle": "维护"},
+    "scenario": "园区",
+    "device_type": "防火墙",
+    "question": "园区出口部署防火墙后，内网一条数据库长连接 TCP 业务每隔一段时间（约半小时到一小时不等）被异常中断，应用报连接被重置或无响应，重建后可恢复。（1）解释防火墙会话表老化机制：空闲老化到期的行为是什么？TCP 会话的正常回收方式与空闲老化有何区别？（2）分析该长连接周期性中断的最可能根因。（3）给出治理措施与排查验证方法。",
+    "answer": "（1）状态检测防火墙为每个通过的业务流建立会话表项并启动空闲老化定时器，不同协议/连接阶段的默认老化时间不同；当一条 TCP 会话持续无报文超过老化时间，表项被删除，后续报文因找不到会话且不匹配安全策略而被丢弃或触发新建（表现为连接中断）。正常回收是连接以 FIN 四次挥手或 RST 结束时，防火墙即时删除表项，无需等待老化。（2）最可能根因：数据库连接在空闲期只有极少或零报文，应用层 TCP keepalive 未开启或周期大于防火墙 TCP 会话老化时间，链路静默期超过老化门限，表项被老化删除，下一个报文被丢弃，应用侧表现为连接失效。（3）治理：应用/中间件开启 TCP keepalive 并把周期调到小于路径上最小老化时间的一半；或在防火墙上对特定协议/五元组配置更长的会话老化时间（长连接，不建议全局放大，会占用来不及回收的表项资源）。排查验证：用会话表详细查看命令观察该五元组表项的剩余老化时间是否随空闲递减至删除；将 keepalive 打开后观察会话是否持续刷新不再中断；对比中断间隔与 TCP 默认老化时间是否吻合。",
+    "scoring_points": [
+      "解释空闲老化机制：超时删表、后续报文无会话被丢弃",
+      "说明 FIN/RST 正常结束会即时回收表项，与空闲老化的区别",
+      "定位根因：keepalive 未开启或周期大于防火墙老化时间",
+      "给出开启 keepalive（周期小于最小老化时间一半）或针对会话加长老化时间的治理",
+      "给出查看会话表剩余老化时间等验证方法",
+      "说明中断间隔与老化时间吻合是判别依据"
+    ],
+    "tags": ["防火墙", "会话表"]
+  },
+  {
+    "id": 81,
+    "difficulty": "中",
+    "category": {"scope": "网络", "protocol_layer": "其他", "lifecycle": "规划"},
+    "scenario": "园区",
+    "device_type": "WLAN",
+    "question": "规划高密度办公区的 Wi-Fi 6（802.11ax）无线网络。（1）OFDMA 的 RU（Resource Unit）是什么粒度的资源？举例说明一次传输如何并行服务多用户，带来什么收益？（2）TWT（Target Wake Time）的机制与收益。（3）除 OFDMA/TWT 外，列举至少三项相对 802.11ac 的空口效率改进。",
+    "answer": "（1）11ax 把信道按子载波划分为 RU（资源单元），粒度从约 2MHz 的小 RU 到占满整信道的大 RU 分档；AP 调度器可把同一信道的不同 RU 分给不同用户同时收发（上行与下行 OFDMA），例如 4 个小包终端各占一个中等粒度 RU 并行完成一次传输。收益：小包并发、减少信道争用与退避开销，高密场景提升总吞吐并改善时延确定性。（2）TWT：AP 与每个终端协商专属的服务期（唤醒时间片），终端深度休眠直到约定时刻才唤醒收发；收益是显著降低终端功耗（物联网/移动终端续航），并允许 AP 把终端错峰调度降低空口竞争。（3）其他改进：1024-QAM 更高阶调制；更长 OFDM 符号与更小子载波间隔配合更长保护间隔提升多径/室外鲁棒性；BSS Coloring 支持空间复用；上行 MU-MIMO（11ac 仅下行）；基于触发的上下行调度与确认机制改进。",
+    "scoring_points": [
+      "说明 RU 为子载波组资源，粒度从约 2MHz 小 RU 到整信道大 RU 分档",
+      "解释上下行 OFDMA 多用户并行传输及高密收益",
+      "说明 TWT 协商专属唤醒时间片与省电收益",
+      "列出其他改进至少三项：1024-QAM、长符号/小子载波间隔、BSS Coloring、上行 MU-MIMO 等"
+    ],
+    "tags": ["WLAN", "802.11ax"]
+  },
+  {
+    "id": 82,
+    "difficulty": "简单",
+    "category": {"scope": "网络", "protocol_layer": "其他", "lifecycle": "建设"},
+    "scenario": "园区",
+    "device_type": "WLAN",
+    "question": "关于 CAPWAP 协议：（1）控制信道与数据信道分别使用哪个 UDP 端口？（2）规范对控制信道使用 DTLS 的要求与对数据信道的要求有何差异？（3）规划 AP 与 AC 间穿越防火墙的策略时需要放行哪些内容？",
+    "answer": "（1）控制信道使用 UDP 5246，数据信道使用 UDP 5247。（2）规范要求控制信道必须使用 DTLS 保护；数据信道的 DTLS 为可选能力，可工作在明文或 DTLS 加密模式，由部署按安全需求选择（华为、思科等厂商设备均支持对数据隧道按需开启 DTLS）。（3）防火墙需放行 AP 到 AC 地址的 UDP 5246（控制，含 DTLS），采用隧道转发模式时还需放行 UDP 5247（数据）；同时注意 DTLS 与 NAT 兼容性，尽量为 AP 与 AC 规划可达的稳定地址。",
+    "scoring_points": [
+      "给出控制信道 UDP 5246、数据信道 UDP 5247",
+      "指出控制信道必须 DTLS、数据信道 DTLS 可选",
+      "说明防火墙需放行 5246（隧道转发时还需 5247）及 NAT/地址稳定性注意点"
+    ],
+    "tags": ["RFC", "RFC5415", "RFC-2009", "WLAN", "CAPWAP"]
+  },
+  {
+    "id": 83,
+    "difficulty": "难",
+    "category": {"scope": "网络", "protocol_layer": "其他", "lifecycle": "优化"},
+    "scenario": "园区",
+    "device_type": "WLAN",
+    "question": "园区网络承载语音业务，终端在 AP 间漫游时出现通话中断，计划引入 802.11r/k/v 联动优化。（1）802.11r FT 的密钥层次（PMK-R0/R1、R0KH/R1KH）如何支撑快速漫游？over-the-air 与 over-the-DS 两种方式有何区别？（2）802.11k 与 802.11v 分别提供什么能力，如何与 FT 联动优化漫游决策？（3）给出联动部署的优化要点与风险。",
+    "answer": "（1）802.11r 在首次关联时把密钥分发提前：客户端与 R0KH（通常在 AC/首 AP）协商出 PMK-R0，并按需向候选 AP 的 R1KH 预分发派生密钥 PMK-R1；漫游时客户端与目标 AP 通过 FT 认证（密钥确认+重关联）在极少交互内完成密钥安装，省去完整的 802.1X/EAP 认证，漫游中断从数百毫秒降到几毫秒量级。over-the-air：客户端直接与目标 AP 在其信道上完成 FT 交互；over-the-DS：客户端仍通过当前 AP 的跨分布系统交互完成切换，切换前不打断当前信道通信。（2）802.11k 邻居报告：AP 向客户端提供周边邻居 AP 列表与测量信息，客户端无需全频段盲目扫描即可锁定候选 AP，缩短扫描停顿；802.11v BSS Transition Management：网络侧根据信号/负载主动建议客户端漫游到指定 AP，引导负载与信号更优的选择。联动：k 告知去哪、v 建议何时去、r 保证切过去快且不断链。（3）要点：按 SSID/频段渐进开启 FT 并验证终端兼容性（部分老终端存在掉线问题，需灰度与回退）；合理设置重关联超时与 R1KH 派发范围；k/v 报告周期与阈值调优，配合 RSSI 门限让漫游发生在合适区间；风险：终端对 11r/k/v 支持参差导致部分终端体验劣化，需按终端型号分策略。",
+    "scoring_points": [
+      "描述 FT 密钥层次：PMK-R0/R1 与 R0KH/R1KH 的预分发机制",
+      "说明省去完整 802.1X/EAP 认证使漫游时延大幅下降",
+      "区分 over-the-air（目标 AP 信道直接交互）与 over-the-DS（经原 AP 转交）",
+      "说明 11k 邻居报告减少扫描、11v 网络侧引导漫游目标",
+      "描述 k 告知候选、v 建议切换、r 保障切换速度的联动关系",
+      "给出灰度开启、终端兼容性验证等部署要点与风险"
+    ],
+    "tags": ["WLAN", "漫游"]
+  },
+  {
+    "id": 84,
+    "difficulty": "中",
+    "category": {"scope": "设备", "protocol_layer": "其他", "lifecycle": "建设"},
+    "scenario": "园区",
+    "device_type": "WLAN",
+    "question": "在华为 AC（VRP，如 AC6605）上为一个 SSID 上线配置 WLAN 业务。请回答：（1）regulatory-domain-profile、ssid-profile、security-profile、vap-profile 各自的作用与相互引用关系是什么？（2）给出推荐的配置顺序（步骤化描述），这些配置最终如何生效到 AP？（3）列出两条上线后的核查命令。",
+    "answer": "（1）regulatory-domain-profile 定义国家码与信道/功率合规信息；ssid-profile 定义 SSID 名称；security-profile 定义安全策略（开放/WPA2-PSK/WPA3/802.1X 等）；vap-profile 是面向射频的业务模板，引用 ssid-profile 与 security-profile，并定义转发模式与业务 VLAN；AP 组（ap-group）统一绑定 regulatory-domain-profile 与各射频下的 vap-profile。（2）顺序：①进入 wlan 视图创建 regulatory-domain-profile，在 ap-group 下绑定；②创建 ssid-profile 与 security-profile；③创建 vap-profile，引用 ssid-profile 与 security-profile，配置 service-vlan 与 forward-mode；④在 ap-group 的射频视图下绑定 vap-profile 并指定 wlan id；AP 上线并加入 AP 组后，AC 按 AP 组配置自动下发，AP 即按模板发出对应 SSID。（3）核查：display vap ssid xxx 查看 VAP 状态、display ap-group / display ap all 查看 AP 组绑定与 AP 在线状态。",
+    "scoring_points": [
+      "说明四个 profile 的职责：国家码合规、SSID、安全策略、VAP 业务聚合",
+      "给出引用关系：vap-profile 引用 ssid/security-profile，ap-group 绑定 regulatory-domain-profile 与各射频的 vap-profile",
+      "配置顺序正确：先合规域与模板创建，再 vap 聚合，最后在 AP 组射频下绑定",
+      "说明配置经 AP 组下发给上线的 AP 生效",
+      "给出 display vap ssid / display ap 类核查命令"
+    ],
+    "tags": ["CLI", "华为", "VRPv5", "WLAN", "AC"]
+  },
+  {
+    "id": 85,
+    "difficulty": "难",
+    "category": {"scope": "设备", "protocol_layer": "其他", "lifecycle": "规划"},
+    "scenario": "园区",
+    "device_type": "WLAN",
+    "question": "规划华为 Fit AP 园区网的数据转发模式（直接转发 vs 隧道转发）。（1）分别描述两种模式下业务数据的转发路径与对 CAPWAP 隧道的依赖差异。（2）对比两种模式在 VLAN 规划、集中策略、性能与故障域方面的优缺点。（3）给出选型建议与各自模式下的两个故障排查要点。",
+    "answer": "（1）直接转发：终端业务数据在 AP 本地终结，AP 对其打业务 VLAN tag 后从接入交换机本地交换，只有 CAPWAP 控制报文（UDP 5246）经隧道到 AC，数据隧道（5247）不承载业务。隧道转发：业务数据在 AP 上封装进 CAPWAP 数据隧道（UDP 5247，可选 DTLS 加密）送到 AC，由 AC 解封装后进入业务 VLAN，控制与数据均依赖 CAPWAP。（2）VLAN：直接转发的业务 VLAN 必须延伸规划到每台 AP 的上联链路，隧道转发业务 VLAN 集中终结在 AC，接入侧仅管理 VLAN；集中策略：隧道转发天然支持 AC 集中下发策略、统一审计与无缝漫游（漫游切换不改变锚点），直接转发策略需下沉到接入交换机；性能：直接转发路径短、无 AC 转发吞吐与时延瓶颈，隧道转发占用 AC 性能与 AC-AP 间带宽、故障域集中（AC 故障影响全部业务）；直接转发 AP 故障只影响本地。（3）选型：高密高吞吐、本地出局的分支/办公区选直接转发；需要集中安全审计、全网统一策略、快速无缝漫游的小规模网络或分支选隧道转发。排障要点：直接模式查 AP 上联端口业务 VLAN 透传与 PVID、终端网关 ARP；隧道模式查 CAPWAP 隧道状态与带宽、隧道 MTU（CAPWAP+可选 DTLS 开销导致分片）及 AC 侧业务 VLAN 网关状态。",
+    "scoring_points": [
+      "正确描述两种模式数据路径：AP 本地交换 vs CAPWAP 数据隧道到 AC",
+      "指出 CAPWAP 依赖差异：直接仅控制 5246，隧道还需数据 5247（可选 DTLS）",
+      "对比 VLAN 规划：业务 VLAN 下沉 AP 上联 vs 集中终结 AC",
+      "对比优缺点：直接模式性能好但策略分散，隧道模式集中但 AC 成瓶颈与故障域",
+      "给出与场景匹配的选型建议",
+      "每模式给出至少两个可操作排查点（VLAN 透传、隧道 MTU/带宽等）"
+    ],
+    "tags": ["WLAN"]
+  },
+  {
+    "id": 86,
+    "difficulty": "简单",
+    "category": {"scope": "网络", "protocol_layer": "其他", "lifecycle": "建设"},
+    "scenario": "园区",
+    "device_type": "不限定",
+    "question": "关于 DHCPv4 租约周期：（1）T1 与 T2 的默认取值是租期的多少倍？各自对应什么状态？（2）T1 与 T2 时刻客户端分别执行什么动作（报文形式与发送方式）？租约最终到期后行为如何？（3）为什么 T2 时刻要改用广播？",
+    "answer": "（1）T1 默认为租期的 0.5 倍，是重约定（renewal）时间点，客户端进入 RENEWING 状态；T2 默认为租期的 0.875 倍（7/8），是重绑定（rebinding）时间点，客户端进入 REBINDING 状态。（2）T1 到达后客户端向原 DHCP 服务器单播 DHCPREQUEST 续租；T2 到达仍未成功则向本地链路广播 DHCPREQUEST，允许任何 DHCP 服务器应答延续租约；若租约到期仍未续上，客户端必须停止使用该地址并释放（回到初始化状态重新申请）。（3）因为此时客户端已认为原服务器不可达，只能向链路上任一可达服务器求助，而新服务器无法通过原单播路径联系，故使用广播。",
+    "scoring_points": [
+      "给出 T1=0.5T、T2=0.875T",
+      "说明 T1 单播 DHCPREQUEST 续租（RENEWING）",
+      "说明 T2 广播 DHCPREQUEST 可被任一服务器应答（REBINDING）",
+      "说明租约到期后须停用地址重新申请"
+    ],
+    "tags": ["RFC", "RFC2131", "RFC-1997", "DHCP"]
+  },
+  {
+    "id": 87,
+    "difficulty": "中",
+    "category": {"scope": "设备", "protocol_layer": "其他", "lifecycle": "建设"},
+    "scenario": "宽带城域",
+    "device_type": "路由器",
+    "question": "宽带城域网使用华为 VRPv5 路由器作为 DHCP 中继，运维要求精确定位用户的物理接入位置。（1）写出接口下 DHCP 中继的基本配置要点。（2）dhcp relay information enable 的作用是什么？插入的 Option 82 包含哪两个主要子选项、各携带什么信息？（3）Option 82 如何支撑用户定位？对客户端已携带 Option 82 报文的处理策略是什么？",
+    "answer": "（1）系统视图 dhcp enable 后，在用户网关接口下配置 dhcp select relay 进入中继模式，并用中继地址命令（dhcp relay address 或 dhcp relay server-ip，随版本而异）指向 DHCP 服务器；接口地址即网关。（2）dhcp relay information enable 使中继在转发 DHCP 请求时插入 Option 82（DHCP Relay Agent Information Option）：子选项 1 Circuit ID 携带用户接入电路标识（典型为中继设备的接口名/VLAN 等物理位置编码），子选项 2 Remote ID 携带远程标识（典型为中继设备标识如 MAC/主机名，有时包含进一步的用户接入信息）。（3）DHCP 服务器记录 Option 82，配合账号/IP 分配日志即可把 IP 映射到物理端口与设备，支撑定位与审计；对客户端请求中已存在 Option 82 的报文，中继按 dhcp relay information strategy 配置的处理策略处理（replace 替换、append 附加、drop 丢弃），默认通常为替换，防止用户伪造位置信息。",
+    "scoring_points": [
+      "给出 dhcp enable、接口下 dhcp select relay 与指向服务器的基本配置",
+      "说明 dhcp relay information enable 的作用：中继插入 Option 82",
+      "指出子选项 1 Circuit ID（接入电路/物理位置）与子选项 2 Remote ID（设备/用户标识）",
+      "说明 Option 82 支撑 IP 到物理端口映射与审计定位",
+      "提到对已有 Option 82 的 strategy 处理（replace/append/drop）"
+    ],
+    "tags": ["CLI", "华为", "VRPv5", "DHCP"]
+  },
+  {
+    "id": 88,
+    "difficulty": "难",
+    "category": {"scope": "设备", "protocol_layer": "其他", "lifecycle": "维护"},
+    "scenario": "园区",
+    "device_type": "WLAN",
+    "question": "新部署的园区无线网络采用华为 Fit AP + AC 架构，AP 通过 DHCP 动态获取地址并应经 Option 43 发现 AC，但批量 AP 无法上线。（1）描述 Fit AP 上线获取 AC 地址的主要途径（含 Option 43 的定位）。（2）华为方案中 DHCP Option 43 如何编码 AC 地址（哪个子选项）？在华为设备 DHCP 地址池上如何配置？（3）给出系统化的排错步骤（至少五个检查点）与对应命令/方法。",
+    "answer": "（1）主要途径按优先级：AP 上静态配置的 AC 地址；DHCP 服务器通过 Option 43 下发 AC 地址列表；通过 DHCP 域名信息解析厂商约定的 AC 域名（DNS 方式）；以及在 AC 同网段时向组播/广播地址发 Discovery（受限场景）。Option 43 是跨网段部署时最常用的方式。（2）Option 43 为厂商自定义的 TLV 结构；华为方案使用其子选项 3，取值为一个或多个 AC 的 IPv4 地址；在华为设备 DHCP 地址池（ip pool）视图下配置 option 43 sub-option 3 ip-address <AC地址>（多个地址可依次配置）。（3）排错步骤：①确认 AP 已获取 IP：在 AP 串口查看 DHCP 过程或在中继/服务器查看地址池分配；②确认 Option 43 正确下发：在 DHCP 服务器检查地址池配置、必要时在中继口镜像抓包查看 Option 43 内容与子选项编码；③确认 AP 到 AC 的 UDP 5246 可达（ping/ tracert 与中间防火墙策略）；④AC 侧查看上线失败原因：display ap online-fail record（含版本不匹配、认证/DTLS 失败、License 不足等）；⑤核查 AP 与 AC 的版本/域名认证/DTLS 配置（capwap 相关配置与证书状态）、AP 序列号是否已加入白名单或自动授权策略；⑥检查 MTU/分片与心跳超时等链路质量问题。",
+    "scoring_points": [
+      "列出发现途径：静态配置、DHCP Option 43、DNS 域名解析、同网段广播/组播",
+      "说明华为用 Option 43 子选项 3 携带 AC 的 IPv4 地址列表",
+      "给出地址池下 option 43 sub-option 3 ip-address 配置",
+      "排错包含 DHCP 分配与 Option 43 内容核对（抓包/服务器配置）",
+      "排错包含 UDP 5246 连通性与 display ap online-fail record 上线原因",
+      "提到版本匹配、认证/DTLS、白名单或 MTU 等至少一项深度检查"
+    ],
+    "tags": ["DHCP", "WLAN", "CAPWAP"]
+  },
+  {
+    "id": 89,
+    "difficulty": "难",
+    "category": {"scope": "网络", "protocol_layer": "其他", "lifecycle": "规划"},
+    "scenario": "园区",
+    "device_type": "不限定",
+    "question": "规划园区的 IPv6 地址与参数获取方式。（1）路由通告（RA）中的 M 位与 O 位各自控制什么？给出四种典型组合下主机获取地址/参数的行为。（2）SLAAC 与 DHCPv6（有状态/无状态）的分工是什么？DHCPv6 规范的最新状态如何？（3）给出选型建议：什么情况选 SLAAC、什么情况选 DHCPv6？",
+    "answer": "（1）M 位（Managed）置 1 表示主机应使用有状态 DHCPv6 获取地址；O 位（Other Configuration）置 1 表示除地址外的其他参数（如 DNS 服务器）可通过无状态 DHCPv6 获取。典型组合：M=0、O=0：仅 SLAAC，参数靠 RA 选项（如 RDNSS）；M=0、O=1：SLAAC 生成地址+无状态 DHCPv6 取参数（常见部署）；M=1、O=0/1：地址以有状态 DHCPv6 分配为主；具体行为还受 RA 携带前缀的 A/L 标志影响。（2）SLAAC：主机根据 RA 通告的前缀与接口标识自行生成地址并做 DAD，适合自管理；DHCPv6：服务器集中分配地址与参数、可做前缀委派与审计绑定；DHCPv6 规范经 2026 年发布的修订整合后确立为互联网标准，是当前 DHCPv6 的权威规范。（3）选型：终端自配置友好、追求零接触的接入网选 SLAAC+RA 下发 DNS 参数；需要集中地址管理、审计、绑定用户/端口分配、或面向路由器做前缀委派时选 DHCPv6；两者可共存，通过网关 RA 的 M/O 位与 A 标志组合引导主机行为。",
+    "scoring_points": [
+      "说明 M 位控制有状态 DHCPv6 地址获取、O 位控制无状态 DHCPv6 参数获取",
+      "给出四种组合的行为（含 M=0/O=1 的常见 SLAAC+无状态 DHCPv6 组合）",
+      "说明 SLAAC 机制：RA 前缀+接口标识自配与 DAD",
+      "说明 DHCPv6 的集中分配与前缀委派能力",
+      "指出 2026 年修订将 DHCPv6 整合确立为互联网标准",
+      "给出与场景匹配的选型建议及两者共存方式"
+    ],
+    "tags": ["RFC", "RFC9915", "RFC-2026", "DHCP", "IPv6"]
+  },
+  {
+    "id": 90,
+    "difficulty": "中",
+    "category": {"scope": "其他", "protocol_layer": "其他", "lifecycle": "维护"},
+    "scenario": "通用",
+    "device_type": "防火墙",
+    "question": "排查防火墙对 HTTPS 流量的处理问题时，需要在测试终端上配合抓包解密 TLS。SSLKEYLOGFILE 密钥日志格式已被标准化（2026 年 7 月）。请回答：（1）该格式的由来与标准化的意义是什么？（2）描述文件行格式：以什么关联握手？TLS 1.2 使用什么标签？TLS 1.3 使用哪些主要标签？（3）如何配合 Wireshark 解密流量？该密钥文件的安全管理要求是什么？",
+    "answer": "（1）SSLKEYLOGFILE 最初是浏览器（NSS）引入的事实格式：应用程序把每条 TLS 连接的密钥以文本行写入环境变量 SSLKEYLOGFILE 指定的文件，供抓包工具解密；因浏览器、curl、Wireshark 广泛采用，2026 年 7 月将其标准化为统一格式，保证各实现输出可互操作。（2）每行格式为：LABEL + ClientRandom 的十六进制 + 密钥的十六进制，以 ClientRandom 关联握手。TLS 1.2 使用 CLIENT_RANDOM 标签，记录主密钥；TLS 1.3 使用 CLIENT_HANDSHAKE_TRAFFIC_SECRET、SERVER_HANDSHAKE_TRAFFIC_SECRET、CLIENT/SERVER_TRAFFIC_SECRET_0 与 EXPORTER_SECRET 等标签，分别对应握手与应用阶段的不同方向密钥，随握手进度逐步追加。（3）在 Wireshark 的 TLS 协议配置（Pre-Master-Secret 日志文件）中指定该文件即可解密对应抓包中的 TLS 应用数据；安全要求：该文件等价于会话明文密钥，任何获得文件与抓包的人都能解密流量，必须限制文件权限、仅在受控测试终端启用（设置环境变量）、用完即删，严禁在生产环境或长期保存。",
+    "scoring_points": [
+      "说明格式源于浏览器（NSS）的事实标准并于 2026 年标准化",
+      "给出行格式：LABEL + ClientRandom + Secret，以 ClientRandom 关联连接",
+      "列出 TLS 1.2 的 CLIENT_RANDOM 与 TLS 1.3 的各 traffic secret 标签",
+      "说明 Wireshark 指定密钥文件即可解密的用法",
+      "强调密钥文件等价于明文密钥的权限控制、用后即删等安全要求"
+    ],
+    "tags": ["RFC", "RFC9850", "RFC-2026", "TLS", "安全"]
+  },
+  {
+    "id": 91,
+    "difficulty": "难",
+    "category": {"scope": "网络", "protocol_layer": "其他", "lifecycle": "建设"},
+    "scenario": "Internet",
+    "device_type": "不限定",
+    "question": "某站点计划使用 SVCB/HTTPS 资源记录改进客户端接入。（1）SVCB/HTTPS RR 解决什么问题？SVCB RR 与 HTTPS RR 的关系是什么？（2）AliasMode 与 ServiceMode 的语义区别是什么？（3）ServiceMode 下有哪些关键 SvcParamKey（至少四个）？描述客户端从解析到建连的选择流程。（4）与 HTTP Alt-Svc 头相比，DNS 层引导的优势是什么？",
+    "answer": "（1）解决域名到服务端点与协议参数的映射：在 DNS 解析阶段即告知客户端可用的替代端点（如 CDN 边缘）、建议的应用协议（alpn=h3/h2）、预置地址、ECH 配置等，避免连接阶段才发现更优端点；SVCB RR 是通用服务绑定记录，HTTPS RR 是专用于 HTTPS 的特化形式（参数语义与处理规则更贴合浏览器）。（2）AliasMode（模式 0）：记录指向另一目标域名，表示本域名的服务由该目标的 SVCB/HTTPS 记录定义，客户端需继续解析目标域名的记录；ServiceMode（模式 1）：直接给出端点与服务参数，端点由 TargetName 与地址 hints 构成。（3）关键参数：alpn（建议协议及对应 IP 版本）、ipv4hint/ipv6hint（免二次查询的预置地址）、mandatory（必须被客户端理解，否则整体退回 A/AAAA 模式）、port（替代端口）、ech（加密 ClientHello 配置）。流程：客户端查询 HTTPS RR 得到 ServiceMode 记录→按 alpn 选择协议与地址族（如 h3 选 IPv4/IPv6）→按 hints 发起连接（可并行尝试）→TLS 握手以 ALPN 确认协议；未能识别 mandatory 参数时退回普通 A/AAAA 连接。（4）Alt-Svc 依赖先完成一次 HTTP 交互才能发现替代端点（首访仍走旧路径，可能产生协议竞速），SVCB/HTTPS 在 DNS 阶段完成引导，首次访问即可直连最优端点与协议，并可承载 ECH 等握手前参数。",
+    "scoring_points": [
+      "说明 SVCB/HTTPS RR 在 DNS 层提供端点与协议参数引导",
+      "说明 SVCB 为通用记录、HTTPS 为其面向 HTTPS 的特化形式",
+      "准确区分 AliasMode（指向另一记录继续解析）与 ServiceMode（直接给端点参数）",
+      "列出 alpn、ipv4hint/ipv6hint、mandatory、port、ech 中至少四个参数",
+      "描述按 alpn 选协议/地址族、hints 并行建连、ALPN 确认的流程",
+      "对比 Alt-Svc：DNS 阶段引导无需先访问一次，首访即最优"
+    ],
+    "tags": ["RFC", "RFC9460", "RFC-2023", "DNS"]
+  },
+  {
+    "id": 92,
+    "difficulty": "简单",
+    "category": {"scope": "其他", "protocol_layer": "其他", "lifecycle": "其他"},
+    "scenario": "Internet",
+    "device_type": "不限定",
+    "question": "2024 年发布的澄清文档（标题为 In the DNS, QDCOUNT Is (Usually) One）对 DNS 标准查询作出规范。请回答：（1）该文档对标准查询的 QDCOUNT 作出什么澄清？（2）为什么需要这份澄清——1987 年的原始 DNS 规范遗留了什么歧义、实现现状如何？（3）DNS 服务器收到 QDCOUNT 值不符合规范的标准查询时应当如何回应？",
+    "answer": "（1）澄清 DNS 标准查询（OPCODE=0）的 QDCOUNT 应取 1（规范允许的少数特例除外），一次查询只携带一个 Question，多 Question 查询不被支持。（2）1987 年的原始规范报文格式允许 QDCOUNT 为多个，但从未定义应答如何与多个 Question 对应，历史上也从未有主流实现支持多问题查询；为防止新实现发明互不兼容的多问题用法，该澄清将这一互操作现实固化为规范。（3）服务器应回应 FORMERR（格式错误），不尝试解析与应答该查询。",
+    "scoring_points": [
+      "给出结论：标准查询 QDCOUNT 应为 1",
+      "指出原始规范格式允许但语义未定义的歧义",
+      "说明无实现支持多 Question，该澄清固化互操作现实",
+      "给出服务器回应 FORMERR 的要求"
+    ],
+    "tags": ["RFC", "RFC9619", "RFC-2024", "DNS"]
+  },
+  {
+    "id": 93,
+    "difficulty": "难",
+    "category": {"scope": "网络", "protocol_layer": "其他", "lifecycle": "维护"},
+    "scenario": "Internet",
+    "device_type": "不限定",
+    "question": "某递归解析器开启 DNSSEC 验证后，用户解析某域名出现 SERVFAIL。请回答：（1）描述 DNSSEC 信任链的构成：从根信任锚到权威区如何逐级验证？（2）KSK 与 ZSK 的分工是什么，DS 记录在链中起什么作用？（3）验证解析器对一条 RRset 的验证包含哪些步骤？（4）列出至少四种常见的验证失败原因并给出排查方法。",
+    "answer": "（1）信任链：验证器配置根区的信任锚；解析时从根开始，用父区的 DS 记录（存储子区 KSK 的摘要）认证子区 DNSKEY，再用子区 DNSKEY 验证子区数据签名，逐级下探直到目标域，链上任何一环失败则整体验证失败。（2）KSK 只用于签名区内的 DNSKEY RRset，是建立与父区信任关系的密钥，其摘要以 DS 记录存放在父区；ZSK 用于签名区内的权威数据 RRset，两者分工使 ZSK 可频繁轮换而不影响父子信任链。（3）对 RRset 验证：取得 RRset 与对应 RRSIG→从已认证的 DNSKEY 中选密钥验签→校验签名时间窗（Inception/Expiration）与当前时间关系→全部通过则该 RRset 有效，最终结果可信并在应答置 AD 位。（4）失败原因与排查：①系统时间偏差导致签名被认为未生效/已过期——校准解析器时钟；②DNSKEY 轮换后父区 DS 未同步（或 DS 指向已撤销密钥）——用 dnssec-dsfromkey 比对 DS 与 DNSKEY 摘要；③区文件签名过期未续签（Expired signature）——检查 RRSIG 有效期并重新签名；④多签名方/CDN 密钥不一致——核对各权威节点 DNSKEY 一致性。排查工具：dig +dnssec 观察 RRSIG/DNSKEY，delv 做完整链验证，关注验证器日志中的具体失败原因。",
+    "scoring_points": [
+      "描述信任链：信任锚→父区 DS 认证子区 DNSKEY→子区验证逐级下探",
+      "说明 KSK 签 DNSKEY RRset、ZSK 签区数据，DS 为父子区信任纽带",
+      "给出 RRset 验证步骤：验签+时间窗校验+AD 位",
+      "列出时间偏差、DS/DNSKEY 不匹配、签名过期、多权威不一致等至少四种原因",
+      "给出 dig +dnssec、delv、dnssec-dsfromkey 等可操作排查手段"
+    ],
+    "tags": ["RFC", "RFC4035", "RFC-2005", "DNS", "DNSSEC"]
+  },
+  {
+    "id": 94,
+    "difficulty": "简单",
+    "category": {"scope": "设备", "protocol_layer": "其他", "lifecycle": "优化"},
+    "scenario": "园区",
+    "device_type": "WLAN",
+    "question": "关于 2.4GHz 频段的信道规划：（1）为什么 20MHz 信道在 2.4GHz 只有 1、6、11 三个互不重叠的信道？（2）在 2.4GHz 使用 40MHz 信道绑定存在什么问题？设备侧有什么共存退让机制？（3）高密办公区的 2.4GHz 规划建议是什么？",
+    "answer": "（1）2.4GHz 频段划分为十几个以 5MHz 为间隔的信道编号，而 20MHz 的 OFDM 实际占用约 22MHz 带宽，相邻信道中心频点需相隔约 25MHz 以上才能不重叠，1/6/11 恰好满足（类似地还有 2/7/12 等等效组合）。（2）40MHz 需要主信道+相邻从信道绑定，占用约三分之二可用频段；周围存在任何 20MHz BSS 都会相互严重干扰，11n 的共存机制（OBSS 扫描/20/40 BSS Coexistence）会让 AP 检测到周边 20MHz 网络时自动退回 20MHz，实际高密环境 40MHz 几乎无法稳定使用。（3）建议：2.4GHz 仅按 1/6/11 三信道蜂窝复用、关闭 40MHz 绑定，把容量承载尽量迁移到 5GHz，并降低 AP 发射功率收紧覆盖减少邻区干扰。",
+    "scoring_points": [
+      "说明 2.4GHz 信道间隔与 20MHz 实占约 22MHz 的频谱重叠原因",
+      "给出 1/6/11 中心频差满足不重叠要求（或等效组合）",
+      "指出 40MHz 绑定占用过宽且与周边 20MHz BSS 互扰",
+      "提到 OBSS/共存机制使 AP 退回 20MHz",
+      "给出三信道复用、关闭 40MHz、业务向 5GHz 迁移的建议"
+    ],
+    "tags": ["WLAN", "射频"]
+  },
+  {
+    "id": 95,
+    "difficulty": "中",
+    "category": {"scope": "设备", "protocol_layer": "其他", "lifecycle": "优化"},
+    "scenario": "园区",
+    "device_type": "WLAN",
+    "question": "优化高密办公区无线接入体验，需控制单 AP 过载。（1）CAC（Call Admission Control，准入控制）在 WLAN 中的判据有哪些？超过阈值后设备如何处理新终端？（2）AP 间/射频间负载均衡的触发条件与作用范围是什么？（3）给出高密场景的综合优化配置思路（至少四条）。",
+    "answer": "（1）CAC 判据通常包括：射频当前关联用户数、信道利用率、终端信噪比/干扰水平等维度（华为等厂商支持按其中一项或多项组合设置门限）；超过阈值后 AP 拒绝新的关联/重关联请求（可对高优先级终端例外），防止过度接入导致所有用户体验崩塌。（2）负载均衡作用于同一覆盖区域内相互重叠的 AP（组）之间：当新终端请求接入时，比较相邻 AP 的负载（用户数或流量），若当前 AP 负载达到启动门限且与组内最轻 AP 的差值超过差值门限，则引导该终端接入较轻的 AP；负载均衡通常只影响新接入终端，不强拆已连接终端。（3）优化思路：①按覆盖与容量设计降低单 AP 发射功率、缩小蜂窝提高复用；②合理设置 CAC 门限（用户数/利用率）防过载；③开启基于用户数（或流量）的 AP 间负载均衡，设置启动/差值阈值；④配置基于 SNR 的准入/引导，阻止远端弱信号终端拖慢空口；⑤利用 802.11k/v 引导漫游与频段引导把双频终端引向 5GHz。",
+    "scoring_points": [
+      "列出 CAC 判据：用户数、信道利用率、SNR/干扰等",
+      "说明超阈值后拒绝新关联（可对高优先级例外）",
+      "解释负载均衡触发：启动门限+组内差值门限，仅影响新接入终端",
+      "给出功率收紧、CAC 门限、负载均衡、SNR 准入、11k/v 或频段引导中至少四条优化"
+    ],
+    "tags": ["WLAN", "CAC"]
+  },
+  {
+    "id": 96,
+    "difficulty": "难",
+    "category": {"scope": "其他", "protocol_layer": "其他", "lifecycle": "其他"},
+    "scenario": "Internet",
+    "device_type": "不限定",
+    "question": "HTTP/3 使用 QPACK 做头部压缩。（1）为什么 HTTP/2 的 HPACK 不能直接用于 HTTP/3？（2）QPACK 通过什么架构与机制限制队头阻塞的范围？说明编码器/解码器流、动态表同步与阻塞控制的作用。（3）编码器在压缩率与阻塞风险之间如何权衡，通过哪些参数控制？",
+    "answer": "（1）HPACK 的动态表索引隐含依赖压缩字节流在 TCP 上的严格有序：一个流的 HPACK 更新若丢失，其后所有流对表状态的解读都会错位，因此 HPACK 与 TCP 的有序交付强耦合；HTTP/3 基于 QUIC，各流独立交付、无传输层队头阻塞，若沿用 HPACK，压缩层的表状态依赖会把队头阻塞在压缩层复活，故必须重新设计。（2）QPACK 的机制：①把头字段的编码指令与解码确认放到两条额外的 QUIC 单向流（编码器流与解码器流）上，业务流只携带对表项的引用；②动态表插入由编码器流上的 Insert 指令完成并使用绝对索引，解码器处理后在解码器流回送确认（推进已接收计数水位）；③编码器引用尚未被确认的表项时，对应业务流可能被阻塞，QPACK 通过协商的最大阻塞流数与水位控制把阻塞限制在有限范围，丢包只影响引用未确认表项的那部分流，其余流不受影响。（3）权衡：激进地向动态表插入新字段（含常见长首部）可显著提升压缩率，但引用未确认表项增加阻塞风险与内存占用；保守地仅用静态表与短字面量编码则压缩率低但几乎无阻塞。控制参数包括协商的最大动态表容量、最大阻塞流数以及编码器自身的引用策略（是否允许引用未确认项）。",
+    "scoring_points": [
+      "解释 HPACK 依赖 TCP 字节流有序性、表状态错位问题",
+      "说明 QUIC 无传输层队头阻塞，HPACK 会在压缩层复活队头阻塞",
+      "描述 QPACK 架构：编码器/解码器两条单向流与业务流分离",
+      "说明动态表插入/确认机制与已接收计数水位",
+      "说明阻塞流数上限把阻塞范围限制在引用未确认表项的流",
+      "给出表容量/阻塞流数/引用策略的权衡与控制参数"
+    ],
+    "tags": ["RFC", "RFC9204", "RFC-2022", "HTTP/3"]
+  },
+  {
+    "id": 97,
+    "difficulty": "中",
+    "category": {"scope": "设备", "protocol_layer": "其他", "lifecycle": "维护"},
+    "scenario": "通用",
+    "device_type": "不限定",
+    "question": "核查一台华为 VRPv5 设备的 SNMPv3 配置安全性。（1）一套最小可用的 SNMPv3 配置需要哪些命令族（含用户组与 USM 用户，说明用途即可，不要求完整语法），要求达到认证+加密安全级别？（2）snmp-agent group 与 snmp-agent usm-user 的安全级别如何匹配？组的 read-view/write-view 起什么作用？（3）列出三条核查命令与对应检查点。",
+    "answer": "（1）命令族：系统视图下 snmp-agent 开启代理；snmp-agent sys-info version v3 仅使能 v3；创建用户组：snmp-agent group v3 <组> privacy read-view <视图> write-view <视图>（视图可自定义或用默认视图）；创建 USM 用户：snmp-agent usm-user v3 <用户> <组>，并配置 authentication-mode（认证算法与密码）与 privacy-mode（加密算法与密码）；如需限定网管源可再配 ACL。（2）组的安全级别（不认证不加密 noAuthNoPriv、仅认证 authentication、认证+加密 privacy）是该组内用户的下限：组配置为 privacy 时，组内 usm-user 必须同时配置认证与加密；用户继承组级别，级别不足或超出均不匹配。read-view/write-view 通过 MIB 视图限定该组可读/可写的 MIB 子树，实现最小权限（如只读组不给 write-view）。（3）核查：display snmp-agent usm-user 检查用户所属组与认证加密算法；display snmp-agent group 检查组级别与绑定视图、ACL；display snmp-agent mib-view 检查视图包含/排除的 MIB 子树是否满足最小权限。",
+    "scoring_points": [
+      "给出 snmp-agent group v3 ... privacy read-view/write-view 的组配置",
+      "给出 snmp-agent usm-user v3 <user> <group> 配置 authentication-mode 与 privacy-mode 的用户配置",
+      "说明组级别是组内用户下限，privacy 组要求用户认证+加密齐备",
+      "说明视图限定可读/可写 MIB 子树实现最小权限",
+      "列出 display snmp-agent usm-user/group/mib-view 及检查点"
+    ],
+    "tags": ["CLI", "华为", "VRPv5", "SNMP"]
+  },
+  {
+    "id": 98,
+    "difficulty": "中",
+    "category": {"scope": "设备", "protocol_layer": "其他", "lifecycle": "建设"},
+    "scenario": "通用",
+    "device_type": "不限定",
+    "question": "建设基于 NETCONF 的设备自动化通道。（1）NETCONF 的承载协议与默认端口是什么？（2）会话建立时 capability 协商如何进行？base 1.0 与 1.1 的差异、:candidate 等能力各代表什么？（3）YANG 在其中扮演什么角色？列出至少四个核心 RPC 操作。（4）相对 SNMP 与 CLI，NETCONF 的优势是什么？",
+    "answer": "（1）NETCONF 缺省承载于 SSH 之上，默认端口 TCP 830（亦可使用 TLS 等绑定）。（2）客户端与服务器在会话建立后互发 <hello> 报文，携带各自 capability URN 列表完成协商：base:1.0 与 base:1.1 决定报文分帧方式（1.1 采用分块帧）；:candidate 表示支持候选数据存储（配置先写入候选库再整体提交）、:startup 支持启动配置独立操作、:validate 支持提交前校验、:xpath 支持 XPath 过滤等，未协商的能力不得在会话中使用。（3）YANG 是 NETCONF 的数据建模语言，定义配置与状态数据的层次结构、类型与约束，设备能力与数据模型通过 capability 中通告的模块集暴露，使自动化可以按模型编程；核心操作：get/get-config（读取运行/候选数据）、edit-config（编辑配置，支持 merge/replace/create 等操作）、copy-config、commit（候选提交至运行）、lock/unlock、close-session，以及 notification 事件订阅。（4）优势：面向事务（候选库+校验+原子提交、失败可回退）、数据模型标准化（YANG 驱动，区别于各厂商异构 CLI）、结构化 XML 编码与明确的 RPC 错误语义，比 SNMP 更适合配置管理、比屏幕抓取式 CLI 自动化更可靠。",
+    "scoring_points": [
+      "给出 SSH 承载、默认端口 830",
+      "描述 <hello> 互发 capability 的协商过程",
+      "说明 base 1.0/1.1 分帧差异及 :candidate/:validate 等能力含义中的至少两项",
+      "说明 YANG 提供数据建模、模块经 capability 通告",
+      "列出 get-config/edit-config/commit/copy-config 等至少四个操作",
+      "给出事务化、模型化、优于 SNMP/CLI 的理由"
+    ],
+    "tags": ["RFC", "RFC6241", "RFC-2011", "NETCONF", "YANG"]
+  },
+  {
+    "id": 99,
+    "difficulty": "中",
+    "category": {"scope": "设备", "protocol_layer": "其他", "lifecycle": "规划"},
+    "scenario": "数据中心",
+    "device_type": "WLAN",
+    "question": "规划数据中心与办公区的 802.1X 准入。（1）EAPOL 报文如何封装？认证如何触发？（2）802.1X 的三个角色是什么？交换机对 EAP 报文做中继时如何封装传递（透传还是解析）？（3）端口受控/非受控的访问控制逻辑是什么？（4）哑终端无法安装 supplicant 时如何退路？",
+    "answer": "（1）EAPOL 直接封装在以太帧中，使用专门的 EtherType 标识，帧类型包括 EAPOL-Start、EAPOL-Key、EAP-Packet 等；认证由客户端发 EAPOL-Start 主动发起，或由 authenticator 周期发送 EAP-Request/Identity 触发。（2）三个角色：supplicant 请求者（终端）、authenticator 认证系统（交换机/AP）、authentication server 认证服务器（通常为 RADIUS）。交换机作为 pass-through：将收到的 EAP 报文原样封装进 RADIUS 的 EAP-Message 属性转发给服务器（EAP 中继方式），自身不解析 EAP 内容，认证在终端与服务器间端到端完成（如 EAP-TLS）。（3）逻辑端口分为非受控端口与受控端口：非受控端口只允许 EAPOL（及少量必要流量）通过，用于认证交互；受控端口在认证 Success 前对业务流量关闭，认证通过后打开并按授权结果（VLAN/ACL）放行；检测到 logoff、链路 down 或 MAC 变化时回收授权。（4）哑终端退路：MAB（MAC Authentication Bypass，基于 MAC 地址经 RADIUS 方式认证）、或按端口/SSID 预授权放行并配合 ACL/隔离区，再逐步精细化。",
+    "scoring_points": [
+      "给出 EAPOL 以太封装与专门的 EtherType 标识",
+      "说明触发方式：终端 EAPOL-Start 或 authenticator 的 Request/Identity",
+      "正确描述三角色与交换机 pass-through 中继（EAP-Message 属性透传）",
+      "解释受控/非受控端口逻辑与认证后授权",
+      "给出 MAB 等哑终端退路"
+    ],
+    "tags": ["802.1X", "安全"]
+  },
+  {
+    "id": 100,
+    "difficulty": "难",
+    "category": {"scope": "网络", "protocol_layer": "其他", "lifecycle": "规划"},
+    "scenario": "Internet",
+    "device_type": "不限定",
+    "question": "某 ISP 规划部署 RPKI 与 BGP Origin Validation 防范前缀劫持。（1）描述 RPKI 的证书体系与 ROA 的内容：ROA 声明了什么要素？（2）路由器对收到的 BGP 前缀宣告给出哪三种验证状态？各在什么条件下出现、如何处置？（3）部署组件如何构成（信任锚、缓存、RTR 协议）？（4）说明该机制防住了什么、防不住什么，以及运营上的注意事项。",
+    "answer": "（1）RPKI 建立在资源公钥体系上：用携带 IP/AS 资源扩展的 X.509 证书沿地址分配链（IANA→RIR→ISP）证明地址块持有权；ROA（Route Origin Authorization）由地址持有者用其证书对应私钥签名，声明「前缀 P 允许由 AS X 作为 origin 通告」，并可设置 maxLength 约束允许的最长具体前缀。（2）路由器对每条收到的 BGP 宣告按最长前缀匹配查找覆盖它的 ROA：前缀与 origin AS 均匹配某 ROA（且不超 maxLength）为 Valid；存在覆盖 ROA 但 origin AS 不符或前缀超 maxLength 为 Invalid；不存在任何覆盖 ROA 为 NotFound。处置：Valid 正常使用；Invalid 默认拒绝（RPKI-invalid 拒绝策略）；NotFound 通常照常接受（可选择性降优先级）。（3）组件：运营商本地部署验证软件（validator）从 RIR 发布点同步全球 ROA 与证书（信任锚配置），通过 RTR 协议把 ROA 数据下发给 BGP 路由器执行验证。（4）防住：伪造 origin AS 的前缀劫持宣告会被验证者以 Invalid 丢弃；防不住：路径（AS_PATH）被篡改的劫持与中间人路径攻击（需 BGPsec 类方案）、以及 NotFound 前缀的宣告。运营注意：ROA 配置错误（如 maxLength 设置过大或过小、AS 填错）会误伤自己的正常路由被全网拒绝；ROA 发布与撤销存在全球传播时延，变更窗口需提前规划；应先以监控模式（仅记录不拒绝）观察再切强制拒绝。",
+    "scoring_points": [
+      "描述资源证书链与 ROA 要素：前缀、origin AS、maxLength",
+      "给出三状态判定条件：Valid/Invalid/NotFound",
+      "说明 Invalid 默认拒绝、NotFound 通常接受的处置",
+      "描述部署组件：本地 validator 同步 ROA、RTR 协议下发路由器",
+      "指出只验证 origin、不验证 AS_PATH 路径真实性的局限",
+      "给出 ROA 配置错误风险、传播时延、先监控后强制的运营注意"
+    ],
+    "tags": ["RPKI", "BGP", "安全"]
+  }
+]

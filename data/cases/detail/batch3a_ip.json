@@ -1,0 +1,404 @@
+[
+  {
+    "id": 31,
+    "difficulty": "简单",
+    "category": {
+      "scope": "网络",
+      "protocol_layer": "IP层",
+      "lifecycle": "维护"
+    },
+    "scenario": "通用",
+    "device_type": "不限定",
+    "question": "OSPFv2（RFC 2328）的 AS-external-LSA（Type-5 LSA）中包含 Forwarding Address 字段。请说明：（1）该字段为 0.0.0.0 时，去往外部目的地的流量应转发到哪里；（2）该字段非 0 时流量如何转发，RFC 2328 建议该地址指向哪一类路由器（哪个范围）；（3）路由器执行外部路由计算时，对非零 Forwarding Address 的可达性有什么要求，不满足时对该 Type-5 LSA 如何处理。",
+    "answer": "（1）Forwarding Address 为 0.0.0.0 时，流量转发到该 LSA 的产生者（ASBR）本身。（2）非 0 时，流量直接转发到该地址标识的路由器，下一跳由到该地址的区域内/区域间路由决定；RFC 2328 建议（脚注 24）该地址指向属于其他自治系统的路由器（如 ASBR 的外部下一跳），使流量不必先绕行 ASBR。（3）RFC 2328 第 16.4 节要求非零 Forwarding Address 必须能解析出区域内或区域间路径，否则忽略该 LSA、不据此安装外部路由。",
+    "scoring_points": [
+      "FA 为 0.0.0.0：流量转发到 Type-5 LSA 的产生者（ASBR）",
+      "FA 非 0：流量转发到 FA 标识的路由器，下一跳由到该地址的内部路由决定",
+      "RFC 2328 建议 FA 指向属于其他自治系统的路由器（典型为 ASBR 的外部下一跳）",
+      "第 16.4 节：非零 FA 必须经区域内/区域间路径可达，否则该 LSA 被忽略（不安装外部路由）"
+    ],
+    "tags": [
+      "RFC",
+      "RFC2328",
+      "RFC-1998",
+      "OSPF"
+    ]
+  },
+  {
+    "id": 32,
+    "difficulty": "中",
+    "category": {
+      "scope": "设备",
+      "protocol_layer": "IP层",
+      "lifecycle": "建设"
+    },
+    "scenario": "通用",
+    "device_type": "路由器",
+    "question": "OSPF 网络中常把连接用户网段的接口配置为抑制 OSPF 报文收发，以避免无效邻居尝试并增强安全。请对比 Cisco IOS 与华为 VRPv5 的实现：（1）IOS passive-interface 下接口的状态：Hello 是否继续收发、能否建立邻居、接口网段是否仍在 Router LSA 中通告；（2）IOS 如何用 passive-interface default 与例外命令实现默认全部抑制、仅互联接口放开；（3）华为 VRPv5 的 silent-interface 语义，及实现同样全部抑制加例外放开的命令组合；（4）两家在 OSPF 下语义是否等价，差异主要体现在哪里（CLI 组织与命令的跨协议语义，后者以 RIP 为例说明 IOS 的行为）。",
+    "answer": "（1）IOS 中被设为 passive 的接口停止收发 OSPF Hello，无法建立邻居，但接口所在网段仍以末梢网络形式包含在该路由器的 Router LSA 中被通告。（2）passive-interface default 使进程下所有接口默认 passive，再用 no passive-interface <接口> 对需要建立邻居的互联接口逐一放开，避免逐条列举用户接口、新增接口漏配。（3）华为 VRPv5 在 OSPF 进程视图配置 silent-interface <接口>，禁止该接口接收和发送 OSPF 报文，同样不影响网段通告；批量做法为 silent-interface all 全部抑制，再用 undo silent-interface <接口> 放开互联接口。（4）对 OSPF 而言两家语义等价（均禁止 Hello 收发、不建邻居、仍通告网段），差异主要在 CLI 组织（default/no 与 all/undo）；且 IOS 的 passive-interface 语义随协议而变——在 RIP 下只抑制发送更新、仍可接收，而华为 silent-interface 在 OSPF 下始终是收发双向禁止，跨协议沿用配置习惯时须注意。",
+    "scoring_points": [
+      "IOS passive 接口停止收发 Hello、不能建立邻居，但网段仍在 Router LSA 中通告",
+      "IOS：passive-interface default + no passive-interface <接口> 实现默认全抑制、个别放开",
+      "华为：silent-interface 禁止接口收发 OSPF 报文、网段仍通告，与 IOS OSPF 语义等价",
+      "华为批量组合：silent-interface all + undo silent-interface <接口>",
+      "指出 IOS passive-interface 在 RIP 下仅抑制发送仍可接收，跨协议语义不同"
+    ],
+    "tags": [
+      "CLI",
+      "Cisco",
+      "IOS",
+      "华为",
+      "VRPv5",
+      "版本差异",
+      "OSPF"
+    ]
+  },
+  {
+    "id": 33,
+    "difficulty": "简单",
+    "category": {
+      "scope": "网络",
+      "protocol_layer": "IP层",
+      "lifecycle": "其他"
+    },
+    "scenario": "宽带城域",
+    "device_type": "不限定",
+    "question": "OSPFv3（RFC 5340）在报头中定义了 Instance ID 字段，用于链路级多实例，RFC 5838 地址族扩展又利用它区分地址族。请说明：（1）该字段的长度，以及 OSPFv3 报头相对 OSPFv2 的相应变化（原认证字段如何处理，认证由什么承担）；（2）接收方对 Instance ID 不匹配报文的处理方式，以及由此在共享链路上实现的功能；（3）RFC 5838 为 IPv6 单播、IPv6 组播、IPv4 单播、IPv4 组播四种地址族规定的 Instance ID 取值范围。",
+    "answer": "Instance ID 长 1 字节，位于 OSPFv3 报头中原 OSPFv2 认证字段的位置，认证功能改由 IPsec 承担。接口只处理 Instance ID 与本接口配置值相同的报文，不匹配即丢弃，由此可在同一条链路上隔离多个互不感知的 OSPFv3 实例（多客户/多 VPN 隔离）。RFC 5838 规定：0–31 为 IPv6 单播、32–63 为 IPv6 组播、64–95 为 IPv4 单播、96–127 为 IPv4 组播，使单链路可并行不同地址族的 OSPFv3 进程。",
+    "scoring_points": [
+      "Instance ID 为 1 字节，位于 OSPFv3 报头（占用 OSPFv2 原认证字段位置）",
+      "OSPFv3 认证改由 IPsec 承担",
+      "Instance ID 不匹配的报文被丢弃；实现共享链路多实例隔离",
+      "RFC 5838 范围：0–31 IPv6 单播、32–63 IPv6 组播、64–95 IPv4 单播、96–127 IPv4 组播"
+    ],
+    "tags": [
+      "RFC",
+      "RFC5340",
+      "RFC-2008",
+      "OSPF",
+      "IPv6"
+    ]
+  },
+  {
+    "id": 34,
+    "difficulty": "中",
+    "category": {
+      "scope": "设备",
+      "protocol_layer": "IP层",
+      "lifecycle": "建设"
+    },
+    "scenario": "通用",
+    "device_type": "路由器",
+    "question": "某 OSPF 多区域网络中，Area 1 没有直连骨干 Area 0，需经 Area 2 中转接入骨干。请说明在华为 VRPv5 路由器上的实现：（1）虚拟链路（virtual link）解决什么问题、逻辑上属于哪个区域、两端需要在什么视图下配置什么命令与关键参数（对端 Router ID，以及 hello/dead 等可修改的定时器或认证参数中的典型项）；（2）配置后用什么命令验证；（3）为什么虚拟链路不允许穿越 stub 区域（结合 stub 区域的 LSA 限制说明）。",
+    "answer": "（1）虚拟链路使未直连骨干的区域经一个 transit 区域逻辑接入 Area 0：两端的 ABR 在该 transit 区域（本例 Area 2）的 OSPF 区域视图下互相配置 vlink-peer <对端Router ID>，两端互指，可选参数包括 hello、dead、retransmit、trans-delay、smart-discover 及认证等。虚拟链路在逻辑上属于 Area 0，等效为骨干内一条无编号点到点链路，ABR 借它交换骨干 LSA，使 Area 1 的路由可进入骨干并分发到其他区域。（2）用 display ospf vlink 查看虚拟链路状态与邻居。（3）stub 区域为精简 LSDB 不泛洪 Type-5 LSA（totally stub 区域还限制 Type-3/Type-4），区域内路由器不学习外部路由；虚拟链路作为骨干通路需要完整的骨干 LSA 交换与传递（端点 ABR 还需生成 Type-4 等汇总 LSA），穿越 stub 区域会破坏这些机制，故 RFC 2328 明确规定虚拟链路不能配置在 stub 区域中。",
+    "scoring_points": [
+      "作用：使未直连 Area 0 的区域经 transit 区域逻辑连入骨干；虚拟链路逻辑上属于 Area 0（等效无编号点到点链路）",
+      "配置视图与命令：transit 区域视图下 vlink-peer <对端 Router ID>，两端互指",
+      "可选参数：hello/dead/retransmit/trans-delay/smart-discover/认证中至少两项",
+      "验证命令 display ospf vlink",
+      "RFC 2328 规定虚拟链路不能穿越 stub 区域，能结合 stub 的 Type-5（及 totally stub 的 Type-3/4）LSA 限制说明原因"
+    ],
+    "tags": [
+      "CLI",
+      "华为",
+      "VRPv5",
+      "OSPF"
+    ]
+  },
+  {
+    "id": 35,
+    "difficulty": "中",
+    "category": {
+      "scope": "设备",
+      "protocol_layer": "IP层",
+      "lifecycle": "建设"
+    },
+    "scenario": "通用",
+    "device_type": "路由器",
+    "question": "Cisco 经典 IOS 的 ip vrf <name> 与 IOS/IOS-XE 的 vrf definition <name> 是两代 VRF 配置方式。请从四个方面说明差异：（1）RD 与 route-target 的配置层级结构；（2）地址族支持范围（IPv4 专用还是原生多地址族）；（3）接口关联 VRF 的命令；（4）接口关联命令对接口上已有 IP 地址的处理，以及两代配置的兼容/迁移关系。",
+    "answer": "（1）ip vrf 创建后，rd 与 route-target（import/export）都直接配置在 VRF 子模式下；vrf definition 为模块化结构：rd 配置在 definition 层，route-target 必须进入 address-family ipv4 或 address-family ipv6 子模式按地址族配置。（2）ip vrf 面向 IPv4 单播（IPv6 需另用独立机制配置）；vrf definition 原生支持多地址族，同一 VRF 内可同时运行 v4/v6。（3）接口关联命令：前者为 ip vrf forwarding <name>，后者为 vrf forwarding <name>（无 ip 前缀）。（4）两条接口关联命令执行时都会删除接口上已配置的 IP 地址，需重新配置地址后 VRF 才生效；在支持 vrf definition 的版本上，legacy ip vrf 配置会被转换为 vrf definition 形式呈现（向后兼容），新部署推荐统一使用 vrf definition。",
+    "scoring_points": [
+      "ip vrf：rd 与 route-target 均直接在 VRF 子模式配置",
+      "vrf definition：rd 在 definition 层，route-target 须进入 address-family ipv4/ipv6 子模式按地址族配置",
+      "地址族：ip vrf 仅 IPv4；vrf definition 原生支持 v4/v6 多地址族",
+      "接口命令分别为 ip vrf forwarding 与 vrf forwarding",
+      "两条接口命令都会清除接口已配 IP 地址需重配；legacy 配置会转换为 vrf definition 形式（新部署推荐后者）"
+    ],
+    "tags": [
+      "CLI",
+      "Cisco",
+      "IOS",
+      "IOS-XE",
+      "版本差异",
+      "VRF"
+    ]
+  },
+  {
+    "id": 36,
+    "difficulty": "中",
+    "category": {
+      "scope": "网络",
+      "protocol_layer": "IP层",
+      "lifecycle": "维护"
+    },
+    "scenario": "通用",
+    "device_type": "路由器",
+    "question": "IS-IS 与 OSPF 在广播网络上都选举指定路由器以减少邻接数量，但 DIS 与 DR 行为不同。请对比：（1）选举优先级的取值范围与默认值，优先级为 0 时各自是否仍可参与/当选；（2）IS-IS DIS 能否被更高优先级路由器抢占，OSPF DR 能否；OSPF 设置 BDR 的作用，IS-IS 为何可以没有备份 DIS（结合其周期同步机制说明）；（3）两者保证广播网数据库同步/可靠的机制差异：IS-IS DIS 周期发送什么报文、普通路由器用什么请求缺失 LSP、DIS 的 Hello 发送间隔特殊在哪，OSPF 靠什么确认机制。",
+    "answer": "（1）优先级：IS-IS 接口优先级 0–127、默认 64，数值大者优先，配 0 的路由器仍参与选举并可能当选 DIS（平局比 SNPA/MAC 最大者）；OSPF 接口优先级 0–255、默认 1，0 表示不参与 DR/BDR 选举（平局比 Router ID）。（2）IS-IS DIS 可被后启动的更高优先级路由器立即抢占重选；OSPF 的 DR/BDR 一旦选出不可被抢占，且设置 BDR 在 DR 失效时无缝接替，DRothers 只与 DR/BDR 建立 Full 邻接。IS-IS 无备份 DIS，因为它依赖周期性自愈：DIS 默认每 10 秒在广播网泛洪 CSNP 供全网比对，缺 LSP 的路由器以 PSNP 请求补齐；DIS 的 Hello 间隔为配置值的 1/3（默认 10 秒时约 3.3 秒发送），加快 DIS 失效检测，DIS 故障后重选并靠 CSNP 快速再同步，无需备份角色。（3）OSPF 的 LSA 泛洪均有显式 LSAck 确认与重传机制；IS-IS 广播网对泛洪的 LSP 不逐一确认，依赖 DIS 周期 CSNP 加 PSNP 请求实现最终一致。",
+    "scoring_points": [
+      "IS-IS 优先级 0–127 默认 64，大者优先，0 仍可当选；OSPF 0–255 默认 1，0 不参与选举",
+      "平局规则：IS-IS 比 SNPA（MAC）最大，OSPF 比 Router ID",
+      "IS-IS DIS 可被更高优先级抢占；OSPF DR 不可抢占",
+      "OSPF 有 BDR 平滑接替、DRothers 仅与 DR/BDR 建 Full；IS-IS 无备份 DIS",
+      "IS-IS 靠 DIS 周期 CSNP（默认 10 秒）加 PSNP 请求自愈，DIS Hello 间隔为配置值的 1/3",
+      "OSPF 泛洪有显式 LSAck 确认与重传，IS-IS 广播网不逐 LSP 确认"
+    ],
+    "tags": [
+      "IS-IS",
+      "OSPF"
+    ]
+  },
+  {
+    "id": 37,
+    "difficulty": "中",
+    "category": {
+      "scope": "设备",
+      "protocol_layer": "IP层",
+      "lifecycle": "优化"
+    },
+    "scenario": "宽带城域",
+    "device_type": "路由器",
+    "question": "某宽带城域网需将 IS-IS 从 narrow 开销迁移到 wide，以支持大度量和流量工程扩展。请回答：（1）narrow 模式使用的旧式 TLV（编号）及其度量限制（接口开销取值范围、SPF 路径总度量的上限）；（2）wide 模式依据 RFC 5305 使用的 TLV 与 metric 位宽，以及可携带的扩展能力；（3）华为 VRPv5 的 cost-style 各取值 narrow / wide / compatible / narrow-compatible / wide-compatible 的收发语义与系统默认值；（4）迁移期一端 narrow、一端 wide 时的故障现象，以及推荐的分阶段迁移步骤。",
+    "answer": "（1）narrow 使用 TLV 2（IS Reachability）、TLV 128/130（IP 内部/外部可达性），接口开销 6 bit（1–63），SPF 路径总度量 10 bit、上限 1023，无法表达大度量也不支持扩展子 TLV。（2）wide 依据 RFC 5305 使用 TLV 22（Extended IS Reachability）与 TLV 135（Extended IP Reachability），metric 字段 32 bit（接口开销 24 bit，可配置到 16777214），并可在子 TLV 中携带流量工程等扩展属性。（3）华为 VRPv5 的 cost-style：narrow 只收发 narrow；wide 只收发 wide；compatible 同时收发两种；narrow-compatible 接收两种、只发送 narrow；wide-compatible 接收两种、只发送 wide（可选 relax-spf-limit 放开 SPF 度量上限）；系统默认 narrow，缺省接口开销 10。（4）不匹配时 IIH 正常、邻接保持，但可达性 TLV 互不识别，双方学不到对方通告的路由，表现为邻居正常而路由缺失。迁移：先全网 compatible，再逐台改 wide-compatible（只发 wide 仍可收 narrow），最后全网切换为 wide。",
+    "scoring_points": [
+      "narrow：TLV 2/128/130，接口开销 6 bit（1–63），路径度量上限 1023（10 bit）",
+      "wide：RFC 5305 TLV 22/135，32 bit metric（接口 24 bit），子 TLV 可扩展 TE 属性",
+      "华为默认 cost-style 为 narrow（缺省接口开销 10）",
+      "compatible/narrow-compatible/wide-compatible 收发语义正确（收两种、发 narrow 或发 wide 等）",
+      "不匹配现象：邻接正常但学不到对端路由（可达性 TLV 不互认）",
+      "迁移步骤：compatible 到 wide-compatible 再到 wide 分阶段切换"
+    ],
+    "tags": [
+      "CLI",
+      "华为",
+      "VRPv5",
+      "IS-IS"
+    ]
+  },
+  {
+    "id": 38,
+    "difficulty": "中",
+    "category": {
+      "scope": "网络",
+      "protocol_layer": "IP层",
+      "lifecycle": "维护"
+    },
+    "scenario": "宽带城域",
+    "device_type": "路由器",
+    "question": "IS-IS LSP 头部的 OL（Overload）标志可用于让其他路由器在 SPF 计算中避让本路由器。请说明：（1）OL 置位后其他路由器的处理（transit 避让），与本路由器直连网段路由、其通告的默认路由是否仍被使用；（2）华为 VRPv5 的 set-overload 命令族：立即置位的用法、on-startup（含时长范围与默认值）与 wait-for-bgp 的区别、allow interlevel 与 allow external 参数的作用；（3）设备在什么异常情况下会自动置位 OL；（4）为什么重启场景常配置置位后等待 BGP 收敛再撤销（说明不这样做可能出现的黑洞窗口）。",
+    "answer": "（1）OL 置位表示该路由器不能可靠转发穿越流量：其他路由器 SPF 计算时不用它作为 transit 节点，但仍学习以它为叶子的路由，其直连网段可达，其通告的默认路由（如配置）也可用。（2）华为 VRPv5 在 IS-IS 进程视图配置：set-overload 立即置位直至撤销；set-overload on-startup [时长] 在系统重启后自动置位、超时后撤销，时长范围 5–86400 秒、默认 600 秒；set-overload on-startup wait-for-bgp [时长] 置位保持到 BGP 收敛完成（或超时）；OL 置位期间缺省情况下不发布 Level-2 到 Level-1 的层间渗透路由与引入的外部路由，allow interlevel 与 allow external 分别在置位期间放行（继续发布）对应的层间路由、外部路由。（3）系统检测到内存不足等异常时自动置位 OL 自保护。（4）重启后 IS-IS 先于 BGP 收敛，若 OL 立即撤销，其他路由器马上把本机当作 transit 转发跨网流量，而 BGP 目的路由尚未恢复，流量在本机被丢弃形成黑洞；wait-for-bgp 使 OL 保持到 BGP 收敛，消除该窗口。",
+    "scoring_points": [
+      "OL 置位后其他路由器 SPF 不将其作为 transit（穿越）节点",
+      "直连网段路由（叶子路由）仍被学习，其通告的默认路由仍可用",
+      "set-overload 立即置位；on-startup 重启后自动置位（5–86400 秒，默认 600 秒）",
+      "wait-for-bgp：保持 OL 直至 BGP 收敛，防止重启窗口黑洞",
+      "OL 置位期间缺省不发布层间渗透路由与引入的外部路由；allow interlevel/external 在置位期间放行对应路由",
+      "内存不足等异常时系统自动置位 OL"
+    ],
+    "tags": [
+      "IS-IS",
+      "故障诊断"
+    ]
+  },
+  {
+    "id": 39,
+    "difficulty": "中",
+    "category": {
+      "scope": "设备",
+      "protocol_layer": "IP层",
+      "lifecycle": "维护"
+    },
+    "scenario": "通用",
+    "device_type": "路由器",
+    "question": "Cisco IOS 的 BGP 最优路径选择中，MED 默认遵循两条规则：只在来自同一邻接 AS 的路径之间比较，以及缺失 MED 按 0 处理。请说明：（1）这两条默认规则的内容及其各自带来的问题；（2）bgp always-compare-med 的作用与部署前提/建议；（3）bgp bestpath med missing-as-worst 的作用与缺失 MED 的取值；（4）为什么建议与 bgp deterministic-med 配合并全网统一部署 always-compare-med。",
+    "answer": "（1）默认仅当路径来自同一邻接 AS 时才比较 MED，来自不同 AS 的路径之间不比较（视为相等，进入后续步骤）；缺失 MED 按 0（最优）处理。问题：无法用 MED 表达经不同上游 AS 入口的出口偏好；无 MED 的路径按 0 可能意外胜过携带较大 MED 的合理路径。（2）bgp always-compare-med 允许跨不同邻接 AS 的路径比较 MED；由于 MED 是逐 AS 传递的本地决策信息，跨 AS 比较只在参与 AS 的 MED 语义一致（如同一运营机构统一度量基准）时才有意义，且必须全网统一启用，否则不同路由器决策不一致可能产生环路。（3）bgp bestpath med missing-as-worst 将缺失 MED 视为 4294967295（最差），避免其意外优选。（4）MED 比较结果依赖路径到达与被比较的顺序，存在非确定性；bgp deterministic-med 按相同邻接 AS 分组做确定性比较，两者配合使全网对 MED 的解释一致、路径选择稳定，消除振荡与次优路径。",
+    "scoring_points": [
+      "默认：MED 仅在来自同一邻接 AS 的路径间比较，跨 AS 不比较",
+      "默认：缺失 MED 按 0（最优）处理，可能意外胜出",
+      "always-compare-med 允许跨邻接 AS 比较 MED，需 MED 语义一致且全网统一部署",
+      "missing-as-worst 将缺失 MED 按 4294967295（最差）处理",
+      "deterministic-med 消除比较顺序带来的非确定性，应与 always-compare-med 配合"
+    ],
+    "tags": [
+      "CLI",
+      "Cisco",
+      "IOS",
+      "BGP"
+    ]
+  },
+  {
+    "id": 40,
+    "difficulty": "简单",
+    "category": {
+      "scope": "网络",
+      "protocol_layer": "IP层",
+      "lifecycle": "其他"
+    },
+    "scenario": "Internet",
+    "device_type": "路由器",
+    "question": "按 RFC 1997 / IANA 注册值回答：写出 BGP 三个 well-known community——NO_EXPORT、NO_ADVERTISE、NO_EXPORT_SUBCONFED（local-AS）的值（十六进制），并分别说明收到携带该 community 的路由后不得向谁通告；再说明 COMMUNITIES 属性的 optional transitive 特性对不支持该属性的路由器的意义（收到后如何处理）。",
+    "answer": "NO_EXPORT＝0xFFFFFF01：不得通告到本 AS（BGP 联盟边界）之外；NO_ADVERTISE＝0xFFFFFF02：不得向任何 BGP 对等体通告；NO_EXPORT_SUBCONFED（又称 local-AS）＝0xFFFFFF03：不得通告到本成员 AS 之外，包括联盟内其他成员 AS 的对等体（同一成员 AS 内 iBGP 可传）。COMMUNITIES 为 optional transitive 属性：不识别它的路由器仍接受该路由，并将属性原样透传给下游。",
+    "scoring_points": [
+      "NO_EXPORT=0xFFFFFF01，不向本 AS/联盟边界外通告",
+      "NO_ADVERTISE=0xFFFFFF02，不向任何对等体通告",
+      "NO_EXPORT_SUBCONFED(local-AS)=0xFFFFFF03，不向成员 AS 外（含联盟内 eBGP）通告",
+      "optional transitive：不识别仍接受路由并透传属性"
+    ],
+    "tags": [
+      "RFC",
+      "RFC1997",
+      "RFC-1996",
+      "BGP"
+    ]
+  },
+  {
+    "id": 41,
+    "difficulty": "中",
+    "category": {
+      "scope": "网络",
+      "protocol_layer": "IP层",
+      "lifecycle": "维护"
+    },
+    "scenario": "数据中心",
+    "device_type": "路由器",
+    "question": "RFC 9687 为 BGP FSM 新增 Send Hold Timer，用于处理 BGP 会话保持 Established、但对端 TCP 持续零窗口使本端消息长期发不出去的僵死会话（BGP zombie）。请说明：（1）该场景下为什么原有 Hold Timer 检测不到故障；（2）SendHoldTimer 的启停规则：何时启动（进入 Established 的条件）、每发送一个 BGP 消息后如何处理、SendHoldTime 或协商 HoldTime 为 0 时如何、离开 Established 时如何；（3）Event 29 SendHoldTimer_Expires 触发后的处理动作序列与状态迁移（含 NOTIFICATION 的 Error Code 注册值与是否必须发送）；（4）SendHoldTime 与 HoldTime 的大小约束、默认值规则及默认开启建议。",
+    "answer": "（1）故障场景：对端 TCP 接收窗口持续为 0、不处理 BGP 消息，本端 UPDATE/KEEPALIVE 积压在发送队列；但对端仍能发出 KEEPALIVE 使本端 HoldTimer 不断重启，会话显示正常，路由实际已陈旧（BGP zombie）。（2）启停规则：OpenConfirm 收到 KEEPALIVE（Event 26）时重启 HoldTimer、在 SendHoldTime 非 0 时启动 SendHoldTimer，随后进入 Established；Established 中每发送一个 BGP 消息就重启 SendHoldTimer，但 SendHoldTime 为 0 或协商 HoldTime 为 0 时该定时器停止；任何离开 Established 的迁移都在释放 BGP 资源时停止它。（3）Event 29：可选发送 NOTIFICATION（IANA 注册 Error Code 8 Send Hold Timer Expired，subcode 为 0 且不带附加数据，仅在不妨碍后续动作时才发），随后记录本地错误日志、释放全部 BGP 资源、ConnectRetryTimer 清零、断开 TCP 连接、ConnectRetryCounter 加 1、（可选）对等体振荡抑制，状态迁入 Idle。（4）约束与默认：SendHoldTime 非 0 时必须大于 HoldTime；默认值取 8 分钟与 2 倍协商 HoldTime 中的较大者，且规范建议实现默认启用（无需额外配置）。",
+    "scoring_points": [
+      "故障场景：对端 TCP 零窗口不处理 BGP 消息、本端发不出去；对端 KEEPALIVE 仍到达使 HoldTimer 持续重启，检测不到故障",
+      "启动：OpenConfirm 收到 KEEPALIVE 时若 SendHoldTime 非 0 则启动，进入 Established",
+      "每发送一个 BGP 消息重启 SendHoldTimer；SendHoldTime=0 或协商 HoldTime=0 时停止；离开 Established 时停止",
+      "Event 29 处理：可选 NOTIFICATION（Error Code 8、subcode 0）后记日志、释放资源、ConnectRetryTimer 清零、断 TCP、ConnectRetryCounter 加 1、迁入 Idle",
+      "约束与默认：SendHoldTime 大于 HoldTime；默认取 max(8 分钟, 2 倍 HoldTime)；建议默认启用"
+    ],
+    "tags": [
+      "RFC",
+      "RFC9687",
+      "RFC-2024",
+      "BGP"
+    ]
+  },
+  {
+    "id": 42,
+    "difficulty": "难",
+    "category": {
+      "scope": "网络",
+      "protocol_layer": "IP层",
+      "lifecycle": "建设"
+    },
+    "scenario": "Internet",
+    "device_type": "路由器",
+    "question": "RFC 9774 弃用了 BGP AS_PATH 中的 AS_SET 与 AS_CONFED_SET 路径段（更新 RFC 4271/5065，废止 RFC 6472）。请系统回答：（1）聚合时携带 AS_SET 的原始目的，以及它使聚合路由在 RPKI ROV、BGPsec、ASPA 验证下分别遇到什么问题（为什么含 AS_SET 的路由 Origin 无法当作单一 AS、ROV 为什么无法判 Valid）；（2）RFC 9774 对发送侧与接收侧的规定（默认能否通告、收到后按什么机制处理）；（3）推荐的替代做法 consistent brief aggregation：AS_PATH 如何截断、以哪个 AS 作为 Origin、如何为聚合前缀签发 ROA、为什么通告聚合路由要附带 ATOMIC_AGGREGATE、以及为什么不应把聚合路由通告回贡献源 AS。",
+    "answer": "（1）原始目的与问题：AS_SET 以无序集合记录被聚合各前缀的贡献 Origin AS，使接收方保留这些 AS 都可能产生更具体前缀的信息用于环路检测。但聚合路由的 Origin 因此不是单一 AS，而是随贡献路由到达情况变化的集合：RPKI ROV 以 ROA 登记的单一 Origin AS 与 AS_PATH 最右 AS 比对，含 AS_SET 的路由不会被判定为 Valid（RFC 9774 §4 仅规定 RPKI-ROV 绝不允许将含 AS_SET 的路由视为 Valid，不承诺具体是 NotFound 还是 Invalid——该结果取决于是否存在覆盖该前缀的 ROA；除非为每个可能出现的 Origin 组合穷举 ROA，而集合内容随时间与邻居策略变化，不可维护）；BGPsec 对有序 AS_PATH 逐跳签名，AS_SET 无序且成员不定，无法纳入签名与验证；ASPA 验证依赖有序的客户-提供者 AS 对，同样不适用于无序集合。（2）RFC 9774 规定：除非网络操作者显式配置（如过渡期），BGP speaker MUST NOT 通告含 AS_SET/AS_CONFED_SET 的 UPDATE；接收侧 MUST 按 RFC 7606 的 treat-as-withdraw 处理，即把对应前缀按撤销处理，而不是仅丢弃属性继续使用路由。（3）替代做法 consistent brief aggregation：实现必须可配置为在期望 Origin AS（通常取聚合者自身 AS）于 AS_PATH 中最右一次出现之后截断，使聚合路由始终以该单一 AS 为 Origin；为聚合前缀按该 Origin 签发 ROA（覆盖聚合前缀长度）；因截断丢弃了贡献 AS 信息，通告时应附带 ATOMIC_AGGREGATE 属性，提示下游这是未保留完整 AS_PATH 的聚合路由、更具体前缀信息可能缺失；同时聚合路由不应通告回任何贡献 AS（向其只通告其他贡献者的更具体前缀），避免贡献 AS 因聚合路由被优选而把流量送回聚合者，形成转发环路。",
+    "scoring_points": [
+      "AS_SET 原始目的：无序集合记录多个贡献 Origin AS，供环路检测",
+      "ROV 影响：Origin 非单一 AS、ROA 无法匹配该起源，不会被判为 Valid（具体 NotFound/Invalid 取决于是否存在覆盖该前缀的 ROA；穷举集合不可维护）",
+      "BGPsec/ASPA 不支持：签名与验证均依赖有序 AS_PATH/有序 AS 对",
+      "发送侧：MUST NOT 通告 AS_SET/AS_CONFED_SET，除非操作者显式配置",
+      "接收侧：按 RFC 7606 treat-as-withdraw 处理（前缀按撤销处理）",
+      "替代：consistent brief aggregation，在期望 Origin AS 最右一次出现后截断 AS_PATH（可为聚合者自身 AS）",
+      "为聚合前缀按该 Origin 签发 ROA；附带 ATOMIC_AGGREGATE 提示聚合未保留完整 AS_PATH",
+      "不应把聚合路由通告回贡献 AS，防止流量回送形成环路"
+    ],
+    "tags": [
+      "RFC",
+      "RFC9774",
+      "RFC-2025",
+      "BGP"
+    ]
+  },
+  {
+    "id": 43,
+    "difficulty": "中",
+    "category": {
+      "scope": "网络",
+      "protocol_layer": "IP层",
+      "lifecycle": "优化"
+    },
+    "scenario": "数据中心",
+    "device_type": "路由器",
+    "question": "RFC 10005 定义 Link Bandwidth 扩展社区，使 eBGP 多路径负载分担可按成员链路带宽加权。请说明：（1）该扩展社区的 Type 值（两种）与 Sub-Type 值，分别对应什么传递性、如何选用；（2）Global Administrator 与 Local Administrator 子字段的编码：长度、GA 的含义与 4 字节 ASN 时的处理（AS_TRANS）、LA 的数值格式与单位（字节每秒还是比特每秒），以及 0 值与负值的语义；（3）同一多路径存在多个 Link Bandwidth 值时如何选取，部分路径缺少该属性时默认如何分担；（4）该带宽值是否参与 BGP 最优路径选择。",
+    "answer": "（1）Type 字段高字节为 0x00（transitive）或 0x40（non-transitive），Sub-Type 为 0x04。两种传递性由实现默认并允许操作者改配，正常只需按部署需要携带一种，过渡期可对同一路由同时携带两种。（2）Global Administrator 为 2 字节操作者自定义值，通常填附加该属性的路由器所属 ASN；4 字节 ASN 无法编码时按 RFC 6793 填 AS_TRANS（23456）。Local Administrator 为 4 字节 IEEE 754-2019 浮点，带宽单位为字节每秒（bytes per second）。0 是合法值（如维护期间令该路径不吸引流量，由接收方本地策略处理），不得视为格式错误；负值不应被发起，接收方遇到负值实例必须忽略。（3）同一路由存在多个 Link Bandwidth 时，加权分担应取带宽值最小（含 0）的实例，忽略传递性差异；多路径中部分路径缺少有效 Link Bandwidth 时，默认按等值分担（可被本地策略覆盖）。（4）带宽值不作为 BGP 最优路径选择的输入，仅用于多路径的 FIB 加权。",
+    "scoring_points": [
+      "Type 高字节 0x00（transitive）/0x40（non-transitive），Sub-Type 0x04",
+      "GA 为 2 字节（通常为 ASN），4 字节 ASN 时填 AS_TRANS（23456）",
+      "LA 为 4 字节 IEEE 754-2019 浮点，单位为字节每秒（bytes per second，非比特）",
+      "0 为合法值（维护引流控制、不视为 malformed）；负值不应发起、接收方忽略",
+      "多个值取最小（含 0）；部分路径缺失时默认等值分担",
+      "不参与最优路径选择，仅用于多路径 FIB 加权"
+    ],
+    "tags": [
+      "RFC",
+      "RFC10005",
+      "RFC-2026",
+      "BGP",
+      "ECMP"
+    ]
+  },
+  {
+    "id": 44,
+    "difficulty": "难",
+    "category": {
+      "scope": "网络",
+      "protocol_layer": "IP层",
+      "lifecycle": "规划"
+    },
+    "scenario": "数据中心",
+    "device_type": "交换机",
+    "question": "RFC 9815 定义 BGP-LS SPF（BGP-LS-SPF，AFI 16388/SAFI 80），让数据中心 Clos 叶脊网络直接用 BGP 的 SPF 决策过程替代 IGP 承担底层（underlay）路由，BGP 仅作覆盖（overlay）。请回答：（1）该方案的核心机制：拓扑如何以 BGP-LS Node/Link NLRI 表达、决策过程为何从路径向量改为 SPF，相对普通 eBGP 路径向量获得什么拓扑能力（ECMP/FRR 等）；（2）收敛优势：链路故障时需要哪些路由器撤销什么 NLRI，与传统 BGP 每前缀重通告的对比，以及变化 NLRI 的发送时机差异；（3）三种 peering 模型（逐链路单跳 eBGP、直连节点间会话、RR/控制器）各自如何判断链路可用（会话状态与链路状态的关系、BFD 与 EoR 标记的作用）；（4）部署约束：为什么域内所有 BGP speaker 都必须支持该规范，EoR 标记配置不一致为什么会引起瞬时微环与丢包。",
+    "answer": "（1）核心机制：每台设备以 BGP-LS-SPF 地址族通告自身 Node NLRI 与各链路 Link NLRI（含度量等属性），域内泛洪形成一致的拓扑库；决策过程不再逐前缀比较路径向量属性，而是直接对拓扑运行 SPF 计算。由于所有 BGP speaker 都拥有完整拓扑视图，可原生支持 ECMP、IP 快速重路由（LFA）、SRLG 等增强，无需 Add-Path 之类的额外路径通告扩展。（2）收敛优势：链路故障时仅需该链路两端的 NLRI 发起者撤销对应 Link NLRI，域内收到撤销即可触发 SPF；而传统 BGP 中一条链路故障可能牵动成百上千前缀的撤销与重通告。且变化的 NLRI 立即通告，不必等待最优路径选择完成，NLRI 分发效率接近链路状态协议。（3）peering 模型：a）逐链路单跳 eBGP：每条物理链路一个会话，会话建立并交换 BGP-LS-SPF 能力即认为链路 up 并通告 Link NLRI，会话状态即链路状态，会话断开则撤销相应 Link NLRI；b）直连节点间会话（可为 loopback 间的会话）：链路发现与存活独立于 BGP 协议，推荐用 BFD 做存活检测，链路 operational 且（可选）收到对端 EoR 标记后才通告 Link NLRI，多条物理连接只需一个会话；c）RR/控制器模型：只需少量会话，且每个 NLRI 只需保留来自发起者的最新版本。（4）部署约束：规范要求 BGP SPF 路由域内所有 BGP speaker 都遵循本规范（不支持与不支持者混合部署）；EoR 标记用于确认对端已完成初始数据库同步，两端对是否要求 EoR 配置不一致时，可能出现一端过早通告 Link NLRI 而网络转发状态尚不完整，产生瞬时微环与丢包。",
+    "scoring_points": [
+      "机制：Node/Link NLRI 描述拓扑，SPF 决策替代路径向量决策（AFI 16388/SAFI 80）",
+      "完整拓扑视图带来原生 ECMP/LFA/SRLG 能力，无需 Add-Path",
+      "链路故障仅链路两端发起者撤销 Link NLRI；传统 BGP 需海量前缀撤销与重通告",
+      "变化 NLRI 立即通告，无需等待最优路径选择完成",
+      "逐链路单跳 eBGP 模型：会话状态即链路状态，会话 up/能力交换后通告 Link NLRI，会话断开则撤销",
+      "直连节点模型：loopback 会话加 BFD 检测链路（存活独立于 BGP），链路 operational 及（可选）EoR 后通告，多链路共享一会话",
+      "RR/控制器模型：少量会话、仅保留每个 NLRI 最新版本",
+      "约束：域内所有 speaker 必须支持规范；EoR 配置不一致导致转发状态不完整、瞬时微环与丢包"
+    ],
+    "tags": [
+      "RFC",
+      "RFC9815",
+      "RFC-2025",
+      "BGP",
+      "数据中心"
+    ]
+  },
+  {
+    "id": 45,
+    "difficulty": "中",
+    "category": {
+      "scope": "网络",
+      "protocol_layer": "IP层",
+      "lifecycle": "建设"
+    },
+    "scenario": "数据中心",
+    "device_type": "不限定",
+    "question": "RFC 9983 为 OSPFv2 定义 Anycast 属性通告。请说明：（1）AC 标志定义在哪个 LSA 的哪个 TLV 的 Flags 字段、IANA 注册值是多少（基于 RFC 7684 的哪种 Opaque LSA）；（2）置位规则：前缀配置为 anycast 时如何、否则如何，与 N-flag 同时置位如何处理；（3）区域间重通告时的处理，以及多台路由器通告同一前缀时如何判定该前缀为 anycast；（4）该属性向北传递的途径（BGP-LS 中哪个 TLV）及其用途。",
+    "answer": "（1）AC-Flag 定义在 OSPFv2 Extended Prefix Opaque LSA（RFC 7684）中 Extended Prefix TLV 的 Flags 字段，IANA 注册值 0x10。（2）前缀配置为 anycast 时必须置位 AC-Flag，否则必须清零；AC-Flag 与 RFC 7684 的 N-flag（标识节点地址前缀）不得同时置位，收到两者同时置位的通告视为配置异常：忽略 N-flag，并建议以限速方式记录运维错误日志。（3）该 LSA 向其他区域重通告时必须保留 AC 标志；同一前缀可被多台路由器通告，只要至少一台置位 AC，该前缀即按 anycast 前缀对待，仅由单节点通告且未置位则为节点专属前缀。（4）BGP-LS 侧通过 RFC 9085 的 Prefix Attribute Flags TLV 携带同样的标志位（Flags 字段按 RFC 7684 解释），使控制器/上层系统能正确识别该前缀是多节点任意播而非单节点归属或重复配置，支撑就近接入等场景的语义判断。",
+    "scoring_points": [
+      "AC-Flag 位于 OSPFv2 Extended Prefix Opaque LSA（RFC 7684）的 Extended Prefix TLV Flags 字段，值 0x10",
+      "配置为 anycast 时必须置位，否则必须清零",
+      "N-flag 与 AC 同时置位视为配置异常：忽略 N-flag 并限速记录日志",
+      "重通告到其他区域时必须保留 AC 标志",
+      "多路由器同前缀：至少一台置位即判定为 anycast 前缀（单节点未置位为节点专属）",
+      "BGP-LS 经 RFC 9085 Prefix Attribute Flags TLV 传递该标志"
+    ],
+    "tags": [
+      "RFC",
+      "RFC9983",
+      "RFC-2026",
+      "OSPF"
+    ]
+  }
+]

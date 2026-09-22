@@ -1,0 +1,531 @@
+[
+  {
+    "id": 11,
+    "difficulty": "简单",
+    "category": {
+      "scope": "网络",
+      "protocol_layer": "链路层",
+      "lifecycle": "建设"
+    },
+    "scenario": "宽带城域",
+    "device_type": "不限定",
+    "question": "某宽带城域网在边缘交换机上部署 QinQ（IEEE 802.1ad）：用户报文已携带 802.1Q 标签，运营商网络再封装一层外层标签。请说明：0x8100 与 0x88A8 分别是哪一层标签的 TPID（Tag Protocol Identifier）；设备按什么顺序识别这两层标签；用户自带的 0x8100 标签为何不会与外层标签混淆；以及运营商把新添加的外层标签 TPID 从缺省的 0x8100 改配为 0x88A8 的主要目的是什么。",
+    "answer": "0x8100 是 IEEE 802.1Q 标准 VLAN 标签（C-Tag）的 TPID，对应用户内层标签；0x88A8 是 802.1ad 为 QinQ 外层运营商标签（S-Tag）规定的 TPID。设备按帧内自外向内的顺序识别：先按第一个 TPID 识别外层 S-Tag，剥离后再遇 0x8100 即按用户 C-Tag 解析。用户自带的 0x8100 标签整体作为净荷封装在 S-Tag 之内，不参与外层识别，因此不会混淆。将外层 TPID 改配为 0x88A8 的目的：避免内外层同为 0x8100 造成层级歧义，使运营商核心设备能统一按 S-Tag 识别、处理并剥离外层标签。",
+    "scoring_points": [
+      "0x8100 为 802.1Q C-Tag（用户内层标签）的 TPID，0x88A8 为 802.1ad S-Tag（外层运营商标签）的 TPID",
+      "识别顺序：先按帧内第一个 TPID 识别外层 S-Tag，剥离后再按 0x8100 解析内层 C-Tag",
+      "用户自带的 0x8100 标签作为净荷封装在 S-Tag 内，不会与外层标签混淆",
+      "改配 0x88A8 的目的：避免两层同为 0x8100 的层级歧义，便于核心设备统一按 S-Tag 处理与剥离"
+    ],
+    "tags": [
+      "VLAN",
+      "QinQ"
+    ]
+  },
+  {
+    "id": 12,
+    "difficulty": "中",
+    "category": {
+      "scope": "设备",
+      "protocol_layer": "链路层",
+      "lifecycle": "建设"
+    },
+    "scenario": "园区",
+    "device_type": "交换机",
+    "question": "某园区网使用华为 S 系列交换机（VRPv5）部署 MUX VLAN：Principal VLAN 10，其下绑定 Group VLAN 20 与 30、Separate VLAN 40；服务器、员工终端与访客终端分别以 access 口接入。请写出：（1）Principal VLAN 视图下的配置命令序列；（2）各 access 端口按角色加入对应 VLAN 后，还必须在接口下配置哪条命令才能使 MUX VLAN 生效；（3）互通隔离规则：Principal 与各子 VLAN 之间、不同 Group VLAN 之间、Separate VLAN 内部端口之间分别能否二层互通；（4）一个 Principal VLAN 下 Separate VLAN 的数量限制与 Group VLAN 的数量上限。",
+    "answer": "（1）配置：vlan 10 后依次执行 mux-vlan、subordinate group 20 30、subordinate separate 40。（2）各端口按角色 port default vlan 加入对应 VLAN（服务器口 VLAN 10、Group 口 VLAN 20/30、Separate 口 VLAN 40），且每个参与端口（包括 Principal 端口）都必须配置 port mux-vlan enable，否则 MUX VLAN 功能不生效。（3）互通规则：Principal 端口可与所有 Group、Separate 端口互通；同一 Group VLAN 内部端口互通，不同 Group VLAN 之间隔离；Group 与 Separate 之间隔离；Separate VLAN 内部端口之间也互相隔离，只能与 Principal 端口通信。（4）数量限制：一个 Principal VLAN 下只能配置一个 Separate VLAN；Group VLAN 最多 128 个。",
+    "scoring_points": [
+      "Principal VLAN 视图命令序列：mux-vlan → subordinate group 20 30 → subordinate separate 40",
+      "各 access 端口按角色 port default vlan 加入对应 VLAN",
+      "所有参与端口（含 Principal 端口）需接口命令 port mux-vlan enable 才生效",
+      "互通规则：Principal 与任意子 VLAN 端口互通",
+      "不同 Group VLAN 之间隔离、Group 与 Separate 隔离、Separate VLAN 内部端口互相隔离（仅通 Principal）",
+      "一个 Principal VLAN 只能绑定一个 Separate VLAN，Group VLAN 最多 128 个"
+    ],
+    "tags": [
+      "CLI",
+      "华为",
+      "VRPv5",
+      "VLAN",
+      "MUX VLAN"
+    ]
+  },
+  {
+    "id": 13,
+    "difficulty": "简单",
+    "category": {
+      "scope": "设备",
+      "protocol_layer": "链路层",
+      "lifecycle": "维护"
+    },
+    "scenario": "通用",
+    "device_type": "交换机",
+    "question": "华为 S 系列交换机（VRPv5）trunk 口的放通规则。请回答：缺省情况下 trunk 口的 PVID 是多少、放通哪些 VLAN？某 trunk 口要求 VLAN 100 报文以 untagged 方式收发、VLAN 200 报文以 tagged 方式收发，应如何组合配置（写出涉及的两类命令）？如果只配置了 port trunk pvid vlan 100，而未将 VLAN 100 加入放通列表，端口对 VLAN 100 报文的处理结果是什么？",
+    "answer": "缺省 PVID 为 VLAN 1，且缺省只放通 VLAN 1。配置：先执行 port trunk allow-pass vlan 100 200 放通两个 VLAN（多条 allow-pass 命令叠加生效），再执行 port trunk pvid vlan 100——PVID 对应 VLAN 的报文出端口时不打标签，入方向 untagged 报文划入 VLAN 100，VLAN 200 保持 tagged 收发。仅设置 PVID 而未加入放通列表时，VLAN 100 报文不在放通范围内，端口直接将其丢弃，无法转发。",
+    "scoring_points": [
+      "缺省 PVID 为 VLAN 1，且缺省只放通 VLAN 1",
+      "放通命令 port trunk allow-pass vlan 100 200（多条命令叠加生效）",
+      "VLAN 100 untagged 收发需 allow-pass + port trunk pvid vlan 100（PVID VLAN 出方向不打标签）",
+      "入方向 untagged 报文划入 PVID 对应 VLAN",
+      "未加入 allow-pass 的 VLAN（含仅设 PVID 未放通）报文被丢弃"
+    ],
+    "tags": [
+      "CLI",
+      "华为",
+      "VRPv5",
+      "VLAN"
+    ]
+  },
+  {
+    "id": 14,
+    "difficulty": "中",
+    "category": {
+      "scope": "网络",
+      "protocol_layer": "链路层",
+      "lifecycle": "维护"
+    },
+    "scenario": "通用",
+    "device_type": "不限定",
+    "question": "RSTP（IEEE 802.1w）的快速过渡依赖 Proposal/Agreement 握手。请说明：某网桥的端口被选为根端口后，该网桥执行的同步（sync）动作是什么；Proposal 与 Agreement 如何交互、上游指定端口收到 Agreement 后处于什么状态；相比 802.1D STP 依赖 Forward Delay 计时器的过渡（listening→learning→forwarding 各 15 s）快在哪里；并列出至少两种会使 RSTP 端口退回类似老式慢速定时器过渡的情形。",
+    "answer": "同步：网桥确认某端口为根端口后，把自身所有非边缘指定端口置为 discarding（阻塞），并继续向下游传播同步要求，在保证无环的前提下才放开上行口。握手：该根端口向上游指定端口发送 Agreement；上游指定端口收到后立即进入 forwarding，不再经历 listening/learning。同时本桥的指定端口向更下游发送 Proposal，下游完成同步后回 Agreement，逐级完成快速过渡，链路切换在毫秒至秒级完成；而 802.1D 非边缘端口必须按 Forward Delay 计时器走 listening→learning→forwarding（15 s+15 s，加上 Max Age 的收敛时间）依赖定时器而非握手。退回慢速过渡的情形：对端运行 802.1D STP（端口迁移为 STP 兼容模式，对 Proposal 只回普通配置 BPDU、不回 Agreement）；链路不是点对点（共享链路或双工不匹配导致协商不出点对点链路），快速过渡前提不满足，只能按定时器过渡。",
+    "scoring_points": [
+      "同步动作：根端口确定后，本桥所有非边缘指定端口置为 discarding（并向下传播同步）",
+      "握手流程：指定端口发 Proposal，下游根端口回 Agreement，上游收到后立即 forwarding",
+      "RSTP 经握手逐级快速过渡，802.1D 需 listening→learning→forwarding 各 15 s Forward Delay 定时器",
+      "退化情形一：对端为 802.1D 网桥，端口进入 STP 兼容模式，无 Agreement 回应",
+      "退化情形二：共享链路或双工不匹配（非点对点链路），快速过渡条件不满足"
+    ],
+    "tags": [
+      "STP",
+      "RSTP"
+    ]
+  },
+  {
+    "id": 15,
+    "difficulty": "难",
+    "category": {
+      "scope": "网络",
+      "protocol_layer": "链路层",
+      "lifecycle": "维护"
+    },
+    "scenario": "园区",
+    "device_type": "不限定",
+    "question": "某园区网接入层大量用户端口频繁启停，需要在汇聚层分析 STP 拓扑变化行为的影响。请完整对比 802.1D STP 与 RSTP（802.1w）的拓扑变化通告机制及其对 MAC 地址表的影响：（1）STP：接入交换机在哪个端口发送什么类型的 BPDU，上游如何确认并逐级转发到根桥，根桥收到后做什么动作、持续多长时间（给出 20 s+15 s 的构成），各交换机如何配合冲刷 MAC 表（老化时间被临时改为何值）；（2）RSTP：检测到变化的网桥自身先做什么、在哪些端口上发送置 TC 位的 BPDU、持续多长时间（与 hello time 的关系），接收网桥冲刷哪些端口的 MAC 表项，边缘端口是否触发；（3）比较两者在收敛时延与冲刷范围上的差异，并说明 TCN 频繁时对网络的影响与工程抑制手段。",
+    "answer": "（1）STP：接入交换机检测到拓扑变化（端口 up/down 等）后，从根端口周期性（hello time 间隔）发送 TCN BPDU；上游指定端口收到后在后续配置 BPDU 中置 TCA（Topology Change Acknowledgment）标志确认，并把 TCN 继续向根方向转发，逐跳直至根桥。根桥收到后，在 Max Age（20 s）+ Forward Delay（15 s）= 35 s 的时间内，在发出的配置 BPDU 中置 TC 标志并泛洪全网。各交换机收到置 TC 的配置 BPDU 后，把 MAC 地址表老化时间临时缩短为 Forward Delay（15 s），使受影响表项快速老化，期间流量以泛洪方式发送。（2）RSTP：无需逐级上报。检测到拓扑变化的网桥先冲刷本机除边缘端口和发生变化的端口以外的全部 MAC 表项，然后在 tcWhile 计时器（2 倍 hello time）内，以 hello 间隔在所有根端口与非边缘指定端口上发送置 TC 位的 RST BPDU；收到置 TC BPDU 的网桥冲刷除接收端口和边缘端口之外所有端口的 MAC 表项，并同样置 TC 向外传播。边缘端口 up/down 不触发拓扑变化处理。（3）差异与影响：STP 通告路径长（TCN 逐级上报、根桥 35 s TC 泛洪窗口），全网交换机普遍缩短老化时间，TCN 频繁（如用户口振荡）时大量表项被冲刷、二层长时间泛洪、设备 CPU 与链路带宽升高；RSTP 只有变化链路相关网桥参与，冲刷范围排除接收端口与边缘端口，时延为 hello 量级，但持续振荡时仍会周期性冲刷。工程抑制：接入层面向用户的端口配置为边缘端口（PortFast/edged-port）并配合 BPDU 保护，避免用户口启停触发伪拓扑变化。",
+    "scoring_points": [
+      "STP：从根端口发送 TCN BPDU，上游置 TCA 确认并逐跳向根桥转发",
+      "根桥在 Max Age 20 s + Forward Delay 15 s = 35 s 内发送置 TC 标志的配置 BPDU 泛洪全网",
+      "STP 交换机将 MAC 老化时间临时缩短为 Forward Delay 15 s 实现快速冲刷",
+      "RSTP：检测网桥先冲刷本机 MAC 表（除边缘端口与变化端口），自身置 TC，无需 TCN 逐级上报",
+      "RSTP 在 tcWhile（2×hello time）内以 hello 间隔向所有根端口与非边缘指定端口发送置 TC BPDU",
+      "接收方冲刷除接收端口与边缘端口外的 MAC 表项",
+      "RSTP 边缘端口 up/down 不触发拓扑变化",
+      "比较：35 s 全网泛洪窗口 vs hello 量级、冲刷范围差异；TCN 频繁的泛洪/CPU 影响及边缘端口+BPDU 保护抑制手段"
+    ],
+    "tags": [
+      "STP",
+      "RSTP"
+    ]
+  },
+  {
+    "id": 16,
+    "difficulty": "中",
+    "category": {
+      "scope": "设备",
+      "protocol_layer": "链路层",
+      "lifecycle": "优化"
+    },
+    "scenario": "通用",
+    "device_type": "交换机",
+    "question": "两台华为 S 系列交换机（VRPv5）组建 iStack 堆叠。请说明配置要点：（1）修改成员槽位号与配置堆叠成员优先级分别用什么命令（优先级缺省值是多少、数值大小与 master 选举的关系）；（2）两台设备使用两条堆叠线缆时的连接规则（本端堆叠口 1、2 与对端如何对应）；（3）MAD 双活检测的直连检测与中继检测两种方式分别如何部署（各自的 mad detect 命令形式），堆叠分裂检测到多主后系统如何处理（哪一侧进入什么状态、发生什么动作）。",
+    "answer": "（1）系统视图 stack slot <slot-id> renumber <n> 修改成员槽位号（两台需配置为不同值，缺省均为 0）；stack slot <slot-id> priority <value> 配置堆叠优先级，缺省 100，数值越大越优先当选 master，建议将规划的主设备配置更高优先级。（2）两台设备两条堆叠线缆必须交叉连接：本端 stack-port 1 连对端 stack-port 2，本端 stack-port 2 连对端 stack-port 1，形成环形堆叠链路，任一条线缆故障堆叠仍不分裂。（3）MAD（Multi-Active Detection）直连检测：在两成员间的专用直连检测链路接口（或管理网口）下配置 mad detect mode direct；中继检测：在堆叠设备与上游代理（proxy）设备互联的 Eth-Trunk 接口下配置 mad detect mode relay（代理设备需使能 mad relay）。堆叠分裂为多主后，MAD 检测到冲突，双方竞争（比较堆叠优先级等），失败方（原备或优先级低的一端）进入 Recovery 状态，批量关闭除堆叠口和保留端口外的全部业务端口，仅保留 MAD 检测报文通道，避免双主造成地址冲突与环路影响网络。",
+    "scoring_points": [
+      "stack slot <slot-id> renumber <n> 修改槽位号（两成员需不同）",
+      "stack slot <slot-id> priority <value> 缺省 100，数值越大越优先当选 master",
+      "两台两缆交叉连接：本端 stack-port 1/2 分别连对端 stack-port 2/1",
+      "MAD 直连检测：mad detect mode direct（成员间专用直连链路/管理网口）",
+      "MAD 中继检测：mad detect mode relay（经与代理设备互联的 Eth-Trunk）",
+      "分裂后处理：竞争失败方进入 Recovery 状态，批量关闭业务端口（保留 MAD 与堆叠相关端口）"
+    ],
+    "tags": [
+      "CLI",
+      "华为",
+      "VRPv5",
+      "堆叠"
+    ]
+  },
+  {
+    "id": 17,
+    "difficulty": "中",
+    "category": {
+      "scope": "设备",
+      "protocol_layer": "链路层",
+      "lifecycle": "维护"
+    },
+    "scenario": "通用",
+    "device_type": "交换机",
+    "question": "对比华为 S 系列交换机（VRPv5）的 BPDU 保护（bpdu-protection）与 Cisco IOS 的 BPDU Guard。请说明：（1）两者的典型配置方式：华为的系统视图命令及其生效前提（需配合端口的什么配置），Cisco 的全局与接口两种配置命令；（2）触发条件与触发后的端口状态（各自的关闭状态名称）；（3）恢复方式的差异：各自的自动恢复命令、Cisco 自动恢复的默认时间，以及双方的手动恢复做法。",
+    "answer": "华为：系统视图 stp bpdu-protection，作用于所有配置了 stp edged-port enable 的边缘端口；边缘口收到 BPDU 即触发，端口进入 error-down（Shutdown）状态。恢复：手动在接口下 shutdown 后 undo shutdown；或预先配置 error-down auto-recovery cause bpdu-protection interval <秒> 到期自动恢复。Cisco：全局 spanning-tree portfast bpduguard default 对所有 PortFast（边缘）端口生效，或接口视图 spanning-tree bpduguard enable 单端口启用；收到 BPDU 后端口置 errdisable。恢复：手动 shutdown 再 no shutdown，或配置 errdisable recovery cause bpduguard 配合 errdisable recovery interval <秒>（缺省 300 s）自动恢复。两者目的一致：防止用户边缘口私接交换机或收到异常 BPDU 干扰 STP 拓扑，触发即关闭端口；主要差异在命令组织方式与自动恢复的配置入口/默认行为。",
+    "scoring_points": [
+      "华为：系统视图 stp bpdu-protection，前提是端口已配置 stp edged-port enable（边缘端口）",
+      "华为触发后端口进入 error-down 状态",
+      "华为恢复：手动 shutdown/undo shutdown 或 error-down auto-recovery cause bpdu-protection interval <秒>",
+      "Cisco：全局 spanning-tree portfast bpduguard default 或接口 spanning-tree bpduguard enable",
+      "Cisco 触发后端口进入 errdisable 状态",
+      "Cisco 恢复：errdisable recovery cause bpduguard + errdisable recovery interval（缺省 300 s）或手动 shutdown/no shutdown"
+    ],
+    "tags": [
+      "CLI",
+      "华为",
+      "VRPv5",
+      "Cisco",
+      "IOS",
+      "版本差异",
+      "STP"
+    ]
+  },
+  {
+    "id": 18,
+    "difficulty": "中",
+    "category": {
+      "scope": "设备",
+      "protocol_layer": "链路层",
+      "lifecycle": "维护"
+    },
+    "scenario": "园区",
+    "device_type": "交换机",
+    "question": "园区接入交换机上，面向用户的指定端口部署 Root Guard，上联的非指定端口部署 Loop Guard。请说明两者防护的故障与行为差异：（1）Root Guard 防什么问题，端口收到 superior（更优）BPDU 后进入什么状态，何时恢复，Cisco 与华为的接口命令分别是什么；（2）Loop Guard 防什么问题（单向链路失效时非指定端口会发生什么，Loop Guard 使其进入什么状态），恢复条件与两家命令；（3）为什么同一端口不应同时配置两者（各自适用的端口角色、同配时谁被禁用）。",
+    "answer": "Root Guard 防护超级根：接入或备份侧设备发出更优（superior）BPDU 抢占根桥。部署在应保持指定角色的端口上，一旦收到 superior BPDU，端口被置为 root-inconsistent（阻塞，不转发）并上报告警；不再收到 superior BPDU 后自动恢复转发。命令：Cisco 接口 spanning-tree guard root，华为接口 stp root-protection。Loop Guard 防单向链路失效：正常应持续接收 BPDU 的非指定端口（根端口/替代端口）在单向故障时收不到 BPDU，会因 BPDU 超龄而把自己误转为指定端口并进入转发，造成环路和 MAC 漂移；使能 Loop Guard 后，收不到 BPDU 的端口进入 loop-inconsistent（阻塞），重新收到 BPDU 后自动恢复转发。命令：Cisco spanning-tree guard loop，华为 stp loop-protection。两者针对的端口角色互补（指定端口 vs 非指定端口），同一端口同时配置时功能冲突，Root Guard 会被禁用（Loop Guard 优先生效），因此应按端口角色分别部署。",
+    "scoring_points": [
+      "Root Guard 防超级根（更优 BPDU 抢占根桥），部署于应保持指定角色的端口",
+      "Root Guard 触发后端口置 root-inconsistent 阻塞，superior BPDU 停止后自动恢复",
+      "Loop Guard 防单向链路失效导致非指定端口收不到 BPDU 误转指定端口并转发成环",
+      "Loop Guard 触发后端口置 loop-inconsistent 阻塞，重新收到 BPDU 自动恢复",
+      "命令对应：Cisco spanning-tree guard root / guard loop；华为 stp root-protection / stp loop-protection",
+      "同一端口两者互斥（角色互补），同配时 Root Guard 被禁用（Loop Guard 优先生效）"
+    ],
+    "tags": [
+      "STP",
+      "故障诊断"
+    ]
+  },
+  {
+    "id": 19,
+    "difficulty": "简单",
+    "category": {
+      "scope": "设备",
+      "protocol_layer": "链路层",
+      "lifecycle": "维护"
+    },
+    "scenario": "数据中心",
+    "device_type": "交换机",
+    "question": "Cisco IOS 交换机配置 EtherChannel。请列出 PAgP 与 LACP 各自的两种模式关键字（主动/被动含义），并判断下列两端组合哪些能成功建立 channel、哪些不能：desirable+desirable、desirable+auto、auto+auto（PAgP）；active+active、active+passive、passive+passive（LACP）；channel-group 模式 on 与 PAgP/LACP 协商模式混合的情况。最后说明双端模式组合错误时端口成员的典型表现（用哪个 show 命令查看什么状态）。",
+    "answer": "PAgP 模式：auto（被动监听）、desirable（主动发起）；LACP 模式：passive（被动）、active（主动）；另有 on（静态，不协商）。能建立：PAgP desirable+desirable、desirable+auto；LACP active+active、active+passive；以及 on+on。不能建立：auto+auto 与 passive+passive（双方都不发起协商）；on 与任何 PAgP/LACP 协商模式混合也无法建立。组合错误时 channel 不形成，成员端口作为普通独立端口各自转发，可用 show etherchannel summary 看到端口处于独立（I，Independent）状态而非捆绑（P/B），失去聚合带宽与负载分担能力。",
+    "scoring_points": [
+      "PAgP 模式 auto/desirable，LACP 模式 passive/active（主动/被动含义对应）",
+      "可建立组合：desirable+desirable、desirable+auto；active+active、active+passive；on+on",
+      "不可建立组合：auto+auto、passive+passive（无发起方）",
+      "on 与 PAgP/LACP 协商模式混合不能建立 channel",
+      "后果与验证：channel 未形成、成员口独立转发，show etherchannel summary 显示独立状态"
+    ],
+    "tags": [
+      "CLI",
+      "Cisco",
+      "IOS",
+      "链路聚合"
+    ]
+  },
+  {
+    "id": 20,
+    "difficulty": "中",
+    "category": {
+      "scope": "设备",
+      "protocol_layer": "链路层",
+      "lifecycle": "优化"
+    },
+    "scenario": "数据中心",
+    "device_type": "交换机",
+    "question": "华为 CloudEngine 数据中心交换机（VRPv8）通过 Eth-Trunk（LACP 模式）与下游交换机互联，且本端两台 CE 组成 M-LAG。请说明：（1）创建 LACP 模式 Eth-Trunk 的关键命令（Eth-Trunk 接口下必须显式配置什么模式命令、成员口如何加入）；（2）M-LAG 两台 CE 为什么必须在系统视图配置 lacp m-lag system-id 且取值相同（该参数缺省值是什么，不一致时对下游 LACP 协商造成什么后果）；（3）least active-linknumber <n> 的作用与缺省值，以及它与 lacp max active-linknumber 的区别；（4）LACP 系统优先级 lacp priority 的缺省值与作用。",
+    "answer": "（1）interface Eth-Trunk <id> 后执行 mode lacp-static（CE 系列 Eth-Trunk 缺省为手工负载分担模式，必须显式改为 lacp-static），成员物理口在接口视图执行 eth-trunk <id> 加入。（2）下游交换机以 LACP System ID（系统优先级+系统 MAC）判断对端成员口是否属于同一聚合系统：M-LAG 两台 CE 必须在系统视图 lacp m-lag system-id <mac-address> 配置相同的系统 MAC（缺省为本设备主控板 MAC，两台必然不同）；若不一致，下游认为自己对接两个不同的 LACP 系统，成员口无法全部 Selected，跨两台 CE 的聚合无法建立。（3）least active-linknumber <n>（缺省 1）：处于 Selected 状态的链路数低于阈值时整个 Eth-Trunk 接口状态变为 DOWN，防止少量链路承载全部流量；lacp max active-linknumber <n> 则限制活动链路数上限，超出上限的成员口置为 Unselect 作为热备份。（4）lacp priority 缺省 32768，数值越小优先级越高；两端比较系统 LACP 优先级（相同再比 System ID）选出主动端，由主动端决定选中哪些链路。",
+    "scoring_points": [
+      "interface Eth-Trunk <id> + mode lacp-static（CE 缺省手工模式需显式配置），成员口 eth-trunk <id> 加入",
+      "M-LAG 两端系统视图 lacp m-lag system-id 配置相同系统 MAC（缺省为本设备主控板 MAC）",
+      "不一致后果：下游 LACP 视为对接两个不同系统，成员口无法全部 Selected、跨设备聚合失败",
+      "least active-linknumber：活动链路低于阈值时 Eth-Trunk 整体 DOWN（缺省 1）",
+      "lacp max active-linknumber 限制活动链路上限，超出者为 Unselect 备用",
+      "lacp priority 缺省 32768、数值越小越优，主动端决定选中链路"
+    ],
+    "tags": [
+      "CLI",
+      "华为",
+      "VRPv8",
+      "链路聚合",
+      "LACP"
+    ]
+  },
+  {
+    "id": 21,
+    "difficulty": "难",
+    "category": {
+      "scope": "网络",
+      "protocol_layer": "链路层",
+      "lifecycle": "优化"
+    },
+    "scenario": "数据中心",
+    "device_type": "防火墙",
+    "question": "数据中心将防火墙以透明模式（二层）串接在两台汇聚交换机之间（以 Cisco ASA 透明模式 bridge-group/BVI 模型为参考）。上线后疑似出现 STP 计算异常。请系统说明：（1）透明防火墙的二层转发模型：bridge group 与 BVI 的关系、同 bridge group 接口间如何转发、MAC 地址如何学习（学习到什么粒度）、跨安全域流量如何处理；（2）透明模式默认放行哪些以太类型的流量，STP BPDU 默认如何处理，这会导致两侧汇聚交换机出现什么问题；（3）如何放行 BPDU 透传（EtherType ACL 的写法与应用命令），放行后 BPDU 与 STP 的行为；（4）防火墙与交换机在拓扑变化时 MAC 表行为上的差异可能带来什么问题，以及排查建议。",
+    "answer": "（1）转发模型：透明模式下物理接口划入同一个 bridge group（每个 bridge group 最多 4 个成员接口），组内由一个 BVI（Bridge Group Virtual Interface）代表三层网关。同一 bridge group、相同安全域接口间的流量按二层 MAC 地址表在成员接口间直接桥接；跨安全域（如 inside 到 outside）的流量上送策略引擎，按 ACL 检查后转发。MAC 学习：从流经的以太帧学习源 MAC，表项绑定到入方向的成员接口并动态老化；目的 MAC 已知则单播转发到对应成员口，未知单播与组播在 bridge group 内泛洪。（2）默认放行：透明模式默认只放行 IP（IPv4/IPv6）与 ARP 两类以太类型流量，其他以太类型（如 STP BPDU，目的 MAC 0180.c200.0000）默认被终结丢弃。两侧汇聚交换机彼此收不到对方的 BPDU：若两侧端口都自认为指定端口转发，而防火墙仍在成员口间桥接数据帧，就可能形成环路；或 STP 收敛结果与设计不符、出现次优阻塞。（3）放行方法：配置 EtherType ACL 并应用到接口，如 access-list BPDU_CAP ethertype permit bpdu，再执行 access-group BPDU_CAP in interface inside（outside 同理）。放行后 BPDU 作为二层数据帧在 bridge group 成员接口间泛洪透传，两侧 STP 正常计算根桥与阻塞端口，防火墙不解析也不终结 BPDU（华为 USG 透明模式行为类似：二层接口默认不透传 BPDU，需在接口配置 bpdu enable）。（4）差异与排查：交换机收到置 TC 的 BPDU 会冲刷 MAC 表，防火墙不解析 BPDU、不感知拓扑变化，其 MAC 表项要按自身老化时间到期才清除，期间可能把帧继续发向已失效的旧成员端口，形成短暂流量黑洞，在 TC 频繁时表现为间歇性丢包。排查建议：用 show access-list 确认 EtherType ACL 命中、用 capture 在接口抓包确认 BPDU 正在穿越，用 show mac-address-table 检查表项端口归属与老化配置，并将两台汇聚交换机的 STP 拓扑（根桥、指定/阻塞端口）与设计比对。",
+    "scoring_points": [
+      "bridge group/BVI 模型：成员接口同组二层桥接、BVI 代表三层；同域内按 MAC 转发、跨域经策略检查",
+      "MAC 学习粒度：源 MAC 学习到入方向成员接口并动态老化；未知单播/组播在组内泛洪",
+      "透明模式默认仅放行 IP 与 ARP 以太类型，BPDU 默认被终结丢弃",
+      "后果：两侧交换机互相看不到 BPDU，可能双指定端口成环或 STP 收敛与设计不符",
+      "放行方法：EtherType ACL（access-list <名称> ethertype permit bpdu）并 access-group 应用到接口",
+      "放行后 BPDU 在组内泛洪透传、STP 恢复正常计算，防火墙不终结 BPDU",
+      "防火墙不感知 TC、MAC 表按自身老化，拓扑变化后存在短暂黑洞风险及 show access-list/capture/mac-address-table 排查思路"
+    ],
+    "tags": [
+      "防火墙",
+      "透明模式"
+    ]
+  },
+  {
+    "id": 22,
+    "difficulty": "中",
+    "category": {
+      "scope": "网络",
+      "protocol_layer": "链路层",
+      "lifecycle": "规划"
+    },
+    "scenario": "数据中心",
+    "device_type": "不限定",
+    "question": "数据中心规划在交换机间部署 IEEE 802.1AE MACsec，密钥协商使用 MKA（IEEE 802.1X-2010）。请说明 MKA 会话的密钥体系与协商规则：（1）CAK 从何而来，由它派生出哪两个密钥、各用于什么；（2）SAK 由谁生成、通过什么密钥如何保护分发给 CA 成员，SAK 本身用于什么；（3）Key Server 如何选举（优先级数值的取舍规则，平局时比较什么）；（4）加密套件（cipher suite）由谁决定、受什么约束。",
+    "answer": "（1）CAK（Connectivity Association Key）是密钥体系根：由 802.1X 认证（EAPOL 交换，如 EAP-TLS）协商产生，或由预共享密钥（PSK）直接配置。由 CAK 派生 KEK（Key Encryption Key）与 ICK（Integrity Check Key）：KEK 用于加密分发 SAK 的 MKPDU，ICK 用于 MKA 协议报文的完整性校验。（2）SAK（Secure Association Key）由当选的 Key Server 生成，用 KEK 加密后通过 MKPDU 分发给 CA 内所有成员；成员用 SAK 完成 802.1AE 数据帧的加解密与完整性保护，SAK 按 SCI 方向独立使用并周期性重新协商（rekey）。（3）Key Server 选举：比较 Key Server 优先级，数值小者优先当选；优先级相同时比较参与者的 SCI（MAC 地址与端口标识），小者当选，选举在 CA 成员间自动完成。（4）加密套件由 Key Server 决定，且必须选择所有成员都通告支持的套件（能力交集，如 GCM-AES-128/256），否则会话无法建立。",
+    "scoring_points": [
+      "CAK 由 802.1X 认证（EAPOL）协商或 PSK 配置产生，是 MKA 密钥体系根",
+      "CAK 派生 KEK 与 ICK：KEK 加密分发 SAK 的 MKPDU，ICK 保护 MKA 报文完整性",
+      "SAK 由 Key Server 生成，用 KEK 加密后经 MKPDU 分发给 CA 成员",
+      "SAK 用于 802.1AE 数据加解密，按 SCI 方向独立并周期性 rekey",
+      "Key Server 选举：优先级数值小者当选，平局时比较 SCI",
+      "cipher suite 由 Key Server 决定，须为全体成员支持的能力交集"
+    ],
+    "tags": [
+      "MACSec",
+      "MKA"
+    ]
+  },
+  {
+    "id": 23,
+    "difficulty": "中",
+    "category": {
+      "scope": "网络",
+      "protocol_layer": "链路层",
+      "lifecycle": "建设"
+    },
+    "scenario": "园区",
+    "device_type": "WLAN",
+    "question": "园区 WLAN 组网：STA 通过 AP1 接入，AP1 与 AP2 之间为 WDS 四地址无线桥接链路，AP2 上联有线交换机，业务 VLAN 100 通过 SSID 映射。请说明：（1）STA 发往有线网络的 802.11 数据帧（ToDS=1、FromDS=0）的 Address1~3 各是什么，AP 发往 STA 的帧（ToDS=0、FromDS=1）三个地址如何变化；（2）WDS 链路上 AP1 发往 AP2 的帧（ToDS=1、FromDS=1）Address1~4 各是什么，为什么 WDS 必须使用四地址；（3）802.11 空口帧是否携带 802.1Q VLAN 标签、业务 VLAN 如何标识，AP 有线出口对 VLAN 标签如何处理（含集中转发时经 CAPWAP 封装的典型方式）。",
+    "answer": "（1）STA 到 AP（ToDS=1、FromDS=0）：Address1=接收方=BSSID（AP 的无线口 MAC），Address2=发送方 SA=STA 的 MAC，Address3=最终目的 DA（如网关或服务器）。AP 到 STA（ToDS=0、FromDS=1）：Address1=DA（目的终端），Address2=BSSID，Address3=SA（原始源）。（2）WDS 桥接链路（ToDS=1、FromDS=1）：Address1=RA（对端 AP 无线口），Address2=TA（本端 AP 无线口），Address3=DA（原始目的），Address4=SA（原始源）。AP 间转发时逐跳地址（RA/TA）与端到端地址（DA/SA）必须同时携带，三地址无法同时表达两类信息，故 WDS 必须使用四地址。（3）802.11 空口帧本身不携带 802.1Q 标签，业务 VLAN 通过 SSID/VAP 与 VLAN 的映射关系标识；AP 从有线口发出前按业务 VLAN 打 802.1Q 单标签（遵循 trunk/native 规则）。集中转发模式下，802.11 帧在 AP 侧转换为 802.3 帧并按业务 VLAN 加标签后封装进 CAPWAP 隧道（隧道报文经管理 VLAN 传输），AC 解封装后送入有线网络。",
+    "scoring_points": [
+      "三地址帧：ToDS=1/FromDS=0 时 Addr1=BSSID、Addr2=SA、Addr3=DA；ToDS=0/FromDS=1 时 Addr1=DA、Addr2=BSSID、Addr3=SA",
+      "WDS 四地址：ToDS=1 且 FromDS=1，Addr1=RA、Addr2=TA、Addr3=DA、Addr4=SA",
+      "说明四地址必要性：逐跳地址（RA/TA）与端到端原始地址（DA/SA）需同时携带",
+      "802.11 空口帧不携带 802.1Q 标签，业务 VLAN 由 SSID/VAP 映射标识",
+      "AP 有线出口按业务 VLAN 打 802.1Q 单标签；集中转发时经 CAPWAP 封装承载到 AC"
+    ],
+    "tags": [
+      "WLAN",
+      "802.11"
+    ]
+  },
+  {
+    "id": 24,
+    "difficulty": "中",
+    "category": {
+      "scope": "网络",
+      "protocol_layer": "链路层",
+      "lifecycle": "维护"
+    },
+    "scenario": "宽带城域",
+    "device_type": "路由器",
+    "question": "宽带城域网中一台华为路由器（VRP，AR/NE 系列）作为汇聚网关。请说明路由式代理 ARP 与本地代理 ARP 的差异与误配影响：（1）两种代理在接口视图下的使能命令分别是什么；（2）路由式代理 ARP 响应什么范围的 ARP 请求（目标 IP 满足什么条件、用什么 MAC 代答），典型适用场景是什么；（3）本地代理 ARP 响应什么范围的请求、解决什么隔离场景；（4）在网关接口上误开或大范围开启路由式代理 ARP 的风险（至少两点），以及华为官方对主机 ARP 表项老化时间的提示。",
+    "answer": "（1）接口视图命令：路由式为 arp-proxy enable，本地式为 arp-proxy inner-subnet-forwarding enable。（2）路由式代理 ARP：接口收到 ARP 请求，若目标 IP 不在本接口直连网段、但本设备路由可达（转发路径经过本设备），即以本接口 MAC 代答。典型场景：两台主机 IP 属同一网段却被三层设备分隔（如子网重新规划后），且主机未配置缺省网关，借代理 ARP 互通。（3）本地代理 ARP：目标 IP 与请求者处于同一接口同一网段（同一 VLAN/广播域），但因端口隔离等二层隔离策略不能直接互通时，网关用自己的 MAC 代答，流量上送网关三层转回，实现同网段被隔离用户间的互通。（4）误开风险：掩盖主机掩码/网关配置错误（配错也能通，排障困难）；同网段流量绕行网关造成网关转发与 CPU 压力、路径不对称；扩大 ARP 欺骗的影响面。华为官方提示：使能路由式代理 ARP 后应适当减小主机 ARP 表项老化时间，使无效表项尽快失效，减少发往网关却无法转发的报文。",
+    "scoring_points": [
+      "命令：arp-proxy enable（路由式）与 arp-proxy inner-subnet-forwarding enable（本地式），均在接口视图",
+      "路由式响应范围：目标 IP 不在本接口直连网段但本设备路由可达，以本接口 MAC 代答",
+      "路由式典型场景：同网段主机被三层设备分隔、未配缺省网关仍需互通",
+      "本地式响应范围：同一接口同网段内因端口隔离不能互通的用户，网关代答后三层转回",
+      "误开风险至少两点：掩盖主机网关/掩码配置错误、流量绕行网关、放大 ARP 欺骗影响",
+      "华为提示：使能后应减小主机 ARP 表项老化时间"
+    ],
+    "tags": [
+      "ARP"
+    ]
+  },
+  {
+    "id": 25,
+    "difficulty": "难",
+    "category": {
+      "scope": "网络",
+      "protocol_layer": "链路层",
+      "lifecycle": "维护"
+    },
+    "scenario": "宽带城域",
+    "device_type": "路由器",
+    "question": "宽带城域网关运行 VRRP（RFC 9568，VRRPv3）。请围绕免费 ARP（gratuitous ARP）的两种用途作答：（1）作为地址冲突检测：主机在什么时机发送，报文类型与字段特征（请求还是应答、SPA 与 TPA 取值、目的 MAC、SHA 填什么），收到什么报文视为冲突；（2）作为 VRRP 主切换表项刷新：按 RFC 9568，新当选的 Active Router 会针对什么地址发送免费 ARP，报文中的发送方/目标链路层地址填什么（与虚拟 MAC 00-00-5E-00-01-VRID 的关系），承载该 ARP 的以太帧源 MAC 填什么，其作用是刷新哪些设备的哪些表；（3）对比两种用途在字段取值上的关键差异，并说明收到免费 ARP 的设备对表项的一般处理方式，以及 Backup 路由器对发往虚拟 MAC 报文的处理要求。",
+    "answer": "（1）地址冲突检测：主机在配置或初始化 IP 地址时（接口 up、手工配置地址、DHCP 获得地址后）主动发送免费 ARP，它是一个 ARP Request：发送方协议地址（SPA）与目标协议地址（TPA）都填本机 IP，SHA 填本接口 MAC，目的 MAC 为广播 ff-ff-ff-ff-ff-ff；若收到 ARP Reply 应答，说明同网段已有主机占用该 IP，即发生地址冲突（主机告警并停用或持续告警该地址），该报文同时可让同网段其他主机刷新已有表项。（2）VRRP 切换刷新：按 RFC 9568，路由器当选 Active Router 后，对虚拟路由器关联的每个 IPv4 地址广播一个免费 ARP：SPA 为该虚拟 IP，发送方链路层地址（SHA）与目标链路层地址均填虚拟 MAC 00-00-5E-00-01-VRID（而非本机物理 MAC）；RFC 9568 对承载该 ARP 的以太帧头源 MAC 未作规定（仅规定 VRRP 通告报文以太源 MAC 为虚拟 MAC），实现上通常以本接口物理 MAC 为帧源、目的为广播。作用：让主机更新虚拟 IP 到虚拟 MAC 的 ARP 表项，把流量切到新 Active；下联交换机对虚拟 MAC 的端口归属学习主要来自新 Active 周期性发送、以太源 MAC 为虚拟 MAC 的 VRRP 通告报文，从而指向新 Active；Backup 路由器必须丢弃目的 MAC 为虚拟 MAC 的报文，避免双端应答。（3）字段差异：冲突检测场景 SPA=TPA=发送者自身单播 IP、SHA=本机物理 MAC；VRRP 场景 SPA=虚拟 IP、SHA 与目标链路层地址=虚拟 MAC，帧源 MAC 可能与 ARP 载荷中的 SHA 不同（帧头源 MAC 属实现行为，RFC 未规范）。接收免费 ARP 的设备一般只更新表中已存在的表项（是否新建因主机实现而异），因此 VRRP 依赖周期性通告加切换时免费 ARP 共同保证表项正确。",
+    "scoring_points": [
+      "冲突检测时机（接口 up/获得 IP 时主动发送）与报文为 ARP Request、SPA=TPA=本机 IP、SHA=本机 MAC、目的 MAC 广播",
+      "收到 ARP Reply 应答即判定地址冲突",
+      "VRRP：新 Active 对虚拟路由器关联的每个 IPv4 地址广播免费 ARP",
+      "SHA 与目标链路层地址均填虚拟 MAC 00-00-5E-00-01-VRID、SPA 为虚拟 IP",
+      "帧源 MAC 差异：RFC 9568 仅规定 ARP 载荷字段（SHA/目标链路层地址=虚拟 MAC），未规定帧头源 MAC；实现中帧源 MAC 可能与 SHA 不同",
+      "作用：刷新主机 ARP 表项，流量切换到新 Active；交换机对虚拟 MAC 的端口归属学习来自以太源 MAC 为虚拟 MAC 的 VRRP 通告报文",
+      "Backup 必须丢弃发往虚拟 MAC 的报文；接收方一般仅更新已有 ARP 表项"
+    ],
+    "tags": [
+      "ARP"
+    ]
+  },
+  {
+    "id": 26,
+    "difficulty": "难",
+    "category": {
+      "scope": "设备",
+      "protocol_layer": "链路层",
+      "lifecycle": "维护"
+    },
+    "scenario": "园区",
+    "device_type": "交换机",
+    "question": "园区 Cisco IOS 接入交换机启用 DHCP Snooping 与 DAI（Dynamic ARP Inspection）后部分用户断网，日志出现端口被 arp-inspection 置 errdisable 或 ARP 报文被大量丢弃。请给出联动排查思路：（1）DAI 的判定依据是什么，为什么 DHCP Snooping 绑定表失效会直接导致合法 ARP 被误拦；（2）列出绑定表建立失败或失效的常见原因（至少三类，含信任端口配置、绑定表易失性、启用范围、静态地址场景）；（3）写出排查所用的 show 命令（至少三条）；（4）给出修复与兜底措施：上联口/DHCP 服务器口的信任命令、errdisable 自动恢复命令与默认恢复时间、静态 IP 用户的补充手段。",
+    "answer": "（1）判定依据：DAI 拦截非信任口收到的所有 ARP 报文，将 ARP 的发送方 IP/MAC 与该端口所在 VLAN 的 DHCP Snooping 绑定表比对，无表项或不匹配即丢弃并计数。绑定表由 DHCP 报文学习生成，一旦失效，合法用户的 ARP 无绑定可查而被误拦。（2）绑定表失效常见原因：面向 DHCP 服务器或上联的端口未配置 ip dhcp snooping trust，DHCP OFFER/ACK 被当作非法报文丢弃，表项建立不了；绑定表保存在内存中，交换机重启即清空，需等客户端续租后重新学习；snooping 未在正确的 VLAN 启用（ip dhcp snooping vlan 列表遗漏该 VLAN）；用户使用静态 IP 地址，从不发送 DHCP 报文，永远没有表项；跨 DHCP 中继场景处理不当（如中继接口策略）。（3）排查命令：show ip dhcp snooping（全局与 VLAN 配置）、show ip dhcp snooping binding（表项有无及端口/VLAN 对应）、show ip arp inspection interfaces（端口信任状态）、show ip arp inspection statistics（丢弃计数）、show interfaces status err-disabled（errdisable 端口）。（4）修复与兜底：面向 DHCP 服务器/上联口配置 ip dhcp snooping trust 与 ip arp inspection trust；errdisable 自动恢复用 errdisable recovery cause arp-inspection，配合 errdisable recovery interval <秒>（缺省 300 s）；静态 IP 用户用 ip source binding 生成静态绑定或配置 ARP ACL（arp access-list 定义 permit 匹配后 ip arp inspection filter 应用到 VLAN）兜底。",
+    "scoring_points": [
+      "DAI 依据：非信任口 ARP 与 DHCP Snooping 绑定表比对，无表项/不匹配即丢弃",
+      "因果链：绑定表失效导致合法 ARP 无绑定可查被误拦",
+      "常见原因至少三类：信任口未配置（OFFER/ACK 被丢）、绑定表易失重启清空、VLAN 未启用 snooping、静态 IP 无表项",
+      "排查命令：show ip dhcp snooping binding / show ip dhcp snooping / show ip arp inspection statistics（或 interfaces）",
+      "修复：上联与 DHCP 服务器口配置 ip dhcp snooping trust 与 ip arp inspection trust",
+      "自动恢复：errdisable recovery cause arp-inspection + errdisable recovery interval（缺省 300 s）",
+      "兜底：ip source binding 或 ARP ACL 应对静态 IP 用户"
+    ],
+    "tags": [
+      "CLI",
+      "Cisco",
+      "IOS",
+      "DHCP",
+      "ARP"
+    ]
+  },
+  {
+    "id": 27,
+    "difficulty": "简单",
+    "category": {
+      "scope": "网络",
+      "protocol_layer": "链路层",
+      "lifecycle": "其他"
+    },
+    "scenario": "园区",
+    "device_type": "路由器",
+    "question": "RFC 9568（VRRPv3，2024 年发布，废止并替代 RFC 5798）规定的基本协议常量。请给出：VRRP 报文的 IP 层标识（IPv4 Protocol 字段与 IPv6 Next Header 的取值）；IPv4 与 IPv6 各自的 VRRP 组播地址；IPv4 与 IPv6 各自的虚拟 MAC 地址格式（注意两者不同）；VRRP 报文对 TTL/HopLimit 的要求及用意；VRID 的取值范围。",
+    "answer": "协议号为 112：IPv4 的 Protocol 字段与 IPv6 的 Next Header 字段均填 112。组播地址：IPv4 为 224.0.0.18，IPv6 为 ff02::12。虚拟 MAC：IPv4 为 00-00-5E-00-01-{VRID}，IPv6 为 00-00-5E-00-02-{VRID}（第 4 字节为 02 是常见易错点）。VRRP 报文 TTL/HopLimit 必须为 255，接收方校验非 255 即丢弃，用于确保报文不会被路由器跨网段转发。VRID 取值范围 1–255，每个 VRID 对应一个虚拟路由器。",
+    "scoring_points": [
+      "协议号 112（IPv4 Protocol 与 IPv6 Next Header 均为 112）",
+      "组播地址：IPv4 为 224.0.0.18，IPv6 为 ff02::12",
+      "IPv4 虚拟 MAC 为 00-00-5E-00-01-{VRID}",
+      "IPv6 虚拟 MAC 为 00-00-5E-00-02-{VRID}（易错点）",
+      "TTL/HopLimit 必须为 255，非 255 丢弃（防跨网段转发）",
+      "VRID 范围 1–255"
+    ],
+    "tags": [
+      "RFC",
+      "RFC9568",
+      "RFC-2024",
+      "VRRP"
+    ]
+  },
+  {
+    "id": 28,
+    "difficulty": "中",
+    "category": {
+      "scope": "设备",
+      "protocol_layer": "链路层",
+      "lifecycle": "维护"
+    },
+    "scenario": "数据中心",
+    "device_type": "交换机",
+    "question": "华为 CloudEngine 数据中心交换机（VRPv8）上报 MAC 地址漂移告警，怀疑存在环路。请说明 MAC flapping 检测与阻断的配置要点：（1）系统视图使能检测的命令与检测原理（如何判定发生 flapping）；（2）在哪个视图配置触发端口关闭的命令，效果是什么（端口进入什么状态）；（3）自动恢复命令（cause 与 interval 参数）与未配置自动恢复时的手动恢复方式；（4）查看漂移历史记录的 display 命令及其在环路定位中的用法。",
+    "answer": "（1）系统视图 mac-address flapping detection 使能检测：设备监测同一 VLAN 内同一 MAC 的表项在不同端口间反复迁移（后学到的覆盖先学到的），在检测周期内迁移次数超过阈值即判定发生 MAC 地址漂移并上报告警。（2）在 VLAN 视图配置 mac-address flapping trigger error-down：判定漂移后直接将漂移涉及的端口置为 error-down（Shutdown），阻断环路影响扩散，比仅告警更能及时止损。（3）自动恢复：系统视图 error-down auto-recovery cause mac-address-flapping interval <秒>，到期后端口自动恢复 up；未配置自动恢复时需在接口视图手动 shutdown 再 undo shutdown 复位。（4）定位：display mac-address flapping 查看漂移记录（漂移的 MAC、原端口与新端口、所属 VLAN、发生时间），对反复在两个端口间迁移的 MAC 沿端口追查物理环路或双上联误接；error-down 是检测到环路后的兜底阻断，仍需配合 STP 等破环手段根治。",
+    "scoring_points": [
+      "mac-address flapping detection（系统视图）使能检测，原理是同 VLAN 同 MAC 在端口间反复迁移超过阈值判定漂移",
+      "VLAN 视图 mac-address flapping trigger error-down 将漂移端口置 error-down 阻断",
+      "自动恢复：error-down auto-recovery cause mac-address-flapping interval <秒>，未配置则手动 shutdown/undo shutdown",
+      "display mac-address flapping 查看漂移 MAC/新旧端口/VLAN/时间",
+      "定位思路：沿反复迁移端口追查物理环路，配合 STP 等手段根治"
+    ],
+    "tags": [
+      "CLI",
+      "华为",
+      "VRPv8",
+      "MAC"
+    ]
+  },
+  {
+    "id": 29,
+    "difficulty": "中",
+    "category": {
+      "scope": "设备",
+      "protocol_layer": "链路层",
+      "lifecycle": "建设"
+    },
+    "scenario": "园区",
+    "device_type": "交换机",
+    "question": "工程师从华为 S 系列交换机（VRPv5）切换到 CloudEngine 数据中心交换机（VRPv8）运维，按旧习惯配置新上线的物理链路后发现端口始终不 up（链路两端与光模块均正常）。请说明：（1）CE 交换机以太网物理接口的缺省状态与 S 系列的差异；（2）CE 上使端口启用需要什么命令；（3）逻辑接口（如 VLANIF、Eth-Trunk）创建后的缺省状态；（4）跨平台迁移运维时的检查与规避做法（至少两点）。",
+    "answer": "（1）CE（VRPv8）的物理以太网接口缺省处于 shutdown（管理 Down）状态，新接口默认不启用；S 系列（VRPv5）物理接口缺省为 up，连线即通。（2）CE 需在物理接口视图执行 undo shutdown 显式启用端口，批量端口可在端口范围下统一执行。（3）逻辑接口（VLANIF、Eth-Trunk、BDIF 等）创建后缺省为 up（只要成员与依赖条件满足），无需 undo shutdown。（4）迁移运维做法：配置物理口后用 display interface 或在接口视图 display this 检查是否残留 shutdown；制作 CE 配置模板时为物理口补上 undo shutdown；批量割接时用端口组一次性启用，避免逐口遗漏。",
+    "scoring_points": [
+      "CE 物理以太口缺省 shutdown（管理 Down）",
+      "S 系列（VRPv5）物理口缺省 up",
+      "CE 需接口视图 undo shutdown 显式启用",
+      "逻辑接口（VLANIF/Eth-Trunk 等）创建后缺省 up",
+      "检查/规避：display interface 或 display this 查残留 shutdown、模板补充 undo shutdown、端口组批量启用（答两点即可）"
+    ],
+    "tags": [
+      "CLI",
+      "华为",
+      "VRPv5",
+      "VRPv8",
+      "版本差异",
+      "以太网"
+    ]
+  },
+  {
+    "id": 30,
+    "difficulty": "中",
+    "category": {
+      "scope": "设备",
+      "protocol_layer": "链路层",
+      "lifecycle": "维护"
+    },
+    "scenario": "园区",
+    "device_type": "交换机",
+    "question": "园区网中华为 S 系列交换机（VRPv5）与 Cisco IOS 交换机混跑 MSTP，要求两者进入同一个 MST 域。请说明：（1）两台交换机处于同一 MST 域必须完全一致的三个参数；（2）分别给出两家的配置命令序列（华为含模式设置、进入域配置视图的三要素命令与激活命令；Cisco 含模式设置与 MST 配置视图的三要素命令）；（3）华为修改域参数后必须执行哪条命令才生效，双方各自的验证命令是什么；（4）参数不一致时的后果；（5）两家缺省值的差异（域名、revision、VLAN 与实例映射的缺省情况）。",
+    "answer": "（1）三要素：MST 域名（region name）、修订级别（revision level）、VLAN 与实例的映射关系，三者必须完全一致。（2）华为：stp mode mstp；stp region-configuration 进入 MST 域视图，依次 region-name <名称>、revision-level <级别>、instance <实例号> vlan <vlan-list>，最后 active region-configuration 激活。Cisco：spanning-tree mode mst；spanning-tree mst configuration 进入 MST 配置模式，依次 name <名称>、revision <级别>、instance <实例号> vlan <vlan-list>。（3）华为修改域参数后必须重新执行 active region-configuration 才生效；验证命令：华为 display stp region-configuration，Cisco show spanning-tree mst configuration（配置模式下可用 show current / show pending）。（4）不一致时两机被判为不同 MST 域，相互间只能通过 IST/CST 交互，规划的多实例负载均衡与阻塞点失效，可能出现次优路径或误阻塞。（5）缺省差异：华为缺省域名为本设备 MAC 地址（各机不同，缺省必不在同一域）、revision 缺省 0；Cisco 缺省域名为空字符串、revision 0、所有 VLAN 映射到实例 0（CIST）。混网必须双方显式统一三要素，不能依赖缺省值。",
+    "scoring_points": [
+      "三要素：MST 域名、revision level、VLAN 与实例的映射完全一致",
+      "华为命令：stp mode mstp + stp region-configuration → region-name / revision-level / instance vlan",
+      "华为修改后必须 active region-configuration 重新激活才生效",
+      "Cisco 命令：spanning-tree mode mst + spanning-tree mst configuration → name / revision / instance vlan",
+      "验证命令：display stp region-configuration / show spanning-tree mst configuration",
+      "不一致后果：判为不同域仅经 IST/CST 交互，负载均衡与阻塞规划失效",
+      "缺省差异：华为域名缺省为设备 MAC 地址、revision 0；Cisco 空域名、revision 0、全 VLAN 映射实例 0"
+    ],
+    "tags": [
+      "CLI",
+      "华为",
+      "VRPv5",
+      "Cisco",
+      "IOS",
+      "版本差异",
+      "MSTP"
+    ]
+  }
+]

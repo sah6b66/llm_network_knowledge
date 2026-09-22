@@ -216,3 +216,16 @@ __marimo__/
 
 # Streamlit
 .streamlit/secrets.toml
+
+# Local configuration
+config.json
+
+# Claude Code local settings (may contain secrets)
+.claude/
+
+# Superpowers plugin local state
+.superpowers/
+
+# Regenerable topic slices (tools/slice.py output)
+data/topics_slices/
+

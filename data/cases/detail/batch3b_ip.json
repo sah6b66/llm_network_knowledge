@@ -1,0 +1,415 @@
+[
+  {
+    "id": 46,
+    "difficulty": "简单",
+    "category": {
+      "scope": "设备",
+      "protocol_layer": "IP层",
+      "lifecycle": "其他"
+    },
+    "scenario": "通用",
+    "device_type": "路由器",
+    "question": "在华为 VRPv5 平台（例如 AR 系列路由器）上，工程师在系统视图下修改了一段配置但未执行任何保存操作便直接 reboot 重启设备。请回答：（1）设备重启后加载的是哪份配置，未保存的修改去向如何？（2）重启前可用哪条命令查看下次启动要加载的配置？（3）重启前用哪条命令比较当前运行配置与已保存配置的差异？",
+    "answer": "（1）重启后加载 Flash 中已保存的启动配置文件（缺省文件名 vrpcfg.zip）；未执行 save 的修改只存在于内存中的 current-configuration，重启后全部丢失。（2）display saved-configuration。（3）compare configuration。VRPv5 中命令输入即生效（一阶段配置），但只有执行 save 后配置才会写入启动配置文件并在重启后保留。",
+    "scoring_points": [
+      "指出重启后加载 Flash 中的启动配置文件（缺省名 vrpcfg.zip）",
+      "说明未保存修改仅存在于内存 current-configuration，重启后丢失",
+      "给出查看保存配置的命令 display saved-configuration",
+      "给出比较当前配置与保存配置的命令 compare configuration",
+      "说明需执行 save 才能将当前配置写入启动配置文件"
+    ],
+    "tags": [
+      "CLI",
+      "华为",
+      "VRPv5",
+      "运维"
+    ]
+  },
+  {
+    "id": 47,
+    "difficulty": "简单",
+    "category": {
+      "scope": "网络",
+      "protocol_layer": "IP层",
+      "lifecycle": "规划"
+    },
+    "scenario": "宽带城域",
+    "device_type": "路由器",
+    "question": "在 MPLS L3VPN（RFC 4364）中，Route Distinguisher（RD）有 Type 0/1/2 三种编码类型。请分别写出三种类型由哪些字段构成；使用 4 字节 AS 号的 PE 应选哪种类型、为什么？RT 的 export 与 import 方向语义分别是什么？",
+    "answer": "Type 0 为 2 字节 AS 号 + 4 字节分配编号；Type 1 为 4 字节 IPv4 地址 + 2 字节分配编号；Type 2 为 4 字节 AS 号 + 2 字节分配编号。4 字节 AS 只能选 Type 2，因为 Type 0 的管理员字段仅 2 字节，容纳不下 4 字节 AS。RT 是 BGP 扩展团体属性：VRF 的 export target 在本地路由输出为 VPNv4 路由时附加到路由上；接收端 VRF 的 import target 与路由携带的 RT 匹配时，路由才被引入该 VRF。",
+    "scoring_points": [
+      "Type 0：2 字节 AS 号 + 4 字节分配编号",
+      "Type 1：4 字节 IPv4 地址 + 2 字节分配编号",
+      "Type 2：4 字节 AS 号 + 2 字节分配编号",
+      "正确判断 4 字节 AS 应选 Type 2，并指出 Type 0 仅支持 2 字节 AS",
+      "export target：VRF 导出路由时附加到 VPNv4 路由",
+      "import target：接收端按 RT 匹配决定路由是否引入 VRF"
+    ],
+    "tags": [
+      "RFC",
+      "RFC4364",
+      "RFC-2006",
+      "VPN",
+      "VRF"
+    ]
+  },
+  {
+    "id": 48,
+    "difficulty": "难",
+    "category": {
+      "scope": "网络",
+      "protocol_layer": "IP层",
+      "lifecycle": "规划"
+    },
+    "scenario": "宽带城域",
+    "device_type": "路由器",
+    "question": "某宽带城域网在同一台 PE 上部署三个 VRF：VRF-A、VRF-B 与 VRF-Hub（集中出口与公共服务 VRF）。需求：A、B 均需访问 Hub 内资源；A、B 之间不允许直接互访，但允许经 Hub 受控中转；禁止任何路由在 VRF 间泄漏后被再次导出形成路由回馈环路。请给出完整的 RT（export/import）设计方案、路由泄漏的过滤控制措施，并说明防止泄漏路由二次导出环路的具体手段。",
+    "answer": "RT 设计（Hub-and-Spoke 单向导入）：VRF-A 配置 export RT 65000:1001、import RT 65000:1000；VRF-B 配置 export RT 65000:1002、import RT 65000:1000；VRF-Hub 配置 export RT 65000:1000、import RT 65000:1001 与 65000:1002。这样 A、B 只导入 Hub 的路由，互相看不到对方路由，直连互访天然被阻断；A 到 B 的流量必须进入 Hub，由 Hub 内的策略点（ACL/防火墙）实施受控中转，同时 Hub 上要做地址重叠检查（必要时 NAT）。防二次导出环路的控制：（1）每个 VRF 的 export route-policy 只对本 VRF 的直连/静态/IGP 等本地源路由附加 export RT，明确拒绝从 VPNv4 导入的路由再导出，否则 A 泄漏给 Hub 的路由会被 Hub 再带 RT 65000:1000 导出、A 重新导入造成路由回馈与 LSDB/路由振荡；（2）为泄漏路由绑定 SoO（Site of Origin）扩展团体，保证从某站点/VRF 学到的路由不被重发布回来源站点，作为第二重保险；（3）在 Hub 引入 A/B 路由时用 import route-policy 限定前缀范围与下一跳，防止超范围泄漏放大环路影响；（4）排查时对比各 VRF 路由的 RD/RT 来源与收到的扩展团体，确认无来源自环。该设计将互通控制点收敛在 Hub，RT 只承担可达性拓扑，安全与互访策略集中在单点实施。",
+    "scoring_points": [
+      "各 VRF export/import RT 取值体现\"spoke 只导入 Hub、Hub 导入全部 spoke、spoke 互不导入\"的单向设计",
+      "说明 A、B 互访必须经 Hub 中转，由 Hub 内策略点实现受控互通",
+      "指出泄漏路由若被再次导出会形成路由回馈/环路风险",
+      "给出 export route-policy 限制只导出本地源路由、拒绝 VPNv4 导入路由再导出的措施",
+      "给出 SoO（Site of Origin）标记防回环手段",
+      "提及 Hub 侧 import 过滤（前缀/下一跳限定）或地址重叠/NAT 设计约束"
+    ],
+    "tags": [
+      "VRF",
+      "方案设计"
+    ]
+  },
+  {
+    "id": 49,
+    "difficulty": "中",
+    "category": {
+      "scope": "网络",
+      "protocol_layer": "IP层",
+      "lifecycle": "建设"
+    },
+    "scenario": "园区",
+    "device_type": "交换机",
+    "question": "园区某 VLAN 内同时存在 IGMPv2 与 IGMPv3 接收者主机，最后一跳为 IGMPv3 路由器。请说明：（1）IGMPv3（RFC 3376）中 INCLUDE 与 EXCLUDE 两种源过滤模式的语义，以及 EXCLUDE 空源列表的含义；（2）IGMPv3 路由器如何解释一台 IGMPv2 主机发来的成员关系报告；（3）当 LAN 上出现更低版本的查询器时，IGMPv3 主机如何降级兼容、由什么定时器维护。",
+    "answer": "（1）INCLUDE(A) 表示只接收源列表 A 中各源发送的该组流量；EXCLUDE(A) 表示接收除 A 之外所有源的流量；EXCLUDE 空源列表（EXCLUDE {}）等价于接收全部源，与 IGMPv2 的加入语义一致。IGMPv3 组记录分为现态记录（MODE_IS_INCLUDE / MODE_IS_EXCLUDE）、过滤模式变化记录（CHANGE_TO_INCLUDE_MODE / CHANGE_TO_EXCLUDE_MODE）与源列表变化记录（ALLOW_NEW_SOURCES / BLOCK_OLD_SOURCES），报告发往 224.0.0.22。（2）IGMPv2 报告不携带源过滤信息，IGMPv3 路由器将其按 EXCLUDE {} 处理，即加入该组全部源；这也意味着 SSM 场景下 v2 主机无法表达源信息，需在最后一跳做 SSM 映射。（3）主机按收到的查询报文版本维护兼容模式：收到 IGMPv2 查询后降为 v2 兼容，仅以 v2 格式报告应答；该状态由 Older Version Querier Present Timeout 维护，超时未再收到低版本查询则恢复 IGMPv3 行为。",
+    "scoring_points": [
+      "INCLUDE(A)=仅接收源列表 A 中的源；EXCLUDE(A)=接收除 A 以外的源",
+      "EXCLUDE 空源列表 = 接收全部源，与 IGMPv2 加入语义等价",
+      "v2 报告不携带源列表，被 v3 路由器按 EXCLUDE {} 解释",
+      "能说出 IGMPv3 组记录类型（现态/过滤模式变化/源列表变化记录）或报告发往 224.0.0.22",
+      "主机收到低版本查询后降级为对应版本兼容，由 Older Version Querier Present Timeout 维护并超时恢复"
+    ],
+    "tags": [
+      "RFC",
+      "RFC3376",
+      "RFC-2002",
+      "组播",
+      "IGMP"
+    ]
+  },
+  {
+    "id": 50,
+    "difficulty": "难",
+    "category": {
+      "scope": "网络",
+      "protocol_layer": "IP层",
+      "lifecycle": "维护"
+    },
+    "scenario": "园区",
+    "device_type": "交换机",
+    "question": "园区 PIM-SM（RFC 7761）网络中，组播源 S 直连接在接入交换机 SW1（第一跳 DR）下，RP 位于远端。运维观察到两个现象：现象一，接收者正常收到流量，且在 RP 切换到最短路径树（SPT）后，SW1 与 RP 之间仍周期性出现 Register 探测报文；现象二，另一个没有任何接收者的组播源，在 RP 方向每约 60 秒出现一瞬间的封装流量。请完整解释第一跳 DR 的 Register 封装与 RP 的 Register-Stop 抑制机制，并分别判定两个现象是否故障、成因是什么。",
+    "answer": "机制：源开始发流后，第一跳 DR 将组播数据整体封装在单播 PIM Register 报文中发往 RP；RP 解封装后沿共享树（RPT）向接收者转发。当 RP 不再需要封装流量时向 DR 单播回送 Register-Stop，触发条件包括：RP 无该组任何 (*,G) 接收者状态，或 RP 已通过向源方向逐跳发送 (S,G) Join 完成到 SPT 的切换（数据改走 SPT）。DR 收到 Register-Stop 后停止发送 Register 并启动 Register-Suppression Timer（缺省 60 秒）；定时器到期前约 5 秒（Register_Probe_Time）DR 发送 Null-Register（仅含空数据报文的探测 Register），若 RP 仍回 Register-Stop 则继续抑制，若 RP 不回则 DR 恢复发送携带数据的 Register。现象一判定为正常：RP 切换 SPT 后业务流量沿 SPT 转发，Register 通道被 Register-Stop 抑制，但抑制期内每个周期到期前的 Null-Register 探测及相应 Register-Stop 应答仍会周期性出现，这是协议自身的保活机制，只要接收者流量走 SPT 未中断即非故障。现象二也符合协议行为但值得运维关注：无接收者的源仍会被第一跳 DR 持续封装上送，RP 因无 (*,G)/(S,G) 状态立即回 Register-Stop，DR 抑制约 60 秒后再探测/重发，形成周期约 60 秒的短暂封装流量，间隔正对应 Register-Suppression Timer 缺省值；该行为在 DR 与 RP 之间白白消耗链路带宽与 RP 处理资源，应核查该源的业务必要性、确认定时器取值未被调小，并评估在源侧或 DR 侧的管控手段。",
+    "scoring_points": [
+      "准确描述第一跳 DR 将组播数据单播封装为 Register 发往 RP、RP 解封装后沿 RPT 下发",
+      "说出 Register-Stop 的触发条件（RP 无接收者状态，或 RP 已完成 SPT 切换不再需要封装流量）",
+      "指出 DR 收到 Register-Stop 后启动 Register-Suppression Timer，缺省 60 秒",
+      "说明定时器到期前约 5 秒发送 Null-Register 探测、按 RP 应答决定恢复或继续抑制",
+      "判定现象一为 RP 切 SPT 后的正常抑制与探测机制，业务流量走 SPT",
+      "判定现象二源于 RP 无接收者状态导致周期性 Register/Register-Stop 循环，并指出 60 秒即抑制定时器周期"
+    ],
+    "tags": [
+      "RFC",
+      "RFC7761",
+      "RFC-2016",
+      "组播",
+      "PIM"
+    ]
+  },
+  {
+    "id": 51,
+    "difficulty": "难",
+    "category": {
+      "scope": "设备",
+      "protocol_layer": "IP层",
+      "lifecycle": "维护"
+    },
+    "scenario": "园区",
+    "device_type": "不限定",
+    "question": "某园区二层 VLAN 启用 IGMP Snooping 后，组播视频业务出现两类问题：初期正常，数周后同 VLAN 内非成员端口开始大量收到未知组播流量；此外该 VLAN 内没有组播路由器，多台接入交换机各自周期发出 IGMP General Query，查询报文开销明显。请从 IGMP Snooping 查询器（querier）选举规则、组表项维护与未知组播转发行为三方面系统分析成因链，并给出排查步骤与治理措施。",
+    "answer": "成因链分析：（1）查询器角色异常。VLAN 内没有组播路由器时，应由使能了 Snooping 查询器功能的交换机自行选举查询器；按 RFC 4541 的建议，IGMPv1/v2 场景比较接口 IP 地址，数值最低者当选，其余交换机保持非查询器。多台交换机各自发 Query 说明查询器选举失效或配置冲突（如多台都手工指定为查询器、地址比较异常）。（2）表项维护断裂。IGMPv3 主机不会主动周期性报告，只在收到 General Query 后按最大响应时间应答；一旦 Query 消失或查询间隔与成员老化时间不匹配，Snooping 组表项得不到 Report 刷新而老化删除，交换机失去组成员端口信息。（3）未知组播泛洪。表项删除后，该组流量在交换机看来是未知组播，缺省在 VLAN 内泛洪，非成员端口被动收到视频流量；而 224.0.0.0/24 本地控制组的流量本来就应始终在 VLAN 内泛洪、不得被 Snooping 过滤，这属于正常例外。排查步骤：在各交换机查看 IGMP Snooping 查询器角色与组表项（确认选举结果唯一、表项是否存在）；核对查询间隔与成员老化/保持时间配置的相对关系；在端口抓包确认 General Query 与 Report 是否周期出现、版本是否一致；确认路由器端口学习（PIM Hello/查询器检测）是否正常。治理措施：修复查询器配置使选举唯一（最低 IP 当选）；使查询间隔小于成员老化时间并留有余量；对确无组播需求的端口/VLAN 启用未知组播丢弃策略（保留 224.0.0.x 例外）；必要时启用 IGMP 过滤/限速防止报文风暴。",
+    "scoring_points": [
+      "指出无组播路由器时需由 Snooping 交换机选举查询器，IGMPv1/v2 按最低 IP 地址当选",
+      "判定多台交换机各自发 Query 反映查询器选举/配置异常而非正常负载分担",
+      "解释 IGMPv3 主机仅在被查询后报告，Query 消失或定时器不匹配导致组表项老化删除",
+      "说明表项缺失使组播退化为未知组播并在 VLAN 内泛洪，冲击非成员端口",
+      "明确 224.0.0.0/24 本地控制组流量应始终泛洪、不受 Snooping 约束的例外行为",
+      "给出可操作排查：核对查询器角色唯一性、查询间隔与老化时间关系、抓包验证 Query/Report",
+      "给出治理措施：唯一查询器、定时器匹配、未知组播按策略丢弃、路由器端口学习等"
+    ],
+    "tags": [
+      "组播",
+      "IGMP"
+    ]
+  },
+  {
+    "id": 52,
+    "difficulty": "中",
+    "category": {
+      "scope": "设备",
+      "protocol_layer": "IP层",
+      "lifecycle": "优化"
+    },
+    "scenario": "宽带城域",
+    "device_type": "交换机",
+    "question": "华为 CloudEngine 交换机（VRPv8）部署在城域网边缘做差分入口：接口入方向需按报文自身携带的 DSCP 做优先级映射，同时把匹配 ACL 3001 的业务流量重标记为 EF（DSCP 46）。请回答：（1）接口下信任 DSCP 的命令是什么？二层接口缺省信任什么？三层接口在信任配置上有什么限制？（2）写出用 MQC 实现\"匹配 ACL 3001 并 remark dscp ef\"并在接口入方向应用所需的全部关键命令。",
+    "answer": "（1）接口视图下配置 trust dscp。缺省情况下二层接口信任报文外层 802.1p 优先级（trust 8021p outer 的等效缺省行为），需显式配置 trust dscp 才按 DSCP 映射；三层接口不支持配置 trust 命令，缺省就按报文 DSCP 处理。被信任的优先级字段经 DiffServ 域的映射表折算为内部优先级，再进入队列调度。（2）MQC 配置：traffic classifier c1 进入流分类视图，配置 if-match acl 3001；traffic behavior b1 进入流行为视图，配置 remark dscp ef；traffic policy p1 进入流策略视图，配置 classifier c1 behavior b1 完成绑定；进入接口视图配置 traffic-policy p1 inbound 应用到入方向；最后执行 commit 提交（VRPv8 两阶段配置，未 commit 不生效）。",
+    "scoring_points": [
+      "接口视图下 trust dscp 命令正确",
+      "指出二层接口缺省信任 8021p outer（外层 802.1p 优先级）",
+      "指出三层接口不能配置 trust、缺省按报文 DSCP 处理",
+      "traffic classifier c1 下 if-match acl 3001 匹配条件正确",
+      "traffic behavior b1 下 remark dscp ef 重标记动作正确",
+      "traffic policy p1 中 classifier c1 behavior b1 绑定关系正确",
+      "接口 traffic-policy p1 inbound 应用方向正确，且执行 commit 使配置生效"
+    ],
+    "tags": [
+      "CLI",
+      "华为",
+      "VRPv8",
+      "QoS",
+      "DiffServ"
+    ]
+  },
+  {
+    "id": 53,
+    "difficulty": "中",
+    "category": {
+      "scope": "其他",
+      "protocol_layer": "IP层",
+      "lifecycle": "规划"
+    },
+    "scenario": "Internet",
+    "device_type": "不限定",
+    "question": "RFC 9435 为新应用申请分配新 DSCP 值给出了指导。请依据该 RFC 说明：（1）报文穿越 DiffServ 域边界时边界节点对 DSCP 存在哪些类处理行为？（2）对\"非预期/未定义 DSCP\"的推荐重标记方式是什么，为什么？（3）MPLS Short Pipe 模型下如何处理？（4）DSCP 值大于 7 且低 3 比特为 001 的值会遇到什么处理？DSCP 不大于 7 的值在聚合处理上有什么不同？",
+    "answer": "（1）边界节点对 DSCP 的行为包括透传、按映射表改写（re-mark）、将多个值聚合映射为单一值等典型类别，不同域间 DSCP 语义不保证端到端一致。（2）RFC 9435 建议对超出预期的 DSCP 值重标记为 0（Default，尽力而为），而不是任意改写为其他非缺省值——因为把未知流量标成某个特定更优等级会向下游注入未被认可的服务语义。（3）MPLS Short Pipe 模型中，出口侧按最终 IP 报文的 DSCP 做转发决策，RFC 9435 引用 RFC 8100 的建议：对非预期的 DSCP 重标记为 0。（4）DSCP 大于 7 且低 3 比特为 001 的值（形如 x001）在规范化中会被降级映射为 LE（Lower Effort，DSCP 1），避免其被当作更高等级；而 DSCP 不大于 7 的值（CS0、LE 及未分配的 2–7）语义固定且互不冲突，可以安全地聚合或映射为单一值而不引入错误的优先级判断。因此新应用应优先复用既有标准 DSCP，确需新值时通过 IANA 以 Standards Action 程序申请。",
+    "scoring_points": [
+      "列出边界节点对 DSCP 的处理行为（透传、改写/重标记、聚合映射等）",
+      "指出对非预期 DSCP 推荐重标记为 0（Default）而非改写为其他非缺省值，并说明原因",
+      "说明 MPLS Short Pipe 模型按出口 IP DSCP 转发、参照 RFC 8100 将非预期值置 0",
+      "指出 DSCP>7 且低 3 位为 001 的值会被降级映射为 LE（DSCP 1）",
+      "指出 DSCP≤7（CS0、LE 及未分配的 2–7）可安全聚合或映射为单一值",
+      "提及新 DSCP 分配需经 IANA Standards Action 程序"
+    ],
+    "tags": [
+      "RFC",
+      "RFC9435",
+      "RFC-2023",
+      "QoS",
+      "DiffServ"
+    ]
+  },
+  {
+    "id": 54,
+    "difficulty": "中",
+    "category": {
+      "scope": "网络",
+      "protocol_layer": "IP层",
+      "lifecycle": "规划"
+    },
+    "scenario": "通用",
+    "device_type": "不限定",
+    "question": "RFC 9956 定义了 NQB（Non-Queue-Building）DSCP 与 PHB，用于区分低时延、不排队的流量。请说明：（1）NQB 使用的 DSCP 值及其二进制表示、属于哪个 DSCP 池；（2）NQB PHB 与 Default PHB 在队列、调度权重与缓存容量上的差异化设计要求；（3）不支持 NQB 的节点应如何处理；（4）为防止滥用建议部署什么流量保护措施、对发送端有什么约束。",
+    "answer": "（1）NQB 使用 DSCP 45，二进制 101101，属于 Pool 3（经 RFC 8436 改为 Standards Action 分配，RFC 9956 据此获得 DSCP 45）。（2）队列与调度：NQB 流量应使用与 Default 分开的独立队列，但调度上获得与 Default 相等的转发待遇（例如 DRR/WFQ 中配置相等权重），不要求也不应默认获得比 Default 更高的优先级；缓存：NQB 队列的缓存应显著小于 Default 队列，RFC 建议至多约 10 毫秒的排队深度，因为 NQB 流量自身不应排队，小缓存既能限制排队型流量滥用又不影响正常突发。（3）不支持 NQB 的节点把 DSCP 45 按 Default PHB 处理，并且不得对该值做重标记。（4）流量保护：节点宜对每条微流实施限速（量级约路径速率的 1%）以惩罚把排队型流量标成 NQB 的滥用者；发送端义务包括把速率限制在路径容量的约 1% 以内并进行平滑（pacing）发送，避免突发造成排队。",
+    "scoring_points": [
+      "DSCP 45 = 二进制 101101，属于 Pool 3",
+      "NQB 使用独立于 Default 的队列，两队列分开",
+      "调度上与 Default 等权重/等同转发待遇，而非更高优先级",
+      "NQB 队列缓存显著小于 Default（建议不超过约 10ms）",
+      "不支持 NQB 的节点按 Default PHB 处理且不得重标记",
+      "提及微流级限速的流量保护措施与发送端限速（约 1% 路径容量）和平滑发送义务"
+    ],
+    "tags": [
+      "RFC",
+      "RFC9956",
+      "RFC-2026",
+      "QoS",
+      "DiffServ"
+    ]
+  },
+  {
+    "id": 55,
+    "difficulty": "中",
+    "category": {
+      "scope": "设备",
+      "protocol_layer": "IP层",
+      "lifecycle": "优化"
+    },
+    "scenario": "宽带城域",
+    "device_type": "交换机",
+    "question": "在华为 CloudEngine 交换机（VRPv8）上，需要对进入 10GE1/0/1 接口的流量中匹配 ACL 3001 的部分执行流量统计与限速（CIR 10 Mbit/s）。请写出 MQC 三要素的完整配置骨架：流分类及其匹配条件、流行为及其动作、流策略内的绑定关系，以及应用到接口的关键命令，并说明使整个配置生效还必须执行什么操作、为什么。",
+    "answer": "配置骨架如下：\ntraffic classifier c1\n if-match acl 3001\n#\ntraffic behavior b1\n statistic enable\n car cir 10000\n#\ntraffic policy p1\n classifier c1 behavior b1\n#\ninterface 10ge 1/0/1\n traffic-policy p1 inbound\n commit\n要素说明：traffic classifier 定义流分类，用 if-match 指定匹配规则（ACL、DSCP、8021p 等）；traffic behavior 定义流行为，配置统计（statistic enable）与承诺信息速率限速（car cir）等动作；traffic policy 把分类与行为绑定（classifier c1 behavior b1）；随后在接口视图用 traffic-policy p1 inbound 把流策略应用到入方向。由于 VRPv8 采用两阶段配置模式，以上命令输入后仅进入候选配置，必须执行 commit 提交并校验通过后才真正生效。",
+    "scoring_points": [
+      "traffic classifier c1 + if-match acl 3001 的流分类配置正确",
+      "traffic behavior b1 下配置 statistic enable 与 car cir 10000 动作",
+      "traffic policy p1 视图下用 classifier c1 behavior b1 完成绑定",
+      "接口视图下 traffic-policy p1 inbound 应用与应用方向正确",
+      "指出必须执行 commit 才生效",
+      "说明原因是 VRPv8 两阶段配置：命令先进候选配置，commit 后才校验生效",
+      "能说清三要素职责划分（分类匹配/行为动作/策略绑定）"
+    ],
+    "tags": [
+      "CLI",
+      "华为",
+      "VRPv8",
+      "QoS",
+      "MQC"
+    ]
+  },
+  {
+    "id": 56,
+    "difficulty": "中",
+    "category": {
+      "scope": "网络",
+      "protocol_layer": "IP层",
+      "lifecycle": "规划"
+    },
+    "scenario": "宽带城域",
+    "device_type": "不限定",
+    "question": "DiffServ 域边界限速可选用 RFC 2697 的单速三色标记器（srTCM）或 RFC 2698 的双速三色标记器（trTCM）。请分别列出两者的参数集合，说明各自双令牌桶的补充速率与颜色判定顺序，并从\"突发容纳能力\"与\"峰值速率约束\"两个维度比较差异、给出各自的适用场景。",
+    "answer": "srTCM（RFC 2697）：参数为 CIR、CBS、EBS 三个；令牌桶 C（容量 CBS）与 E（容量 EBS）以同一速率 CIR 补充令牌，色盲模式下对长度 B 的报文：若 Tc≥B 判绿并从 C 桶扣减；否则若 Te≥B 判黄并从 E 桶扣减；否则判红。它没有峰值速率的概念，黄色与红色只体现两个级别的突发超出程度，适合只约束平均速率、允许短时二级突发的接入场景。trTCM（RFC 2698）：参数为 CIR、CBS、PIR、PBS 四个；Tc 桶以 CIR、Tp 桶以 PIR 补充，色盲模式下对长度 B 的报文：若 Tp<B 直接判红；否则若 Tc≥B 判绿且两个桶同时扣减 B；否则判黄且仅从 Tp 桶扣减。它显式定义峰值速率 PIR，能同时约束平均速率与峰值速率，适合对用户同时承诺双速率合同（如带宽+突发峰值上限）的城域以太/BRAS 场景。两者都支持色盲（color-blind）与色感知（color-aware）两种模式，色感知模式下可沿用上游已标记的颜色。",
+    "scoring_points": [
+      "srTCM 参数：CIR、CBS、EBS（三参数）",
+      "trTCM 参数：CIR、CBS、PIR、PBS（四参数）",
+      "srTCM 双桶同速率 CIR 补充：C 桶不足再看 E 桶，依次判绿/黄/红",
+      "trTCM 双桶分别以 CIR/PIR 补充：先判 Tp，Tp 不足红，Tc 足够绿且双桶扣减，否则黄仅扣 Tp",
+      "指出 trTCM 能显式约束峰值速率 PIR，srTCM 无峰值速率概念仅体现二级突发",
+      "给出各自适用场景差异并提及两者均支持 color-blind/color-aware 模式"
+    ],
+    "tags": [
+      "RFC",
+      "RFC2697",
+      "RFC-1999",
+      "RFC2698",
+      "RFC-1999",
+      "QoS"
+    ]
+  },
+  {
+    "id": 57,
+    "difficulty": "中",
+    "category": {
+      "scope": "网络",
+      "protocol_layer": "IP层",
+      "lifecycle": "建设"
+    },
+    "scenario": "数据中心",
+    "device_type": "路由器",
+    "question": "某数据中心 SRv6（RFC 8754）组网中，报文需从入节点 A 发出，依次经过段端点节点 B、C 处理，最终到达目的地 D。请说明：（1）SRH 中 Segment List 的存放顺序规则、当前活动段由哪个字段指示、Last Entry 的含义；（2）报文从 A 发出时以及到达 B、C、D 时，IPv6 目的地址（DA）与 Segments Left（SL）各自的取值及变化过程；（3）Routing Type 与 Hdr Ext Len 字段的取值规则。",
+    "answer": "（1）SRH 是 IPv6 路由扩展头，Routing Type=4。Segment List 按处理顺序相反的方向存放：Segment List[0] 是最终目的地 D，其后依次是 C、B（即 List[0]=D、List[1]=C、List[2]=B）；当前活动段由 Segments Left（SL）指示，活动段即 List[SL]，IPv6 DA 始终等于 List[SL]；Last Entry 指向列表中最后一个有效表项的下标，本例为 2。（2）A 作为 ingress 构造报文：DA=List[2]=B，SL=2；到达 B 后，B 作为段端点执行 SL 减 1（SL=1）并把 DA 改写为 List[1]=C 转发；到达 C 后同样处理，SL 减为 0，DA 改写为 List[0]=D；报文到达 D 时 SL 已为 0，D 不再执行段处理，按后续扩展头/上层报文正常处理。（3）Routing Type 固定取 4 标识 SRH；Hdr Ext Len 以 8 字节为单位表示 SRH 长度且不包含最初 8 字节，即值=(SRH 总长-8)/8。",
+    "scoring_points": [
+      "Segment List 逆序存放，List[0] 为最终目的地 D",
+      "当前活动段由 Segments Left 指示，IPv6 DA 始终等于 List[SL]",
+      "A 发出报文时 DA=B、SL=2（B 位于 List[2]），Last Entry=2",
+      "B、C 处理过程正确：SL 依次减 1，DA 依次改写为 C、D",
+      "说明 SL=0 时到达 D 不再改写 DA，按普通 IPv6 后续头处理",
+      "Routing Type=4；Hdr Ext Len 以 8 字节为单位且不含最初 8 字节"
+    ],
+    "tags": [
+      "RFC",
+      "RFC8754",
+      "RFC-2020",
+      "SRv6"
+    ]
+  },
+  {
+    "id": 58,
+    "difficulty": "难",
+    "category": {
+      "scope": "网络",
+      "protocol_layer": "IP层",
+      "lifecycle": "建设"
+    },
+    "scenario": "数据中心",
+    "device_type": "不限定",
+    "question": "RFC 9800 定义的 G-SRv6（Generalized SRv6）用 G-SID 压缩缓解 128 位 SID 在 SRH 中的开销。请以 NEXT-CSID 编码方式为例回答：（1）G-SID 由哪些部分构成、什么是 128 位\"容器\"（container）、单个容器可容纳的 CSID 个数 K 的计算公式是什么、RFC 要求必须支持哪种长度组合；（2）当 Locator Block 为 32 位、Locator Node Function 长度（LNFL）为 16 位时，计算 K 值，并量化说明相对传统 SRH 每段 128 位的开销收益；（3）NEXT-CSID 中 CSID 取 0 的含义是什么；REPLACE-CSID 方式在容器结构与处理上有哪些主要差异（含各自新端点行为的 IANA 编号）。",
+    "answer": "（1）G-SID 把传统 128 位 SID 拆分为可共享的 Locator Block（LB）、Locator Node 与变长的 CSID（压缩段标识）：同一 LB/LN 下的多个 CSID 可以打包进一个 128 位的\"容器\"。NEXT-CSID 方式中，容器本身就是一个完整 SID（LB+LN+若干 CSID），单个容器容纳的 CSID 个数 K=floor((128-LBL)/LNFL)，其中 LBL 为 Locator Block 长度、LNFL 为 Locator Node Function 长度；RFC 9800 要求必须支持 32 位 LBL 与 16 位 LNFL 的组合。（2）LBL=32、LNFL=16 时 K=floor((128-32)/16)=6，即一个 128 位容器容纳 6 个 16 位 CSID。传统 SRH 每个段占 128 位，N 段路径的 Segment List 需 16N 字节；G-SRv6 下每个压缩段仅占 16 位，约为原来的 1/8，在数据中心长段路径场景下显著降低报头开销、减轻 MTU 与解析压力。（3）NEXT-CSID 中 CSID 取 0 为保留值，用作容器内的结束标记，表示其后的 CSID 不再有效；节点处理时通过\"取下一个 CSID、把剩余 CSID 向前推进\"的方式更新活动段，对应新端点行为如 End with NEXT-CSID（IANA 编号 43）。REPLACE-CSID 的主要差异：第一个列表元素仍是完整的 128 位 SID（含 LB），后续元素才是纯打包 CSID 的容器，此时 K=floor(128/LNFL)，RFC 要求至少支持 32 位 LNFL；处理时以新 CSID 替换当前活动 SID 中的节点部分，对应 End with REPLACE-CSID（IANA 编号 101）。两种方式由控制器按域内 GIB/LIB（全局/本地标识块）规划统一选用，RFC 9800 同时更新了 RFC 8754 的相关处理规则。",
+    "scoring_points": [
+      "G-SID 组成：共享的 Locator Block + Locator Node + 压缩 CSID，多个 CSID 打包进 128 位容器",
+      "NEXT-CSID 的 K=floor((128-LBL)/LNFL)，且 RFC 9800 要求支持 32 位 LB + 16 位 LNFL 组合",
+      "正确计算 K=6（LBL=32、LNFL=16 时）",
+      "量化收益：每压缩段 16 位对传统 128 位约 1/8 开销，降低 SRH 体积与 MTU 压力",
+      "指出 NEXT-CSID 中 CSID 0 为保留的结束标记",
+      "REPLACE-CSID：首元素为完整 128 位 SID、后续为纯 CSID 容器，K=floor(128/LNFL)",
+      "给出新端点行为 IANA 编号：End NEXT-CSID=43、End REPLACE-CSID=101"
+    ],
+    "tags": [
+      "RFC",
+      "RFC9800",
+      "RFC-2025",
+      "SRv6"
+    ]
+  },
+  {
+    "id": 59,
+    "difficulty": "难",
+    "category": {
+      "scope": "网络",
+      "protocol_layer": "IP层",
+      "lifecycle": "建设"
+    },
+    "scenario": "数据中心",
+    "device_type": "不限定",
+    "question": "某数据中心采用基于 RFC 7432 的 EVPN。CE1 通过 LAG 双归属到 PE1（Originating Router IP：10.0.0.1）与 PE2（10.0.0.2），该 Ethernet Segment 工作在 All-Active 模式，EVPN 实例为 VLAN-based 服务，ES 上承载 VLAN 10 与 VLAN 11 两个广播域。请回答：（1）完整描述 DF 选举过程（涉及的 EVPN 路由类型、选举前的定时器、排序与计算规则），并计算 VLAN 10 与 VLAN 11 各自由谁担任 DF；（2）解释 CE1 发出的 BUM 报文经一台 PE 复制到另一台 PE 后，为什么不会被再次发回 CE1，说明 ESI label 实现水平分割的机制。",
+    "answer": "（1）DF 选举过程：PE 发现 CE 双归属链路的 ESI 后，发布 Ethernet Segment（Type-4）路由，携带 ESI、Originating Router IP 与 ES-Import Route Target 扩展团体（只有同一 ES 的 PE 互相引入该路由），并启动定时器（RFC 缺省 3 秒）收集同 ES 其他 PE 的 ES 路由。到期后每台 PE 把该 ES 上全部 PE（含自身）的 IP 按数值升序排列，数值最小者 ordinal 为 0，依次编号；对 N 台 PE 的冗余组，VLAN-based 服务按 (V mod N) 选举：ordinal 为 i 的 PE 担任满足 V mod N=i 的 <ES, VLAN> 的 DF。本例 N=2：PE1（10.0.0.1）ordinal=0，PE2（10.0.0.2）ordinal=1；VLAN 10 满足 10 mod 2=0，DF 为 PE1；VLAN 11 满足 11 mod 2=1，DF 为 PE2。DF 放开该 VLAN 的 BUM/未知单播流量向 ES 的出方向转发，非 DF 持续阻塞该方向，两台 PE 在不同 VLAN 互为主备分担多目的流量；链路或端口故障时 PE 撤销 ES 路由，全组重新执行 service carving。（2）水平分割：设 CE1 的 BUM 报文哈希到非 DF 的 PE1，PE1 会向 EVI 内其他 PE（含对应 VLAN 的 DF PE2）复制；若 PE2 再发给 CE1 即成环路，故 PE2 必须丢弃。实现依赖 ESI label：各 PE 通过 Ethernet A-D per ES（Type-1）路由携带 ESI Label 扩展团体，分发自己为该 ES 分配的 ESI label（All-Active 模式必须分发；ingress replication 场景为下游分配标签）。ingress replication 下，非 DF 入 PE 在发往某台 egress PE 的 BUM 副本标签栈中压入该 egress PE 为该 ES 分配的 ESI label；egress PE 收到后检查该标签：若等于自己为该 ES 分配的标签，说明报文来自同一 ES 的对端，禁止向该 ES 转发；若为无法识别的 ESI label 则直接丢弃，从而切断 CE1→PE1→PE2→CE1 的回环路径。",
+    "scoring_points": [
+      "指出 Type-4（Ethernet Segment）路由用于 ES 自动机发现与 DF 选举，携带 ES-Import RT 限定引入范围",
+      "提到发布 ES 路由后先启动定时器（缺省 3 秒）收集其余 PE 路由再选举",
+      "PE 按 Originating Router IP 升序编号 ordinal，数值最小 IP 为 0",
+      "正确计算：VLAN 10 的 DF 为 PE1、VLAN 11 的 DF 为 PE2（10 mod 2=0、11 mod 2=1）",
+      "说明 DF 放开、非 DF 阻塞对应 VLAN 的 BUM/未知单播出方向流量，故障时撤销路由重算",
+      "水平分割判定：非 DF 入 PE 复制到 DF PE 的 BUM 必须被丢弃、不得回发 CE1",
+      "ESI label 经 Type-1（Ethernet A-D per ES）路由分发，egress PE 依据 ESI label 识别来源 ES 并阻止回发（含不认识即丢弃）"
+    ],
+    "tags": [
+      "RFC",
+      "RFC7432",
+      "RFC-2015",
+      "EVPN"
+    ]
+  },
+  {
+    "id": 60,
+    "difficulty": "中",
+    "category": {
+      "scope": "设备",
+      "protocol_layer": "IP层",
+      "lifecycle": "规划"
+    },
+    "scenario": "数据中心",
+    "device_type": "交换机",
+    "question": "华为 CloudEngine 交换机（VRPv8）作为 VTEP1（VTEP 源 IP 为 1.1.1.1）需与 VTEP2（2.2.2.2）、VTEP3（3.3.3.3）建立静态 VXLAN 隧道，VNI 为 5000，BUM 流量采用头端复制方式。请写出 NVE 接口相关的完整配置（创建 NVE 接口、配置 source、配置 VNI 的头端复制对端列表），说明 source 与 head-end peer-list 各自的作用及 source 地址使用的注意事项，并指出配置生效前必须执行的操作。",
+    "answer": "配置如下：\ninterface nve 1\n source 1.1.1.1\n vni 5000 head-end peer-list 2.2.2.2\n vni 5000 head-end peer-list 3.3.3.3\n#\ncommit\n说明：NVE 接口编号通常只能为 1（interface nve 1）；source 指定本端 VTEP 的源 IP，作为 VXLAN 报文外层封装的源地址，一般取 loopback 地址，且不同 VTEP 必须使用不同的 source IP，否则会导致流量转发错误；vni 5000 head-end peer-list 逐条配置该 VNI 的远端 VTEP，构成头端复制列表，BUM 流量由本端按列表逐一复制成单播发送，不依赖组播或 BGP EVPN 动态建立。由于 VRPv8 为两阶段配置，以上命令配置完成后必须执行 commit 提交才会真正生效。",
+    "scoring_points": [
+      "interface nve 1 创建 NVE 接口（编号为 1）",
+      "source 1.1.1.1 指定本端 VTEP 源 IP，作为 VXLAN 外层封装源地址",
+      "vni 5000 head-end peer-list 逐一配置远端 VTEP（2.2.2.2 与 3.3.3.3）",
+      "说明 head-end peer-list 用于 BUM 流量头端复制、按列表复制为单播",
+      "指出不同 VTEP 必须使用不同 source IP（否则转发错误），一般取 loopback",
+      "指出配置后需执行 commit 才生效（VRPv8 两阶段配置）"
+    ],
+    "tags": [
+      "CLI",
+      "华为",
+      "VRPv8",
+      "VXLAN"
+    ]
+  }
+]

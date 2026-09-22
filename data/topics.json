@@ -1,0 +1,1746 @@
+[
+  {
+    "id": 1,
+    "difficulty": "中",
+    "category": {
+      "scope": "设备",
+      "protocol_layer": "物理层",
+      "lifecycle": "规划"
+    },
+    "scenario": "数据中心",
+    "device_type": "不限定",
+    "topic": "100GBASE-LR4 四路 25G 波分复用通道与 SR4 并行 MMF 通道的结构及接口差异",
+    "tags": [
+      "以太网",
+      "光模块"
+    ]
+  },
+  {
+    "id": 2,
+    "difficulty": "简单",
+    "category": {
+      "scope": "设备",
+      "protocol_layer": "物理层",
+      "lifecycle": "维护"
+    },
+    "scenario": "园区",
+    "device_type": "交换机",
+    "topic": "802.3bt Type 4 的 PSE 90W 与 PD 71.3W 功率等级和 Type 3 的差异",
+    "tags": [
+      "PoE",
+      "以太网"
+    ]
+  },
+  {
+    "id": 3,
+    "difficulty": "中",
+    "category": {
+      "scope": "网络",
+      "protocol_layer": "物理层",
+      "lifecycle": "规划"
+    },
+    "scenario": "宽带城域",
+    "device_type": "不限定",
+    "topic": "G.694.1 DWDM 以 193.1THz 为基准的 50GHz 通道间隔与频率波长换算",
+    "tags": [
+      "DWDM",
+      "光传输"
+    ]
+  },
+  {
+    "id": 4,
+    "difficulty": "难",
+    "category": {
+      "scope": "网络",
+      "protocol_layer": "物理层",
+      "lifecycle": "规划"
+    },
+    "scenario": "数据中心",
+    "device_type": "不限定",
+    "topic": "400ZR 相干光 DP-16QAM 与 DP-QPSK 调制格式对 OSNR 和传输距离的权衡",
+    "tags": [
+      "相干光",
+      "光传输"
+    ]
+  },
+  {
+    "id": 5,
+    "difficulty": "中",
+    "category": {
+      "scope": "设备",
+      "protocol_layer": "物理层",
+      "lifecycle": "优化"
+    },
+    "scenario": "数据中心",
+    "device_type": "不限定",
+    "topic": "FlexE 通过 5Gbps 时隙 calendar 与 Shim 头实现 MAC 速率与 PHY 解耦",
+    "tags": [
+      "FlexE",
+      "光传输"
+    ]
+  },
+  {
+    "id": 6,
+    "difficulty": "中",
+    "category": {
+      "scope": "网络",
+      "protocol_layer": "物理层",
+      "lifecycle": "规划"
+    },
+    "scenario": "宽带城域",
+    "device_type": "路由器",
+    "topic": "OTN OTU4/ODU4 分层中 TCM 串联连接监视与 FEC 开销的跨域定位用法",
+    "tags": [
+      "OTN",
+      "光传输"
+    ]
+  },
+  {
+    "id": 7,
+    "difficulty": "简单",
+    "category": {
+      "scope": "设备",
+      "protocol_layer": "物理层",
+      "lifecycle": "维护"
+    },
+    "scenario": "数据中心",
+    "device_type": "交换机",
+    "topic": "光模块 DDM 实时收发光功率与温度告警阈值的判读方法",
+    "tags": [
+      "光模块",
+      "运维"
+    ]
+  },
+  {
+    "id": 8,
+    "difficulty": "难",
+    "category": {
+      "scope": "设备",
+      "protocol_layer": "物理层",
+      "lifecycle": "维护"
+    },
+    "scenario": "数据中心",
+    "device_type": "交换机",
+    "topic": "53.125Gbaud PAM4 链路预加重与接收端均衡调整及误码率劣化排查",
+    "tags": [
+      "PAM4",
+      "光传输"
+    ]
+  },
+  {
+    "id": 9,
+    "difficulty": "中",
+    "category": {
+      "scope": "设备",
+      "protocol_layer": "物理层",
+      "lifecycle": "规划"
+    },
+    "scenario": "园区",
+    "device_type": "不限定",
+    "topic": "10GBASE-T 与 10GBASE-SR 光口在时延功耗与距离上的选型权衡",
+    "tags": [
+      "以太网",
+      "光模块"
+    ]
+  },
+  {
+    "id": 10,
+    "difficulty": "简单",
+    "category": {
+      "scope": "设备",
+      "protocol_layer": "物理层",
+      "lifecycle": "其他"
+    },
+    "scenario": "通用",
+    "device_type": "不限定",
+    "topic": "千兆光口 1000BASE-X 不支持自协商强制速率与电口自协商的差异",
+    "tags": [
+      "以太网",
+      "自协商"
+    ]
+  },
+  {
+    "id": 11,
+    "difficulty": "简单",
+    "category": {
+      "scope": "网络",
+      "protocol_layer": "链路层",
+      "lifecycle": "建设"
+    },
+    "scenario": "宽带城域",
+    "device_type": "不限定",
+    "topic": "802.1Q TPID 0x8100 与 QinQ 外层标签 0x88a8 的识别处理差异",
+    "tags": [
+      "VLAN",
+      "QinQ"
+    ]
+  },
+  {
+    "id": 12,
+    "difficulty": "中",
+    "category": {
+      "scope": "设备",
+      "protocol_layer": "链路层",
+      "lifecycle": "建设"
+    },
+    "scenario": "园区",
+    "device_type": "交换机",
+    "topic": "华为 MUX VLAN 中 Principal Group Separate 子 VLAN 的互通隔离规则配置",
+    "tags": [
+      "CLI",
+      "华为",
+      "VRPv5",
+      "VLAN",
+      "MUX VLAN"
+    ]
+  },
+  {
+    "id": 13,
+    "difficulty": "简单",
+    "category": {
+      "scope": "设备",
+      "protocol_layer": "链路层",
+      "lifecycle": "维护"
+    },
+    "scenario": "通用",
+    "device_type": "交换机",
+    "topic": "华为 trunk 口 allowed vlan 与 PVID untagged 的放通规则",
+    "tags": [
+      "CLI",
+      "华为",
+      "VRPv5",
+      "VLAN"
+    ]
+  },
+  {
+    "id": 14,
+    "difficulty": "中",
+    "category": {
+      "scope": "网络",
+      "protocol_layer": "链路层",
+      "lifecycle": "维护"
+    },
+    "scenario": "通用",
+    "device_type": "不限定",
+    "topic": "RSTP Proposal/Agreement 握手同步机制与老式慢速过渡的差别",
+    "tags": [
+      "STP",
+      "RSTP"
+    ]
+  },
+  {
+    "id": 15,
+    "difficulty": "难",
+    "category": {
+      "scope": "网络",
+      "protocol_layer": "链路层",
+      "lifecycle": "维护"
+    },
+    "scenario": "园区",
+    "device_type": "不限定",
+    "topic": "STP TCN 逐级上报与 RSTP 置 TC 位泛洪的拓扑变化机制差异及 MAC 冲刷影响",
+    "tags": [
+      "STP",
+      "RSTP"
+    ]
+  },
+  {
+    "id": 16,
+    "difficulty": "中",
+    "category": {
+      "scope": "设备",
+      "protocol_layer": "链路层",
+      "lifecycle": "优化"
+    },
+    "scenario": "通用",
+    "device_type": "交换机",
+    "topic": "华为 iStack 堆叠成员优先级 mad 检测与堆叠线缆的配置要点",
+    "tags": [
+      "CLI",
+      "华为",
+      "VRPv5",
+      "堆叠"
+    ]
+  },
+  {
+    "id": 17,
+    "difficulty": "中",
+    "category": {
+      "scope": "设备",
+      "protocol_layer": "链路层",
+      "lifecycle": "维护"
+    },
+    "scenario": "通用",
+    "device_type": "交换机",
+    "topic": "华为 bpdu-protection 与 Cisco BPDU Guard 的触发恢复差异",
+    "tags": [
+      "CLI",
+      "华为",
+      "VRPv5",
+      "Cisco",
+      "IOS",
+      "版本差异",
+      "STP"
+    ]
+  },
+  {
+    "id": 18,
+    "difficulty": "中",
+    "category": {
+      "scope": "设备",
+      "protocol_layer": "链路层",
+      "lifecycle": "维护"
+    },
+    "scenario": "园区",
+    "device_type": "交换机",
+    "topic": "Root Guard 与 Loop Guard 分别防超级根与单向链路失效的场景行为",
+    "tags": [
+      "STP",
+      "故障诊断"
+    ]
+  },
+  {
+    "id": 19,
+    "difficulty": "简单",
+    "category": {
+      "scope": "设备",
+      "protocol_layer": "链路层",
+      "lifecycle": "维护"
+    },
+    "scenario": "数据中心",
+    "device_type": "交换机",
+    "topic": "Cisco IOS EtherChannel 的 PAgP 与 LACP 模式组合矩阵",
+    "tags": [
+      "CLI",
+      "Cisco",
+      "IOS",
+      "链路聚合"
+    ]
+  },
+  {
+    "id": 20,
+    "difficulty": "中",
+    "category": {
+      "scope": "设备",
+      "protocol_layer": "链路层",
+      "lifecycle": "优化"
+    },
+    "scenario": "数据中心",
+    "device_type": "交换机",
+    "topic": "华为 CE eth-trunk LACP 模式下 LACP System ID 冲突与最小活动链路阈值",
+    "tags": [
+      "CLI",
+      "华为",
+      "VRPv8",
+      "链路聚合",
+      "LACP"
+    ]
+  },
+  {
+    "id": 21,
+    "difficulty": "难",
+    "category": {
+      "scope": "网络",
+      "protocol_layer": "链路层",
+      "lifecycle": "优化"
+    },
+    "scenario": "数据中心",
+    "device_type": "防火墙",
+    "topic": "透明防火墙二层串接对 STP BPDU 透传与 MAC 学习的处理机制",
+    "tags": [
+      "防火墙",
+      "透明模式"
+    ]
+  },
+  {
+    "id": 22,
+    "difficulty": "中",
+    "category": {
+      "scope": "网络",
+      "protocol_layer": "链路层",
+      "lifecycle": "规划"
+    },
+    "scenario": "数据中心",
+    "device_type": "不限定",
+    "topic": "802.1AE MACsec MKA 会话中 KEK SAK 分发与密钥服务器选举规则",
+    "tags": [
+      "MACSec",
+      "MKA"
+    ]
+  },
+  {
+    "id": 23,
+    "difficulty": "中",
+    "category": {
+      "scope": "网络",
+      "protocol_layer": "链路层",
+      "lifecycle": "建设"
+    },
+    "scenario": "园区",
+    "device_type": "WLAN",
+    "topic": "802.11 数据帧三地址与 WDS 四地址的转换及 VLAN 标签映射",
+    "tags": [
+      "WLAN",
+      "802.11"
+    ]
+  },
+  {
+    "id": 24,
+    "difficulty": "中",
+    "category": {
+      "scope": "网络",
+      "protocol_layer": "链路层",
+      "lifecycle": "维护"
+    },
+    "scenario": "宽带城域",
+    "device_type": "路由器",
+    "topic": "路由式代理 ARP 与本地代理 ARP 的响应范围差异及误配影响",
+    "tags": [
+      "ARP"
+    ]
+  },
+  {
+    "id": 25,
+    "difficulty": "难",
+    "category": {
+      "scope": "网络",
+      "protocol_layer": "链路层",
+      "lifecycle": "维护"
+    },
+    "scenario": "宽带城域",
+    "device_type": "路由器",
+    "topic": "免费 ARP 的地址冲突检测与 VRRP 主切换表项刷新两种用途及字段特征",
+    "tags": [
+      "ARP"
+    ]
+  },
+  {
+    "id": 26,
+    "difficulty": "难",
+    "category": {
+      "scope": "设备",
+      "protocol_layer": "链路层",
+      "lifecycle": "维护"
+    },
+    "scenario": "园区",
+    "device_type": "交换机",
+    "topic": "Cisco IOS DHCP Snooping 绑定表失效导致 DAI 误拦 ARP 的联动排查",
+    "tags": [
+      "CLI",
+      "Cisco",
+      "IOS",
+      "DHCP",
+      "ARP"
+    ]
+  },
+  {
+    "id": 27,
+    "difficulty": "简单",
+    "category": {
+      "scope": "网络",
+      "protocol_layer": "链路层",
+      "lifecycle": "其他"
+    },
+    "scenario": "园区",
+    "device_type": "路由器",
+    "topic": "VRRP 虚拟 MAC 00-00-5E-00-01-VRID 与协议号 112 细节",
+    "tags": [
+      "RFC",
+      "RFC9568",
+      "RFC-2024",
+      "VRRP"
+    ]
+  },
+  {
+    "id": 28,
+    "difficulty": "中",
+    "category": {
+      "scope": "设备",
+      "protocol_layer": "链路层",
+      "lifecycle": "维护"
+    },
+    "scenario": "数据中心",
+    "device_type": "交换机",
+    "topic": "华为 CE MAC flapping 检测与 MAC move 惩罚阻断的环路防护配置",
+    "tags": [
+      "CLI",
+      "华为",
+      "VRPv8",
+      "MAC"
+    ]
+  },
+  {
+    "id": 29,
+    "difficulty": "中",
+    "category": {
+      "scope": "设备",
+      "protocol_layer": "链路层",
+      "lifecycle": "建设"
+    },
+    "scenario": "园区",
+    "device_type": "交换机",
+    "topic": "华为 VRPv8 CE 接口默认 shutdown 与 VRPv5 的差异",
+    "tags": [
+      "CLI",
+      "华为",
+      "VRPv5",
+      "VRPv8",
+      "版本差异",
+      "以太网"
+    ]
+  },
+  {
+    "id": 30,
+    "difficulty": "中",
+    "category": {
+      "scope": "设备",
+      "protocol_layer": "链路层",
+      "lifecycle": "维护"
+    },
+    "scenario": "园区",
+    "device_type": "交换机",
+    "topic": "华为与 Cisco 配置 MSTP 域参数的一致性要求",
+    "tags": [
+      "CLI",
+      "华为",
+      "VRPv5",
+      "Cisco",
+      "IOS",
+      "版本差异",
+      "MSTP"
+    ]
+  },
+  {
+    "id": 31,
+    "difficulty": "简单",
+    "category": {
+      "scope": "网络",
+      "protocol_layer": "IP层",
+      "lifecycle": "维护"
+    },
+    "scenario": "通用",
+    "device_type": "不限定",
+    "topic": "OSPF Type-5 LSA 的 Forwarding Address 语义与置零条件",
+    "tags": [
+      "RFC",
+      "RFC2328",
+      "RFC-1998",
+      "OSPF"
+    ]
+  },
+  {
+    "id": 32,
+    "difficulty": "中",
+    "category": {
+      "scope": "设备",
+      "protocol_layer": "IP层",
+      "lifecycle": "建设"
+    },
+    "scenario": "通用",
+    "device_type": "路由器",
+    "topic": "IOS passive-interface default 与华为 silent-interface 差异",
+    "tags": [
+      "CLI",
+      "Cisco",
+      "IOS",
+      "华为",
+      "VRPv5",
+      "版本差异",
+      "OSPF"
+    ]
+  },
+  {
+    "id": 33,
+    "difficulty": "简单",
+    "category": {
+      "scope": "网络",
+      "protocol_layer": "IP层",
+      "lifecycle": "其他"
+    },
+    "scenario": "宽带城域",
+    "device_type": "不限定",
+    "topic": "OSPFv3 报头 Instance-ID 字段支持 IPv6 多实例与地址族分离的差异",
+    "tags": [
+      "RFC",
+      "RFC5340",
+      "RFC-2008",
+      "OSPF",
+      "IPv6"
+    ]
+  },
+  {
+    "id": 34,
+    "difficulty": "中",
+    "category": {
+      "scope": "设备",
+      "protocol_layer": "IP层",
+      "lifecycle": "建设"
+    },
+    "scenario": "通用",
+    "device_type": "路由器",
+    "topic": "华为 VRPv5 ospf vlink-peer 虚链路参数与骨干区域连通的作用",
+    "tags": [
+      "CLI",
+      "华为",
+      "VRPv5",
+      "OSPF"
+    ]
+  },
+  {
+    "id": 35,
+    "difficulty": "中",
+    "category": {
+      "scope": "设备",
+      "protocol_layer": "IP层",
+      "lifecycle": "建设"
+    },
+    "scenario": "通用",
+    "device_type": "路由器",
+    "topic": "IOS ip vrf 与 IOS-XE vrf definition 配置结构差异",
+    "tags": [
+      "CLI",
+      "Cisco",
+      "IOS",
+      "IOS-XE",
+      "版本差异",
+      "VRF"
+    ]
+  },
+  {
+    "id": 36,
+    "difficulty": "中",
+    "category": {
+      "scope": "网络",
+      "protocol_layer": "IP层",
+      "lifecycle": "维护"
+    },
+    "scenario": "通用",
+    "device_type": "路由器",
+    "topic": "IS-IS DIS 选举可被更高优先级抢占且无 BDR 与 OSPF DR 行为差异",
+    "tags": [
+      "IS-IS",
+      "OSPF"
+    ]
+  },
+  {
+    "id": 37,
+    "difficulty": "中",
+    "category": {
+      "scope": "设备",
+      "protocol_layer": "IP层",
+      "lifecycle": "优化"
+    },
+    "scenario": "宽带城域",
+    "device_type": "路由器",
+    "topic": "华为 IS-IS cost-style wide 迁移与 narrow 6bit 限制",
+    "tags": [
+      "CLI",
+      "华为",
+      "VRPv5",
+      "IS-IS"
+    ]
+  },
+  {
+    "id": 38,
+    "difficulty": "中",
+    "category": {
+      "scope": "网络",
+      "protocol_layer": "IP层",
+      "lifecycle": "维护"
+    },
+    "scenario": "宽带城域",
+    "device_type": "路由器",
+    "topic": "IS-IS LSP 的 OL 过载位置位条件与 transit 流量避让",
+    "tags": [
+      "IS-IS",
+      "故障诊断"
+    ]
+  },
+  {
+    "id": 39,
+    "difficulty": "中",
+    "category": {
+      "scope": "设备",
+      "protocol_layer": "IP层",
+      "lifecycle": "维护"
+    },
+    "scenario": "通用",
+    "device_type": "路由器",
+    "topic": "Cisco IOS bgp always-compare-med 与 med 缺失按最差处理的默认规则",
+    "tags": [
+      "CLI",
+      "Cisco",
+      "IOS",
+      "BGP"
+    ]
+  },
+  {
+    "id": 40,
+    "difficulty": "简单",
+    "category": {
+      "scope": "网络",
+      "protocol_layer": "IP层",
+      "lifecycle": "其他"
+    },
+    "scenario": "Internet",
+    "device_type": "路由器",
+    "topic": "BGP Well-known Community no-export no-advertise local-AS 的值与作用域",
+    "tags": [
+      "RFC",
+      "RFC1997",
+      "RFC-1996",
+      "BGP"
+    ]
+  },
+  {
+    "id": 41,
+    "difficulty": "中",
+    "category": {
+      "scope": "网络",
+      "protocol_layer": "IP层",
+      "lifecycle": "维护"
+    },
+    "scenario": "数据中心",
+    "device_type": "路由器",
+    "topic": "RFC9687 BGP Send Hold Timer 针对持续拥塞卡死会话的强制断开机制",
+    "tags": [
+      "RFC",
+      "RFC9687",
+      "RFC-2024",
+      "BGP"
+    ]
+  },
+  {
+    "id": 42,
+    "difficulty": "难",
+    "category": {
+      "scope": "网络",
+      "protocol_layer": "IP层",
+      "lifecycle": "建设"
+    },
+    "scenario": "Internet",
+    "device_type": "路由器",
+    "topic": "RFC9774 弃用 AS_SET 与 AS_CONFED_SET 对聚合路由 ROV 验证的影响",
+    "tags": [
+      "RFC",
+      "RFC9774",
+      "RFC-2025",
+      "BGP"
+    ]
+  },
+  {
+    "id": 43,
+    "difficulty": "中",
+    "category": {
+      "scope": "网络",
+      "protocol_layer": "IP层",
+      "lifecycle": "优化"
+    },
+    "scenario": "数据中心",
+    "device_type": "路由器",
+    "topic": "RFC10005 BGP Link Bandwidth 扩展社区在 eBGP 多路径下的带宽加权分担",
+    "tags": [
+      "RFC",
+      "RFC10005",
+      "RFC-2026",
+      "BGP",
+      "ECMP"
+    ]
+  },
+  {
+    "id": 44,
+    "difficulty": "难",
+    "category": {
+      "scope": "网络",
+      "protocol_layer": "IP层",
+      "lifecycle": "规划"
+    },
+    "scenario": "数据中心",
+    "device_type": "交换机",
+    "topic": "RFC9815 BGP-LS SPF 替代 IGP 作为数据中心 Clos 叶脊底层路由的设计",
+    "tags": [
+      "RFC",
+      "RFC9815",
+      "RFC-2025",
+      "BGP",
+      "数据中心"
+    ]
+  },
+  {
+    "id": 45,
+    "difficulty": "中",
+    "category": {
+      "scope": "网络",
+      "protocol_layer": "IP层",
+      "lifecycle": "建设"
+    },
+    "scenario": "数据中心",
+    "device_type": "不限定",
+    "topic": "RFC9983 OSPFv2 Anycast Property 通告任意播前缀归属的用途",
+    "tags": [
+      "RFC",
+      "RFC9983",
+      "RFC-2026",
+      "OSPF"
+    ]
+  },
+  {
+    "id": 46,
+    "difficulty": "简单",
+    "category": {
+      "scope": "设备",
+      "protocol_layer": "IP层",
+      "lifecycle": "其他"
+    },
+    "scenario": "通用",
+    "device_type": "路由器",
+    "topic": "华为 current 与 saved-configuration 的存储生效关系",
+    "tags": [
+      "CLI",
+      "华为",
+      "VRPv5",
+      "运维"
+    ]
+  },
+  {
+    "id": 47,
+    "difficulty": "简单",
+    "category": {
+      "scope": "网络",
+      "protocol_layer": "IP层",
+      "lifecycle": "规划"
+    },
+    "scenario": "宽带城域",
+    "device_type": "路由器",
+    "topic": "VPN 的 RD Type 0 1 2 字段结构与 RT import export 方向语义",
+    "tags": [
+      "RFC",
+      "RFC4364",
+      "RFC-2006",
+      "VPN",
+      "VRF"
+    ]
+  },
+  {
+    "id": 48,
+    "difficulty": "难",
+    "category": {
+      "scope": "网络",
+      "protocol_layer": "IP层",
+      "lifecycle": "规划"
+    },
+    "scenario": "宽带城域",
+    "device_type": "路由器",
+    "topic": "跨 VRF 路由泄漏经 RT 交叉导入与 Hub-Spoke 中心出口的设计控制",
+    "tags": [
+      "VRF",
+      "方案设计"
+    ]
+  },
+  {
+    "id": 49,
+    "difficulty": "中",
+    "category": {
+      "scope": "网络",
+      "protocol_layer": "IP层",
+      "lifecycle": "建设"
+    },
+    "scenario": "园区",
+    "device_type": "交换机",
+    "topic": "IGMPv3 INCLUDE EXCLUDE 源过滤模式与 IGMPv2 兼容行为",
+    "tags": [
+      "RFC",
+      "RFC3376",
+      "RFC-2002",
+      "组播",
+      "IGMP"
+    ]
+  },
+  {
+    "id": 50,
+    "difficulty": "难",
+    "category": {
+      "scope": "网络",
+      "protocol_layer": "IP层",
+      "lifecycle": "维护"
+    },
+    "scenario": "园区",
+    "device_type": "交换机",
+    "topic": "PIM-SM 第一跳 DR 的 Register 封装与 RP 的 Register-Stop 抑制机制",
+    "tags": [
+      "RFC",
+      "RFC7761",
+      "RFC-2016",
+      "组播",
+      "PIM"
+    ]
+  },
+  {
+    "id": 51,
+    "difficulty": "难",
+    "category": {
+      "scope": "设备",
+      "protocol_layer": "IP层",
+      "lifecycle": "维护"
+    },
+    "scenario": "园区",
+    "device_type": "不限定",
+    "topic": "IGMP Snooping 查询器选举与未知组播泛洪抑制的联动排查",
+    "tags": [
+      "组播",
+      "IGMP"
+    ]
+  },
+  {
+    "id": 52,
+    "difficulty": "中",
+    "category": {
+      "scope": "设备",
+      "protocol_layer": "IP层",
+      "lifecycle": "优化"
+    },
+    "scenario": "宽带城域",
+    "device_type": "交换机",
+    "topic": "华为 CE 端口 trust dscp 8021p 与重标记的差分入口配置",
+    "tags": [
+      "CLI",
+      "华为",
+      "VRPv8",
+      "QoS",
+      "DiffServ"
+    ]
+  },
+  {
+    "id": 53,
+    "difficulty": "中",
+    "category": {
+      "scope": "其他",
+      "protocol_layer": "IP层",
+      "lifecycle": "规划"
+    },
+    "scenario": "Internet",
+    "device_type": "不限定",
+    "topic": "RFC9435 为新应用分配 DSCP 时短路径与重标记的规范考量",
+    "tags": [
+      "RFC",
+      "RFC9435",
+      "RFC-2023",
+      "QoS",
+      "DiffServ"
+    ]
+  },
+  {
+    "id": 54,
+    "difficulty": "中",
+    "category": {
+      "scope": "网络",
+      "protocol_layer": "IP层",
+      "lifecycle": "规划"
+    },
+    "scenario": "通用",
+    "device_type": "不限定",
+    "topic": "RFC9956 NQB PHB 用 DSCP 45 区分低时延非排队流量的调度设计",
+    "tags": [
+      "RFC",
+      "RFC9956",
+      "RFC-2026",
+      "QoS",
+      "DiffServ"
+    ]
+  },
+  {
+    "id": 55,
+    "difficulty": "中",
+    "category": {
+      "scope": "设备",
+      "protocol_layer": "IP层",
+      "lifecycle": "优化"
+    },
+    "scenario": "宽带城域",
+    "device_type": "交换机",
+    "topic": "华为 CE MQC 的 traffic classifier behavior policy 三要素绑定与流策略应用",
+    "tags": [
+      "CLI",
+      "华为",
+      "VRPv8",
+      "QoS",
+      "MQC"
+    ]
+  },
+  {
+    "id": 56,
+    "difficulty": "中",
+    "category": {
+      "scope": "网络",
+      "protocol_layer": "IP层",
+      "lifecycle": "规划"
+    },
+    "scenario": "宽带城域",
+    "device_type": "不限定",
+    "topic": "RFC2698 trTCM 双速三色与 RFC2697 srTCM 单速三色的参数差异",
+    "tags": [
+      "RFC",
+      "RFC2697",
+      "RFC-1999",
+      "RFC2698",
+      "RFC-1999",
+      "QoS"
+    ]
+  },
+  {
+    "id": 57,
+    "difficulty": "中",
+    "category": {
+      "scope": "网络",
+      "protocol_layer": "IP层",
+      "lifecycle": "建设"
+    },
+    "scenario": "数据中心",
+    "device_type": "路由器",
+    "topic": "SRv6 SRH 的 Segment List 与 Segments Left 处理",
+    "tags": [
+      "RFC",
+      "RFC8754",
+      "RFC-2020",
+      "SRv6"
+    ]
+  },
+  {
+    "id": 58,
+    "difficulty": "难",
+    "category": {
+      "scope": "网络",
+      "protocol_layer": "IP层",
+      "lifecycle": "建设"
+    },
+    "scenario": "数据中心",
+    "device_type": "不限定",
+    "topic": "RFC9800 G-SRv6 将 128bit SID 压缩为 16 32bit NSID 的编码机制",
+    "tags": [
+      "RFC",
+      "RFC9800",
+      "RFC-2025",
+      "SRv6"
+    ]
+  },
+  {
+    "id": 59,
+    "difficulty": "难",
+    "category": {
+      "scope": "网络",
+      "protocol_layer": "IP层",
+      "lifecycle": "建设"
+    },
+    "scenario": "数据中心",
+    "device_type": "不限定",
+    "topic": "EVPN ESI 多活场景 DF 选举与水平分割本地转发的防环机制",
+    "tags": [
+      "RFC",
+      "RFC7432",
+      "RFC-2015",
+      "EVPN"
+    ]
+  },
+  {
+    "id": 60,
+    "difficulty": "中",
+    "category": {
+      "scope": "设备",
+      "protocol_layer": "IP层",
+      "lifecycle": "规划"
+    },
+    "scenario": "数据中心",
+    "device_type": "交换机",
+    "topic": "华为 CE NVE 接口 source 与 vni head-end peer-list 的 VTEP 配置",
+    "tags": [
+      "CLI",
+      "华为",
+      "VRPv8",
+      "VXLAN"
+    ]
+  },
+  {
+    "id": 61,
+    "difficulty": "简单",
+    "category": {
+      "scope": "其他",
+      "protocol_layer": "传输层",
+      "lifecycle": "其他"
+    },
+    "scenario": "通用",
+    "device_type": "不限定",
+    "topic": "RFC9293 将窗口管理等扩展并入 TCP 基础规范并废止 RFC793 的范围",
+    "tags": [
+      "RFC",
+      "RFC9293",
+      "RFC-2022",
+      "TCP"
+    ]
+  },
+  {
+    "id": 62,
+    "difficulty": "难",
+    "category": {
+      "scope": "设备",
+      "protocol_layer": "传输层",
+      "lifecycle": "维护"
+    },
+    "scenario": "Internet",
+    "device_type": "防火墙",
+    "topic": "SYN Cookie 用编码 MSS 与计数器的 ISN 实现无状态防御 SYN flood",
+    "tags": [
+      "TCP",
+      "安全"
+    ]
+  },
+  {
+    "id": 63,
+    "difficulty": "简单",
+    "category": {
+      "scope": "网络",
+      "protocol_layer": "传输层",
+      "lifecycle": "优化"
+    },
+    "scenario": "通用",
+    "device_type": "不限定",
+    "topic": "TCP Window Scale 选项仅在 SYN 中协商且 shift count 范围 0 到 14",
+    "tags": [
+      "TCP"
+    ]
+  },
+  {
+    "id": 64,
+    "difficulty": "中",
+    "category": {
+      "scope": "网络",
+      "protocol_layer": "传输层",
+      "lifecycle": "优化"
+    },
+    "scenario": "通用",
+    "device_type": "不限定",
+    "topic": "TIME_WAIT 保持 2MSL 的目的与高并发短连接场景的调优手段",
+    "tags": [
+      "TCP"
+    ]
+  },
+  {
+    "id": 65,
+    "difficulty": "难",
+    "category": {
+      "scope": "网络",
+      "protocol_layer": "传输层",
+      "lifecycle": "维护"
+    },
+    "scenario": "通用",
+    "device_type": "不限定",
+    "topic": "Nagle 与 Delayed ACK 相互作用引发 40ms 额外时延的诊断",
+    "tags": [
+      "TCP",
+      "故障诊断"
+    ]
+  },
+  {
+    "id": 66,
+    "difficulty": "难",
+    "category": {
+      "scope": "网络",
+      "protocol_layer": "传输层",
+      "lifecycle": "维护"
+    },
+    "scenario": "数据中心",
+    "device_type": "防火墙",
+    "topic": "TCP RST 合法触发与异常注入的抓包判别及防火墙静默丢包差异",
+    "tags": [
+      "TCP",
+      "故障诊断"
+    ]
+  },
+  {
+    "id": 67,
+    "difficulty": "中",
+    "category": {
+      "scope": "网络",
+      "protocol_layer": "传输层",
+      "lifecycle": "维护"
+    },
+    "scenario": "通用",
+    "device_type": "不限定",
+    "topic": "SACK 选项辅助判别部分丢包与虚假重传 spurious RTO",
+    "tags": [
+      "TCP"
+    ]
+  },
+  {
+    "id": 68,
+    "difficulty": "中",
+    "category": {
+      "scope": "网络",
+      "protocol_layer": "传输层",
+      "lifecycle": "优化"
+    },
+    "scenario": "通用",
+    "device_type": "不限定",
+    "topic": "RFC9768 AccECN 通过三次 ACK 精确反馈 ECN 标记的协商机制",
+    "tags": [
+      "RFC",
+      "RFC9768",
+      "RFC-2026",
+      "TCP",
+      "ECN"
+    ]
+  },
+  {
+    "id": 69,
+    "difficulty": "简单",
+    "category": {
+      "scope": "网络",
+      "protocol_layer": "传输层",
+      "lifecycle": "其他"
+    },
+    "scenario": "通用",
+    "device_type": "不限定",
+    "topic": "UDP 校验和在 IPv4 可置 0 而 IPv6 必须计算的处理差异",
+    "tags": [
+      "RFC",
+      "RFC768",
+      "RFC-1980",
+      "UDP"
+    ]
+  },
+  {
+    "id": 70,
+    "difficulty": "简单",
+    "category": {
+      "scope": "网络",
+      "protocol_layer": "传输层",
+      "lifecycle": "其他"
+    },
+    "scenario": "通用",
+    "device_type": "不限定",
+    "topic": "RFC9369 QUIC Version 2 的版本号设计目的与版本协商流程",
+    "tags": [
+      "RFC",
+      "RFC9369",
+      "RFC-2023",
+      "QUIC"
+    ]
+  },
+  {
+    "id": 71,
+    "difficulty": "难",
+    "category": {
+      "scope": "网络",
+      "protocol_layer": "传输层",
+      "lifecycle": "维护"
+    },
+    "scenario": "数据中心",
+    "device_type": "不限定",
+    "topic": "QUIC Connection ID 支持连接迁移与 NAT rebinding 及对 LB 哈希的影响",
+    "tags": [
+      "RFC",
+      "RFC9000",
+      "RFC-2021",
+      "QUIC",
+      "负载均衡"
+    ]
+  },
+  {
+    "id": 72,
+    "difficulty": "难",
+    "category": {
+      "scope": "网络",
+      "protocol_layer": "传输层",
+      "lifecycle": "维护"
+    },
+    "scenario": "Internet",
+    "device_type": "防火墙",
+    "topic": "防火墙识别与控制 UDP 443 的 QUIC 流量及 HTTP/2 回退策略",
+    "tags": [
+      "防火墙",
+      "QUIC",
+      "安全"
+    ]
+  },
+  {
+    "id": 73,
+    "difficulty": "难",
+    "category": {
+      "scope": "设备",
+      "protocol_layer": "传输层",
+      "lifecycle": "规划"
+    },
+    "scenario": "数据中心",
+    "device_type": "不限定",
+    "topic": "四层与七层负载均衡设备的功能边界健康检查与选型权衡",
+    "tags": [
+      "负载均衡",
+      "方案设计"
+    ]
+  },
+  {
+    "id": 74,
+    "difficulty": "难",
+    "category": {
+      "scope": "设备",
+      "protocol_layer": "传输层",
+      "lifecycle": "优化"
+    },
+    "scenario": "数据中心",
+    "device_type": "不限定",
+    "topic": "DSR 直接服务器返回模式的报文改写 ARP 网关与健康检查问题",
+    "tags": [
+      "负载均衡"
+    ]
+  },
+  {
+    "id": 75,
+    "difficulty": "中",
+    "category": {
+      "scope": "设备",
+      "protocol_layer": "传输层",
+      "lifecycle": "维护"
+    },
+    "scenario": "通用",
+    "device_type": "不限定",
+    "topic": "Cisco IOS ip tcp adjust-mss 与 MTU 协商避免隧道分片的配置",
+    "tags": [
+      "CLI",
+      "Cisco",
+      "IOS",
+      "TCP",
+      "MTU"
+    ]
+  },
+  {
+    "id": 76,
+    "difficulty": "中",
+    "category": {
+      "scope": "设备",
+      "protocol_layer": "其他",
+      "lifecycle": "规划"
+    },
+    "scenario": "数据中心",
+    "device_type": "防火墙",
+    "topic": "防火墙 Trust Untrust DMZ 与 Local 安全区域间的策略方向模型",
+    "tags": [
+      "防火墙",
+      "安全区域"
+    ]
+  },
+  {
+    "id": 77,
+    "difficulty": "中",
+    "category": {
+      "scope": "设备",
+      "protocol_layer": "其他",
+      "lifecycle": "建设"
+    },
+    "scenario": "园区",
+    "device_type": "防火墙",
+    "topic": "状态检测防火墙对 FTP 等多通道协议的 ALG 应用层网关处理",
+    "tags": [
+      "防火墙",
+      "ALG"
+    ]
+  },
+  {
+    "id": 78,
+    "difficulty": "中",
+    "category": {
+      "scope": "网络",
+      "protocol_layer": "其他",
+      "lifecycle": "维护"
+    },
+    "scenario": "宽带城域",
+    "device_type": "防火墙",
+    "topic": "防火墙 twice NAT 双向转换与 NAT 策略匹配顺序的转换故障排查",
+    "tags": [
+      "防火墙",
+      "NAT",
+      "故障诊断"
+    ]
+  },
+  {
+    "id": 79,
+    "difficulty": "难",
+    "category": {
+      "scope": "设备",
+      "protocol_layer": "其他",
+      "lifecycle": "维护"
+    },
+    "scenario": "数据中心",
+    "device_type": "防火墙",
+    "topic": "防火墙双机热备 HRP 状态同步与 VGMP 抢占的倒换机制",
+    "tags": [
+      "防火墙",
+      "双机热备"
+    ]
+  },
+  {
+    "id": 80,
+    "difficulty": "难",
+    "category": {
+      "scope": "设备",
+      "protocol_layer": "其他",
+      "lifecycle": "维护"
+    },
+    "scenario": "园区",
+    "device_type": "防火墙",
+    "topic": "防火墙会话表老化机制与长连接 TCP 超时保活的业务中断排查",
+    "tags": [
+      "防火墙",
+      "会话表"
+    ]
+  },
+  {
+    "id": 81,
+    "difficulty": "中",
+    "category": {
+      "scope": "网络",
+      "protocol_layer": "其他",
+      "lifecycle": "规划"
+    },
+    "scenario": "园区",
+    "device_type": "WLAN",
+    "topic": "Wi-Fi 6 OFDMA 按 RU 细粒度调度与 TWT 目标唤醒时间的空口效率",
+    "tags": [
+      "WLAN",
+      "802.11ax"
+    ]
+  },
+  {
+    "id": 82,
+    "difficulty": "简单",
+    "category": {
+      "scope": "网络",
+      "protocol_layer": "其他",
+      "lifecycle": "建设"
+    },
+    "scenario": "园区",
+    "device_type": "WLAN",
+    "topic": "CAPWAP 控制 5246 与数据 5247 UDP 端口及 DTLS 加密选择",
+    "tags": [
+      "RFC",
+      "RFC5415",
+      "RFC-2009",
+      "WLAN",
+      "CAPWAP"
+    ]
+  },
+  {
+    "id": 83,
+    "difficulty": "难",
+    "category": {
+      "scope": "网络",
+      "protocol_layer": "其他",
+      "lifecycle": "优化"
+    },
+    "scenario": "园区",
+    "device_type": "WLAN",
+    "topic": "802.11r FT 快速漫游与 802.11k v 邻居报告辅助的联动优化",
+    "tags": [
+      "WLAN",
+      "漫游"
+    ]
+  },
+  {
+    "id": 84,
+    "difficulty": "中",
+    "category": {
+      "scope": "设备",
+      "protocol_layer": "其他",
+      "lifecycle": "建设"
+    },
+    "scenario": "园区",
+    "device_type": "WLAN",
+    "topic": "华为 AC 三类 profile 的绑定关系与配置顺序",
+    "tags": [
+      "CLI",
+      "华为",
+      "VRPv5",
+      "WLAN",
+      "AC"
+    ]
+  },
+  {
+    "id": 85,
+    "difficulty": "难",
+    "category": {
+      "scope": "设备",
+      "protocol_layer": "其他",
+      "lifecycle": "规划"
+    },
+    "scenario": "园区",
+    "device_type": "WLAN",
+    "topic": "WLAN 直接转发与隧道转发模式的数据路径与 CAPWAP 依赖差异",
+    "tags": [
+      "WLAN"
+    ]
+  },
+  {
+    "id": 86,
+    "difficulty": "简单",
+    "category": {
+      "scope": "网络",
+      "protocol_layer": "其他",
+      "lifecycle": "建设"
+    },
+    "scenario": "园区",
+    "device_type": "不限定",
+    "topic": "DHCPv4 租约的 T1 0.5 续租与 T2 0.875 重绑定时间点",
+    "tags": [
+      "RFC",
+      "RFC2131",
+      "RFC-1997",
+      "DHCP"
+    ]
+  },
+  {
+    "id": 87,
+    "difficulty": "中",
+    "category": {
+      "scope": "设备",
+      "protocol_layer": "其他",
+      "lifecycle": "建设"
+    },
+    "scenario": "宽带城域",
+    "device_type": "路由器",
+    "topic": "华为 DHCP 中继 information enable 与 Option82 插入的用户定位",
+    "tags": [
+      "CLI",
+      "华为",
+      "VRPv5",
+      "DHCP"
+    ]
+  },
+  {
+    "id": 88,
+    "difficulty": "难",
+    "category": {
+      "scope": "设备",
+      "protocol_layer": "其他",
+      "lifecycle": "维护"
+    },
+    "scenario": "园区",
+    "device_type": "WLAN",
+    "topic": "AP 通过 DHCP Option 43 获得 AC 地址的上线发现流程与排错",
+    "tags": [
+      "DHCP",
+      "WLAN",
+      "CAPWAP"
+    ]
+  },
+  {
+    "id": 89,
+    "difficulty": "难",
+    "category": {
+      "scope": "网络",
+      "protocol_layer": "其他",
+      "lifecycle": "规划"
+    },
+    "scenario": "园区",
+    "device_type": "不限定",
+    "topic": "RFC9915 DHCPv6 与 RA 的 M O 位决定 SLAAC 及有状态无状态地址获取",
+    "tags": [
+      "RFC",
+      "RFC9915",
+      "RFC-2026",
+      "DHCP",
+      "IPv6"
+    ]
+  },
+  {
+    "id": 90,
+    "difficulty": "中",
+    "category": {
+      "scope": "其他",
+      "protocol_layer": "其他",
+      "lifecycle": "维护"
+    },
+    "scenario": "通用",
+    "device_type": "防火墙",
+    "topic": "RFC9850 SSLKEYLOGFILE 统一格式支撑 TLS 会话解密调试与密钥保护",
+    "tags": [
+      "RFC",
+      "RFC9850",
+      "RFC-2026",
+      "TLS",
+      "安全"
+    ]
+  },
+  {
+    "id": 91,
+    "difficulty": "难",
+    "category": {
+      "scope": "网络",
+      "protocol_layer": "其他",
+      "lifecycle": "建设"
+    },
+    "scenario": "Internet",
+    "device_type": "不限定",
+    "topic": "RFC9460 SVCB HTTPS RR 的 AliasMode ServiceMode 与端点参数选择",
+    "tags": [
+      "RFC",
+      "RFC9460",
+      "RFC-2023",
+      "DNS"
+    ]
+  },
+  {
+    "id": 92,
+    "difficulty": "简单",
+    "category": {
+      "scope": "其他",
+      "protocol_layer": "其他",
+      "lifecycle": "其他"
+    },
+    "scenario": "Internet",
+    "device_type": "不限定",
+    "topic": "RFC9619 规定 DNS 更新 QDCOUNT 必须为 1 的历史兼容原因",
+    "tags": [
+      "RFC",
+      "RFC9619",
+      "RFC-2024",
+      "DNS"
+    ]
+  },
+  {
+    "id": 93,
+    "difficulty": "难",
+    "category": {
+      "scope": "网络",
+      "protocol_layer": "其他",
+      "lifecycle": "维护"
+    },
+    "scenario": "Internet",
+    "device_type": "不限定",
+    "topic": "DNSSEC 的 RRSIG DS 信任链验证与 KSK ZSK 分层的故障排查",
+    "tags": [
+      "RFC",
+      "RFC4035",
+      "RFC-2005",
+      "DNS",
+      "DNSSEC"
+    ]
+  },
+  {
+    "id": 94,
+    "difficulty": "简单",
+    "category": {
+      "scope": "设备",
+      "protocol_layer": "其他",
+      "lifecycle": "优化"
+    },
+    "scenario": "园区",
+    "device_type": "WLAN",
+    "topic": "2.4GHz 仅 1 6 11 三个不重叠 20MHz 信道与 40MHz 绑定退避机制",
+    "tags": [
+      "WLAN",
+      "射频"
+    ]
+  },
+  {
+    "id": 95,
+    "difficulty": "中",
+    "category": {
+      "scope": "设备",
+      "protocol_layer": "其他",
+      "lifecycle": "优化"
+    },
+    "scenario": "园区",
+    "device_type": "WLAN",
+    "topic": "WLAN 的 CAC 准入与 AC 负载均衡对高密接入的控制配置",
+    "tags": [
+      "WLAN",
+      "CAC"
+    ]
+  },
+  {
+    "id": 96,
+    "difficulty": "难",
+    "category": {
+      "scope": "其他",
+      "protocol_layer": "其他",
+      "lifecycle": "其他"
+    },
+    "scenario": "Internet",
+    "device_type": "不限定",
+    "topic": "RFC9204 QPACK 动态表与阻塞避免相对 HPACK 的改进",
+    "tags": [
+      "RFC",
+      "RFC9204",
+      "RFC-2022",
+      "HTTP/3"
+    ]
+  },
+  {
+    "id": 97,
+    "difficulty": "中",
+    "category": {
+      "scope": "设备",
+      "protocol_layer": "其他",
+      "lifecycle": "维护"
+    },
+    "scenario": "通用",
+    "device_type": "不限定",
+    "topic": "华为 SNMPv3 的 snmp-agent usm-user 与 VACM 视图权限配置核查",
+    "tags": [
+      "CLI",
+      "华为",
+      "VRPv5",
+      "SNMP"
+    ]
+  },
+  {
+    "id": 98,
+    "difficulty": "中",
+    "category": {
+      "scope": "设备",
+      "protocol_layer": "其他",
+      "lifecycle": "建设"
+    },
+    "scenario": "通用",
+    "device_type": "不限定",
+    "topic": "NETCONF over SSH 830 端口的 capability 协商与 YANG 数据建模",
+    "tags": [
+      "RFC",
+      "RFC6241",
+      "RFC-2011",
+      "NETCONF",
+      "YANG"
+    ]
+  },
+  {
+    "id": 99,
+    "difficulty": "中",
+    "category": {
+      "scope": "设备",
+      "protocol_layer": "其他",
+      "lifecycle": "规划"
+    },
+    "scenario": "数据中心",
+    "device_type": "WLAN",
+    "topic": "802.1X 的 EAPOL EtherType 0x888E 认证流程与 EAP 中继要求",
+    "tags": [
+      "802.1X",
+      "安全"
+    ]
+  },
+  {
+    "id": 100,
+    "difficulty": "难",
+    "category": {
+      "scope": "网络",
+      "protocol_layer": "其他",
+      "lifecycle": "规划"
+    },
+    "scenario": "Internet",
+    "device_type": "不限定",
+    "topic": "RPKI ROA 与 BGP Origin Validation 部署防范前缀劫持的机制",
+    "tags": [
+      "RPKI",
+      "BGP",
+      "安全"
+    ]
+  }
+]

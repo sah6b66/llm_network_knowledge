@@ -1,0 +1,32 @@
+[
+  {
+    "id": 1,
+    "difficulty": "简单",
+    "category": { "scope": "设备", "protocol_layer": "其他", "lifecycle": "建设" },
+    "scenario": "通用",
+    "device_type": "交换机",
+    "question": "在华为 VRPv8 平台（例如 CloudEngine 系列交换机）上，通过命令行完成一段配置修改后，必须再执行哪条命令配置才会生效？这一行为与 VRPv5 平台（例如 S 系列交换机）有何本质区别？",
+    "answer": "必须执行 commit 命令。VRPv8 采用两阶段配置模式：命令输入后先进入候选配置（candidate configuration），并不立即生效；执行 commit 后配置经校验生效，成为运行配置。而 VRPv5 采用一阶段配置模式，命令输入并回车后立即生效，无需额外提交动作。",
+    "scoring_points": [
+      "明确指出需执行 commit 命令",
+      "说明 VRPv8 为两阶段配置：命令先进入候选配置，提交后才生效",
+      "说明 VRPv5 为一阶段配置：命令立即生效"
+    ],
+    "tags": ["CLI", "华为", "VRPv8", "VRPv5", "版本差异"]
+  },
+  {
+    "id": 2,
+    "difficulty": "简单",
+    "category": { "scope": "设备", "protocol_layer": "其他", "lifecycle": "建设" },
+    "scenario": "通用",
+    "device_type": "路由器",
+    "question": "在 Cisco IOS 中，将当前运行配置保存为启动配置的常用命令是什么？请写出至少两种等价写法，并说明它们写入的目标位置。",
+    "answer": "copy running-config startup-config，以及等价写法 write memory（可简写为 write mem）。两者均将 RAM 中的 running-config 写入 NVRAM 作为启动配置 startup-config。",
+    "scoring_points": [
+      "写出 copy running-config startup-config",
+      "写出等价命令 write memory 或其简写",
+      "说明作用是把 running-config 从 RAM 保存到 NVRAM 的 startup-config"
+    ],
+    "tags": ["CLI", "Cisco", "IOS"]
+  }
+]

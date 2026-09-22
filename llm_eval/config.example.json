@@ -1,0 +1,26 @@
+{
+  "mode": "evaluate",
+  "benchmark_dir": "../data/benchmark",
+  "report_dir": "../report",
+  "evaluatee_llm": {
+    "provider": "evaluatee_llm_provider_name",
+    "api_url": "llm_url_exampel: https://open.bigmodel.cn/api/anthropic/v1/messages",
+    "api_key": "evaluatee_llm_key",
+    "model": "evaluatee_llm_model_name",
+    "timeout": 300,
+    "max_tokens": 32768,
+    "thinking": {"mode": "disabled"}
+  },
+  "judge_llm": {
+    "provider": "judge_llm_provider_name",
+    "api_url": "lm_url_exampel: https://open.bigmodel.cn/api/anthropic/v1/messages",
+    "api_key": "judge_llm_key",
+    "model": "judge_llm_model_name",
+    "timeout": 300,
+    "max_tokens": 128000,
+    "thinking": {"mode": "enabled"}
+  },
+  "concurrency": 4,
+  "max_retries": 2,
+  "temperature": 0.1
+}
