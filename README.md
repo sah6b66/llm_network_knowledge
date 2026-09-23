@@ -30,7 +30,7 @@
 │   ├── test_extract_hw_manual.py # extract_hw_manual.py 的单元测试
 │   └── fixtures/          # validate.py 的测试夹具
 ├── llm_eval/              # 评测引擎(作答 + 裁判打分,详见其 README)
-├── report/                # 评测产出(summary.md 为结果总览)
+├── report/                # 评测产出(每个模型一个子目录,含 RECORD / EVALUATION / summary)
 └── docs/                  # 历史规格与计划文档
 ```
 
@@ -72,6 +72,14 @@ python main.py --config config.json  # mode=execute 作答;mode=evaluate 裁判�
 
 ### 3. 查看报告
 
-产出在 `report/<模型>/` 下;跨模型结果总览见 [report/summary.md](report/summary.md)。
+产出在 `report/<模型>/` 下:`RECORD_<模型>_<思考模式>_<数据集>.json`(作答记录)、
+`EVALUATION_<裁判>_<模型>_<思考模式>_<数据集>.json`(逐题评分)与
+`EVALUATION_<裁判>_<模型>_<思考模式>_summary.md`(总结报告,按数据集分别统计,不做跨数据集合并)。
 
-首次全量评测:glm-4.7(非思考)× 裁判 glm-5.3,200 题平均 **4.42 / 5**(basic 4.55,detail 4.30)。
+已完成评测(裁判 glm-5.3,思考模式 disabled,综合评分 / 5):
+
+| 被评测模型 | common_basic | common_detail | huawei_device | rfc |
+|---|---|---|---|---|
+| glm-4.7 | 4.57 | 4.18 | 2.78 | 2.77 |
+| DeepSeek-V4-Flash | 4.15 | 4.01 | 2.47 | 2.35 |
+| Qwen3.8-27B | 3.63 | 3.14 | 1.99 | 1.65 |
