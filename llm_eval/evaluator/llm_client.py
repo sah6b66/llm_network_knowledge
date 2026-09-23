@@ -264,7 +264,8 @@ def _create_provider(node: Dict[str, Any]) -> _BaseProvider:
     provider_name = str(node.get("provider", "glm")).lower()
     api_url = node.get("api_url", "")
 
-    if "/anthropic" in api_url or "/api/anthropic" in api_url:
+    if "/anthropic" in api_url or "/api/anthropic" in api_url \
+            or str(api_url).rstrip("/").endswith("/v1/messages"):
         return AnthropicCompatibleProvider(node, _PROVIDER_CONFIGS["anthropic"])
 
     if provider_name in ("qianwen", "qw", "dashscope"):

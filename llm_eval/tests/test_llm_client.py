@@ -71,6 +71,17 @@ def test_thinking_injection_anthropic_by_url():
     assert all(m["role"] != "system" for m in p["messages"])
 
 
+def test_anthropic_routing_by_v1_messages_suffix():
+    from evaluator.llm_client import AnthropicCompatibleProvider
+    node = dict(NODE, provider="siliconflow",
+                api_url="https://api.siliconflow.cn/v1/messages")
+    c = LLMClient(node)
+    assert isinstance(c._provider, AnthropicCompatibleProvider)
+    r = c._provider._extract_response(
+        {"content": [{"type": "text", "text": "答案"}], "usage": {}})
+    assert r["success"] and r["content"] == "答案"
+
+
 def test_thinking_injection_dashscope():
     node = dict(NODE, provider="QianWen", api_url="https://x/dashscope/api")
     p = LLMClient(node)._provider._build_payload([], temperature=0.0)
