@@ -46,7 +46,16 @@ def _ok(content="答"):
 
 
 def test_sanitize_name():
-    assert sanitize_name('a/b\\c:d*e?f"g<h>i|j') == "a-b-c-d-e-f-g-h-i-j"
+    # 含 "/" 的模型名只取最后一段(如 org/model → model),其余非法字符替换为 "-"
+    assert sanitize_name("deepseek-ai/DeepSeek-V4-Flash") == "DeepSeek-V4-Flash"
+    assert sanitize_name('a/b\\c:d*e?f"g<h>i|j') == "b-c-d-e-f-g-h-i-j"
+
+
+def test_record_path_slash_model_name():
+    p = record_path(_cfg(__import__("pathlib").Path(".")).report_dir,
+                    "deepseek-ai/DeepSeek-V4-Flash", "disabled", "dataset_x")
+    assert p.parent.name == "DeepSeek-V4-Flash"
+    assert p.name == "RECORD_DeepSeek-V4-Flash_disabled_dataset_x.json"
 
 
 def test_record_path():

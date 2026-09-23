@@ -18,6 +18,8 @@ _ILLEGAL = '\\/:*?"<>|'
 
 
 def sanitize_name(s: str) -> str:
+    # 模型名常带路径形式前缀(如 deepseek-ai/DeepSeek-V4-Flash),只取最后一段作文件名
+    s = s.split("/")[-1]
     for ch in _ILLEGAL:
         s = s.replace(ch, "-")
     return s.strip()

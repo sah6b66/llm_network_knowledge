@@ -20,6 +20,7 @@ class LLMNode:
     timeout: int = 300
     max_tokens: int = 32768
     thinking_mode: str = "disabled"
+    ssl_verify: bool = False
 
 
 @dataclass
@@ -48,6 +49,9 @@ def _load_llm_node(name: str, raw: Any, need_conn: bool) -> LLMNode:
         max_tokens = int(raw.get("max_tokens", 32768))
     except (ValueError, TypeError) as e:
         raise ConfigError(f"{name}.timeout/max_tokens 必须为数值: {e}") from e
+    ssl_verify = raw.get("ssl_verify", False)
+    if not isinstance(ssl_verify, bool):
+        raise ConfigError(f"{name}.ssl_verify 必须为布尔值,收到:{ssl_verify!r}")
     node = LLMNode(
         provider=str(raw.get("provider", "glm")),
         api_url=str(raw.get("api_url", "")),
@@ -56,6 +60,7 @@ def _load_llm_node(name: str, raw: Any, need_conn: bool) -> LLMNode:
         timeout=timeout,
         max_tokens=max_tokens,
         thinking_mode=mode,
+        ssl_verify=ssl_verify,
     )
     if need_conn:
         for field in ("api_url", "api_key", "model"):

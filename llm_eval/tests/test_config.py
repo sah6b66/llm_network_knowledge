@@ -45,6 +45,21 @@ def test_defaults_applied(tmp_path):
     assert (c.concurrency, c.max_retries, c.temperature) == (4, 2, 0.1)
 
 
+def test_ssl_verify_defaults_false(tmp_path):
+    c = load_config(_write(tmp_path, VALID))
+    assert c.evaluatee_llm.ssl_verify is False
+    assert c.judge_llm.ssl_verify is False
+
+
+def test_ssl_verify_parsed(tmp_path):
+    cfg = json.loads(json.dumps(VALID))
+    cfg["evaluatee_llm"]["ssl_verify"] = True
+    cfg["judge_llm"]["ssl_verify"] = False
+    c = load_config(_write(tmp_path, cfg))
+    assert c.evaluatee_llm.ssl_verify is True
+    assert c.judge_llm.ssl_verify is False
+
+
 @pytest.mark.parametrize("mutate", [
     lambda c: c.pop("mode"),
     lambda c: c.update(mode="run"),
@@ -53,6 +68,8 @@ def test_defaults_applied(tmp_path):
     lambda c: c["evaluatee_llm"].update(api_key=""),
     lambda c: c["evaluatee_llm"].update(model=""),
     lambda c: c["evaluatee_llm"]["thinking"].update(mode="adaptive"),
+    lambda c: c["evaluatee_llm"].update(ssl_verify="false"),
+    lambda c: c["judge_llm"].update(ssl_verify=1),
     lambda c: c.update(concurrency=0),
     lambda c: c.update(concurrency="four"),
     lambda c: c.update(temperature="x"),

@@ -9,6 +9,7 @@
     "model": "evaluatee_llm_model_name",
     "timeout": 300,
     "max_tokens": 32768,
+    "ssl_verify": false,
     "thinking": {"mode": "disabled"}
   },
   "judge_llm": {
@@ -18,6 +19,7 @@
     "model": "judge_llm_model_name",
     "timeout": 300,
     "max_tokens": 128000,
+    "ssl_verify": false,
     "thinking": {"mode": "enabled"}
   },
   "concurrency": 4,

@@ -5,7 +5,8 @@
 
 ## 使用
 1. 复制 `config.example.json` 为 `config.json`,填写两个 LLM(被评测/裁判)的
-   连接信息与 thinking.mode(enabled/disabled)
+   连接信息与 thinking.mode(enabled/disabled);自签/内网 HTTPS 端点可将
+   `ssl_verify` 设为 `false`(缺省 false,跳过证书校验)
 2. 执行模式(`"mode": "execute"`):逐题调用被评测 LLM,产出
    `report/<模型>/RECORD_<模型>_<思考模式>_<数据集>.json`(支持并发与断点续跑,
    中断后重跑自动跳过已完成题目)

@@ -119,3 +119,15 @@ def test_invalid_thinking_mode_rejected():
     import pytest
     with pytest.raises(ValueError):
         LLMClient(dict(NODE, thinking={"mode": "adaptive"}))
+
+
+def test_ssl_verify_defaults_false():
+    c = LLMClient(dict(NODE))
+    assert c._provider._ssl_verify is False
+    assert c._provider._session.verify is False
+
+
+def test_ssl_verify_true_enables_certificate_check():
+    c = LLMClient(dict(NODE, ssl_verify=True))
+    assert c._provider._ssl_verify is True
+    assert c._provider._session.verify is True

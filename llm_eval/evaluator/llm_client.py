@@ -62,7 +62,7 @@ class _BaseProvider:
     """复制参考实现的 LLMProvider 基类,逐字保留:
     __init__(连接池/ssl_verify/api_key 的 ${ENV} 解析/timeout/max_tokens)、
     _resolve_api_key、_handle_request_error、_execute_request、close。
-    修改点:__init__ 去掉 self.config 之外无;保留原样即可。"""
+    修改点:ssl_verify 缺省改为 False(与配置文件缺省一致),其余保留原样。"""
 
     ERROR_NETWORK = "network"
     ERROR_TIMEOUT = "timeout"
@@ -87,7 +87,7 @@ class _BaseProvider:
         self._session.mount("https://", adapter)
         self._session.mount("http://", adapter)
 
-        self._ssl_verify = config.get("ssl_verify", True)
+        self._ssl_verify = config.get("ssl_verify", False)
         if not self._ssl_verify:
             self._session.verify = False
             urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
