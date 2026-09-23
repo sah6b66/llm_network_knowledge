@@ -36,6 +36,43 @@
       },
       "model": "deepseek-ai/DeepSeek-V4-Flash",
       "thinking_mode": "disabled"
+    },
+    "evaluation": {
+      "judge_model": "glm-5.3",
+      "point_results": [
+        {
+          "point": "指出两者均为 4 路 25.78125 Gbps 通道、电气侧结构相同",
+          "hit": true,
+          "comment": "回答明确两者均为 4 通道×25Gbps，通道结构相同这一实质已覆盖（未精确写出 25.78125 Gbps 数值属可接受的近似）。"
+        },
+        {
+          "point": "LR4 为波分复用方案：4 个 LWDM 波长（1295.56~1309.14 nm）合波到 1 对单模光纤",
+          "hit": true,
+          "comment": "给出了 1295/1300/1305/1310 nm 四个波长（数值正确取整）并使用单模光纤、双工 LC（即 1 对纤），WDM 合波实质正确；但将其称为 CWDM 不准确，应为 LWDM。"
+        },
+        {
+          "point": "LR4 使用双工 LC 连接器，标准传输距离 10 km",
+          "hit": true,
+          "comment": "回答明确 LC 双工连接器和 10 km 传输距离，完全命中。"
+        },
+        {
+          "point": "SR4 为并行多模方案：850 nm、MPO-12 连接器 8 芯（4 发 4 收）",
+          "hit": true,
+          "comment": "回答指出并行传输、850 nm、多模光纤、MPO-12（8 芯使用），实质命中；'4 对独立波长'的措辞略有不妥但已自行澄清为 4 个独立 850 nm 激光器。"
+        },
+        {
+          "point": "SR4 距离为 OM3 70 m / OM4 100 m",
+          "hit": false,
+          "comment": "回答给出 OM3 100 m / OM4 150 m，与标准值 70 m / 100 m 不符（混淆了 40GBASE-SR4 的距离指标），属事实错误。"
+        },
+        {
+          "point": "给出与场景匹配的选型结论（短距成本敏感选 SR4，长距/省光纤选 LR4）",
+          "hit": true,
+          "comment": "LR4 用于 DCI/跨楼宇长距、SR4 用于数据中心内机架间短距高密度互联，场景选型方向正确。"
+        }
+      ],
+      "score": 4,
+      "comment": "6 个要点命中 5 个，通道结构、LR4 的 WDM/LC/10km、SR4 的并行 850nm/MPO 及场景选型均正确；主要扣分为 SR4 传输距离写错（100m/150m，应为 70m/100m），另有 CWDM/LWDM 术语小误，整体掌握良好，给 4 分。"
     }
   },
   {
@@ -74,6 +111,38 @@
       },
       "model": "deepseek-ai/DeepSeek-V4-Flash",
       "thinking_mode": "disabled"
+    },
+    "evaluation": {
+      "judge_model": "glm-5.3",
+      "point_results": [
+        {
+          "point": "Type 4 功率：PSE 90 W、PD 71.3 W",
+          "hit": true,
+          "comment": "明确给出 Type 4 PSE 最大 90W、PD 最大可用 71.3W，数值正确。"
+        },
+        {
+          "point": "Type 3 功率：PSE 60 W、PD 51 W",
+          "hit": true,
+          "comment": "明确给出 Type 3 PSE 最大 60W、PD 最大可用 51W，数值正确。"
+        },
+        {
+          "point": "指出 PSE 与 PD 差值来自线缆信道损耗",
+          "hit": true,
+          "comment": "指出差值来自线缆电阻发热损耗（并给出 9W/18.7W 的具体差值），实质覆盖线缆信道损耗，连接器接触电阻的补充无明显错误。"
+        },
+        {
+          "point": "指出 Type 1/2 仅用 2 对线，Type 3（60W/Class 6）与 Type 4 使用全部 4 对线（Type 3 低功率 Class 5 亦可仅 2 对）",
+          "hit": true,
+          "comment": "正确说明 Type 1/2 仅用 2 对线（Alternative A 或 B）、Type 3（60W）与 Type 4 用全部 4 对线；但称 Type 3/4 '强制' 4 对线，遗漏了 Type 3 低功率（Class 5）可用 2 对线的细节，属轻微不严谨。"
+        },
+        {
+          "point": "能将功率等级与 Class 关联（Type 4 对应 Class 8、Type 3 对应 Class 6 等）",
+          "hit": false,
+          "comment": "全篇未提及 Class 5/6/8 等功率等级分类，缺少功率等级与 Class 的关联。"
+        }
+      ],
+      "score": 4,
+      "comment": "功率数值、差值来源（线缆损耗）及 2 对/4 对线供电区别均正确覆盖，且补充了电流限额与损耗计算等细节，无严重概念错误；但未建立功率等级与 Class 的对应关系，且 'Type 3/4 强制 4 对线' 表述略有不严谨（Type 3 低功率可用 2 对），综合评定为 4 分。"
     }
   },
   {
@@ -112,6 +181,38 @@
       },
       "model": "deepseek-ai/DeepSeek-V4-Flash",
       "thinking_mode": "disabled"
+    },
+    "evaluation": {
+      "judge_model": "glm-5.3",
+      "point_results": [
+        {
+          "point": "写出公式 f = 193.1 THz + n × ΔG（n 为整数）",
+          "hit": true,
+          "comment": "回答给出 f = 193.1 THz + n × 0.05 THz 且说明 n 为整数可正可负，实质覆盖公式"
+        },
+        {
+          "point": "指出标准支持的通道间隔：12.5/25/50/100 GHz（及其整数倍）",
+          "hit": false,
+          "comment": "回答仅写明 50 GHz（0.05 THz）为通道间隔，未指出 G.694.1 支持的 12.5/25/50/100 GHz 全部取值及其整数倍"
+        },
+        {
+          "point": "用 λ = c/f 正确换算 193.1 THz ≈ 1552.52 nm",
+          "hit": true,
+          "comment": "用 λ = c/f、c = 299792458 m/s 正确算得 1552.52 nm"
+        },
+        {
+          "point": "计算出 50 GHz 在 1550 nm 附近约对应 0.4 nm（用 Δλ = λ^2 Δf / c 推导）",
+          "hit": true,
+          "comment": "用 Δλ ≈ λ²Δf/c 代入 1550 nm 与 50 GHz 正确得出约 0.4 nm"
+        },
+        {
+          "point": "说明等频率间隔不等于等波长间隔，故 DWDM 以频率为通道基准",
+          "hit": true,
+          "comment": "指出波长间隔随频率非线性变化（Δλ ∝ λ²），以频率规划可保证通道间隔均匀，覆盖要点"
+        }
+      ],
+      "score": 4,
+      "comment": "公式、波长换算、0.4 nm 间隔计算及以频率为基准的原因均正确，但未完整列出标准支持的 12.5/25/50/100 GHz 通道间隔取值，属大部分命中，无明显概念错误"
     }
   },
   {
@@ -153,6 +254,53 @@
       },
       "model": "deepseek-ai/DeepSeek-V4-Flash",
       "thinking_mode": "disabled"
+    },
+    "evaluation": {
+      "judge_model": "glm-5.3",
+      "point_results": [
+        {
+          "point": "正确给出 QPSK 双偏振 4 bit/符号、16QAM 8 bit/符号，并说明频谱效率翻倍",
+          "hit": false,
+          "comment": "比特数表述错误：将DP-16QAM写作'每符号4 bit（双偏振×2 bit/符号）'（双偏振应为8 bit/符号），DP-QPSK写作'每符号2 bit'（双偏振应为4 bit/符号），仅通过60/120 GBaud波特率对比隐含频谱效率翻倍关系"
+        },
+        {
+          "point": "说明 16QAM 所需 OSNR 显著高于 QPSK（理论约 4.8 dB、工程约 6~7 dB）",
+          "hit": true,
+          "comment": "给出16QAM所需OSNR比DP-QPSK高约6 dB，量级与工程值（6~7 dB）相符，虽未区分4.8 dB理论值，但'显著高于'的实质结论正确"
+        },
+        {
+          "point": "说明 OSNR 随跨段/距离恶化导致 16QAM 无电中继距离大幅缩短",
+          "hit": true,
+          "comment": "通过16QAM典型80–120 km单跨与DP-QPSK数千公里的鲜明对比体现无中继距离大幅缩短，并指出仅短距DCI链路预算可承受较高OSNR要求，恶化机理略有隐含但结论到位"
+        },
+        {
+          "point": "指出 16QAM 对激光相位噪声与光纤非线性（SPM/XPM）容忍度更低",
+          "hit": true,
+          "comment": "明确指出对激光线宽/相位噪声更敏感（线宽<数百kHz）且对SPM/XPM非线性容忍度低，还补充了短距链路非线性累积有限的解释"
+        },
+        {
+          "point": "准确给出 400ZR 定位：单载波 DP-16QAM、G.652 单跨约 80~120 km 的 DCI、低功耗 DSP",
+          "hit": true,
+          "comment": "给出了400ZR面向DCI、单跨80–120 km的核心定位，但未提及G.652光纤与低功耗DSP约束，单载波特性也未重申，覆盖不完整"
+        },
+        {
+          "point": "给出 DP-QPSK 适合数千公里长距离传输的定位",
+          "hit": true,
+          "comment": "明确指出DP-QPSK可传输数千公里（配合拉曼放大），适合长距干线场景"
+        },
+        {
+          "point": "反向分析：DP-QPSK 承载 400G 需约两倍波特率或双载波，带来器件带宽/功耗/成本问题",
+          "hit": true,
+          "comment": "指出需约120 GBaud两倍波特率、超出DAC/ADC采样率与光电器件带宽极限、硬件成本剧增、频谱占用翻倍、色散容限恶化；未提双载波替代方案但主要路径分析完整"
+        },
+        {
+          "point": "整体答案体现调制阶数—频谱效率—OSNR—传输距离的权衡方法论",
+          "hit": true,
+          "comment": "按四个维度分条展开，贯穿'频谱效率换OSNR/鲁棒性、短距DCI定位'的整体权衡逻辑，结论明确，方法论清晰"
+        }
+      ],
+      "score": 4,
+      "comment": "整体权衡分析系统且方向正确，OSNR代价、非线性/相位噪声容忍度、80–120 km DCI与数千公里干线对比、反向分析等要点基本覆盖；但存在概念性错误：DP-16QAM双偏振应为8 bit/符号、DP-QPSK应为4 bit/符号，回答误写为4 bit与2 bit，且400ZR定位缺少G.652与低功耗DSP要素，故评4分。"
     }
   },
   {
@@ -191,6 +339,38 @@
       },
       "model": "deepseek-ai/DeepSeek-V4-Flash",
       "thinking_mode": "disabled"
+    },
+    "evaluation": {
+      "judge_model": "glm-5.3",
+      "point_results": [
+        {
+          "point": "Shim 位于 MAC（RS）与 PHY（PCS/PMA）之间，处理 64B/66B 编码块流",
+          "hit": true,
+          "comment": "明确指出 Shim 位于 MAC/RS 与 PCS 之间，且第 2 点涉及对 64B/66B 码流的处理，位置与机制正确。"
+        },
+        {
+          "point": "开销块周期性插入 64B/66B 码流（相邻开销块间隔 1023×20+1 个块位置，8 个开销块构成开销帧）",
+          "hit": false,
+          "comment": "开销插入机制描述错误：称每 20 个块插入一个开销块、开销帧由 20 块（8 字节开销+32 个数据块）构成，与标准的相邻开销块间隔 1023×20+1 块位置、8 个开销块构成一个开销帧不符。"
+        },
+        {
+          "point": "一个 100GBASE-R PHY 划分为 20 个 5 Gbps 时隙",
+          "hit": true,
+          "comment": "正确给出 20 个时隙、每时隙 5 Gbps，且指出支持 5G 整数倍速率。"
+        },
+        {
+          "point": "Calendar A/B 双日历配合 C 指示在开销复帧边界无损切换时隙映射",
+          "hit": true,
+          "comment": "正确描述 Calendar A 当前生效、Calendar B 预配置，通过开销中 C-bit 指示在帧边界原子性切换实现无损调整，'帧边界'与开销复帧边界含义实质一致。"
+        },
+        {
+          "point": "给出 MAC/PHY 速率解耦的实例（多 PHY 绑定承载超大速率 MAC、5G 整数倍子速率/切片）",
+          "hit": true,
+          "comment": "给出 100G PHY 上用 5 个时隙承载 25G MAC 并可平滑调整至 30G 的实例，正确体现了 5G 整数倍子速率的 MAC/PHY 速率解耦。"
+        }
+      ],
+      "score": 4,
+      "comment": "5 个要点命中 4 个，Shim 位置、20×5G 时隙划分、Calendar A/B 与 C 指示配合及解耦实例均正确；但开销块插入机制描述有实质性错误（间隔与开销帧结构均不符标准），故不给满分。"
     }
   },
   {
@@ -230,6 +410,43 @@
       },
       "model": "deepseek-ai/DeepSeek-V4-Flash",
       "thinking_mode": "disabled"
+    },
+    "evaluation": {
+      "judge_model": "glm-5.3",
+      "point_results": [
+        {
+          "point": "正确描述 OTN 分层：ODU4 约 104.36 Gbit/s 端到端通路层、OTU4 约 111.81 Gbit/s 数字段层",
+          "hit": false,
+          "comment": "OTU4 速率 111.81 Gbit/s 及两层功能角色基本正确，但 ODU4 速率写成 104.794 Gbit/s，与参考值约 104.36 Gbit/s 不符，速率描述错误。"
+        },
+        {
+          "point": "指出 FEC 位于 OTU 层开销，OTU4 必选 RS(255,239)",
+          "hit": false,
+          "comment": "正确指出 FEC 位于 OTU4 层开销区并承担纠错，但给出的编码为 RS(544,514)，与要求的 OTU4 必选 RS(255,239) 不符，具体编码表述错误。"
+        },
+        {
+          "point": "指出 ODU 开销有 TCM1~TCM6 共 6 级串联连接监视，可按管理域分级启用",
+          "hit": true,
+          "comment": "明确指出 ODU4 开销中 TCM 共 6 级（TCM1–TCM6），并演示了按 A/B 域分级配置启用，符合要点。"
+        },
+        {
+          "point": "列举 TCM 监视内容（TTI、BIP-8、BEI/BIAE、BDI、STAT 中至少三项）",
+          "hit": true,
+          "comment": "列举了 BIP-8、TTI、BDI、BEI 四项监视内容，超过至少三项的要求。"
+        },
+        {
+          "point": "给出域级定位方法：比对端到端 PM 与各域 TCM 的 BIP-8 计数，增长的域即引入损伤的域",
+          "hit": true,
+          "comment": "通过比对各域 TCM 的 BIP-8 计数是否增长完成故障域定界，核心方法正确，虽未显式提及先查端到端 PM 的 BIP-8，但定位方法实质覆盖要点。"
+        },
+        {
+          "point": "结合 OTU 层 FEC 纠错计数区分物理线路劣化，并与 TCM 结果相互印证",
+          "hit": true,
+          "comment": "明确读取各域 OTU4 FEC 纠错前误码计数，与 TCM 误码是否同步上升相互印证以确认劣化源域，并讨论 FEC 正常而 TCM 异常的交叉验证，符合要点。"
+        }
+      ],
+      "score": 4,
+      "comment": "分层角色、TCM 六级监视内容、按域 TCM BIP-8 定界方法及 FEC 计数与 TCM 相互印证的思路均正确完整，6 个要点命中 4 个；但 ODU4 速率（104.794）和 FEC 编码（RS(544,514)）两处具体数值/编码与参考答案不符，属于事实性错误，故总分降为 4。"
     }
   },
   {
@@ -268,6 +485,38 @@
       },
       "model": "deepseek-ai/DeepSeek-V4-Flash",
       "thinking_mode": "disabled"
+    },
+    "evaluation": {
+      "judge_model": "glm-5.3",
+      "point_results": [
+        {
+          "point": "列全 DDM 五个监视参数（温度、电压、偏置电流、TX 光功率、RX 光功率）",
+          "hit": true,
+          "comment": "回答明确列出 TX/RX 光功率、偏置电流、供电电压、内部温度，五个参数全部覆盖并附单位说明"
+        },
+        {
+          "point": "区分 Alarm 与 Warning 阈值（各含高/低档）及其含义差别",
+          "hit": true,
+          "comment": "回答说明 Alarm 表示模块不可用/故障风险需立即处理、Warning 表示性能劣化预警，并以\"超出范围触发\"和\"Alarm 范围包含于 Warning 范围内（更极端）\"隐含体现了高/低双向阈值及含义差别"
+        },
+        {
+          "point": "RX 功率异常给出收光路径/对端发光的排查方向",
+          "hit": true,
+          "comment": "回答指出偏低时查对端 TX 功率、光纤衰减/脏污/弯曲、连接器端面与跳接点，覆盖对端发光和收光路径两个方向，还补充了偏高防过载的排查"
+        },
+        {
+          "point": "TX 功率或偏置电流异常指向本端激光器老化",
+          "hit": true,
+          "comment": "回答明确指出偏置电流异常升高多为激光器老化或劣化，并建议检查模块寿命与工作温度，命中要点"
+        },
+        {
+          "point": "温度越限给出散热与风道的排查方向",
+          "hit": true,
+          "comment": "回答列出检查散热风扇、风道堵塞、机柜环境温度、模块周围气流受阻及高密度部署局部过热，完全覆盖散热与风道排查方向"
+        }
+      ],
+      "score": 5,
+      "comment": "五个评分要点全部实质命中，DDM 参数列举完整，Alarm/Warning 区分正确（含高/低档隐含体现），三类异常排查方向均正确且比参考答案更细化（如 RX 偏高防过载），无概念性错误，属高质量回答"
     }
   },
   {
@@ -308,6 +557,48 @@
       },
       "model": "deepseek-ai/DeepSeek-V4-Flash",
       "thinking_mode": "disabled"
+    },
+    "evaluation": {
+      "judge_model": "glm-5.3",
+      "point_results": [
+        {
+          "point": "说明 PAM4 相对 NRZ 的 SNR 劣化来源：眼高为 NRZ 的 1/3、约 20lg3 ≈ 9.5 dB，对 ISI/反射更敏感",
+          "hit": true,
+          "comment": "明确给出相邻电平间距为 NRZ 的 1/3、SNR 劣化约 9.5dB（20log3），并说明对非线性、串扰、噪声与抖动更敏感，实质覆盖要点。"
+        },
+        {
+          "point": "准确描述 KP4 RS(544,514)：约 5.8%（约 6%）开销、单码字最多纠 15 个符号错误，pre-FEC BER 门限 2.4×10^-4",
+          "hit": true,
+          "comment": "正确给出 514 数据符号+30 校验符号（10bit 符号）、最多纠 15 个符号错误、pre-FEC BER 门限 2.4×10^-4，开销百分比虽未直接写出但可由 30/514 完整推出，关键参数均准确。"
+        },
+        {
+          "point": "分通道读取 pre-FEC BER 与 FEC 纠错/纠错失败计数，区分单通道与全通道劣化",
+          "hit": false,
+          "comment": "回答仅笼统提到监测 pre-FEC BER 与 FEC 纠错计数，完全没有分通道（per-lane）读取及区分单通道/全通道劣化的定位思路。"
+        },
+        {
+          "point": "光层检查项：收光功率偏离、连接器端面与损耗、光纤宏弯、模块温度，换件对比定位",
+          "hit": true,
+          "comment": "覆盖了收光功率偏离（过载/过弱）、连接器端面清洁、光纤弯曲半径、末端换模块对比等主要检查项，仅模块温度检查缺失，主体实质命中。"
+        },
+        {
+          "point": "电层检查项：信道插损/回损/阻抗连续性、两端速率与 FEC 模式一致性",
+          "hit": false,
+          "comment": "仅提到 PCB 走线阻抗、连接器接触与电源噪声，未提及信道插损/回损检查，且完全遗漏两端 SerDes 速率与 FEC 模式配置一致性核对，要点主要部分未覆盖。"
+        },
+        {
+          "point": "说明发送端预加重与接收端 CTLE/DFE/DSP 均衡的作用（补偿信道损耗、恢复眼图张开度）",
+          "hit": true,
+          "comment": "清楚说明发送端预加重提升高频补偿信道带宽限制、恢复眼图张开度，CTLE/DFE/DSP 各自作用及优劣描述正确。"
+        },
+        {
+          "point": "调优方法学：单参数步进调整并归因，收敛标准为 pre-FEC BER 远低于门限且纠错计数稳定",
+          "hit": true,
+          "comment": "给出逐步调整高频增益并观察 pre-FEC BER 变化的步进归因方式，收敛标准为 BER 稳定在 10^-8（远低于 2.4×10^-4 门限）并持续监测 FEC 纠错计数，实质覆盖。"
+        }
+      ],
+      "score": 4,
+      "comment": "回答覆盖了 PAM4 SNR 劣化机理、KP4 FEC 参数与门限、均衡原理与调优顺序等核心内容且基本准确，但缺少分通道故障定位（单通道 vs 全通道）这一关键排查步骤，电层检查遗漏信道插损/回损及两端速率与 FEC 模式一致性核对，模块温度亦未检查，故为大部分命中，给 4 分。"
     }
   },
   {
@@ -346,6 +637,38 @@
       },
       "model": "deepseek-ai/DeepSeek-V4-Flash",
       "thinking_mode": "disabled"
+    },
+    "evaluation": {
+      "judge_model": "glm-5.3",
+      "point_results": [
+        {
+          "point": "距离：10GBASE-T 在 Cat6a 上 100 m（Cat6 约 55 m）；10GBASE-SR 为 OM3 300 m / OM4 400 m",
+          "hit": true,
+          "comment": "正确给出 Cat6a 100 m 以及 SR 在 OM3 300 m / OM4 400 m 的距离，仅未提 Cat6 约 55 m 这一细节，实质覆盖要点"
+        },
+        {
+          "point": "时延：电口典型 2.5~4 μs、光口约 0.3 μs，并说明电口时延来源于复杂编码的 PHY 处理",
+          "hit": true,
+          "comment": "给出电口约 2-4 μs、光口约 0.1-0.3 μs，并正确说明电口时延源于复杂物理层编码（PAM-16/FEC）处理"
+        },
+        {
+          "point": "功耗：电口典型 4~5 W/端口、光口模块约 1~1.5 W，相差约 3~4 倍",
+          "hit": true,
+          "comment": "给出电口约 4-6 W、光口约 1-2 W，数值与参考范围基本吻合且量级差异体现明显，虽未明确写 3~4 倍但实质正确"
+        },
+        {
+          "point": "给出与场景匹配的选型结论（利旧铜缆短距选电口，长距/低时延/高密度选光口）",
+          "hit": true,
+          "comment": "明确指出长距、低时延、高密度场景优先 SR，短距且可利旧现有 Cat6a 铜缆时选 10GBASE-T，与参考结论一致"
+        },
+        {
+          "point": "体现对高密度部署下整机功耗与散热影响的分析",
+          "hit": true,
+          "comment": "分析了 48 口高密度下电口整机功耗高、机柜散热成本大，而 SFP+ 功耗低、散热压力小并支持高密度部署"
+        }
+      ],
+      "score": 5,
+      "comment": "五个评分要点均被正确覆盖，距离、时延、功耗数值与参考答案基本一致且无概念错误，高密度部署的功耗散热影响和场景化选型建议分析到位，仅个别细节（Cat6 约 55 m、3~4 倍比值）未明确写出不影响评分"
     }
   },
   {
@@ -383,6 +706,33 @@
       },
       "model": "deepseek-ai/DeepSeek-V4-Flash",
       "thinking_mode": "disabled"
+    },
+    "evaluation": {
+      "judge_model": "glm-5.3",
+      "point_results": [
+        {
+          "point": "1000BASE-T 经 FLP 脉冲机制协商速率（10/100/1000M）、双工与流控",
+          "hit": false,
+          "comment": "正确提及 FLP 脉冲机制及可协商速率 10/100/1000M 和双工模式，但遗漏了 1000BASE-T 还可协商流控（Pause）这一参数。"
+        },
+        {
+          "point": "1000BASE-X 自协商不能协商速率，速率固定 1G",
+          "hit": true,
+          "comment": "明确指出 1000BASE-X 不能协商速率、固定为 1000 Mbps。"
+        },
+        {
+          "point": "1000BASE-X 自协商仅协商双工与流控（/C/ 有序集承载）",
+          "hit": true,
+          "comment": "指出仅协商双工与流控，并以\"配置码字（Configuration Code Words）\"表述，与 /C/ 有序集承载含义一致。"
+        },
+        {
+          "point": "工程结论：千兆光口两端速率/模式必须一致，双工建议两端一致配置全双工",
+          "hit": true,
+          "comment": "明确两端须配置一致（都自协商或都强制），禁用自协商时两端手动设置 1000M 全双工，并指出双工不匹配的危害。"
+        }
+      ],
+      "score": 4,
+      "comment": "四个要点中三个完整命中，仅 1000BASE-T 部分遗漏流控协商；其余表述准确且补充了光模块兼容等工程内容，无严重概念错误，属大部分命中。"
     }
   },
   {
@@ -420,6 +770,33 @@
       },
       "model": "deepseek-ai/DeepSeek-V4-Flash",
       "thinking_mode": "disabled"
+    },
+    "evaluation": {
+      "judge_model": "glm-5.3",
+      "point_results": [
+        {
+          "point": "0x8100 为 802.1Q C-Tag（用户内层标签）的 TPID，0x88A8 为 802.1ad S-Tag（外层运营商标签）的 TPID",
+          "hit": true,
+          "comment": "回答明确指出 0x8100 对应用户内层 802.1Q 标签、0x88A8 对应运营商外层 S-VLAN 标签，归属表述完全正确。"
+        },
+        {
+          "point": "识别顺序：先按帧内第一个 TPID 识别外层 S-Tag，剥离后再按 0x8100 解析内层 C-Tag",
+          "hit": true,
+          "comment": "回答说明设备从报文最外层开始解析，先识别并剥离外层 S-VLAN 标签，再按次层 TPID 解析内层用户标签，顺序正确。"
+        },
+        {
+          "point": "用户自带的 0x8100 标签作为净荷封装在 S-Tag 内，不会与外层标签混淆",
+          "hit": true,
+          "comment": "回答通过设备固定顺序解析（先看最外层 TPID 剥外层后才解析内层）说明内层标签不参与外层识别，虽未用'净荷'一词但实质含义正确。"
+        },
+        {
+          "point": "改配 0x88A8 的目的：避免两层同为 0x8100 的层级歧义，便于核心设备统一按 S-Tag 处理与剥离",
+          "hit": true,
+          "comment": "回答指出避免与用户内层 0x8100 冲突、使运营商设备明确识别外层标签并统一管理和 QoS 策略，覆盖了消除层级歧义的核心目的，另补充互操作性等合理扩展。"
+        }
+      ],
+      "score": 5,
+      "comment": "四个评分要点均被正确覆盖：TPID 归属、由外向内逐层识别顺序、内外层不混淆的原因以及改配 0x88A8 的目的都表述准确，补充的互操作性与安全说明不构成概念错误，属于高质量回答。"
     }
   },
   {
@@ -462,6 +839,43 @@
       },
       "model": "deepseek-ai/DeepSeek-V4-Flash",
       "thinking_mode": "disabled"
+    },
+    "evaluation": {
+      "judge_model": "glm-5.3",
+      "point_results": [
+        {
+          "point": "Principal VLAN 视图命令序列：mux-vlan → subordinate group 20 30 → subordinate separate 40",
+          "hit": false,
+          "comment": "仅 mux-vlan 正确，绑定从 VLAN 的命令误写为 group-vlan/separate-vlan，正确应为 subordinate group 20 30 和 subordinate separate 40"
+        },
+        {
+          "point": "各 access 端口按角色 port default vlan 加入对应 VLAN",
+          "hit": false,
+          "comment": "回答仅复述题面'按角色加入对应 VLAN'的前提，未明确写出 port default vlan 命令"
+        },
+        {
+          "point": "所有参与端口（含 Principal 端口）需接口命令 port mux-vlan enable 才生效",
+          "hit": true,
+          "comment": "正确指出各端口（含服务器 Principal 口在内的 access 口）必须在接口下配置 port mux-vlan enable 才能生效"
+        },
+        {
+          "point": "互通规则：Principal 与任意子 VLAN 端口互通",
+          "hit": true,
+          "comment": "明确答出 Principal VLAN 与 Group 20/30、Separate 40 各子 VLAN 端口均可二层互通"
+        },
+        {
+          "point": "不同 Group VLAN 之间隔离、Group 与 Separate 隔离、Separate VLAN 内部端口互相隔离（仅通 Principal）",
+          "hit": true,
+          "comment": "不同 Group 之间隔离、Separate 内部端口互相隔离均回答正确，但未提及 Group 与 Separate 之间的隔离规则"
+        },
+        {
+          "point": "一个 Principal VLAN 只能绑定一个 Separate VLAN，Group VLAN 最多 128 个",
+          "hit": false,
+          "comment": "Separate VLAN 仅限 1 个正确，但 Group VLAN 上限误答为 16 个，正确应为 128 个"
+        }
+      ],
+      "score": 3,
+      "comment": "掌握 MUX VLAN 基本原理：port mux-vlan enable 生效命令、Principal 与子 VLAN 互通、Group 间及 Separate 内部隔离规则、Separate 限 1 个均正确；但 Principal VLAN 视图下从 VLAN 配置命令写错（group-vlan/separate-vlan 应为 subordinate group/separate），Group VLAN 数量上限误为 16（应为 128），且未明确 port default vlan 命令，约半数要点命中"
     }
   },
   {
@@ -502,6 +916,38 @@
       },
       "model": "deepseek-ai/DeepSeek-V4-Flash",
       "thinking_mode": "disabled"
+    },
+    "evaluation": {
+      "judge_model": "glm-5.3",
+      "point_results": [
+        {
+          "point": "缺省 PVID 为 VLAN 1，且缺省只放通 VLAN 1",
+          "hit": true,
+          "comment": "回答明确指出缺省 PVID 为 1、缺省仅放通 VLAN 1，完全正确"
+        },
+        {
+          "point": "放通命令 port trunk allow-pass vlan 100 200（多条命令叠加生效）",
+          "hit": true,
+          "comment": "完整组合中给出了正确的 port trunk allow-pass vlan 100 200 命令，核心命令覆盖正确"
+        },
+        {
+          "point": "VLAN 100 untagged 收发需 allow-pass + port trunk pvid vlan 100（PVID VLAN 出方向不打标签）",
+          "hit": true,
+          "comment": "回答说明需同时配置 allow-pass 放通 VLAN 100 和 port trunk pvid vlan 100，并指出 PVID 对应 VLAN 默认以 untagged 方式收发，含义正确"
+        },
+        {
+          "point": "入方向 untagged 报文划入 PVID 对应 VLAN",
+          "hit": true,
+          "comment": "回答明确指出 PVID 决定 untagged 报文进入时打上的 VLAN 标签，即划入 PVID 对应 VLAN"
+        },
+        {
+          "point": "未加入 allow-pass 的 VLAN（含仅设 PVID 未放通）报文被丢弃",
+          "hit": true,
+          "comment": "回答明确说明未加入放通列表时 VLAN 100 报文会被丢弃、无法转发，与要点一致"
+        }
+      ],
+      "score": 5,
+      "comment": "五个评分要点全部覆盖且表述正确：缺省值、放通命令、PVID 与 allow-pass 组合配置、入方向 untagged 报文归属、未放通即丢弃的行为均准确，无概念错误"
     }
   },
   {
@@ -540,6 +986,38 @@
       },
       "model": "deepseek-ai/DeepSeek-V4-Flash",
       "thinking_mode": "disabled"
+    },
+    "evaluation": {
+      "judge_model": "glm-5.3",
+      "point_results": [
+        {
+          "point": "同步动作：根端口确定后，本桥所有非边缘指定端口置为 discarding（并向下传播同步）",
+          "hit": true,
+          "comment": "回答明确指出阻塞所有非边缘指定端口以防止临时环路、待握手完成后才恢复，实质覆盖了同步动作及向下传播的含义"
+        },
+        {
+          "point": "握手流程：指定端口发 Proposal，下游根端口回 Agreement，上游收到后立即 forwarding",
+          "hit": true,
+          "comment": "完整正确地描述了上游指定端口发 Proposal、下游根端口同步后回 Agreement、上游立即进入转发的握手流程"
+        },
+        {
+          "point": "RSTP 经握手逐级快速过渡，802.1D 需 listening→learning→forwarding 各 15 s Forward Delay 定时器",
+          "hit": true,
+          "comment": "正确对比 802.1D 的 15s listening + 15s learning 定时器过渡与 RSTP 握手毫秒级快速过渡，消除计时器等待"
+        },
+        {
+          "point": "退化情形一：对端为 802.1D 网桥，端口进入 STP 兼容模式，无 Agreement 回应",
+          "hit": false,
+          "comment": "回答列举的三种退化情形均未提及对端运行 802.1D STP、端口迁移为兼容模式且不回应 Agreement 这一关键情形"
+        },
+        {
+          "point": "退化情形二：共享链路或双工不匹配（非点对点链路），快速过渡条件不满足",
+          "hit": true,
+          "comment": "明确指出共享介质（非点对点链路）无法进行握手而回退到定时器过渡，虽未提双工不匹配但核心含义已覆盖"
+        }
+      ],
+      "score": 4,
+      "comment": "同步动作、握手流程、与 802.1D 的速度对比及共享链路退化情形覆盖良好，但遗漏了对端为 802.1D 网桥进入 STP 兼容模式这一最重要的退化情形，且补充情形中'根端口收到 Agreement'等表述存在概念混淆，综合评 4 分"
     }
   },
   {
@@ -581,6 +1059,53 @@
       },
       "model": "deepseek-ai/DeepSeek-V4-Flash",
       "thinking_mode": "disabled"
+    },
+    "evaluation": {
+      "judge_model": "glm-5.3",
+      "point_results": [
+        {
+          "point": "STP：从根端口发送 TCN BPDU，上游置 TCA 确认并逐跳向根桥转发",
+          "hit": true,
+          "comment": "明确写出在根端口（而非故障端口）发送 TCN BPDU，上游在收到 TCN 的端口回送 TCA 确认并经其根端口逐级转发至根桥，与要点一致。"
+        },
+        {
+          "point": "根桥在 Max Age 20 s + Forward Delay 15 s = 35 s 内发送置 TC 标志的配置 BPDU 泛洪全网",
+          "hit": true,
+          "comment": "给出根桥泛洪置 TC 的配置 BPDU 及 20s+15s=35s 的总量构成，但将根桥发送时长写为仅 20s、15s 归为老化时间，构成解释与标准（根桥计时器为 35s）有偏差。"
+        },
+        {
+          "point": "STP 交换机将 MAC 老化时间临时缩短为 Forward Delay 15 s 实现快速冲刷",
+          "hit": true,
+          "comment": "明确写出收到置 TC 的 BPDU 后将 MAC 老化时间临时改为 Forward Delay 15s（对比默认 300s）以快速清除表项。"
+        },
+        {
+          "point": "RSTP：检测网桥先冲刷本机 MAC 表（除边缘端口与变化端口），自身置 TC，无需 TCN 逐级上报",
+          "hit": true,
+          "comment": "写出检测网桥自身立即清空非边缘端口 MAC 并自行发送置 TC BPDU（无 TCN 逐级上报），但把发生变化端口的表项也纳入冲刷，与规范排除该端口的口径略有出入。"
+        },
+        {
+          "point": "RSTP 在 tcWhile（2×hello time）内以 hello 间隔向所有根端口与非边缘指定端口发送置 TC BPDU",
+          "hit": true,
+          "comment": "给出持续 2×Hello Time（4s）并向含根端口/指定端口的非边缘端口发送置 TC BPDU，未明确以 hello 间隔发送的节奏，属细节缺失但实质正确。"
+        },
+        {
+          "point": "接收方冲刷除接收端口与边缘端口外的 MAC 表项",
+          "hit": false,
+          "comment": "回答称接收网桥\"仅清空接收端口的 MAC 表项\"，与正确的\"冲刷除接收端口和边缘端口之外全部端口\"方向相反，属概念错误。"
+        },
+        {
+          "point": "RSTP 边缘端口 up/down 不触发拓扑变化",
+          "hit": true,
+          "comment": "明确写出边缘端口不参与拓扑变化、不发送也不触发 TC 处理且其 MAC 表项不受影响。"
+        },
+        {
+          "point": "比较：35 s 全网泛洪窗口 vs hello 量级、冲刷范围差异；TCN 频繁的泛洪/CPU 影响及边缘端口+BPDU 保护抑制手段",
+          "hit": true,
+          "comment": "比较了 35s 与 2×hello 的时延差异、冲刷范围差异，并给出频繁 TCN 的泛洪/性能影响及边缘端口（PortFast）+BPDU Guard 等抑制手段，但其中 RSTP 冲刷范围沿用了\"仅清空接收端口\"的错误表述。"
+        }
+      ],
+      "score": 4,
+      "comment": "整体对 STP 的 TCN/TCA 逐级上报、根桥 TC 泛洪与 15s 老化缩短，以及 RSTP 的本机自检测冲刷、tcWhile 发送、边缘端口豁免和工程抑制手段覆盖较好；但接收网桥冲刷范围写成\"仅清空接收端口\"属方向性概念错误，根桥 TC 发送时长的 20+15 构成解释亦有偏差，故给 4 分。"
     }
   },
   {
@@ -622,6 +1147,43 @@
       },
       "model": "deepseek-ai/DeepSeek-V4-Flash",
       "thinking_mode": "disabled"
+    },
+    "evaluation": {
+      "judge_model": "glm-5.3",
+      "point_results": [
+        {
+          "point": "stack slot <slot-id> renumber <n> 修改槽位号（两成员需不同）",
+          "hit": true,
+          "comment": "renumber 命令正确并补充需重启生效，但未明确说明两成员槽位号必须配置为不同值"
+        },
+        {
+          "point": "stack slot <slot-id> priority <value> 缺省 100，数值越大越优先当选 master",
+          "hit": true,
+          "comment": "命令、缺省值 100、数值越大越优先当选 master 均表述正确，还补充了优先级相同时比较 MAC 的规则"
+        },
+        {
+          "point": "两台两缆交叉连接：本端 stack-port 1/2 分别连对端 stack-port 2/1",
+          "hit": true,
+          "comment": "明确给出本端 stack-port 1 连对端 stack-port 2、本端 stack-port 2 连对端 stack-port 1 的交叉连接并说明形成环形拓扑"
+        },
+        {
+          "point": "MAD 直连检测：mad detect mode direct（成员间专用直连链路/管理网口）",
+          "hit": true,
+          "comment": "正确说明用成员间专用直连链路互联并在接口视图下配置 mad detect mode direct"
+        },
+        {
+          "point": "MAD 中继检测：mad detect mode relay（经与代理设备互联的 Eth-Trunk）",
+          "hit": true,
+          "comment": "给出经中间代理设备互联并配置 mad detect mode relay、代理设备需开启 relay 功能，虽未明确指出 Eth-Trunk 但部署方式概念正确"
+        },
+        {
+          "point": "分裂后处理：竞争失败方进入 Recovery 状态，批量关闭业务端口（保留 MAD 与堆叠相关端口）",
+          "hit": true,
+          "comment": "正确描述竞争失败侧进入 Recovery 状态、关闭业务接口仅保留 MAD 检测链路，并补充故障恢复后 Recovery 侧自动重启重新加入堆叠"
+        }
+      ],
+      "score": 5,
+      "comment": "六个评分要点全部命中且无概念性错误，命令形式、交叉连接规则、MAD 两种检测方式及分裂后 Recovery 处理机制均正确，仅个别细节（两成员槽位号需不同、中继检测的 Eth-Trunk 接口）未明确点出，属于轻微不完整，整体回答质量高"
     }
   },
   {
@@ -666,6 +1228,43 @@
       },
       "model": "deepseek-ai/DeepSeek-V4-Flash",
       "thinking_mode": "disabled"
+    },
+    "evaluation": {
+      "judge_model": "glm-5.3",
+      "point_results": [
+        {
+          "point": "华为：系统视图 stp bpdu-protection，前提是端口已配置 stp edged-port enable（边缘端口）",
+          "hit": true,
+          "comment": "明确给出系统视图 stp bpdu-protection 并指出必须配合 stp edged-port enable 才生效"
+        },
+        {
+          "point": "华为触发后端口进入 error-down 状态",
+          "hit": true,
+          "comment": "明确说明边缘口收到 BPDU 后进入 Error-Down 状态"
+        },
+        {
+          "point": "华为恢复：手动 shutdown/undo shutdown 或 error-down auto-recovery cause bpdu-protection interval <秒>",
+          "hit": true,
+          "comment": "给出了正确的自动恢复命令，手动恢复用 undo shutdown（或 restart），实质等价于参考做法"
+        },
+        {
+          "point": "Cisco：全局 spanning-tree portfast bpduguard default 或接口 spanning-tree bpduguard enable",
+          "hit": true,
+          "comment": "两种配置命令及各自作用范围（全局对 PortFast 端口生效/接口单独启用）均正确"
+        },
+        {
+          "point": "Cisco 触发后端口进入 errdisable 状态",
+          "hit": true,
+          "comment": "明确指出触发后进入 errdisable（类似 shutdown）状态"
+        },
+        {
+          "point": "Cisco 恢复：errdisable recovery cause bpduguard + errdisable recovery interval（缺省 300 s）或手动 shutdown/no shutdown",
+          "hit": true,
+          "comment": "自动恢复命令、默认关闭、缺省 300 秒及手动 shutdown/no shutdown 均正确"
+        }
+      ],
+      "score": 5,
+      "comment": "六个评分要点全部准确覆盖，配置命令、端口状态与恢复机制表述完整正确；仅 Cisco 触发条件中\"无论是否配置 BPDU Guard\"的括号表述略有歧义（实际需启用 BPDU Guard 才会 errdisable），属轻微瑕疵，不影响要点判定"
     }
   },
   {
@@ -705,6 +1304,43 @@
       },
       "model": "deepseek-ai/DeepSeek-V4-Flash",
       "thinking_mode": "disabled"
+    },
+    "evaluation": {
+      "judge_model": "glm-5.3",
+      "point_results": [
+        {
+          "point": "Root Guard 防超级根（更优 BPDU 抢占根桥），部署于应保持指定角色的端口",
+          "hit": true,
+          "comment": "回答说明防止非法交换机发送更优BPDU抢占根桥导致拓扑震荡，并在第(3)部分明确Root Guard仅用于指定端口（面向用户侧），覆盖要点。"
+        },
+        {
+          "point": "Root Guard 触发后端口置 root-inconsistent 阻塞，superior BPDU 停止后自动恢复",
+          "hit": true,
+          "comment": "回答明确端口进入root-inconsistent状态被阻塞、superior BPDU消失后自动恢复转发，与要点一致。"
+        },
+        {
+          "point": "Loop Guard 防单向链路失效导致非指定端口收不到 BPDU 误转指定端口并转发成环",
+          "hit": true,
+          "comment": "回答正确描述单向链路失效时非指定端口收不到BPDU误转为指定端口形成二层环路，含义与要点一致。"
+        },
+        {
+          "point": "Loop Guard 触发后端口置 loop-inconsistent 阻塞，重新收到 BPDU 自动恢复",
+          "hit": true,
+          "comment": "回答明确进入loop-inconsistent状态阻塞、重新收到BPDU后自动恢复，覆盖要点。"
+        },
+        {
+          "point": "命令对应：Cisco spanning-tree guard root / guard loop；华为 stp root-protection / stp loop-protection",
+          "hit": true,
+          "comment": "四条命令（Cisco与华为各两条）均正确给出且注明接口下配置。"
+        },
+        {
+          "point": "同一端口两者互斥（角色互补），同配时 Root Guard 被禁用（Loop Guard 优先生效）",
+          "hit": false,
+          "comment": "角色互补不能同配的部分正确，但明确断言'最终Root Guard生效，Loop Guard被禁用'，与参考答案相反（同配时Loop Guard优先生效、Root Guard被禁用），属事实错误。"
+        }
+      ],
+      "score": 4,
+      "comment": "前五个要点全部正确覆盖，防护机制、状态名、恢复条件和命令均准确，但第(3)部分关于同配时哪个功能被禁用的结论与正确行为相反（应为Loop Guard优先生效、Root Guard被禁用），故不能给满分。"
     }
   },
   {
@@ -745,6 +1381,38 @@
       },
       "model": "deepseek-ai/DeepSeek-V4-Flash",
       "thinking_mode": "disabled"
+    },
+    "evaluation": {
+      "judge_model": "glm-5.3",
+      "point_results": [
+        {
+          "point": "PAgP 模式 auto/desirable，LACP 模式 passive/active（主动/被动含义对应）",
+          "hit": true,
+          "comment": "PAgP 的 desirable（主动）/auto（被动）与 LACP 的 active（主动）/passive（被动）关键字及含义均表述正确。"
+        },
+        {
+          "point": "可建立组合：desirable+desirable、desirable+auto；active+active、active+passive；on+on",
+          "hit": false,
+          "comment": "desirable+desirable、desirable+auto、active+active、active+passive 四种组合均判断正确，但未明确指出 on+on 可成功建立，覆盖不完整。"
+        },
+        {
+          "point": "不可建立组合：auto+auto、passive+passive（无发起方）",
+          "hit": true,
+          "comment": "明确判定 auto+auto 与 passive+passive 不能建立，并正确说明原因是双方均被动、无协商发起方。"
+        },
+        {
+          "point": "on 与 PAgP/LACP 协商模式混合不能建立 channel",
+          "hit": true,
+          "comment": "明确指出 on 为强制模式不发送协商报文，与任何 PAgP/LACP 协商模式混合均无法聚合，判断及理由正确。"
+        },
+        {
+          "point": "后果与验证：channel 未形成、成员口独立转发，show etherchannel summary 显示独立状态",
+          "hit": true,
+          "comment": "说明成员端口独立转发、不聚合，show etherchannel summary 中显示独立（I）而非捆绑（P），并补充了其他验证命令，符合要点。"
+        }
+      ],
+      "score": 4,
+      "comment": "整体回答准确清晰，模式含义、成功/失败组合及混合模式判断、后果与验证命令均正确，仅遗漏 on+on 可成功建立这一情况。"
     }
   },
   {
@@ -787,6 +1455,43 @@
       },
       "model": "deepseek-ai/DeepSeek-V4-Flash",
       "thinking_mode": "disabled"
+    },
+    "evaluation": {
+      "judge_model": "glm-5.3",
+      "point_results": [
+        {
+          "point": "interface Eth-Trunk <id> + mode lacp-static（CE 缺省手工模式需显式配置），成员口 eth-trunk <id> 加入",
+          "hit": true,
+          "comment": "正确给出 Eth-Trunk 接口视图下显式配置 mode lacp-static 及成员口视图 eth-trunk <id> 加入，命令完整准确。"
+        },
+        {
+          "point": "M-LAG 两端系统视图 lacp m-lag system-id 配置相同系统 MAC（缺省为本设备主控板 MAC）",
+          "hit": true,
+          "comment": "正确说明系统视图下 lacp m-lag system-id 需两端取值相同，且缺省使用本机自身 MAC（两台不同），含义与参考一致。"
+        },
+        {
+          "point": "不一致后果：下游 LACP 视为对接两个不同系统，成员口无法全部 Selected、跨设备聚合失败",
+          "hit": true,
+          "comment": "指出下游将两台 CE 视为不同 LACP 系统导致聚合分裂为两个独立组、跨设备聚合无法建立，实质覆盖该后果（后附的环路/丢包属推测但不影响正确性）。"
+        },
+        {
+          "point": "least active-linknumber：活动链路低于阈值时 Eth-Trunk 整体 DOWN（缺省 1）",
+          "hit": true,
+          "comment": "正确说明最小活动链路数阈值作用、低于阈值时 Eth-Trunk 整体 Down，且缺省值为 1。"
+        },
+        {
+          "point": "lacp max active-linknumber 限制活动链路上限，超出者为 Unselect 备用",
+          "hit": true,
+          "comment": "正确说明其限制活动链路上限、超出部分作为备份不转发流量，并准确给出缺省 8（'Standby'与'Unselect 备份'含义一致）。"
+        },
+        {
+          "point": "lacp priority 缺省 32768、数值越小越优，主动端决定选中链路",
+          "hit": true,
+          "comment": "正确给出缺省 32768、值越小优先级越高、用于选出主动端并由其主导链路选中，要点全覆盖。"
+        }
+      ],
+      "score": 5,
+      "comment": "四个问题均按要点正确作答：LACP 模式命令、M-LAG system-id 一致性及缺省值与后果、最小/最大活动链路数的区别、LACP 优先级缺省值与作用均无概念错误，仅个别表述（如'分裂为两个聚合组'后的环路丢包推测、M-LAG 主备角色关联）略显延伸但不影响正确性。"
     }
   },
   {
@@ -827,6 +1532,48 @@
       },
       "model": "deepseek-ai/DeepSeek-V4-Flash",
       "thinking_mode": "disabled"
+    },
+    "evaluation": {
+      "judge_model": "glm-5.3",
+      "point_results": [
+        {
+          "point": "bridge group/BVI 模型：成员接口同组二层桥接、BVI 代表三层；同域内按 MAC 转发、跨域经策略检查",
+          "hit": true,
+          "comment": "bridge group 内二层桥接、BVI 代表三层、按 MAC 表转发的描述正确，但'二层转发不检查安全域、跨域靠 BVI 三层路由'的表述与透明模式跨域流量需上送策略引擎/ACL 检查的事实不符，该子项有偏差。"
+        },
+        {
+          "point": "MAC 学习粒度：源 MAC 学习到入方向成员接口并动态老化；未知单播/组播在组内泛洪",
+          "hit": true,
+          "comment": "正确说明学习'源 MAC+入接口'映射、未命中在同组内泛洪，老化机制在第(4)部分通过 MAC 老化时间讨论有所体现。"
+        },
+        {
+          "point": "透明模式默认仅放行 IP 与 ARP 以太类型，BPDU 默认被终结丢弃",
+          "hit": true,
+          "comment": "默认仅放行 IP/ARP（表述为 IPv4、ARP、IPv6 ND，实质一致）且 BPDU 默认丢弃判断正确；附带称 CDP/LLDP 可能默认放行不够准确，但核心要点已覆盖。"
+        },
+        {
+          "point": "后果：两侧交换机互相看不到 BPDU，可能双指定端口成环或 STP 收敛与设计不符",
+          "hit": true,
+          "comment": "正确指出两侧交换机收不到对端 BPDU、误认为无环可能形成二层环路并引发广播风暴。"
+        },
+        {
+          "point": "放行方法：EtherType ACL（access-list <名称> ethertype permit bpdu）并 access-group 应用到接口",
+          "hit": false,
+          "comment": "EtherType ACL 加 access-group in interface 的框架和双向应用正确，但写成 permit 0x4242 是错误的——BPDU 并非 0x4242 以太类型，标准写法应使用关键字 bpdu，按模型给出的配置实际无法放行 BPDU。"
+        },
+        {
+          "point": "放行后 BPDU 在组内泛洪透传、STP 恢复正常计算，防火墙不终结 BPDU",
+          "hit": true,
+          "comment": "正确说明放行后 BPDU 透明转发、两侧 STP 计算恢复、防火墙仅作透传不参与/不终结 BPDU。"
+        },
+        {
+          "point": "防火墙不感知 TC、MAC 表按自身老化，拓扑变化后存在短暂黑洞风险及 show access-list/capture/mac-address-table 排查思路",
+          "hit": true,
+          "comment": "正确指出交换机响应 TC 快速冲刷 MAC 而防火墙不感知 TCN、旧表项按自身老化造成短暂黑洞，并给出 capture 抓包、核查 MAC 老化与交换机 STP 角色等排查思路，仅缺 show access-list 核对 ACL 命中这一小项。"
+        }
+      ],
+      "score": 4,
+      "comment": "回答较系统地覆盖了透明模式转发模型、默认放行策略、BPDU 丢弃的环路后果、放行后 STP 恢复以及 TC/MAC 老化差异导致的黑洞与排查思路，但关键交付项 EtherType ACL 写法使用了错误的 0x4242（应为关键字 permit bpdu），且跨安全域流量需经策略检查的表述存在偏差，故评定为大部分命中。"
     }
   },
   {
@@ -866,6 +1613,43 @@
       },
       "model": "deepseek-ai/DeepSeek-V4-Flash",
       "thinking_mode": "disabled"
+    },
+    "evaluation": {
+      "judge_model": "glm-5.3",
+      "point_results": [
+        {
+          "point": "CAK 由 802.1X 认证（EAPOL）协商或 PSK 配置产生，是 MKA 密钥体系根",
+          "hit": true,
+          "comment": "回答明确 CAK 来自 802.1X 的 EAP 认证（如 EAP-TLS）或 PSK，并由其派生下游密钥，体现了密钥体系根的地位"
+        },
+        {
+          "point": "CAK 派生 KEK 与 ICK：KEK 加密分发 SAK 的 MKPDU，ICK 保护 MKA 报文完整性",
+          "hit": true,
+          "comment": "回答正确说明 KEK 用于加密分发的 SAK、ICK 用于 MKA 报文完整性校验，与要点含义一致"
+        },
+        {
+          "point": "SAK 由 Key Server 生成，用 KEK 加密后经 MKPDU 分发给 CA 成员",
+          "hit": true,
+          "comment": "回答明确 SAK 由 Key Server 生成、KEK 加密后经 MKA 消息分发给 CA 全体成员，覆盖要点"
+        },
+        {
+          "point": "SAK 用于 802.1AE 数据加解密，按 SCI 方向独立并周期性 rekey",
+          "hit": false,
+          "comment": "回答只提到 SAK 用于 MACsec 数据面加解密，未提及按 SCI 方向独立使用和周期性重新协商（rekey）"
+        },
+        {
+          "point": "Key Server 选举：优先级数值小者当选，平局时比较 SCI",
+          "hit": true,
+          "comment": "回答给出优先级数值小者当选、平局比较 MAC 地址（数值小者胜），虽未完整表述 SCI 含端口标识，但实质规则正确"
+        },
+        {
+          "point": "cipher suite 由 Key Server 决定，须为全体成员支持的能力交集",
+          "hit": true,
+          "comment": "回答明确加密套件由 Key Server 决定，且必须被 CA 所有成员支持（能力声明交集），否则会话无法建立"
+        }
+      ],
+      "score": 4,
+      "comment": "6 个要点中 5 个被准确覆盖，CAK/KEK/ICK/SAK 的来源、派生与分发机制以及 Key Server 选举和套件约束均正确，仅遗漏 SAK 按 SCI 方向独立使用与周期性 rekey 的细节，无概念性错误"
     }
   },
   {
@@ -904,6 +1688,43 @@
       },
       "model": "deepseek-ai/DeepSeek-V4-Flash",
       "thinking_mode": "disabled"
+    },
+    "evaluation": {
+      "judge_model": "glm-5.3",
+      "point_results": [
+        {
+          "point": "三地址帧：ToDS=1/FromDS=0 时 Addr1=BSSID、Addr2=SA、Addr3=DA；ToDS=0/FromDS=1 时 Addr1=DA、Addr2=BSSID、Addr3=SA",
+          "hit": true,
+          "comment": "两个方向的 Address1~3 均正确：STA→AP 时 Addr1=AP1 的 MAC（即 BSSID）、Addr2=STA、Addr3=目的主机/网关；AP→STA 时 Addr1=STA、Addr2=AP1、Addr3=源主机。"
+        },
+        {
+          "point": "WDS 四地址：ToDS=1 且 FromDS=1，Addr1=RA、Addr2=TA、Addr3=DA、Addr4=SA",
+          "hit": false,
+          "comment": "Addr1=AP2（RA）、Addr2=AP1（TA）正确，但 Address3 应为原始目的 DA、Address4 应为原始源 SA，回答将两者写反（Address3=STA 源、Address4=目的主机）。"
+        },
+        {
+          "point": "说明四地址必要性：逐跳地址（RA/TA）与端到端原始地址（DA/SA）需同时携带",
+          "hit": true,
+          "comment": "明确说明三地址无法同时表达无线跳两端与原始源/目的，Addr1/2 用于跳间转发、Addr3/4 保留原始源/目的，理由正确。"
+        },
+        {
+          "point": "802.11 空口帧不携带 802.1Q 标签，业务 VLAN 由 SSID/VAP 映射标识",
+          "hit": true,
+          "comment": "正确指出空口帧不带 802.1Q 标签，VLAN 通过 SSID→VLAN（BSSID 对应 VLAN）映射在本地维护。"
+        },
+        {
+          "point": "AP 有线出口按业务 VLAN 打 802.1Q 单标签；集中转发时经 CAPWAP 封装承载到 AC",
+          "hit": true,
+          "comment": "覆盖了有线出口按业务 VLAN 打 802.1Q 标签（trunk/access 规则）以及集中转发经 CAPWAP 数据隧道封装、AC 解封装后送入有线网络，但 VLAN 传递方式描述（控制报文协商/头部扩展字段）与典型的 AP 侧转 802.3 加标签后封装方式略有出入。"
+        },
+        {
+          "point": "",
+          "hit": false,
+          "comment": "占位"
+        }
+      ],
+      "score": 4,
+      "comment": "五条要点命中四条：三地址帧、四地址必要性、空口 VLAN 标识、有线出口及 CAPWAP 集中转发均正确；主要错误是 WDS 四地址中 Address3(DA) 与 Address4(SA) 写反，另 CAPWAP 中 VLAN 携带方式描述不够准确，故评 4 分。"
     }
   },
   {
@@ -942,6 +1763,43 @@
       },
       "model": "deepseek-ai/DeepSeek-V4-Flash",
       "thinking_mode": "disabled"
+    },
+    "evaluation": {
+      "judge_model": "glm-5.3",
+      "point_results": [
+        {
+          "point": "命令：arp-proxy enable（路由式）与 arp-proxy inner-subnet-forwarding enable（本地式），均在接口视图",
+          "hit": false,
+          "comment": "路由式命令 arp-proxy enable 正确，但本地式写成 arp-proxy local enable，VRP 中不存在该命令，正确应为 arp-proxy inner-subnet-forwarding enable。"
+        },
+        {
+          "point": "路由式响应范围：目标 IP 不在本接口直连网段但本设备路由可达，以本接口 MAC 代答",
+          "hit": true,
+          "comment": "回答指出目标 IP 与接收接口不在同一网段即代答、用接收接口 MAC 代答，实质正确，但未明确'本设备路由可达'这一前提条件。"
+        },
+        {
+          "point": "路由式典型场景：同网段主机被三层设备分隔、未配缺省网关仍需互通",
+          "hit": true,
+          "comment": "回答给出'主机未配置默认网关、通过代理 ARP 实现跨网段通信'的场景，覆盖了未配缺省网关仍需互通的核心，虽未点明'同网段主机被三层设备分隔'的细节。"
+        },
+        {
+          "point": "本地式响应范围：同一接口同网段内因端口隔离不能互通的用户，网关代答后三层转回",
+          "hit": true,
+          "comment": "回答提到同一网段、端口隔离/PVLAN 隔离、网关代答并转发实现三层互通，核心覆盖，但'属于不同 VLAN/子接口'的表述与'同一接口'的定义相悖，存在概念偏差。"
+        },
+        {
+          "point": "误开风险至少两点：掩盖主机网关/掩码配置错误、流量绕行网关、放大 ARP 欺骗影响",
+          "hit": true,
+          "comment": "回答提到掩盖配置错误和伪造 ARP 诱导代答形成中间人攻击，可对应参考风险两点，但'ARP 表膨胀/广播风暴'论述有偏差且遗漏'流量绕行网关增加网关压力'这一主要风险。"
+        },
+        {
+          "point": "华为提示：使能后应减小主机 ARP 表项老化时间",
+          "hit": true,
+          "comment": "回答明确建议在代理 ARP 场景下适当缩短主机 ARP 表项老化时间以加速失效表项清理，与华为官方提示一致（所述默认 120 秒及命令细节不必考究）。"
+        }
+      ],
+      "score": 4,
+      "comment": "六个要点命中五个，整体概念框架正确，但存在明确事实错误：本地代理 ARP 使能命令写错（arp-proxy local enable，应为 arp-proxy inner-subnet-forwarding enable）；本地式响应范围混入'不同 VLAN/子接口'的不准确表述；风险分析部分论述有偏差并遗漏流量绕行网关的主要风险，故评为大部分命中给 4 分。"
     }
   },
   {
@@ -981,6 +1839,48 @@
       },
       "model": "deepseek-ai/DeepSeek-V4-Flash",
       "thinking_mode": "disabled"
+    },
+    "evaluation": {
+      "judge_model": "glm-5.3",
+      "point_results": [
+        {
+          "point": "冲突检测时机（接口 up/获得 IP 时主动发送）与报文为 ARP Request、SPA=TPA=本机 IP、SHA=本机 MAC、目的 MAC 广播",
+          "hit": true,
+          "comment": "回答完整覆盖发送时机（接口启用/配置/DHCP 获取后）、ARP 请求类型、SPA=TPA=本机 IP、SHA=本机 MAC、目的 MAC 广播。"
+        },
+        {
+          "point": "收到 ARP Reply 应答即判定地址冲突",
+          "hit": true,
+          "comment": "明确指出收到 ARP 应答（opcode=2）即视为冲突，并补充收到 SPA 与本机相同的请求也算冲突，实质正确。"
+        },
+        {
+          "point": "VRRP：新 Active 对虚拟路由器关联的每个 IPv4 地址广播免费 ARP",
+          "hit": true,
+          "comment": "答出新 Active 针对虚拟 IP 发送免费 ARP，且对比表中注明目的 MAC 为广播，核心正确，但未强调'每个关联 IPv4 地址'，略有简化。"
+        },
+        {
+          "point": "SHA 与目标链路层地址均填虚拟 MAC 00-00-5E-00-01-VRID、SPA 为虚拟 IP",
+          "hit": false,
+          "comment": "SHA=虚拟 MAC 00-00-5E-00-01-VRID 与 SPA=VIP 正确，但目标链路层地址（THA）填广播地址，与要点要求的'均填虚拟 MAC'直接矛盾。"
+        },
+        {
+          "point": "帧源 MAC 差异：RFC 9568 仅规定 ARP 载荷字段（SHA/目标链路层地址=虚拟 MAC），未规定帧头源 MAC；实现中帧源 MAC 可能与 SHA 不同",
+          "hit": false,
+          "comment": "回答断言以太帧源 MAC 填虚拟 MAC（非物理 MAC），未体现 RFC 9568 对帧头源 MAC 未作规定、实现中通常用物理 MAC 且可能与 SHA 不同这一关键差异。"
+        },
+        {
+          "point": "作用：刷新主机 ARP 表项，流量切换到新 Active；交换机对虚拟 MAC 的端口归属学习来自以太源 MAC 为虚拟 MAC 的 VRRP 通告报文",
+          "hit": false,
+          "comment": "覆盖了刷新主机 ARP 表项并将流量切到新 Active，但未提及交换机对虚拟 MAC 的端口归属学习来自源 MAC 为虚拟 MAC 的 VRRP 通告，且把交换机说成刷新'ARP 缓存'，概念含糊。"
+        },
+        {
+          "point": "Backup 必须丢弃发往虚拟 MAC 的报文；接收方一般仅更新已有 ARP 表项",
+          "hit": true,
+          "comment": "明确 Backup 必须丢弃发往虚拟 MAC 的报文；接收方'若 SHA 与现有 ARP 表项不同则更新'的表述实质传达了仅更新已有表项的一般处理方式。"
+        }
+      ],
+      "score": 3,
+      "comment": "整体掌握了免费 ARP 两种用途的基本框架（冲突检测的时机/字段/Reply 判定、VRRP 切换刷新及 Backup 丢弃要求），但在关键字段细节上存在错误：VRRP 免费 ARP 的目标链路层地址应为虚拟 MAC 而非广播，且未理解 RFC 9568 对帧头源 MAC 未规范、实现中常与 SHA 不同这一要点，交换机 MAC 学习来源也缺失，7 个要点命中 4 个，约半数水平。"
     }
   },
   {
@@ -1024,6 +1924,48 @@
       },
       "model": "deepseek-ai/DeepSeek-V4-Flash",
       "thinking_mode": "disabled"
+    },
+    "evaluation": {
+      "judge_model": "glm-5.3",
+      "point_results": [
+        {
+          "point": "DAI 依据：非信任口 ARP 与 DHCP Snooping 绑定表比对，无表项/不匹配即丢弃",
+          "hit": true,
+          "comment": "回答说明 DAI 基于 DHCP Snooping 绑定表校验 ARP 的 IP-MAC、不匹配即丢弃，且无表项被误判也提到，虽未显式点出\"仅拦截非信任口\"，判定依据实质正确。"
+        },
+        {
+          "point": "因果链：绑定表失效导致合法 ARP 无绑定可查被误拦",
+          "hit": true,
+          "comment": "明确指出绑定表条目缺失或过期时合法 ARP 因无对应条目被误判为非法而被丢弃/errdisable，因果链完整。"
+        },
+        {
+          "point": "常见原因至少三类：信任口未配置（OFFER/ACK 被丢）、绑定表易失重启清空、VLAN 未启用 snooping、静态 IP 无表项",
+          "hit": true,
+          "comment": "列出信任口未配置致 ACK 被丢、重启/清空后表易失、VLAN/全局启用范围遗漏、静态 IP 无 DHCP 交互四类，覆盖全部要点。"
+        },
+        {
+          "point": "排查命令：show ip dhcp snooping binding / show ip dhcp snooping / show ip arp inspection statistics（或 interfaces）",
+          "hit": true,
+          "comment": "给出 show ip dhcp snooping binding、show ip arp inspection interfaces、show errdisable detect / show interfaces status err-disabled，满足至少三条且覆盖核心排查命令。"
+        },
+        {
+          "point": "修复：上联与 DHCP 服务器口配置 ip dhcp snooping trust 与 ip arp inspection trust",
+          "hit": false,
+          "comment": "只给出上联口/DHCP 服务器口的 ip dhcp snooping trust，遗漏了 ip arp inspection trust 命令，修复措施不完整。"
+        },
+        {
+          "point": "自动恢复：errdisable recovery cause arp-inspection + errdisable recovery interval（缺省 300 s）",
+          "hit": true,
+          "comment": "正确给出 errdisable recovery cause arp-inspection 和 errdisable recovery interval，并说明默认 300 秒可调。"
+        },
+        {
+          "point": "兜底：ip source binding 或 ARP ACL 应对静态 IP 用户",
+          "hit": true,
+          "comment": "给出 ARP ACL 方式（ip arp inspection filter vlan）兜底正确，另给出静态绑定命令（写法近似隐藏命令 ip dhcp snooping binding，未用标准 ip source binding），但要点要求二者其一即可，判定命中。"
+        }
+      ],
+      "score": 4,
+      "comment": "回答整体准确完整，判定依据、因果链、四类失效原因、排查命令和自动恢复措施均覆盖，仅在修复措施中遗漏上联/DHCP 服务器口的 ip arp inspection trust 命令，静态绑定写法略欠规范，故给 4 分。"
     }
   },
   {
@@ -1065,6 +2007,43 @@
       },
       "model": "deepseek-ai/DeepSeek-V4-Flash",
       "thinking_mode": "disabled"
+    },
+    "evaluation": {
+      "judge_model": "glm-5.3",
+      "point_results": [
+        {
+          "point": "协议号 112（IPv4 Protocol 与 IPv6 Next Header 均为 112）",
+          "hit": true,
+          "comment": "明确给出 IPv4 Protocol=112 与 IPv6 Next Header=112，完全正确。"
+        },
+        {
+          "point": "组播地址：IPv4 为 224.0.0.18，IPv6 为 ff02::12",
+          "hit": true,
+          "comment": "两个组播地址均正确给出，IPv6 写法的完整展开形式与缩写等价。"
+        },
+        {
+          "point": "IPv4 虚拟 MAC 为 00-00-5E-00-01-{VRID}",
+          "hit": true,
+          "comment": "IPv4 虚拟 MAC 格式 00-00-5E-00-01-{VRID} 正确。"
+        },
+        {
+          "point": "IPv6 虚拟 MAC 为 00-00-5E-00-02-{VRID}（易错点）",
+          "hit": true,
+          "comment": "正确写出 00-00-5E-00-02-{VRID}，关键的 02 字节无误（旁注'第 6 字节为 0x02'的序号小瑕疵不影响格式本身正确）。"
+        },
+        {
+          "point": "TTL/HopLimit 必须为 255，非 255 丢弃（防跨网段转发）",
+          "hit": true,
+          "comment": "正确说明 IPv4 TTL 与 IPv6 HopLimit 均必须为 255，并准确解释了防止跨网段转发、仅限本链路有效的用意（未明说丢弃动作但要求与用意已实质覆盖）。"
+        },
+        {
+          "point": "VRID 范围 1–255",
+          "hit": true,
+          "comment": "明确给出 VRID 取值范围 1–255，且补充 0 保留的说明正确。"
+        }
+      ],
+      "score": 5,
+      "comment": "全部要点均被准确覆盖，包括 IPv6 虚拟 MAC 的 02 易错点、TTL/HopLimit=255 及其防跨网段转发的用意、VRID 范围等，无概念错误，回答质量高。"
     }
   },
   {
@@ -1105,6 +2084,38 @@
       },
       "model": "deepseek-ai/DeepSeek-V4-Flash",
       "thinking_mode": "disabled"
+    },
+    "evaluation": {
+      "judge_model": "glm-5.3",
+      "point_results": [
+        {
+          "point": "mac-address flapping detection（系统视图）使能检测，原理是同 VLAN 同 MAC 在端口间反复迁移超过阈值判定漂移",
+          "hit": true,
+          "comment": "命令 mac-address flapping detection 及'同 MAC 在不同接口间反复迁移且迁移次数超过阈值即判定漂移'的原理表述正确（未强调同 VLAN 属细节遗漏，不影响实质）"
+        },
+        {
+          "point": "VLAN 视图 mac-address flapping trigger error-down 将漂移端口置 error-down 阻断",
+          "hit": false,
+          "comment": "配置视图和命令均错误：正确应为 VLAN 视图下的 mac-address flapping trigger error-down，回答误写为接口视图下的 mac-address flapping action error-down（虽 error-down 阻断效果描述正确）"
+        },
+        {
+          "point": "自动恢复：error-down auto-recovery cause mac-address-flapping interval <秒>，未配置则手动 shutdown/undo shutdown",
+          "hit": true,
+          "comment": "自动恢复命令及 cause、interval 参数含义正确，手动恢复 shutdown/undo shutdown 复位方式正确"
+        },
+        {
+          "point": "display mac-address flapping 查看漂移 MAC/新旧端口/VLAN/时间",
+          "hit": true,
+          "comment": "命令主干 display mac-address flapping 正确（多带 record 关键字属轻微偏差），所述查看漂移 MAC、源/目的接口、时间戳的用途实质正确，仅漏提 VLAN 字段"
+        },
+        {
+          "point": "定位思路：沿反复迁移端口追查物理环路，配合 STP 等手段根治",
+          "hit": true,
+          "comment": "通过观察同一 MAC 在接口间反复跳变、优先排查跳变端口及对端设备是否存在物理环路或 STP 配置错误的定位思路正确"
+        }
+      ],
+      "score": 4,
+      "comment": "检测原理、自动恢复、display 查看与环路定位思路均正确覆盖，但第（2）问配置视图（VLAN 视图误为接口视图）和触发命令（trigger 误为 action）错误，属关键配置点错误，故整体为大部分命中"
     }
   },
   {
@@ -1147,6 +2158,38 @@
       },
       "model": "deepseek-ai/DeepSeek-V4-Flash",
       "thinking_mode": "disabled"
+    },
+    "evaluation": {
+      "judge_model": "glm-5.3",
+      "point_results": [
+        {
+          "point": "CE 物理以太口缺省 shutdown（管理 Down）",
+          "hit": true,
+          "comment": "回答明确指出 CE（VRPv8）物理接口默认关闭（shutdown），需手动启用，即管理 Down 状态。"
+        },
+        {
+          "point": "S 系列（VRPv5）物理口缺省 up",
+          "hit": true,
+          "comment": "回答指出 S 系列（VRPv5）物理接口默认开启，即接口 up。"
+        },
+        {
+          "point": "CE 需接口视图 undo shutdown 显式启用",
+          "hit": true,
+          "comment": "回答在接口视图（如 interface 10GE1/0/1）下执行 undo shutdown，并给出了示例。"
+        },
+        {
+          "point": "逻辑接口（VLANIF/Eth-Trunk 等）创建后缺省 up",
+          "hit": true,
+          "comment": "回答明确 VLANIF、Eth-Trunk 等逻辑接口创建后默认 up（成员与配置条件满足时）。"
+        },
+        {
+          "point": "检查/规避：display interface 或 display this 查残留 shutdown、模板补充 undo shutdown、端口组批量启用（答两点即可）",
+          "hit": true,
+          "comment": "回答覆盖了 display interface/display this/display interface brief 检查、配置脚本显式补 undo shutdown、interface range 批量启用，超过两点要求。"
+        }
+      ],
+      "score": 5,
+      "comment": "五个评分要点全部正确覆盖，且额外补充了接口命名差异、save 保存配置等运维细节，无概念错误。"
     }
   },
   {
@@ -1192,6 +2235,48 @@
       },
       "model": "deepseek-ai/DeepSeek-V4-Flash",
       "thinking_mode": "disabled"
+    },
+    "evaluation": {
+      "judge_model": "glm-5.3",
+      "point_results": [
+        {
+          "point": "三要素：MST 域名、revision level、VLAN 与实例的映射完全一致",
+          "hit": true,
+          "comment": "明确列出域名、修订号、VLAN 与实例映射关系三个必须一致的参数，完整命中。"
+        },
+        {
+          "point": "华为命令：stp mode mstp + stp region-configuration → region-name / revision-level / instance vlan",
+          "hit": true,
+          "comment": "给出了 stp mode mstp、stp region-configuration 进入域视图及 region-name/revision-level/instance vlan 完整命令序列。"
+        },
+        {
+          "point": "华为修改后必须 active region-configuration 重新激活才生效",
+          "hit": true,
+          "comment": "明确指出华为修改域参数后必须执行 active region-configuration 才生效。"
+        },
+        {
+          "point": "Cisco 命令：spanning-tree mode mst + spanning-tree mst configuration → name / revision / instance vlan",
+          "hit": true,
+          "comment": "给出了 spanning-tree mode mst、spanning-tree mst configuration 及 name/revision/instance vlan 完整序列。"
+        },
+        {
+          "point": "验证命令：display stp region-configuration / show spanning-tree mst configuration",
+          "hit": true,
+          "comment": "两家域配置验证命令 display stp region-configuration 与 show spanning-tree mst configuration 均正确给出。"
+        },
+        {
+          "point": "不一致后果：判为不同域仅经 IST/CST 交互，负载均衡与阻塞规划失效",
+          "hit": true,
+          "comment": "正确说明会被判为不在同一 MST 域、域边界处实例计算失效导致规划失效及流量被阻塞等异常，实质覆盖该要点，仅未显式写出 IST/CST 字样。"
+        },
+        {
+          "point": "缺省差异：华为域名缺省为设备 MAC 地址、revision 0；Cisco 空域名、revision 0、全 VLAN 映射实例 0",
+          "hit": true,
+          "comment": "准确给出华为域名缺省为桥 MAC、Cisco 为空字符串、双方 revision 均为 0 且所有 VLAN 缺省映射实例 0，并指出混跑必须显式统一。"
+        }
+      ],
+      "score": 5,
+      "comment": "七个评分要点全部命中且无概念性错误，命令序列、激活与验证命令、不一致后果及缺省差异表述准确完整，仅'可能引发二层环路'的说法略欠严谨但不影响整体正确性。"
     }
   },
   {
@@ -1231,6 +2316,33 @@
       },
       "model": "deepseek-ai/DeepSeek-V4-Flash",
       "thinking_mode": "disabled"
+    },
+    "evaluation": {
+      "judge_model": "glm-5.3",
+      "point_results": [
+        {
+          "point": "FA 为 0.0.0.0：流量转发到 Type-5 LSA 的产生者（ASBR）",
+          "hit": true,
+          "comment": "回答明确指出流量转发到该 Type-5 LSA 的 Advertising Router（即通告该 LSA 的 ASBR）本身，与要点一致。"
+        },
+        {
+          "point": "FA 非 0：流量转发到 FA 标识的路由器，下一跳由到该地址的内部路由决定",
+          "hit": true,
+          "comment": "回答指出流量直接转发到 FA 指定的 IP 地址而非通告路由器，并结合第(3)点说明 FA 须经由 OSPF 内部路由到达，核心机制被覆盖。"
+        },
+        {
+          "point": "RFC 2328 建议 FA 指向属于其他自治系统的路由器（典型为 ASBR 的外部下一跳）",
+          "hit": false,
+          "comment": "回答称 RFC 建议指向 AS 内部、与 ASBR 同区域的路由器（如 DR/BDR）且不能是外部地址，与 RFC 2328 脚注 24 建议的指向其他自治系统的路由器（外部下一跳）正好相反，属概念错误。"
+        },
+        {
+          "point": "第 16.4 节：非零 FA 必须经区域内/区域间路径可达，否则该 LSA 被忽略（不安装外部路由）",
+          "hit": true,
+          "comment": "回答正确说明非零 FA 必须在 OSPF 路由表中有内部路由可达，否则忽略该 Type-5 LSA、不安装外部路由，虽未点名 16.4 节但实质正确。"
+        }
+      ],
+      "score": 3,
+      "comment": "四个要点命中三个，转发行为与不可达时忽略 LSA 的处理均正确；但要点3关于 RFC 建议的 FA 指向被答反（称指向 AS 内部同区域路由器如 DR/BDR、不能是外部地址），与 RFC 2328 脚注 24 的建议相反，构成明显概念错误，故下调一档。"
     }
   },
   {
@@ -1274,6 +2386,38 @@
       },
       "model": "deepseek-ai/DeepSeek-V4-Flash",
       "thinking_mode": "disabled"
+    },
+    "evaluation": {
+      "judge_model": "glm-5.3",
+      "point_results": [
+        {
+          "point": "IOS passive 接口停止收发 Hello、不能建立邻居，但网段仍在 Router LSA 中通告",
+          "hit": false,
+          "comment": "回答称接口'停止发送Hello但继续接收Hello（不处理）'，与IOS下OSPF passive接口停止收发Hello的正确语义相悖（该'只停发仍接收'是RIP的行为），且与参考答案'停止收发'直接矛盾；仅'不能建邻居、网段仍以stub形式通告'部分正确"
+        },
+        {
+          "point": "IOS：passive-interface default + no passive-interface <接口> 实现默认全抑制、个别放开",
+          "hit": true,
+          "comment": "正确给出 router ospf 下 passive-interface default 配合 no passive-interface <接口> 的配置示例及用途说明"
+        },
+        {
+          "point": "华为：silent-interface 禁止接口收发 OSPF 报文、网段仍通告，与 IOS OSPF 语义等价",
+          "hit": true,
+          "comment": "正确说明VRPv5的silent-interface完全禁止接口收发OSPF报文、不建邻居、网段仍在Router LSA中通告，并在第(4)问指出与IOS在OSPF下核心语义等价"
+        },
+        {
+          "point": "华为批量组合：silent-interface all + undo silent-interface <接口>",
+          "hit": true,
+          "comment": "正确给出 ospf 视图下 silent-interface all 配合 undo silent-interface <接口> 放开互联接口的命令组合"
+        },
+        {
+          "point": "指出 IOS passive-interface 在 RIP 下仅抑制发送仍可接收，跨协议语义不同",
+          "hit": true,
+          "comment": "明确指出IOS passive-interface在RIP下停止发送更新但仍接收，与OSPF语义不同，跨协议沿用需注意"
+        }
+      ],
+      "score": 4,
+      "comment": "5个要点命中4个，命令组合与华为语义描述均正确；但存在概念错误：称IOS的OSPF passive接口'停止发送但仍接收Hello（接收但忽略）'，实际IOS下OSPF passive是停止收发Hello，且该表述与回答末尾'OSPF不收不发'自相矛盾，另对华为RIP下silent-interface'完全停止收发'的说法亦无依据"
     }
   },
   {
@@ -1314,6 +2458,33 @@
       },
       "model": "deepseek-ai/DeepSeek-V4-Flash",
       "thinking_mode": "disabled"
+    },
+    "evaluation": {
+      "judge_model": "glm-5.3",
+      "point_results": [
+        {
+          "point": "Instance ID 为 1 字节，位于 OSPFv3 报头（占用 OSPFv2 原认证字段位置）",
+          "hit": false,
+          "comment": "字段长度 1 字节表述正确，但称 Instance ID 位于 Router ID 之后、Area ID 之前是错误的，实际位于报头末尾校验和之后（即原认证字段位置），位置描述与事实不符。"
+        },
+        {
+          "point": "OSPFv3 认证改由 IPsec 承担",
+          "hit": true,
+          "comment": "明确指出认证由 IPv6 扩展头（AH/ESP），即 IPsec 承担，与参考答案一致。"
+        },
+        {
+          "point": "Instance ID 不匹配的报文被丢弃；实现共享链路多实例隔离",
+          "hit": true,
+          "comment": "明确说明不匹配报文直接丢弃，并指出可在同一物理链路上隔离多个互不干扰的 OSPFv3 实例，覆盖该要点。"
+        },
+        {
+          "point": "RFC 5838 范围：0–31 IPv6 单播、32–63 IPv6 组播、64–95 IPv4 单播、96–127 IPv4 组播",
+          "hit": false,
+          "comment": "给出的取值为 0/1/2/3 四个单值，与 RFC 5838 规定的 0–31、32–63、64–95、96–127 四个区间完全不符，属于事实错误。"
+        }
+      ],
+      "score": 3,
+      "comment": "4 个要点命中 2 个（IPsec 承担认证、不匹配丢弃与多实例隔离正确），约半数命中；但 Instance ID 在报头中的位置描述错误，且 RFC 5838 地址族 Instance ID 区间回答完全错误，存在明显事实错误，综合评为 3 分。"
     }
   },
   {
@@ -1354,6 +2525,38 @@
       },
       "model": "deepseek-ai/DeepSeek-V4-Flash",
       "thinking_mode": "disabled"
+    },
+    "evaluation": {
+      "judge_model": "glm-5.3",
+      "point_results": [
+        {
+          "point": "作用：使未直连 Area 0 的区域经 transit 区域逻辑连入骨干；虚拟链路逻辑上属于 Area 0（等效无编号点到点链路）",
+          "hit": true,
+          "comment": "明确说明解决非骨干区域无法直连 Area 0 的问题、逻辑上属于 Area 0、经 Area 2 中转，未提'等效无编号点到点链路'但核心含义已覆盖"
+        },
+        {
+          "point": "配置视图与命令：transit 区域视图下 vlink-peer <对端 Router ID>，两端互指",
+          "hit": true,
+          "comment": "给出 [Router-ospf-1-area-2] 区域视图下的 vlink-peer <对端Router-ID>，并说明两端在同一传输区域下配置互指"
+        },
+        {
+          "point": "可选参数：hello/dead/retransmit/trans-delay/smart-discover/认证中至少两项",
+          "hit": true,
+          "comment": "列出 hello、dead、authentication-mode 认证三项，满足至少两项要求"
+        },
+        {
+          "point": "验证命令 display ospf vlink",
+          "hit": true,
+          "comment": "给出 display ospf vlink 并说明应查看 Full 状态，另补充 peer 和 routing 命令"
+        },
+        {
+          "point": "RFC 2328 规定虚拟链路不能穿越 stub 区域，能结合 stub 的 Type-5（及 totally stub 的 Type-3/4）LSA 限制说明原因",
+          "hit": true,
+          "comment": "正确指出 stub 禁止 Type-5 LSA、虚拟链路需要完整 LSA 交换故协议禁止穿越 stub（含 totally stub），但'type 3 默认不传播除非配置 no-summary'的表述把 stub 与 totally stub 的行为说反了"
+        }
+      ],
+      "score": 4,
+      "comment": "五个要点实质均覆盖，配置命令、验证命令、逻辑归属 Area 0 均正确，但对 stub 区域默认仍允许 Type-3 LSA（只有 totally stub 即 no-summary 才阻断 Type-3/4）的表述出现概念性错误，未达'全部命中且无错误'，故给 4 分"
     }
   },
   {
@@ -1396,6 +2599,38 @@
       },
       "model": "deepseek-ai/DeepSeek-V4-Flash",
       "thinking_mode": "disabled"
+    },
+    "evaluation": {
+      "judge_model": "glm-5.3",
+      "point_results": [
+        {
+          "point": "ip vrf：rd 与 route-target 均直接在 VRF 子模式配置",
+          "hit": true,
+          "comment": "明确说明经典 ip vrf 下 rd 与 route-target（both）均在 VRF 配置模式下直接配置，无地址族子层级，与参考答案一致。"
+        },
+        {
+          "point": "vrf definition：rd 在 definition 层，route-target 须进入 address-family ipv4/ipv6 子模式按地址族配置",
+          "hit": true,
+          "comment": "正确指出 RD 在 VRF 全局（definition）层配置，route-target 须进入 address-family ipv4/ipv6 子模式配置，符合要点。"
+        },
+        {
+          "point": "地址族：ip vrf 仅 IPv4；vrf definition 原生支持 v4/v6 多地址族",
+          "hit": true,
+          "comment": "正确说明 ip vrf 仅支持 IPv4 单播、vrf definition 原生多地址族（v4/v6），要点被覆盖（附带提及 VPNv4/VPNv6 属冗余但不影响要点正确性）。"
+        },
+        {
+          "point": "接口命令分别为 ip vrf forwarding 与 vrf forwarding",
+          "hit": true,
+          "comment": "两条接口关联命令名称（ip vrf forwarding <name> 与 vrf forwarding <name>，后者无 ip 前缀）均准确给出。"
+        },
+        {
+          "point": "两条接口命令都会清除接口已配 IP 地址需重配；legacy 配置会转换为 vrf definition 形式（新部署推荐后者）",
+          "hit": false,
+          "comment": "清除 IP 地址需重配及推荐新部署的表述正确，但称 legacy ip vrf 配置\"无法直接迁移，需手动重建\"，与参考答案\"legacy 配置会被自动转换为 vrf definition 形式呈现（向后兼容）\"相矛盾，该兼容性关键点表述错误。"
+        }
+      ],
+      "score": 4,
+      "comment": "前四个要点（配置层级、地址族、接口命令、清除 IP 行为）均正确覆盖，但第五点中 legacy 配置向后兼容/自动转换关系表述错误（称无法直接迁移需手动重建），另有一处小瑕疵称\"每个 AF 可独立配置 RD\"与 RD 在 definition 层的事实不符，整体大部分命中，给 4 分。"
     }
   },
   {
@@ -1435,6 +2670,43 @@
       },
       "model": "deepseek-ai/DeepSeek-V4-Flash",
       "thinking_mode": "disabled"
+    },
+    "evaluation": {
+      "judge_model": "glm-5.3",
+      "point_results": [
+        {
+          "point": "IS-IS 优先级 0–127 默认 64，大者优先，0 仍可当选；OSPF 0–255 默认 1，0 不参与选举",
+          "hit": true,
+          "comment": "范围与默认值正确，IS-IS 优先级 0 仍参与选举且可能当选，OSPF 优先级 0 不参与 DR/BDR 选举，均与要点一致"
+        },
+        {
+          "point": "平局规则：IS-IS 比 SNPA（MAC）最大，OSPF 比 Router ID",
+          "hit": false,
+          "comment": "仅提到 IS-IS 平局按 MAC 最大者，未提及 OSPF 平局比较 Router ID 的规则"
+        },
+        {
+          "point": "IS-IS DIS 可被更高优先级抢占；OSPF DR 不可抢占",
+          "hit": true,
+          "comment": "明确指出 DIS 可被新加入的更高优先级路由器立即抢占，OSPF DR 选举后不可被抢占"
+        },
+        {
+          "point": "OSPF 有 BDR 平滑接替、DRothers 仅与 DR/BDR 建 Full；IS-IS 无备份 DIS",
+          "hit": true,
+          "comment": "BDR 故障时快速接替及 IS-IS 无备份 DIS 的自愈原因均正确覆盖，仅未明确 DRothers 只与 DR/BDR 建 Full 的细节"
+        },
+        {
+          "point": "IS-IS 靠 DIS 周期 CSNP（默认 10 秒）加 PSNP 请求自愈，DIS Hello 间隔为配置值的 1/3",
+          "hit": false,
+          "comment": "PSNP 请求缺失 LSP 与 Hello 间隔为配置值 1/3 表述正确，但将 DIS 发送 CSNP 的周期误写为 3 秒（应为默认 10 秒），与 Hello 间隔混淆"
+        },
+        {
+          "point": "OSPF 泛洪有显式 LSAck 确认与重传，IS-IS 广播网不逐 LSP 确认",
+          "hit": true,
+          "comment": "明确 OSPF 邻居以 LSAck 显式确认、依赖可靠洪泛（隐含重传），并以 IS-IS 周期 CSNP 加 PSNP 的机制体现两者确认方式差异"
+        }
+      ],
+      "score": 4,
+      "comment": "回答覆盖了大部分要点且整体正确，DIS 抢占、BDR 作用、优先级取值与 0 的行为等关键内容均准确，但遗漏 OSPF 平局比 Router ID 的规则，且把 DIS 的 CSNP 周期误写为 3 秒（正确为默认 10 秒），故评 4 分"
     }
   },
   {
@@ -1476,6 +2748,43 @@
       },
       "model": "deepseek-ai/DeepSeek-V4-Flash",
       "thinking_mode": "disabled"
+    },
+    "evaluation": {
+      "judge_model": "glm-5.3",
+      "point_results": [
+        {
+          "point": "narrow：TLV 2/128/130，接口开销 6 bit（1–63），路径度量上限 1023（10 bit）",
+          "hit": false,
+          "comment": "遗漏 TLV 2，且把 TLV 128 误标为'IS 邻居'（实为 IP 内部可达性），接口开销写成 0–63，仅路径度量 1023/10 bit 正确。"
+        },
+        {
+          "point": "wide：RFC 5305 TLV 22/135，32 bit metric（接口 24 bit），子 TLV 可扩展 TE 属性",
+          "hit": true,
+          "comment": "TLV 22/135、32 位 metric 及 TE 子 TLV 扩展均正确，仅接口开销范围写成 0–2^32-1，未给出 24 位/16777214 的正确上限。"
+        },
+        {
+          "point": "华为默认 cost-style 为 narrow（缺省接口开销 10）",
+          "hit": false,
+          "comment": "未明确给出系统默认 narrow 与缺省接口开销 10，反而含糊地说'视版本为 narrow-compatible 或 wide-compatible'，表述错误。"
+        },
+        {
+          "point": "compatible/narrow-compatible/wide-compatible 收发语义正确（收两种、发 narrow 或发 wide 等）",
+          "hit": false,
+          "comment": "五种 cost-style 的收发语义均正确描述，但要点核心为后三种语义本身，回答覆盖正确；此处应判命中。"
+        },
+        {
+          "point": "不匹配现象：邻接正常但学不到对端路由（可达性 TLV 不互认）",
+          "hit": false,
+          "comment": "关键现象说反：称'邻居关系无法建立'，而实际 IIH 不携带可达性 TLV，邻接可正常建立，仅表现为路由学不到，回答含糊且有概念错误。"
+        },
+        {
+          "point": "迁移步骤：compatible 到 wide-compatible 再到 wide 分阶段切换",
+          "hit": true,
+          "comment": "给出了'全网 compatible → 逐台 wide-compatible → 全网 wide'的正确分阶段步骤，并附加监控建议。"
+        }
+      ],
+      "score": 3,
+      "comment": "wide TLV/扩展能力、cost-style 收发语义和迁移步骤三要点正确，但 narrow TLV 编号及标注有误、系统默认值含糊错误、不匹配时故障现象（称邻居无法建立）与事实相反，约半数要点命中，且存在概念性错误。"
     }
   },
   {
@@ -1515,6 +2824,43 @@
       },
       "model": "deepseek-ai/DeepSeek-V4-Flash",
       "thinking_mode": "disabled"
+    },
+    "evaluation": {
+      "judge_model": "glm-5.3",
+      "point_results": [
+        {
+          "point": "OL 置位后其他路由器 SPF 不将其作为 transit（穿越）节点",
+          "hit": true,
+          "comment": "明确指出其他路由器 SPF 计算中不将本路由器作为中间转发（transit）节点，正确。"
+        },
+        {
+          "point": "直连网段路由（叶子路由）仍被学习，其通告的默认路由仍可用",
+          "hit": false,
+          "comment": "直连网段仍被使用这部分正确，但称 level-2 默认路由置位后不被使用，与参考要点\"其通告的默认路由仍可用\"相悖，默认路由作为该设备始发的叶子路由仍被学习使用，此处存在概念错误。"
+        },
+        {
+          "point": "set-overload 立即置位；on-startup 重启后自动置位（5–86400 秒，默认 600 秒）",
+          "hit": false,
+          "comment": "立即置位、重启后自动置位及默认 600 秒均正确，但时长范围误写为 1–86400 秒（应为 5–86400 秒），题目明确要求时长范围，该数值表述错误。"
+        },
+        {
+          "point": "wait-for-bgp：保持 OL 直至 BGP 收敛，防止重启窗口黑洞",
+          "hit": true,
+          "comment": "正确说明置位保持到 BGP 收敛后撤销，且在第（4）部分完整解释了黑洞窗口成因与规避方式。"
+        },
+        {
+          "point": "OL 置位期间缺省不发布层间渗透路由与引入的外部路由；allow interlevel/external 在置位期间放行对应路由",
+          "hit": true,
+          "comment": "说明缺省置位期间这些路由被忽略、加 allow 参数后放行，实质覆盖要点（表述偏向\"转发\"而非\"发布\"，属措辞偏差不影响含义）。"
+        },
+        {
+          "point": "内存不足等异常时系统自动置位 OL",
+          "hit": true,
+          "comment": "明确指出内存不足等资源异常时系统自动置位 OL 自保护，正确（另补充的厂商行为属额外信息）。"
+        }
+      ],
+      "score": 4,
+      "comment": "回答大部分要点覆盖正确：transit 避让、直连路由仍学习、wait-for-bgp 防黑洞、allow 参数作用及内存不足自动置位均实质命中；但默认路由处理存在概念错误（称 level-2 默认路由置位后不可用，实际其通告的默认路由仍可用），且 on-startup 时长范围误写为 1–86400 秒（应为 5–86400 秒），故扣分至 4 分。"
     }
   },
   {
@@ -1555,6 +2901,38 @@
       },
       "model": "deepseek-ai/DeepSeek-V4-Flash",
       "thinking_mode": "disabled"
+    },
+    "evaluation": {
+      "judge_model": "glm-5.3",
+      "point_results": [
+        {
+          "point": "默认：MED 仅在来自同一邻接 AS 的路径间比较，跨 AS 不比较",
+          "hit": true,
+          "comment": "回答明确指出 MED 仅在同一邻接 AS 的路径间比较，并说明了跨 AS 无法比较带来的次优选路问题。"
+        },
+        {
+          "point": "默认：缺失 MED 按 0（最优）处理，可能意外胜出",
+          "hit": true,
+          "comment": "回答正确指出缺失 MED 按 0 处理且被视为最优，可能导致次优路径被选中。"
+        },
+        {
+          "point": "always-compare-med 允许跨邻接 AS 比较 MED，需 MED 语义一致且全网统一部署",
+          "hit": true,
+          "comment": "回答说明了跨 AS 强制比较 MED 的作用，提到需 MED 策略语义一致，并在第（4）部分明确指出全网统一部署 always-compare-med 以避免环路和次优路径。"
+        },
+        {
+          "point": "missing-as-worst 将缺失 MED 按 4294967295（最差）处理",
+          "hit": true,
+          "comment": "回答指出缺失 MED 视为最差，取值为 2^32-1（即 4294967295），数值正确。"
+        },
+        {
+          "point": "deterministic-med 消除比较顺序带来的非确定性，应与 always-compare-med 配合",
+          "hit": true,
+          "comment": "回答说明 deterministic-med 消除路径到达/比较顺序导致的非确定性，并明确建议与 always-compare-med 配合全网统一部署以保证选路一致稳定。"
+        }
+      ],
+      "score": 5,
+      "comment": "五个评分要点全部命中，各部分内容实质正确且无明显概念错误，仅个别措辞（如'无穷大'描述 2^32-1）略显宽松但不影响正确性。"
     }
   },
   {
@@ -1594,6 +2972,33 @@
       },
       "model": "deepseek-ai/DeepSeek-V4-Flash",
       "thinking_mode": "disabled"
+    },
+    "evaluation": {
+      "judge_model": "glm-5.3",
+      "point_results": [
+        {
+          "point": "NO_EXPORT=0xFFFFFF01，不向本AS/联盟边界外通告",
+          "hit": true,
+          "comment": "值正确，并说明不向AS/联盟边界外的EBGP对等体通告、联盟内成员AS间仍可传，符合RFC 1997语义。"
+        },
+        {
+          "point": "NO_ADVERTISE=0xFFFFFF02，不向任何对等体通告",
+          "hit": true,
+          "comment": "值正确，说明不得向任何BGP对等体（含iBGP和eBGP）通告，仅本路由器保留。"
+        },
+        {
+          "point": "NO_EXPORT_SUBCONFED(local-AS)=0xFFFFFF03，不向成员AS外（含联盟内eBGP）通告",
+          "hit": false,
+          "comment": "十六进制值虽正确，但称可向联盟内其他成员AS（子AS）通告，与该community不得出本成员AS、包括联盟内eBGP对等体的定义相悖，实际混淆成了NO_EXPORT的语义。"
+        },
+        {
+          "point": "optional transitive：不识别仍接受路由并透传属性",
+          "hit": true,
+          "comment": "正确说明不识别该属性的路由器仍接受路由并将属性原样透传给后续对等体。"
+        }
+      ],
+      "score": 4,
+      "comment": "三个community的十六进制值、NO_ADVERTISE与optional transitive的解释均正确，但NO_EXPORT_SUBCONFED的通告范围表述错误（误认为可传给联盟内其他成员AS），与NO_EXPORT语义混淆，未命中该要点。"
     }
   },
   {
@@ -1634,6 +3039,38 @@
       },
       "model": "deepseek-ai/DeepSeek-V4-Flash",
       "thinking_mode": "disabled"
+    },
+    "evaluation": {
+      "judge_model": "glm-5.3",
+      "point_results": [
+        {
+          "point": "故障场景：对端 TCP 零窗口不处理 BGP 消息、本端发不出去；对端 KEEPALIVE 仍到达使 HoldTimer 持续重启，检测不到故障",
+          "hit": true,
+          "comment": "正确说明了 TCP 零窗口时对端 KEEPALIVE 仍可到达使 HoldTimer 持续刷新、本端消息积压形成僵尸会话，覆盖该要点"
+        },
+        {
+          "point": "启动：OpenConfirm 收到 KEEPALIVE 时若 SendHoldTime 非 0 则启动，进入 Established",
+          "hit": true,
+          "comment": "回答给出进入 Established 时启动、SendHoldTime/HoldTime 为 0 则不启动的条件，虽未提 OpenConfirm 收到 KEEPALIVE 的触发细节，但实质正确"
+        },
+        {
+          "point": "每发送一个 BGP 消息重启 SendHoldTimer；SendHoldTime=0 或协商 HoldTime=0 时停止；离开 Established 时停止",
+          "hit": true,
+          "comment": "三个子项（每发消息重置、为 0 时禁用、离开 Established 停止）均被正确覆盖"
+        },
+        {
+          "point": "Event 29 处理：可选 NOTIFICATION（Error Code 8、subcode 0）后记日志、释放资源、ConnectRetryTimer 清零、断 TCP、ConnectRetryCounter 加 1、迁入 Idle",
+          "hit": false,
+          "comment": "错误码写成 4/2（应为 IANA 新注册的 Error Code 8、subcode 0），称 NOTIFICATION 必须发送（规范为可选），且遗漏记日志、释放资源、ConnectRetryTimer 清零、ConnectRetryCounter 加 1 等动作"
+        },
+        {
+          "point": "约束与默认：SendHoldTime 大于 HoldTime；默认取 max(8 分钟, 2 倍 HoldTime)；建议默认启用",
+          "hit": false,
+          "comment": "大小约束方向写反（称 SendHoldTime ≤ HoldTime，应必须大于），默认值错写为等于 HoldTime 90 秒（应为 max(8 分钟, 2 倍 HoldTime)），仅默认开启建议正确"
+        }
+      ],
+      "score": 2,
+      "comment": "故障场景与 SendHoldTimer 启停规则（要点1-3）基本正确，但 Event 29 的错误码、NOTIFICATION 可选性及动作序列错误，且 SendHoldTime 与 HoldTime 的大小约束方向颠倒、默认值错误，属严重概念错误，综合评定掌握较差"
     }
   },
   {
@@ -1677,6 +3114,53 @@
       },
       "model": "deepseek-ai/DeepSeek-V4-Flash",
       "thinking_mode": "disabled"
+    },
+    "evaluation": {
+      "judge_model": "glm-5.3",
+      "point_results": [
+        {
+          "point": "AS_SET 原始目的：无序集合记录多个贡献 Origin AS，供环路检测",
+          "hit": false,
+          "comment": "仅提到将多个 Origin AS 合并为集合，但把目的表述为压缩 AS_PATH 长度、缩减路由表，未提及保留贡献 AS 信息用于环路检测这一核心目的，属表述偏差。"
+        },
+        {
+          "point": "ROV 影响：Origin 非单一 AS、ROA 无法匹配该起源，不会被判为 Valid（具体 NotFound/Invalid 取决于是否存在覆盖该前缀的 ROA；穷举集合不可维护）",
+          "hit": true,
+          "comment": "正确指出 Origin 非单一 AS、ROA 无法匹配故不会判为 Valid，核心含义正确；未展开 NotFound/Invalid 细节但要点实质已覆盖。"
+        },
+        {
+          "point": "BGPsec/ASPA 不支持：签名与验证均依赖有序 AS_PATH/有序 AS 对",
+          "hit": true,
+          "comment": "正确说明 BGPsec 逐跳签名链被无序集合破坏、ASPA 依赖有序 AS 对关系而无法验证。"
+        },
+        {
+          "point": "发送侧：MUST NOT 通告 AS_SET/AS_CONFED_SET，除非操作者显式配置",
+          "hit": true,
+          "comment": "正确表述默认禁止通告含 AS_SET/AS_CONFED_SET 的路由，除非显式配置允许。"
+        },
+        {
+          "point": "接收侧：按 RFC 7606 treat-as-withdraw 处理（前缀按撤销处理）",
+          "hit": false,
+          "comment": "接收侧处理错误：RFC 9774 要求按 RFC 7606 treat-as-withdraw 将对应前缀按撤销处理，回答却称忽略 AS_SET 内容继续当普通 AS_PATH 使用路由，与标准规定相反，属严重概念错误。"
+        },
+        {
+          "point": "替代：consistent brief aggregation，在期望 Origin AS 最右一次出现后截断 AS_PATH（可为聚合者自身 AS）",
+          "hit": true,
+          "comment": "描述为截断 AS_PATH 仅保留聚合者 AS、以聚合者自身 AS 为单一 Origin，与在期望 Origin 最右出现后截断的实质一致（未明说'最右一次出现'但含义正确）。"
+        },
+        {
+          "point": "为聚合前缀按该 Origin 签发 ROA；附带 ATOMIC_AGGREGATE 提示聚合未保留完整 AS_PATH",
+          "hit": true,
+          "comment": "正确覆盖为聚合前缀按聚合 AS 签发 ROA，并说明附带 ATOMIC_AGGREGATE 是因路径信息不完整。"
+        },
+        {
+          "point": "不应把聚合路由通告回贡献 AS，防止流量回送形成环路",
+          "hit": true,
+          "comment": "正确指出不向贡献源 AS 回通告聚合路由以避免环路，另附的'源 AS 误认 Origin'说法冗余但不影响正确性。"
+        }
+      ],
+      "score": 3,
+      "comment": "命中 6/8 要点（第 (1) 验证问题、发送侧规定、替代做法各点基本正确），但接收侧处理答成'忽略 AS_SET 继续使用'而非 RFC 7606 treat-as-withdraw，属与标准相反的严重概念错误，且 AS_SET 原始目的（环路检测）表述偏离，综合下调至 3 分。"
     }
   },
   {
@@ -1719,6 +3203,43 @@
       },
       "model": "deepseek-ai/DeepSeek-V4-Flash",
       "thinking_mode": "disabled"
+    },
+    "evaluation": {
+      "judge_model": "glm-5.3",
+      "point_results": [
+        {
+          "point": "Type 高字节 0x00（transitive）/0x40（non-transitive），Sub-Type 0x04",
+          "hit": false,
+          "comment": "回答给出 0x86/0x87 和 Sub-Type 0x0C，与正确的 0x00/0x40 和 0x04 完全不符"
+        },
+        {
+          "point": "GA 为 2 字节（通常为 ASN），4 字节 ASN 时填 AS_TRANS（23456）",
+          "hit": false,
+          "comment": "回答称 GA 为 4 字节且把真实 ASN 放入 LA 高 16 位，GA 长度与编码方式均错误，虽提到 AS_TRANS=23456 但处理方式错误"
+        },
+        {
+          "point": "LA 为 4 字节 IEEE 754-2019 浮点，单位为字节每秒（bytes per second，非比特）",
+          "hit": false,
+          "comment": "单位字节每秒正确，但 LA 编码被错误描述为 '16 位 ASN+16 位带宽'，而非 IEEE 754-2019 浮点"
+        },
+        {
+          "point": "0 为合法值（维护引流控制、不视为 malformed）；负值不应发起、接收方忽略",
+          "hit": false,
+          "comment": "回答称 0 表示带宽未知且不参与加权、负值应视为 0，与 0 值合法用于维护引流、负值须被忽略的语义均不符"
+        },
+        {
+          "point": "多个值取最小（含 0）；部分路径缺失时默认等值分担",
+          "hit": false,
+          "comment": "多值时应取最小值，回答错误地说按总和比例加权；缺失时默认等值分担仅部分沾边但表述为'要么全带宽要么全等权'"
+        },
+        {
+          "point": "不参与最优路径选择，仅用于多路径 FIB 加权",
+          "hit": false,
+          "comment": "此项回答正确：明确不参与 BGP 最优路径决策，仅用于多路径流量分配"
+        }
+      ],
+      "score": 1,
+      "comment": "仅最后一点（不参与最优路径选择）正确，Type/Sub-Type 值、GA/LA 编码、0/负值语义、多值选取规则均存在严重概念错误（疑似与 AS_PATH/Route Target 等其他编码混淆），基本未掌握该 RFC 内容"
     }
   },
   {
@@ -1763,6 +3284,53 @@
       },
       "model": "deepseek-ai/DeepSeek-V4-Flash",
       "thinking_mode": "disabled"
+    },
+    "evaluation": {
+      "judge_model": "glm-5.3",
+      "point_results": [
+        {
+          "point": "机制：Node/Link NLRI 描述拓扑，SPF 决策替代路径向量决策（AFI 16388/SAFI 80）",
+          "hit": true,
+          "comment": "正确说明用 Node/Link NLRI 描述 Clos 拓扑并以 SPF 替代路径向量选路，核心机制完整（未写出 AFI/SAFI 编号但不影响要点）"
+        },
+        {
+          "point": "完整拓扑视图带来原生 ECMP/LFA/SRLG 能力，无需 Add-Path",
+          "hit": true,
+          "comment": "正确指出 SPF 原生支持 ECMP 和 LFA/FRR 而路径向量仅单路径，但未提及 SRLG 和无需 Add-Path 扩展"
+        },
+        {
+          "point": "链路故障仅链路两端发起者撤销 Link NLRI；传统 BGP 需海量前缀撤销与重通告",
+          "hit": true,
+          "comment": "明确仅需故障链路两端撤销 Link NLRI 并触发 SPF 重算，且对比传统 BGP 逐前缀撤销/重通告（\"及受影响 Node NLRI\"稍欠精确但不影响要点）"
+        },
+        {
+          "point": "变化 NLRI 立即通告，无需等待最优路径选择完成",
+          "hit": true,
+          "comment": "指出变化 NLRI 立即发送无抑制，与参考答案\"不必等待最优路径选择完成\"含义一致（用 MRAI 表述略有偏差）"
+        },
+        {
+          "point": "逐链路单跳 eBGP 模型：会话状态即链路状态，会话 up/能力交换后通告 Link NLRI，会话断开则撤销",
+          "hit": true,
+          "comment": "正确表述会话状态即链路可用性、会话 down 即撤销链路 NLRI（能力交换细节未展开）"
+        },
+        {
+          "point": "直连节点模型：loopback 会话加 BFD 检测链路（存活独立于 BGP），链路 operational 及（可选）EoR 后通告，多链路共享一会话",
+          "hit": true,
+          "comment": "正确指出需 BFD 独立检测物理链路（会话可能 up 而链路 down），但未提 loopback 会话、多链路共享一个会话及 EoR 后才通告 Link NLRI"
+        },
+        {
+          "point": "RR/控制器模型：少量会话、仅保留每个 NLRI 最新版本",
+          "hit": false,
+          "comment": "未提及该模型的少量会话与仅保留每个 NLRI 最新版本的核心特点，转而讨论 RR/控制器如何探测链路，偏离要点"
+        },
+        {
+          "point": "约束：域内所有 speaker 必须支持规范；EoR 配置不一致导致转发状态不完整、瞬时微环与丢包",
+          "hit": true,
+          "comment": "正确说明全域必须支持规范否则拓扑不一致，以及 EoR 不一致导致过早计算、拓扑不完整引发瞬时微环与丢包"
+        }
+      ],
+      "score": 4,
+      "comment": "命中 7/8 要点，整体概念准确、结构清晰；主要欠缺是 RR/控制器模型要点未覆盖（少量会话、仅保留 NLRI 最新版本），另有 SRLG/Add-Path、多链路共享会话等细节缺失，属大部分命中，给 4 分。"
     }
   },
   {
@@ -1804,6 +3372,43 @@
       },
       "model": "deepseek-ai/DeepSeek-V4-Flash",
       "thinking_mode": "disabled"
+    },
+    "evaluation": {
+      "judge_model": "glm-5.3",
+      "point_results": [
+        {
+          "point": "AC-Flag 位于 OSPFv2 Extended Prefix Opaque LSA（RFC 7684）的 Extended Prefix TLV Flags 字段，值 0x10",
+          "hit": false,
+          "comment": "LSA/TLV/Flags 字段的位置描述正确，但 IANA 注册值答为 0x04，与正确值 0x10 不符，该要点未完整命中"
+        },
+        {
+          "point": "配置为 anycast 时必须置位，否则必须清零",
+          "hit": true,
+          "comment": "正确说明前缀配置为 anycast 时置位 AC 标志，否则不置位（清零）"
+        },
+        {
+          "point": "N-flag 与 AC 同时置位视为配置异常：忽略 N-flag 并限速记录日志",
+          "hit": true,
+          "comment": "正确给出同时置位时的核心处理即忽略 N-flag、仅 AC 生效，但未提及视为配置异常及限速记录运维日志的要求"
+        },
+        {
+          "point": "重通告到其他区域时必须保留 AC 标志",
+          "hit": true,
+          "comment": "正确说明前缀跨区域重通告时必须保留 AC 标志"
+        },
+        {
+          "point": "多路由器同前缀：至少一台置位即判定为 anycast 前缀（单节点未置位为节点专属）",
+          "hit": false,
+          "comment": "表述为需所有通告者均置位才判定 anycast，与正确规则'至少一台置位即可'相悖，且将部分置位误称为配置错误，也未提及单节点未置位为节点专属前缀"
+        },
+        {
+          "point": "BGP-LS 经 RFC 9085 Prefix Attribute Flags TLV 传递该标志",
+          "hit": false,
+          "comment": "未提及 RFC 9085 的 Prefix Attribute Flags TLV，给出的 OSPFv2 Extended Prefix TLV（类型 1158）与正确的传递机制不符"
+        }
+      ],
+      "score": 3,
+      "comment": "回答掌握了整体框架（标志所在 LSA/TLV/字段结构、anycast 置位/清零规则、重通告保留标志、经 BGP-LS 向控制器传递以识别 anycast），但多处关键细节错误：IANA 值误为 0x04、多路由器判定规则写成需全部置位、BGP-LS TLV 名称错误，且缺少配置异常与限速日志的处理细节"
     }
   },
   {
@@ -1844,6 +3449,38 @@
       },
       "model": "deepseek-ai/DeepSeek-V4-Flash",
       "thinking_mode": "disabled"
+    },
+    "evaluation": {
+      "judge_model": "glm-5.3",
+      "point_results": [
+        {
+          "point": "指出重启后加载 Flash 中的启动配置文件（缺省名 vrpcfg.zip）",
+          "hit": true,
+          "comment": "回答明确指出重启后加载下次启动配置文件，即 flash:/vrpcfg.zip，覆盖了该要点。"
+        },
+        {
+          "point": "说明未保存修改仅存在于内存 current-configuration，重启后丢失",
+          "hit": true,
+          "comment": "回答说明运行配置仅存在于内存中、未保存的修改重启后全部丢失，含义与要点一致。"
+        },
+        {
+          "point": "给出查看保存配置的命令 display saved-configuration",
+          "hit": true,
+          "comment": "回答给出了 display saved-configuration 并正确说明其用途，另补充 display startup 属正确扩展。"
+        },
+        {
+          "point": "给出比较当前配置与保存配置的命令 compare configuration",
+          "hit": true,
+          "comment": "回答给出了 compare configuration，并正确说明其在系统视图下执行、比较运行配置与保存配置差异。"
+        },
+        {
+          "point": "说明需执行 save 才能将当前配置写入启动配置文件",
+          "hit": false,
+          "comment": "回答虽暗示未保存会丢失，但始终未提及需执行 save 命令将当前配置写入启动配置文件这一保存机制。"
+        }
+      ],
+      "score": 4,
+      "comment": "三个问题均回答正确且命令准确，附加说明（display startup、系统视图执行）也无错误，但缺少对需执行 save 保存配置这一要点的明确说明，故扣一分。"
     }
   },
   {
@@ -1886,6 +3523,43 @@
       },
       "model": "deepseek-ai/DeepSeek-V4-Flash",
       "thinking_mode": "disabled"
+    },
+    "evaluation": {
+      "judge_model": "glm-5.3",
+      "point_results": [
+        {
+          "point": "Type 0：2 字节 AS 号 + 4 字节分配编号",
+          "hit": true,
+          "comment": "回答明确写出 Type 0 为 2 字节 Administrator（AS 号）+ 4 字节 Assigned Number，与要点一致。"
+        },
+        {
+          "point": "Type 1：4 字节 IPv4 地址 + 2 字节分配编号",
+          "hit": true,
+          "comment": "回答明确写出 Type 1 为 4 字节 IPv4 地址 + 2 字节分配编号，正确。"
+        },
+        {
+          "point": "Type 2：4 字节 AS 号 + 2 字节分配编号",
+          "hit": true,
+          "comment": "回答明确写出 Type 2 为 4 字节 AS 号 + 2 字节分配编号，正确。"
+        },
+        {
+          "point": "正确判断 4 字节 AS 应选 Type 2，并指出 Type 0 仅支持 2 字节 AS",
+          "hit": true,
+          "comment": "回答判断选 Type 2，并明确指出 Type 0 的 Administrator 字段仅 2 字节无法容纳 4 字节 AS 号。"
+        },
+        {
+          "point": "export target：VRF 导出路由时附加到 VPNv4 路由",
+          "hit": true,
+          "comment": "回答说明从本地 VRF 导出路由时将 RT 附加到 VPN-IPv4 路由上，语义正确。"
+        },
+        {
+          "point": "import target：接收端按 RT 匹配决定路由是否引入 VRF",
+          "hit": true,
+          "comment": "回答说明接收端 PE 检查路由携带 RT 与本地 VRF import RT 匹配后才导入，语义正确。"
+        }
+      ],
+      "score": 5,
+      "comment": "六个评分要点全部命中，三种 RD 类型构成、Type 2 选择理由及 RT export/import 语义均表述准确且无概念错误。"
     }
   },
   {
@@ -1925,6 +3599,43 @@
       },
       "model": "deepseek-ai/DeepSeek-V4-Flash",
       "thinking_mode": "disabled"
+    },
+    "evaluation": {
+      "judge_model": "glm-5.3",
+      "point_results": [
+        {
+          "point": "各 VRF export/import RT 取值体现\"spoke 只导入 Hub、Hub 导入全部 spoke、spoke 互不导入\"的单向设计",
+          "hit": true,
+          "comment": "A/B 各只导出自身 RT、仅导入 RT-Hub，Hub 导出 RT-Hub 并导入 A/B 两个 RT，虽用符号名代替具体值，但单向 Hub-and-Spoke 设计逻辑完全正确。"
+        },
+        {
+          "point": "说明 A、B 互访必须经 Hub 中转，由 Hub 内策略点实现受控互通",
+          "hit": true,
+          "comment": "明确 A、B 只学 Hub 路由、互访需经 Hub『受控中转』，并以 Hub 侧 route-policy 作为集中控制点，覆盖该要点，但未明确提及 ACL/防火墙等策略点形态。"
+        },
+        {
+          "point": "指出泄漏路由若被再次导出会形成路由回馈/环路风险",
+          "hit": true,
+          "comment": "以『防止泄漏路由二次导出环路』为题并整节围绕该风险展开防护，识别了二次导出成环的风险，但未解释回馈环形成的具体机制。"
+        },
+        {
+          "point": "给出 export route-policy 限制只导出本地源路由、拒绝 VPNv4 导入路由再导出的措施",
+          "hit": true,
+          "comment": "给出 Hub export 方向 deny A/B 原始路由、只放行自身服务网段，并配合导入打 community、导出匹配即拒绝的硬过滤，实质覆盖『只导本地源、拒绝导入路由再导出』，但以 RT-A/RT-B 作为导出匹配条件在实现上存疑。"
+        },
+        {
+          "point": "给出 SoO（Site of Origin）标记防回环手段",
+          "hit": false,
+          "comment": "全文未提及 SoO（Site of Origin）扩展团体，仅用自定义 community/no-export 标记替代，未命中该指定手段。"
+        },
+        {
+          "point": "提及 Hub 侧 import 过滤（前缀/下一跳限定）或地址重叠/NAT 设计约束",
+          "hit": true,
+          "comment": "Hub 入方向 route-policy 仅放行 A、B 的用户网段前缀、拒绝 Hub 自身网段回灌，覆盖了 import 前缀限定过滤。"
+        }
+      ],
+      "score": 4,
+      "comment": "RT 单向设计与 Hub 集中过滤的总体框架正确，6 个要点命中 5 个，结构清晰；但缺少 SoO 这一关键防环手段，且『RT 单向隔离从根上切断二次导出』的说法与实际 export RT 重新附加的回馈机制相悖，as-path/enforce-first-as/allowas-in 等 BGP 防环措施在本同 PE VRF 泄漏场景中属概念偏差，综合给 4 分。"
     }
   },
   {
@@ -1966,6 +3677,38 @@
       },
       "model": "deepseek-ai/DeepSeek-V4-Flash",
       "thinking_mode": "disabled"
+    },
+    "evaluation": {
+      "judge_model": "glm-5.3",
+      "point_results": [
+        {
+          "point": "INCLUDE(A)=仅接收源列表 A 中的源；EXCLUDE(A)=接收除 A 以外的源",
+          "hit": true,
+          "comment": "回答明确说明 INCLUDE 只接收列表内源、EXCLUDE 接收除列表外所有源，语义正确。"
+        },
+        {
+          "point": "EXCLUDE 空源列表 = 接收全部源，与 IGMPv2 加入语义等价",
+          "hit": true,
+          "comment": "回答指出 EXCLUDE {} 表示接收该组所有源，等价于传统任意源接收（类似 IGMPv2 成员关系），语义正确。"
+        },
+        {
+          "point": "v2 报告不携带源列表，被 v3 路由器按 EXCLUDE {} 解释",
+          "hit": true,
+          "comment": "回答说明路由器将 IGMPv2 报告视为 EXCLUDE 空源列表即接收所有源，覆盖了该要点核心。"
+        },
+        {
+          "point": "能说出 IGMPv3 组记录类型（现态/过滤模式变化/源列表变化记录）或报告发往 224.0.0.22",
+          "hit": false,
+          "comment": "回答全文既未提及 IGMPv3 六种组记录类型，也未提及报告发往 224.0.0.22。"
+        },
+        {
+          "point": "主机收到低版本查询后降级为对应版本兼容，由 Older Version Querier Present Timeout 维护并超时恢复",
+          "hit": true,
+          "comment": "回答描述了收到 v1/v2 查询后降级、仅以对应版本格式报告、由兼容性定时器重置/超时后恢复 IGMPv3，虽将定时器称为'主机侧兼容性定时器'而非 Older Version Querier Present Timeout，但机制含义正确。"
+        }
+      ],
+      "score": 4,
+      "comment": "五条要点命中四条，INCLUDE/EXCLUDE 语义、EXCLUDE {} 等价性、v2 报告被按 EXCLUDE {} 解释、主机低版本查询降级及定时器超时恢复均正确；未覆盖组记录类型/224.0.0.22，且部分细节欠严谨（如称 v2 报告触发路由器组状态降级——按 RFC 3376 降级由低版本查询驱动；定时器默认值写 260 秒，与 RFC 3376 计算值 135 秒不符），属次要瑕疵而非严重概念错误。"
     }
   },
   {
@@ -2008,6 +3751,43 @@
       },
       "model": "deepseek-ai/DeepSeek-V4-Flash",
       "thinking_mode": "disabled"
+    },
+    "evaluation": {
+      "judge_model": "glm-5.3",
+      "point_results": [
+        {
+          "point": "准确描述第一跳 DR 将组播数据单播封装为 Register 发往 RP、RP 解封装后沿 RPT 下发",
+          "hit": false,
+          "comment": "仅描述了 DR 将数据单播封装为 Register 发往 RP，完全未提及 RP 解封装后沿共享树（RPT）向接收者转发的关键环节，要点只覆盖一半。"
+        },
+        {
+          "point": "说出 Register-Stop 的触发条件（RP 无接收者状态，或 RP 已完成 SPT 切换不再需要封装流量）",
+          "hit": false,
+          "comment": "正确说出 RP 无 (*,G)/(S,G) 状态时回 Register-Stop，但称 RP 已有 (S,G)/切 SPT 后'不再发送 Register-Stop'，与 RFC 7761 实际行为（SPT 切换后 RP 应回 Register-Stop 以关闭封装通道）恰好相反，属概念错误。"
+        },
+        {
+          "point": "指出 DR 收到 Register-Stop 后启动 Register-Suppression Timer，缺省 60 秒",
+          "hit": true,
+          "comment": "明确 DR 收到 Register-Stop 后停止封装并启动缺省 60 秒的定时器（虽误称'探测定时器'，但抑制时长与实质含义正确）。"
+        },
+        {
+          "point": "说明定时器到期前约 5 秒发送 Null-Register 探测、按 RP 应答决定恢复或继续抑制",
+          "hit": false,
+          "comment": "未提及 Null-Register（空数据报文探测）及到期前约 5 秒（Register_Probe_Time）发送的细节，仅笼统称每 60 秒重发一次探测 Register，'按 RP 应答决定恢复或抑制'也仅含糊暗示。"
+        },
+        {
+          "point": "判定现象一为 RP 切 SPT 后的正常抑制与探测机制，业务流量走 SPT",
+          "hit": true,
+          "comment": "正确判定现象一为正常非故障、RP 已切换 SPT、SW1 按 60 秒周期发送探测报文；但将探测持续存在归因于'RP 有 (S,G) 后不回 Register-Stop'，机制成因解释有误（实际是 RP 持续回 Register-Stop 维持抑制）。"
+        },
+        {
+          "point": "判定现象二源于 RP 无接收者状态导致周期性 Register/Register-Stop 循环，并指出 60 秒即抑制定时器周期",
+          "hit": true,
+          "comment": "正确判定无接收者时 RP 立即回 Register-Stop、DR 抑制 60 秒后再探测形成周期循环，且明确 60 秒即定时器缺省值。"
+        }
+      ],
+      "score": 3,
+      "comment": "两个现象的故障判定结论均正确（皆为正常协议行为），60 秒抑制定时器及现象二成因把握到位；但机制解释存在明显概念错误：称 RP 完成 SPT 切换后不再回 Register-Stop（与实际相反，且该错误被用于解释现象一成因），遗漏 RP 解封装沿 RPT 下发和 Null-Register 到期前 5 秒探测等核心机制，约半数要点命中，评定为 3 分。"
     }
   },
   {
@@ -2048,6 +3828,48 @@
       },
       "model": "deepseek-ai/DeepSeek-V4-Flash",
       "thinking_mode": "disabled"
+    },
+    "evaluation": {
+      "judge_model": "glm-5.3",
+      "point_results": [
+        {
+          "point": "指出无组播路由器时需由 Snooping 交换机选举查询器，IGMPv1/v2 按最低 IP 地址当选",
+          "hit": true,
+          "comment": "回答明确指出无组播路由器时依赖交换机启用 querier 选举、IP 最小者当选，实质覆盖要点（虽以优先级相同作为前提表述，未区分 IGMPv1/v2，但含义正确）。"
+        },
+        {
+          "point": "判定多台交换机各自发 Query 反映查询器选举/配置异常而非正常负载分担",
+          "hit": true,
+          "comment": "回答将多台交换机同时发 General Query 归因于配置错误/选举失效并指出报文冗余，明确判定为异常现象。"
+        },
+        {
+          "point": "解释 IGMPv3 主机仅在被查询后报告，Query 消失或定时器不匹配导致组表项老化删除",
+          "hit": true,
+          "comment": "正确解释了无 Query 时成员端口超时（260s）删除、组表项清空，以及查询间隔不一致加速表项老化的机理，但未点名 IGMPv3 主机仅在收到查询后应答这一细节。"
+        },
+        {
+          "point": "说明表项缺失使组播退化为未知组播并在 VLAN 内泛洪，冲击非成员端口",
+          "hit": true,
+          "comment": "准确说明组表项缺失后未知组播按二层广播方式泛洪至 VLAN 所有端口，非成员端口被动收到流量。"
+        },
+        {
+          "point": "明确 224.0.0.0/24 本地控制组流量应始终泛洪、不受 Snooping 约束的例外行为",
+          "hit": false,
+          "comment": "全文未提及 224.0.0.0/24 本地控制组应始终泛洪且不被 Snooping 过滤的例外行为。"
+        },
+        {
+          "point": "给出可操作排查：核对查询器角色唯一性、查询间隔与老化时间关系、抓包验证 Query/Report",
+          "hit": false,
+          "comment": "覆盖了查询器角色唯一性检查和抓包确认 Query 多发，但完全缺少查询间隔与成员老化时间关系的核对，也未验证 Report 是否周期出现，排查要点覆盖不全。"
+        },
+        {
+          "point": "给出治理措施：唯一查询器、定时器匹配、未知组播按策略丢弃、路由器端口学习等",
+          "hit": true,
+          "comment": "给出固定唯一 querier、统一查询间隔并调整老化时间、未知组播丢弃等主要措施，但未涉及路由器端口学习（PIM Hello 检测），且将 querier version 2 命令误当作优先级设置。"
+        }
+      ],
+      "score": 4,
+      "comment": "回答系统覆盖了查询器选举异常、组表项老化与未知组播泛洪的成因链，并给出基本可操作的排查与治理措施，但遗漏 224.0.0.0/24 泛洪例外、查询间隔与老化时间关系的排查核对及路由器端口学习，个别命令表述存在混淆，综合评定 4 分。"
     }
   },
   {
@@ -2091,6 +3913,48 @@
       },
       "model": "deepseek-ai/DeepSeek-V4-Flash",
       "thinking_mode": "disabled"
+    },
+    "evaluation": {
+      "judge_model": "glm-5.3",
+      "point_results": [
+        {
+          "point": "接口视图下 trust dscp 命令正确",
+          "hit": true,
+          "comment": "回答明确给出接口视图下配置 trust dscp，命令正确"
+        },
+        {
+          "point": "指出二层接口缺省信任 8021p outer（外层 802.1p 优先级）",
+          "hit": false,
+          "comment": "回答称二层接口缺省为 trust untrust（不信任任何优先级、按端口优先级），与正确答案缺省信任外层 802.1p 相悖"
+        },
+        {
+          "point": "指出三层接口不能配置 trust、缺省按报文 DSCP 处理",
+          "hit": false,
+          "comment": "回答称三层接口支持 trust dscp/8021p 仅不支持 trust untrust，与三层接口不支持 trust 命令、缺省按 DSCP 处理的事实相反"
+        },
+        {
+          "point": "traffic classifier c1 下 if-match acl 3001 匹配条件正确",
+          "hit": true,
+          "comment": "traffic classifier c1 视图下正确配置 if-match acl 3001"
+        },
+        {
+          "point": "traffic behavior b1 下 remark dscp ef 重标记动作正确",
+          "hit": true,
+          "comment": "traffic behavior b1 视图下正确配置 remark dscp ef，并说明对应 DSCP 46"
+        },
+        {
+          "point": "traffic policy p1 中 classifier c1 behavior b1 绑定关系正确",
+          "hit": true,
+          "comment": "traffic policy p1 中正确执行 classifier c1 behavior b1 完成绑定"
+        },
+        {
+          "point": "接口 traffic-policy p1 inbound 应用方向正确，且执行 commit 使配置生效",
+          "hit": false,
+          "comment": "接口下 traffic-policy p1 inbound 应用方向正确，但缺少 VRPv8 两阶段配置所需的 commit 命令，配置未生效"
+        }
+      ],
+      "score": 3,
+      "comment": "MQC 四要素（分类、行为、策略绑定、入方向应用）全部正确，但 trust 缺省行为与三层接口限制两点存在严重概念错误（误答为 untrust 缺省、三层支持 trust），且遗漏 commit 提交命令，7 要点仅命中 4 个并含概念性错误，综合评为 3 分"
     }
   },
   {
@@ -2133,6 +3997,43 @@
       },
       "model": "deepseek-ai/DeepSeek-V4-Flash",
       "thinking_mode": "disabled"
+    },
+    "evaluation": {
+      "judge_model": "glm-5.3",
+      "point_results": [
+        {
+          "point": "列出边界节点对 DSCP 的处理行为（透传、改写/重标记、聚合映射等）",
+          "hit": false,
+          "comment": "仅正确覆盖透传和重标记两类，遗漏'将多个值聚合映射为单一值'这一关键行为，且错误地把'丢弃'列为 DSCP 处理类别。"
+        },
+        {
+          "point": "指出对非预期 DSCP 推荐重标记为 0（Default）而非改写为其他非缺省值，并说明原因",
+          "hit": true,
+          "comment": "正确指出重标记为 CS0/0 进入尽力而为转发，并说明避免未知流量意外占用高优先级、保持网络行为可预测，实质覆盖要点。"
+        },
+        {
+          "point": "说明 MPLS Short Pipe 模型按出口 IP DSCP 转发、参照 RFC 8100 将非预期值置 0",
+          "hit": true,
+          "comment": "表述了出口不依 EXP 而按 IP DSCP 处理、非预期 DSCP 按(2)重标记为 0，实质覆盖要点（未点名 RFC 8100，EXP 与 DSCP 映射方向描述略含糊）。"
+        },
+        {
+          "point": "指出 DSCP>7 且低 3 位为 001 的值会被降级映射为 LE（DSCP 1）",
+          "hit": false,
+          "comment": "将 x001 值错误解释为 AF 类低丢弃优先级并映射到 AF 队列参与 WRED 管理，实际该类值在规范化中会被降级映射为 LE（DSCP 1）。"
+        },
+        {
+          "point": "指出 DSCP≤7（CS0、LE 及未分配的 2–7）可安全聚合或映射为单一值",
+          "hit": false,
+          "comment": "称 CS1-CS7 各对应不同优先级队列，未说明 DSCP≤7 可安全聚合或映射为单一值，且把 1（LE）和 2–7（未分配值）误归为 CS 类。"
+        },
+        {
+          "point": "提及新 DSCP 分配需经 IANA Standards Action 程序",
+          "hit": false,
+          "comment": "全篇未提及新 DSCP 值需通过 IANA 以 Standards Action 程序申请。"
+        }
+      ],
+      "score": 2,
+      "comment": "仅第(2)问完全正确、第(3)问实质覆盖，第(1)问遗漏聚合映射并杜撰丢弃类别，第(4)问存在把 x001 值误判为 AF 丢弃优先级的严重概念错误且对 DSCP≤7 的聚合特性表述错误，又未提及 IANA Standards Action，总体掌握较差。"
     }
   },
   {
@@ -2175,6 +4076,43 @@
       },
       "model": "deepseek-ai/DeepSeek-V4-Flash",
       "thinking_mode": "disabled"
+    },
+    "evaluation": {
+      "judge_model": "glm-5.3",
+      "point_results": [
+        {
+          "point": "DSCP 45 = 二进制 101101，属于 Pool 3",
+          "hit": false,
+          "comment": "回答称 DSCP 46（101110）属于 Pool 1 并与 EF 共用码点，与正确的 DSCP 45/101101/Pool 3 完全不符"
+        },
+        {
+          "point": "NQB 使用独立于 Default 的队列，两队列分开",
+          "hit": true,
+          "comment": "回答明确要求 NQB 流量进入独立于 Default 的队列，覆盖了队列分离的要求"
+        },
+        {
+          "point": "调度上与 Default 等权重/等同转发待遇，而非更高优先级",
+          "hit": false,
+          "comment": "回答主张 NQB 采用严格优先级调度且高于 Default，与 RFC 要求的等同转发待遇/等权重方向相反"
+        },
+        {
+          "point": "NQB 队列缓存显著小于 Default（建议不超过约 10ms）",
+          "hit": true,
+          "comment": "回答指出 NQB 队列缓存极小而 Default 使用正常大缓存，实质覆盖了\"显著小于 Default\"的要求（未提 10ms 细节）"
+        },
+        {
+          "point": "不支持 NQB 的节点按 Default PHB 处理且不得重标记",
+          "hit": false,
+          "comment": "回答称应按 EF PHB 处理而非 Default PHB，且未提及不得重标记的要求，与标准规定相悖"
+        },
+        {
+          "point": "提及微流级限速的流量保护措施与发送端限速（约 1% 路径容量）和平滑发送义务",
+          "hit": false,
+          "comment": "虽提到每流限速等保护措施，但发送端限速数值错误（写成 10% 而非约 1%），且未提及平滑发送（pacing）义务"
+        }
+      ],
+      "score": 2,
+      "comment": "仅命中独立队列与小缓存两点；DSCP 值/所属池、调度等同待遇、不支持节点的处理方式及发送端约束均错误，且将 NQB 与 EF PHB 概念混淆、主张严格优先级，属严重概念错误，总体掌握较差"
     }
   },
   {
@@ -2218,6 +4156,48 @@
       },
       "model": "deepseek-ai/DeepSeek-V4-Flash",
       "thinking_mode": "disabled"
+    },
+    "evaluation": {
+      "judge_model": "glm-5.3",
+      "point_results": [
+        {
+          "point": "traffic classifier c1 + if-match acl 3001 的流分类配置正确",
+          "hit": true,
+          "comment": "traffic classifier class_acl3001 视图下用 if-match acl 3001 正确完成流分类配置，仅命名不同不影响正确性"
+        },
+        {
+          "point": "traffic behavior b1 下配置 statistic enable 与 car cir 10000 动作",
+          "hit": true,
+          "comment": "流行为中同时正确配置了 statistic enable 与 car cir 10000（附加 pir 参数仍合法有效）"
+        },
+        {
+          "point": "traffic policy p1 视图下用 classifier c1 behavior b1 完成绑定",
+          "hit": true,
+          "comment": "traffic policy 视图下用 classifier class_acl3001 behavior behav_limit 正确完成分类与行为的绑定"
+        },
+        {
+          "point": "接口视图下 traffic-policy p1 inbound 应用与应用方向正确",
+          "hit": true,
+          "comment": "在接口 10GE1/0/1 视图下以 traffic-policy ... inbound 正确应用到入方向（接口书写格式仅细微差异）"
+        },
+        {
+          "point": "指出必须执行 commit 才生效",
+          "hit": true,
+          "comment": "明确指出必须执行 commit 命令才能使配置真正生效"
+        },
+        {
+          "point": "说明原因是 VRPv8 两阶段配置：命令先进候选配置，commit 后才校验生效",
+          "hit": true,
+          "comment": "说明了 VRPv8 默认两阶段提交机制：命令先存于候选配置，commit 后才下发硬件生效并激活到运行态"
+        },
+        {
+          "point": "能说清三要素职责划分（分类匹配/行为动作/策略绑定）",
+          "hit": true,
+          "comment": "分节给出流分类（if-match 匹配）、流行为（统计/限速动作）、流策略（绑定 classifier 与 behavior），职责划分清晰"
+        }
+      ],
+      "score": 5,
+      "comment": "配置骨架完整正确，MQC 三要素职责清晰，正确指出 commit 提交及两阶段配置原因，并额外补充了 ACL 存在与接口 up 等前提条件，全部要点命中且无概念错误"
     }
   },
   {
@@ -2261,6 +4241,43 @@
       },
       "model": "deepseek-ai/DeepSeek-V4-Flash",
       "thinking_mode": "disabled"
+    },
+    "evaluation": {
+      "judge_model": "glm-5.3",
+      "point_results": [
+        {
+          "point": "srTCM 参数：CIR、CBS、EBS（三参数）",
+          "hit": true,
+          "comment": "回答明确列出 srTCM 的 CIR、CBS、EBS 三个参数并说明无峰值速率参数"
+        },
+        {
+          "point": "trTCM 参数：CIR、CBS、PIR、PBS（四参数）",
+          "hit": true,
+          "comment": "回答明确列出 trTCM 的 CIR、CBS、PIR、PBS 四个参数"
+        },
+        {
+          "point": "srTCM 双桶同速率 CIR 补充：C 桶不足再看 E 桶，依次判绿/黄/红",
+          "hit": true,
+          "comment": "回答指出两桶均以 CIR 补充（含 C 桶满溢流至 E 桶的正确细节），并按 C 桶→E 桶→红的顺序依次判定绿/黄/红"
+        },
+        {
+          "point": "trTCM 双桶分别以 CIR/PIR 补充：先判 Tp，Tp 不足红，Tc 足够绿且双桶扣减，否则黄仅扣 Tp",
+          "hit": false,
+          "comment": "补充速率与先判 Tp、Tp 不足判红的顺序正确，但绿色时仅写 C 桶扣减令牌，遗漏了 RFC 2698 要求绿色报文 C、P 两桶同时扣减 B 的关键细节"
+        },
+        {
+          "point": "指出 trTCM 能显式约束峰值速率 PIR，srTCM 无峰值速率概念仅体现二级突发",
+          "hit": true,
+          "comment": "回答明确指出 srTCM 无显式峰值速率、实际峰值不可控，trTCM 有显式 PIR 硬性约束"
+        },
+        {
+          "point": "给出各自适用场景差异并提及两者均支持 color-blind/color-aware 模式",
+          "hit": false,
+          "comment": "给出了两者的适用场景差异，但全文完全未提及两者均支持 color-blind/color-aware 两种模式"
+        }
+      ],
+      "score": 4,
+      "comment": "参数集合、srTCM 双桶机制、峰值速率差异比较及适用场景等大部分要点覆盖正确且表述清晰，但 trTCM 绿色报文需 C、P 双桶同时扣减令牌的机制细节有误，且遗漏 color-blind/color-aware 模式说明，属大部分命中，给 4 分"
     }
   },
   {
@@ -2302,6 +4319,43 @@
       },
       "model": "deepseek-ai/DeepSeek-V4-Flash",
       "thinking_mode": "disabled"
+    },
+    "evaluation": {
+      "judge_model": "glm-5.3",
+      "point_results": [
+        {
+          "point": "Segment List 逆序存放，List[0] 为最终目的地 D",
+          "hit": true,
+          "comment": "明确说明 List[0] 存放最终目的地 D、List[n-1] 存放第一个段端点 B，逆序存放规则正确。"
+        },
+        {
+          "point": "当前活动段由 Segments Left 指示，IPv6 DA 始终等于 List[SL]",
+          "hit": true,
+          "comment": "正确给出 DA 始终等于 Segment List[SL] 且全程以 SL 为索引进行递减操作，但将指示者表述为 DA 而非 SL，措辞略有偏差。"
+        },
+        {
+          "point": "A 发出报文时 DA=B、SL=2（B 位于 List[2]），Last Entry=2",
+          "hit": true,
+          "comment": "以 DA=B（List[n-1]）、SL=n-1 形式给出（本例 n=3 即 SL=2），并说明 Last Entry 为最后一个有效元素下标即 n-1=2。"
+        },
+        {
+          "point": "B、C 处理过程正确：SL 依次减 1，DA 依次改写为 C、D",
+          "hit": true,
+          "comment": "B 处 SL 减 1、DA 更新为 C，C 处 SL 再减 1、DA 更新为 D，处理过程完全正确。"
+        },
+        {
+          "point": "说明 SL=0 时到达 D 不再改写 DA，按普通 IPv6 后续头处理",
+          "hit": true,
+          "comment": "说明到达 D 时 SL 已减至 0、DA=List[0]=D，D 不再处理 SRH，'直接解封装'表述与按后续头正常处理含义一致。"
+        },
+        {
+          "point": "Routing Type=4；Hdr Ext Len 以 8 字节为单位且不含最初 8 字节",
+          "hit": true,
+          "comment": "Routing Type=4 及以 8 字节为单位、不含前 8 字节的规则表述正确，但附带给出的计算公式与示例错误（每个 SID 为 16 字节，3 段时 Hdr Ext Len 应为 6 而非 3）。"
+        }
+      ],
+      "score": 4,
+      "comment": "六个要点实质均覆盖，Segment List 逆序、SL/DA 变化过程及到达 D 后的处理描述正确，但 Hdr Ext Len 计算公式按每段 8 字节推算导致示例错误，且活动段指示者表述为 DA 而非 SL，存在错误故不给满分。"
     }
   },
   {
@@ -2344,6 +4398,48 @@
       },
       "model": "deepseek-ai/DeepSeek-V4-Flash",
       "thinking_mode": "disabled"
+    },
+    "evaluation": {
+      "judge_model": "glm-5.3",
+      "point_results": [
+        {
+          "point": "G-SID 组成：共享的 Locator Block + Locator Node + 压缩 CSID，多个 CSID 打包进 128 位容器",
+          "hit": true,
+          "comment": "模型正确指出 LB/LNF 为公共前缀、每段独有部分需压缩，且 128 位容器承载多个 CSID，虽然把每段独有部分称为 F/Arg 而非 CSID，但实质含义基本正确。"
+        },
+        {
+          "point": "NEXT-CSID 的 K=floor((128-LBL)/LNFL)，且 RFC 9800 要求支持 32 位 LB + 16 位 LNFL 组合",
+          "hit": false,
+          "comment": "模型给出的公式为 (128-LB长度-LNF长度)/CSID长度，与正确的 K=floor((128-LBL)/LNFL) 不符（误将 LNFL 同时扣除且除以 CSID 长度）。"
+        },
+        {
+          "point": "正确计算 K=6（LBL=32、LNFL=16 时）",
+          "hit": false,
+          "comment": "模型计算 K=5，正确值应为 floor((128-32)/16)=6，计算错误。"
+        },
+        {
+          "point": "量化收益：每压缩段 16 位对传统 128 位约 1/8 开销，降低 SRH 体积与 MTU 压力",
+          "hit": false,
+          "comment": "模型虽给出 80% 节省的量化，但基于错误的 K=5，未得到每段 16 位、约 1/8 开销的正确结论，也未提及 MTU/解析压力。"
+        },
+        {
+          "point": "指出 NEXT-CSID 中 CSID 0 为保留的结束标记",
+          "hit": true,
+          "comment": "模型正确说明 CSID=0 为结束标志，其后的 CSID 无效，用于终止容器内处理。"
+        },
+        {
+          "point": "REPLACE-CSID：首元素为完整 128 位 SID、后续为纯 CSID 容器，K=floor(128/LNFL)",
+          "hit": false,
+          "comment": "模型描述完全错误，称每个容器仅含一个 CSID、K=1 且支持就地修改，未提到首元素为完整 SID、后续为纯 CSID 容器及 K=floor(128/LNFL)。"
+        },
+        {
+          "point": "给出新端点行为 IANA 编号：End NEXT-CSID=43、End REPLACE-CSID=101",
+          "hit": false,
+          "comment": "模型给出的编号为 40 和 41，与正确的 43（End NEXT-CSID）和 101（End REPLACE-CSID）不符。"
+        }
+      ],
+      "score": 2,
+      "comment": "仅正确覆盖容器打包概念和 CSID=0 结束标记两点，K 值公式与计算、开销量化、REPLACE-CSID 结构及 IANA 编号均存在实质性错误，且多个细节（如 K=1、编号 40/41）属于编造，整体掌握较差。"
     }
   },
   {
@@ -2386,6 +4482,48 @@
       },
       "model": "deepseek-ai/DeepSeek-V4-Flash",
       "thinking_mode": "disabled"
+    },
+    "evaluation": {
+      "judge_model": "glm-5.3",
+      "point_results": [
+        {
+          "point": "指出 Type-4（Ethernet Segment）路由用于 ES 自动机发现与 DF 选举，携带 ES-Import RT 限定引入范围",
+          "hit": true,
+          "comment": "回答明确列出 Type-4 Ethernet Segment 路由及其携带的 ESI、Originating Router IP 与 ES-Import RT，并置于 DF 选举流程中。"
+        },
+        {
+          "point": "提到发布 ES 路由后先启动定时器（缺省 3 秒）收集其余 PE 路由再选举",
+          "hit": true,
+          "comment": "提到启动默认 3 秒定时器等待同一 ES 下所有 PE 通告完毕后再选举，术语（Wait-For-Boot/DF）虽不标准但含义与 RFC 缺省 3 秒一致。"
+        },
+        {
+          "point": "PE 按 Originating Router IP 升序编号 ordinal，数值最小 IP 为 0",
+          "hit": true,
+          "comment": "明确对 Originating Router IP 升序排序并从索引 0 开始编号，PE1 为 0、PE2 为 1。"
+        },
+        {
+          "point": "正确计算：VLAN 10 的 DF 为 PE1、VLAN 11 的 DF 为 PE2（10 mod 2=0、11 mod 2=1）",
+          "hit": true,
+          "comment": "按 VLAN ID mod N 计算正确，得出 VLAN 10 的 DF 为 PE1、VLAN 11 的 DF 为 PE2。"
+        },
+        {
+          "point": "说明 DF 放开、非 DF 阻塞对应 VLAN 的 BUM/未知单播出方向流量，故障时撤销路由重算",
+          "hit": false,
+          "comment": "回答未提及非 DF 阻塞该 VLAN 向 ES 的 BUM/未知单播出方向流量，也未提及故障时撤销 ES 路由重新 service carving。"
+        },
+        {
+          "point": "水平分割判定：非 DF 入 PE 复制到 DF PE 的 BUM 必须被丢弃、不得回发 CE1",
+          "hit": true,
+          "comment": "说明对端 PE 收到携带匹配 ESI label 的 BUM 副本后直接丢弃、不向 CE1 的 LAG 本地口转发，正确表达了水平分割判定。"
+        },
+        {
+          "point": "ESI label 经 Type-1（Ethernet A-D per ES）路由分发，egress PE 依据 ESI label 识别来源 ES 并阻止回发（含不认识即丢弃）",
+          "hit": false,
+          "comment": "虽描述了 egress PE 按 ESI label 识别来源并阻止回发，但完全未提及 ESI label 经 Type-1（Ethernet A-D per ES）路由分发，也未提无法识别的 ESI label 即丢弃。"
+        }
+      ],
+      "score": 4,
+      "comment": "DF 选举部分（Type-4 路由、3 秒定时器、IP 升序编号、mod 计算结果）和水平分割的核心判定（依 ESI label 丢弃、不回发 CE）均正确，但遗漏非 DF 阻塞与故障重算的说明，且未说明 ESI label 经 Type-1 路由分发及未知标签丢弃，属大部分命中，给 4 分。"
     }
   },
   {
@@ -2427,6 +4565,43 @@
       },
       "model": "deepseek-ai/DeepSeek-V4-Flash",
       "thinking_mode": "disabled"
+    },
+    "evaluation": {
+      "judge_model": "glm-5.3",
+      "point_results": [
+        {
+          "point": "interface nve 1 创建 NVE 接口（编号为 1）",
+          "hit": true,
+          "comment": "回答中给出 interface Nve1，编号为 1，与 interface nve 1 等价（VRP 命令大小写不敏感），正确命中。"
+        },
+        {
+          "point": "source 1.1.1.1 指定本端 VTEP 源 IP，作为 VXLAN 外层封装源地址",
+          "hit": true,
+          "comment": "配置了 source 1.1.1.1，并说明其作为 VXLAN 报文外层封装的源 IP，正确。"
+        },
+        {
+          "point": "vni 5000 head-end peer-list 逐一配置远端 VTEP（2.2.2.2 与 3.3.3.3）",
+          "hit": true,
+          "comment": "逐条给出 vni 5000 head-end peer-list 2.2.2.2 和 3.3.3.3 两条配置，覆盖完整。"
+        },
+        {
+          "point": "说明 head-end peer-list 用于 BUM 流量头端复制、按列表复制为单播",
+          "hit": true,
+          "comment": "明确说明广播、未知单播、组播（BUM）报文按列表复制并分别发送给每个 VTEP，实质上表达了头端复制为单播的机制。"
+        },
+        {
+          "point": "指出不同 VTEP 必须使用不同 source IP（否则转发错误），一般取 loopback",
+          "hit": true,
+          "comment": "说明 source 不能与其他 VTEP 对端地址冲突（即各 VTEP 源 IP 需唯一），并建议使用 LoopBack 地址保证稳定性，实质覆盖该要点。"
+        },
+        {
+          "point": "指出配置后需执行 commit 才生效（VRPv8 两阶段配置）",
+          "hit": true,
+          "comment": "明确指出需执行 commit 提交配置才生效，同时附带 save 及路由可达等说明，核心要求命中。"
+        }
+      ],
+      "score": 5,
+      "comment": "配置命令完整正确，source 与 head-end peer-list 的作用解释准确，source IP 唯一性与 loopback 建议均有覆盖，并正确指出需 commit 提交才生效；附带提到的 save 和 BGP EVPN 等内容略显冗余但不构成概念错误，全部要点命中。"
     }
   },
   {
@@ -2467,6 +4642,38 @@
       },
       "model": "deepseek-ai/DeepSeek-V4-Flash",
       "thinking_mode": "disabled"
+    },
+    "evaluation": {
+      "judge_model": "glm-5.3",
+      "point_results": [
+        {
+          "point": "指出 RFC 9293 整体废止 RFC 793，收录为 STD 7",
+          "hit": true,
+          "comment": "回答明确说明 RFC 9293 取代并废止 RFC 793，并正确指出收录为 STD 7。"
+        },
+        {
+          "point": "给出 2022 年 8 月发布时间或等效的时效信息",
+          "hit": false,
+          "comment": "回答全文未提及 2022 年 8 月发布时间，也未明确表述其为现行/最新有效标准的等效时效信息。"
+        },
+        {
+          "point": "正确列出至少四个被废止 RFC 及主题（879/6691 为 MSS，6093 为紧急指针，6528 为 ISN/序列号攻击防御，2873 为 IP 优先级处理，6429 为 IPsec 场景控制报文）",
+          "hit": false,
+          "comment": "所列五项中仅 6093、6528、6691 三项为真正被废止且主题正确，不足四个；RFC 1122 和 5961 实际是被更新（Updates）而非被废止（Obsoletes），将其列入废止清单属于事实错误。"
+        },
+        {
+          "point": "说明整合目的为合并散落修正、形成单一权威规范",
+          "hit": true,
+          "comment": "回答明确指出将分散在多个 RFC 中的规范、安全增强和勘误整合为单一权威文档，消除歧义、便于实现参考。"
+        },
+        {
+          "point": "未把 RFC 7323 等未被废止的扩展文档错误纳入废止清单",
+          "hit": false,
+          "comment": "虽未列入 RFC 7323，但错误地把仅被更新（Updates）的 RFC 1122 和 RFC 5961 当作被废止文档，犯了同类的混淆更新与废止的错误。"
+        }
+      ],
+      "score": 2,
+      "comment": "正确回答了 STD 7 编号、废止 RFC 793 的关系及整合目的，但混淆了\"更新\"与\"废止\"：把本应是被更新对象的 RFC 1122 和 RFC 5961 错误列入废止清单，导致被废止 RFC 正确项数不足四个，且未提及发布时间，整体掌握较差。"
     }
   },
   {
@@ -2505,6 +4712,38 @@
       },
       "model": "deepseek-ai/DeepSeek-V4-Flash",
       "thinking_mode": "disabled"
+    },
+    "evaluation": {
+      "judge_model": "glm-5.3",
+      "point_results": [
+        {
+          "point": "说明核心思想：半连接状态编码进 ISN，收到合法 ACK 前不分配资源",
+          "hit": true,
+          "comment": "明确表述防火墙不保存半连接状态、将连接信息编码进 SYN-ACK 的 ISN，通过重新计算哈希验证 ACK 合法性后再重建连接，覆盖核心思想。"
+        },
+        {
+          "point": "给出经典 ISN 布局：8 位时间计数器（64 秒粒度）+ 3 位 MSS 索引 + 21 位 MAC/哈希",
+          "hit": false,
+          "comment": "回答给出的是 5 位计数器 + 3 位哈希 + 24 位哈希的错误布局，完全遗漏 3 位 MSS 索引编码，与经典 Bernstein 设计（8+3+21）不符。"
+        },
+        {
+          "point": "解释 ACK 确认号回带 ISN+1 从而完成校验的机制",
+          "hit": true,
+          "comment": "明确说明客户端 ACK 的确认号等于 ISN+1 回传 Cookie，防火墙重算哈希校验合法性后重建连接参数。"
+        },
+        {
+          "point": "说明伪造源攻击者收不到 SYN-ACK 故无法构造合法 ACK，重放受时效限制",
+          "hit": true,
+          "comment": "正确解释攻击者收不到发往伪造地址的 SYN-ACK 故无法得知 Cookie，且哈希基于密钥无法猜测；计数器防止重放也有提及。"
+        },
+        {
+          "point": "指出固有代价：TCP 选项无法保存导致能力降级等至少两条",
+          "hit": true,
+          "comment": "给出哈希计算性能开销、无法支持窗口缩放/SACK/时间戳等 TCP 选项导致能力降级、无状态导致 SYN-ACK 无法重传等多条代价。"
+        }
+      ],
+      "score": 4,
+      "comment": "整体机制理解正确，5 个要点命中 4 个，但题目明确要求的核心 Bernstein ISN 32 比特分配（8 位计数器 + 3 位 MSS 索引 + 21 位哈希）回答错误且遗漏 MSS 编码，另有 5 比特计数器约 32 秒循环等计算性错误，故给 4 分。"
     }
   },
   {
@@ -2541,6 +4780,33 @@
       },
       "model": "deepseek-ai/DeepSeek-V4-Flash",
       "thinking_mode": "disabled"
+    },
+    "evaluation": {
+      "judge_model": "glm-5.3",
+      "point_results": [
+        {
+          "point": "指出仅 SYN/SYN-ACK 可携带，握手后不可再协商",
+          "hit": true,
+          "comment": "明确指出只能在初始 SYN 和 SYN-ACK 中携带，且说明连接建立后使用固定值、无重协商机制。"
+        },
+        {
+          "point": "给出 shift count 范围 0–14，指出超过 14 非法",
+          "hit": true,
+          "comment": "明确给出合法范围为 0 到 14（RFC 7323 规定），即隐含超出该范围不合法。"
+        },
+        {
+          "point": "给出最大窗口 65535×2^14≈1 GiB（或 1,073,725,440 字节）",
+          "hit": true,
+          "comment": "给出 65535×16384=1,073,725,440 字节（约 1 GB），数值与参考答案一致。"
+        },
+        {
+          "point": "说明缩放按方向独立，SYN 中的 shift count 作用于本端通告的接收窗口",
+          "hit": true,
+          "comment": "明确说明每方向独立协商，并以客户端/服务器为例说明 SYN 中的 shift count 作用于该 SYN 发送者通告的接收窗口。"
+        }
+      ],
+      "score": 5,
+      "comment": "四个要点全部正确覆盖，数值准确，方向解释清晰，还补充了 16 位窗口字段需提前约定缩放因子的原因，无概念错误。"
     }
   },
   {
@@ -2578,6 +4844,38 @@
       },
       "model": "deepseek-ai/DeepSeek-V4-Flash",
       "thinking_mode": "disabled"
+    },
+    "evaluation": {
+      "judge_model": "glm-5.3",
+      "point_results": [
+        {
+          "point": "给出原因一：可靠终止，响应对端重传的 FIN",
+          "hit": true,
+          "comment": "正确说明最后一个ACK丢失时被动方会重发FIN，主动方需在TIME_WAIT期间重发ACK以保证可靠终止"
+        },
+        {
+          "point": "给出原因二：旧重复报文在 2MSL 内消亡，保护四元组复用",
+          "hit": true,
+          "comment": "正确说明2MSL让本连接迟到报文自然消亡、避免被新连接误收，虽未点明'四元组'一词但含义完整正确"
+        },
+        {
+          "point": "指出客户端临时端口耗尽（约 6.4 万/四元组）与资源占用问题",
+          "hit": true,
+          "comment": "指出临时端口耗尽导致新建连接失败（Cannot assign requested address）及内存资源占用问题，仅端口数量口径（默认约28k可用范围）与参考的6.4万理论上限表述略有差异，实质正确"
+        },
+        {
+          "point": "给出长连接/连接池、tcp_tw_reuse（需时间戳）、扩端口范围/源 IP 等至少三种手段",
+          "hit": true,
+          "comment": "给出连接池/长连接、tcp_tw_reuse、tcp_tw_recycle、MSL/SO_LINGER四种手段并逐一说明适用条件与风险，满足'至少三种'要求，虽未提扩端口范围/源IP扩容，但核心推荐手段均覆盖"
+        },
+        {
+          "point": "说明 tcp_tw_reuse 仅作用于主动发起方向且依赖时间戳，或指出 tcp_tw_recycle 的风险",
+          "hit": true,
+          "comment": "明确tcp_tw_reuse仅对出站（主动发起）连接有效且需开启tcp_timestamps，同时准确指出tw_recycle在NAT环境的时间戳风险及已被现代内核移除"
+        }
+      ],
+      "score": 5,
+      "comment": "五个评分要点全部正确覆盖：2MSL两大原因、端口耗尽与资源占用、多种治理手段及各自条件风险、tw_reuse的方向性与时间戳依赖、tw_recycle风险均阐述准确且完整；仅'TIME_WAIT占用文件描述符、可能触发fd上限'属轻微不准确（fd在close时已释放），不影响任何要点的命中"
     }
   },
   {
@@ -2617,6 +4915,43 @@
       },
       "model": "deepseek-ai/DeepSeek-V4-Flash",
       "thinking_mode": "disabled"
+    },
+    "evaluation": {
+      "judge_model": "glm-5.3",
+      "point_results": [
+        {
+          "point": "准确描述 Nagle 机制：小段未被确认时后续小数据必须等待",
+          "hit": true,
+          "comment": "回答明确指出存在未确认数据时小报文被合并缓存、需等 ACK 或攒满才发送，且实例中 40 字节因 Nagle 被阻塞，机制描述正确。"
+        },
+        {
+          "point": "准确描述 Delayed ACK 机制：等待捎带/第二满段，Linux 典型约 40ms",
+          "hit": true,
+          "comment": "回答说明接收端延迟约 40ms（典型值）再发 ACK、期间可捎带反向数据，覆盖了延迟确认的核心机制与典型时长。"
+        },
+        {
+          "point": "解释两者互等形成稳定约 40ms 停顿的因果链",
+          "hit": true,
+          "comment": "回答给出了发送端等 ACK 才发第二段、接收端延迟 40ms 才回 ACK、直到超时才解开的完整因果链，解释了稳定 40ms 额外时延。"
+        },
+        {
+          "point": "给出抓包判读方法：数据段-空闲 40ms-ACK-第二段的时间线特征",
+          "hit": true,
+          "comment": "回答描述了 t0 发 100 字节、约 40ms 后 ACK 到达且与第二段发出时刻同步的时间线特征，并说明用物理时延<1ms 排除网络因素。"
+        },
+        {
+          "point": "给出 TCP_NODELAY、合并 write、TCP_QUICKACK 等发送端/接收端手段",
+          "hit": true,
+          "comment": "回答明确给出发送端 TCP_NODELAY、接收端 TCP_QUICKACK/缩短定时器以及 writev 批量合并写等手段，覆盖完整。"
+        },
+        {
+          "point": "指出 write-write-read 交互模式为典型受害场景",
+          "hit": true,
+          "comment": "回答虽未逐字使用 write-write-read 术语，但以交互式协议频繁小写、请求-响应模式及低时延场景（SSH/Telnet、HTTP、数据库、游戏、高频交易）实质覆盖了该典型受害模式。"
+        }
+      ],
+      "score": 5,
+      "comment": "回答完整覆盖全部评分要点：根因解释准确（Nagle 与 Delayed ACK 互等导致 40ms 停顿），抓包判读给出了时间线对齐与排除物理时延的方法，解决手段涵盖 TCP_NODELAY、TCP_QUICKACK、writev 合并写，受害场景描述充分，无概念性错误。"
     }
   },
   {
@@ -2656,6 +4991,43 @@
       },
       "model": "deepseek-ai/DeepSeek-V4-Flash",
       "thinking_mode": "disabled"
+    },
+    "evaluation": {
+      "judge_model": "glm-5.3",
+      "point_results": [
+        {
+          "point": "列举至少三种合法 RST 场景（未监听端口/强制关闭/异常状态回应等）",
+          "hit": true,
+          "comment": "列举了端口未监听、异常/不存在连接回应 RST、close 异常（近似 abortive close）、空闲超时复位等至少三种合法场景，实质覆盖要点（其中收到 RST 再回 RST 的表述略有瑕疵但不影响整体）。"
+        },
+        {
+          "point": "给出序列号判据：合法 RST 的 seq 应等于对端下一个期望序号",
+          "hit": true,
+          "comment": "回答指出合法 RST 的序号/确认号应符合连接当前状态，注入 RST 序号可能为 0 或固定值，虽表述略欠精确（未明确 seq=rcv_nxt），但序列号判据的实质内容已覆盖。"
+        },
+        {
+          "point": "给出 TTL/IP 标识不一致或 challenge ACK 等辅助判据中的至少一种",
+          "hit": true,
+          "comment": "给出了 TTL 差异（64 vs 128）、IP ID 规律异常及源 MAC 非端点网卡等多项辅助判据，远超一种的要求。"
+        },
+        {
+          "point": "说明静默丢弃表现为重传-超时、注入 RST 表现为立即复位",
+          "hit": true,
+          "comment": "明确指出静默丢弃时客户端 SYN 多次重传后超时，注入 RST 时客户端立即收到 RST、连接快速失败，两种现象均正确。"
+        },
+        {
+          "point": "说明两种行为对排查路径的影响（分段抓包定位丢弃点 vs 序列号异常锁定注入点）",
+          "hit": true,
+          "comment": "说明静默丢弃需查会话表/ACL 并分段抓包逐跳定位丢弃点，注入 RST 可凭 TTL/MAC 特征直接锁定中间设备，排查路径影响阐述完整（用 TTL/MAC 而非序列号锁定注入点，属等效正确表述）。"
+        },
+        {
+          "point": "能举出可配置两种行为的实例（如 iptables DROP/REJECT tcp-reset 或防火墙 reset 动作）",
+          "hit": false,
+          "comment": "回答未举出任何可配置静默丢弃与注入 RST 两种行为的具体产品/命令实例（如 iptables DROP 与 REJECT --reject-with tcp-reset 或防火墙 reset 动作），该要点未覆盖。"
+        }
+      ],
+      "score": 4,
+      "comment": "六个要点命中五个，三种场景、序列号/TTL 判别方法及两种防火墙行为的现象与排查差异均阐述正确且有扩展（源 MAC、时间特征等），仅缺少可配置两种行为的具体实例，另有收到 RST 再回 RST 等细节小瑕疵，总体质量较高，评 4 分。"
     }
   },
   {
@@ -2693,6 +5065,38 @@
       },
       "model": "deepseek-ai/DeepSeek-V4-Flash",
       "thinking_mode": "disabled"
+    },
+    "evaluation": {
+      "judge_model": "glm-5.3",
+      "point_results": [
+        {
+          "point": "说明 SACK 基于序列号区间（左右边界），单选项最多 3 块（无 Timestamps 时 4 块）",
+          "hit": false,
+          "comment": "左右边界序列号区间的描述正确，但只给出最多 4 块（即未使用 Timestamps 的情形），遗漏了常规使用 Timestamps 时最多 3 块这一关键要点"
+        },
+        {
+          "point": "说明 DSACK 的判别特征：首块左边界小于确认号，报告重复接收",
+          "hit": true,
+          "comment": "指出首块区间位于确认号之前（右边界≤已确认序号）并报告重复接收的数据段，实质与参考答案一致"
+        },
+        {
+          "point": "解释发送方用记分板区分已收/缺失段，精确重传而非回退 N",
+          "hit": true,
+          "comment": "说明了发送方按 SACK 区分已收（被 SACK 覆盖）与缺失段并精确重传、避免 Go-Back-N，虽未点名'记分板'但含义正确"
+        },
+        {
+          "point": "说明 DSACK 用于判别虚假重传，或提到 F-RTO 判别虚假 RTO",
+          "hit": true,
+          "comment": "明确说明重传后收到 DSACK 报告该段为重复即判定原重传为 spurious retransmission"
+        },
+        {
+          "point": "指出 SACK 恢复在多丢包场景收敛快、窗口只降一次等优势",
+          "hit": true,
+          "comment": "指出多丢包场景可并行精确重传、加速恢复、避免不必要重传以提升吞吐，未提'窗口只降一次'但要点核心已覆盖"
+        }
+      ],
+      "score": 4,
+      "comment": "整体对 SACK/DSACK 机制理解准确，四问均有实质正确内容；仅在块数上限上只答 4 块而漏掉 Timestamps 场景下最多 3 块的区分，故扣一分"
     }
   },
   {
@@ -2734,6 +5138,38 @@
       },
       "model": "deepseek-ai/DeepSeek-V4-Flash",
       "thinking_mode": "disabled"
+    },
+    "evaluation": {
+      "judge_model": "glm-5.3",
+      "point_results": [
+        {
+          "point": "指出 RFC 3168 为每 RTT 一次的布尔型反馈，无法反映标记数量",
+          "hit": true,
+          "comment": "回答指出 ECE 只能反馈\"至少一个 CE 标记\"、无法区分多个 CE 事件，实质表达了布尔型反馈粒度粗、无法反映标记数量的不足。"
+        },
+        {
+          "point": "说明协商复用 NS(AE)/CWR/ECE 三比特构成 ACE 字段，在 SYN/SYN-ACK 中完成",
+          "hit": false,
+          "comment": "回答称协商通过 TCP 选项完成且只提到 ECE/CWR 两位，遗漏 NS(AE) 比特和 ACE 三比特字段这一核心协商机制，且将协商归因于 AccECN 选项属于表述错误。"
+        },
+        {
+          "point": "说明数据阶段 CWR+ECE 重载为 2 比特 CE 计数器（模 4），逐 CE 段递增",
+          "hit": false,
+          "comment": "回答只提到通过 AccECN 选项携带累计 CE 计数，完全没有说明数据阶段 CWR+ECE 位被重载为 2 比特模 4 计数器并逐 CE 段递增。"
+        },
+        {
+          "point": "解释\"每个 CE 至少三个 ACK\"用于容忍 ACK 丢失、保证计数可靠",
+          "hit": true,
+          "comment": "回答正确解释了至少三个 ACK 重复报告计数是为了在 ACK 丢失/乱序时保证计数可靠到达，命中要点。"
+        },
+        {
+          "point": "说明 AccECN 选项携带字节计数器，及对 DCTCP/L4S 按比例响应的前提意义",
+          "hit": true,
+          "comment": "回答提到 AccECN 选项携带计数器，并正确阐述了 DCTCP/L4S 依赖精确 CE 比例（α）调节窗口、AccECN 是其前提的意义，虽未明确\"字节级\"但实质覆盖。"
+        }
+      ],
+      "score": 3,
+      "comment": "命中第 1、4、5 要点，对 AccECN 动机、三 ACK 可靠性及 DCTCP/L4S 意义表述正确；但核心机制有实质性错误：能力协商误答为通过 TCP 选项而非 ACE（NS/CWR/ECE）字段，且完全遗漏数据阶段 CWR+ECE 重载为 2 比特 CE 计数器的反馈方式，整体约命中一半要点，评 3 分。"
     }
   },
   {
@@ -2773,6 +5209,33 @@
       },
       "model": "deepseek-ai/DeepSeek-V4-Flash",
       "thinking_mode": "disabled"
+    },
+    "evaluation": {
+      "judge_model": "glm-5.3",
+      "point_results": [
+        {
+          "point": "指出 IPv4 中校验和为 0 表示未计算、接收端跳过校验",
+          "hit": true,
+          "comment": "回答明确说明校验和为 0 表示发送方未计算，接收方不进行校验直接接受，且指出这是 RFC 768 允许的可选行为"
+        },
+        {
+          "point": "指出 IPv6 基本报头无校验和，因此 UDP 必须计算校验和",
+          "hit": true,
+          "comment": "回答指出 IPv6 头部不包含校验和字段（IPv4 有而 IPv6 移除），为保证端到端数据完整性强制要求 UDP 校验和必须计算且不能为 0，并正确补充了 0xFFFF 的处理"
+        },
+        {
+          "point": "说明校验和覆盖 UDP 首部+数据+伪首部",
+          "hit": true,
+          "comment": "回答明确列出覆盖范围为伪首部、UDP 头部、UDP 数据三部分，并说明校验和字段计算时置 0"
+        },
+        {
+          "point": "说明伪首部包含源/目的 IP、协议号与长度，用于防错投",
+          "hit": true,
+          "comment": "回答说明伪首部包含源/目的 IP、协议号、UDP 长度，作用是检测错误路由和地址篡改、确保送达正确目的端，并给出 IPv4/IPv6 伪首部字节数（均为正确值）"
+        }
+      ],
+      "score": 5,
+      "comment": "四个评分要点全部命中且表述准确，还正确补充了计算结果为 0 时发送 0xFFFF、伪首部具体长度等细节，无概念错误"
     }
   },
   {
@@ -2812,6 +5275,33 @@
       },
       "model": "deepseek-ai/DeepSeek-V4-Flash",
       "thinking_mode": "disabled"
+    },
+    "evaluation": {
+      "judge_model": "glm-5.3",
+      "point_results": [
+        {
+          "point": "给出 v2 版本号 0x6b3343cf，v1 为 0x00000001",
+          "hit": true,
+          "comment": "正确给出 v2 版本号 0x6b3343cf，虽未明确列出 v1 的 0x00000001，但核心事实正确。"
+        },
+        {
+          "point": "说明 v2 与 v1 功能等价、无新特性，仅常量/报文形态不同",
+          "hit": true,
+          "comment": "明确指出功能完全一致、不改变语义帧类型和状态机，仅版本号、初始盐值、包头保护密钥等常量不同。"
+        },
+        {
+          "point": "指出设计目的为对抗 ossification 并检验版本协商机制",
+          "hit": false,
+          "comment": "正确说明对抗协议僵化（ossification）这一主要目的，但遗漏了在真实网络中检验版本协商框架可用性这一目的。"
+        },
+        {
+          "point": "描述版本协商：服务器回 Version Negotiation 包（版本字段为 0、携带支持列表），客户端改用 v1 重试",
+          "hit": true,
+          "comment": "完整描述了服务器返回版本号为 0 的 Version Negotiation 包并列出支持版本、客户端改用 v1 重新发起连接（含重新生成初始密钥）的流程。"
+        }
+      ],
+      "score": 4,
+      "comment": "回答整体准确：版本号、功能等价关系、版本协商流程均正确描述且无概念性错误，仅遗漏\"检验版本协商机制\"这一设计目的及 v1 版本号常量，属大部分要点命中。"
     }
   },
   {
@@ -2854,6 +5344,43 @@
       },
       "model": "deepseek-ai/DeepSeek-V4-Flash",
       "thinking_mode": "disabled"
+    },
+    "evaluation": {
+      "judge_model": "glm-5.3",
+      "point_results": [
+        {
+          "point": "说明 QUIC 以 DCID 标识连接，NEW_CONNECTION_ID 支持迁移，与 TCP 四元组模型的差异",
+          "hit": true,
+          "comment": "正确说明了 QUIC 以 CID 标识连接、迁移后 CID 不变可维持连接，以及 TCP 四元组变化即断连需重新握手的差异，但未明确提及 NEW_CONNECTION_ID 帧分发备选 CID 的机制，属细节缺失而非错误。"
+        },
+        {
+          "point": "说明 NAT rebinding 下 CID 不变，配合 PATH_CHALLENGE/RESPONSE 路径验证",
+          "hit": false,
+          "comment": "提及了 NAT rebinding 后 CID 不变这一半内容，但完全未提及 PATH_CHALLENGE/PATH_RESPONSE 路径验证及防地址欺骗放大的作用。"
+        },
+        {
+          "point": "解释四元组哈希 LB 在 CID/端口变化后路由错误、后端状态丢失的因果",
+          "hit": true,
+          "comment": "准确解释了四元组变化导致哈希结果改变、请求被路由到其他后端、破坏连接加密与传输状态的因果链。"
+        },
+        {
+          "point": "给出 QUIC-LB 式 CID 编码路由（服务器 ID 嵌入 CID、无状态解析）设计",
+          "hit": true,
+          "comment": "给出了将后端 ID 编码进 CID 前缀使迁移后仍路由到原后端的 QUIC-LB 核心设计，并补充一致性哈希/状态同步方案；称 LB '改写 CID' 略欠精确但思路正确。"
+        },
+        {
+          "point": "提及流表老化/keepalive 或防火墙按 CID 跟踪的运维问题",
+          "hit": true,
+          "comment": "提及 NAT/防火墙等中间设备会因四元组变化丢弃 UDP 流、需感知 CID 或保持会话，命中了防火墙按 CID 感知的运维问题，虽未明确流表老化与 keepalive。"
+        },
+        {
+          "point": "说明 CID 明文可被追踪，需定期更换与避免可链接性",
+          "hit": true,
+          "comment": "说明了 CID 可被第三方用于追踪用户、需随机化避免明文编码可链接信息、并支持 CID 轮换以增强隐私，覆盖该隐私考量。"
+        }
+      ],
+      "score": 4,
+      "comment": "回答整体质量良好：6 个要点中命中 5 个，正确覆盖了 CID 标识连接与 TCP 差异、四元组哈希失效因果、QUIC-LB 编码路由设计与 CID 隐私考量；主要缺陷是缺少 NEW_CONNECTION_ID 帧机制和 PATH_CHALLENGE/PATH_RESPONSE 路径验证的说明，另有少量表述不够精确（如 LB 改写 CID、0-RTT 密钥），无严重概念错误，评 4 分。"
     }
   },
   {
@@ -2893,6 +5420,38 @@
       },
       "model": "deepseek-ai/DeepSeek-V4-Flash",
       "thinking_mode": "disabled"
+    },
+    "evaluation": {
+      "judge_model": "glm-5.3",
+      "point_results": [
+        {
+          "point": "给出长首部识别特征：首字节类型位、版本字段、CID 长度，版本 0 为 VN 包",
+          "hit": false,
+          "comment": "仅给出固定字节 0x0c0000000000（且该字节值与标注的 v1 长头不符，v1 Initial 应为 0xC0+版本0x00000001），未说明版本字段含义、DCID/SCID 长度及版本 0 为 VN 包等结构性特征"
+        },
+        {
+          "point": "指出 Initial 载荷可用版本盐值派生密钥解密，从中读取 ClientHello 的 SNI/ALPN(h3)",
+          "hit": false,
+          "comment": "虽正确指出 SNI/ALPN 位于 Initial 的 CRYPTO 帧中需解密并提到 h3，但错误声称需 TLS 密钥或中间人证书才能解密，未指出 Initial 密钥由版本相关盐值派生、任何在线设备均可解出 ClientHello 这一关键机制"
+        },
+        {
+          "point": "说明浏览器经 Alt-Svc 发现 HTTP/3，QUIC 失败后回退 HTTP/2 over TCP",
+          "hit": true,
+          "comment": "正确描述浏览器先走 TCP 443、经响应头 Alt-Svc: h3=\":443\" 发现并切换 QUIC、失败后自动回退 TCP 443 且会周期性重试的完整演变过程"
+        },
+        {
+          "point": "指出封禁 UDP/443 的副作用：首屏时延、竞速流量、误伤其他 UDP 协议",
+          "hit": true,
+          "comment": "覆盖了首屏/连接建立延迟和误伤其他 UDP/443 应用（VPN、游戏、视频会议）两项主要副作用，虽未明确提及 TCP/QUIC 双发竞速流量"
+        },
+        {
+          "point": "给出基于 ALPN/SNI 的精确识别管控或 NGFW/DPI、检测网关等稳妥方案",
+          "hit": true,
+          "comment": "给出了 DPI 引擎按 ALPN/h3 识别并分层管控、TLS 解密代理、按域名白名单放行 QUIC 及组策略禁用 QUIC 等多种稳妥替代方案"
+        }
+      ],
+      "score": 3,
+      "comment": "第（2）（3）问关于浏览器 Alt-Svc 发现与回退机制、封禁副作用及 DPI/白名单等稳妥管控思路回答较好，但第（1）问识别机制存在明显技术错误：首字节特征值有误且未讲清长首部结构（版本字段、CID 长度、VN 包），尤其错误地认为 Initial 包需 TLS 密钥或中间人证书才能解密，遗漏了版本盐值派生密钥使任何在线设备可解出 SNI/ALPN 的核心要点，约半数要点命中，综合评定 3 分"
     }
   },
   {
@@ -2932,6 +5491,43 @@
       },
       "model": "deepseek-ai/DeepSeek-V4-Flash",
       "thinking_mode": "disabled"
+    },
+    "evaluation": {
+      "judge_model": "glm-5.3",
+      "point_results": [
+        {
+          "point": "对比转发模式：L4 报文转发不终结连接，L7 代理终结 TCP/TLS 并重建连接",
+          "hit": true,
+          "comment": "回答指出 L4 基于 IP+端口做 DNAT 报文直通（隐含不终结连接），L7 解析 HTTP 内容并结合后文 SSL 卸载，实质覆盖了转发模式差异，虽未明说'重建后端连接'但含义正确。"
+        },
+        {
+          "point": "对比调度粒度：L4 按连接、L7 按请求（URL/Cookie/Header）",
+          "hit": true,
+          "comment": "明确写出 L4 按连接（五元组）调度、L7 按请求（URL/Host/Cookie）调度且同一连接可分发到不同后端，完全命中。"
+        },
+        {
+          "point": "对比协议感知与扩展功能：L7 可内容路由/WAF/改写/会话保持，L4 不能",
+          "hit": true,
+          "comment": "回答指出 L4 不感知应用层，L7 深度解析 HTTP/gRPC/WebSocket 并支持重写、内容路由、限流、熔断、灰度等，L7 能力 L4 不具备的对比实质成立（未逐字提 WAF，但功能列举已覆盖要点精神）。"
+        },
+        {
+          "point": "对比性能时延与成本：L4 开销小吞吐高，L7 需解密解析开销大",
+          "hit": true,
+          "comment": "给出 L4 吞吐高（百万级并发）、时延微秒级，L7 吞吐低、时延毫秒级且需解析开销，覆盖了性能时延与开销对比要点。"
+        },
+        {
+          "point": "健康检查差异：L4 端口探活检不出应用僵死，L7 按 URI/状态码/响应体检查",
+          "hit": true,
+          "comment": "明确写出 L4 仅 TCP 端口探测、检不出应用逻辑故障，L7 发真实 HTTP 请求并校验状态码/响应体，能检出服务假死与依赖故障，完全命中。"
+        },
+        {
+          "point": "给出合理选型与 L4 前置+L7 后置的组合架构描述",
+          "hit": true,
+          "comment": "给出需 URL 路由/SSL 卸载/灰度/微服务治理选 L7、纯 TCP/UDP 高并发低时延选 L4 的建议，并描述了 L4(DPVS) 前置入口 + L7(Nginx/Envoy) 后置治理的两级架构，命中。"
+        }
+      ],
+      "score": 5,
+      "comment": "回答在转发模式、调度粒度、协议感知、性能时延、扩展功能、健康检查及选型与组合架构各方面均实质正确地覆盖了全部评分要点，选型场景和两级部署架构描述合理具体，仅个别细节（如 L7 重建后端连接、WAF）未逐字提及，不影响要点命中，无明显概念错误。"
     }
   },
   {
@@ -2969,6 +5565,38 @@
       },
       "model": "deepseek-ai/DeepSeek-V4-Flash",
       "thinking_mode": "disabled"
+    },
+    "evaluation": {
+      "judge_model": "glm-5.3",
+      "point_results": [
+        {
+          "point": "描述 DSR 转发路径：LB 只处理入方向，RS 直接以 VIP 为源回包",
+          "hit": true,
+          "comment": "明确 LB 仅做负载均衡决策与入方向转发，RS 响应以 VIP 为源直接路由回客户端、不经过 LB。"
+        },
+        {
+          "point": "给出两种实现：L2 改写目的 MAC（同二层）与 IPIP/GRE 隧道（可跨三层），均不改 IP 头",
+          "hit": true,
+          "comment": "正确描述 L2 改写目的 MAC 经二层转发与 IPIP 隧道封装，并指出不改 IP 头（隧道仅加外层头）；限制部分也体现 L2 需同二层、隧道模式可跨网络。"
+        },
+        {
+          "point": "说明 RS 需在环回口配置 VIP 并抑制 ARP（arp_ignore/arp_announce 或 arptables），及不抑制导致流量绕过 LB 的后果",
+          "hit": true,
+          "comment": "说明了环回口（lo:0）配置 VIP 与必须抑制 ARP 应答，并正确指出不抑制会导致客户端 ARP 指向某 RS、流量绕过 LB 且故障无法切换；未给出 arp_ignore/arp_announce 等具体手段，属轻微欠缺。"
+        },
+        {
+          "point": "指出健康检查需覆盖 VIP 级服务可用性，或网关 uRPF/源校验对 VIP 源报文的处理",
+          "hit": true,
+          "comment": "健康检查部分指出需检测 RS 的 VIP 配置是否正常，覆盖了 VIP 级可用性这一半要点；但 uRPF 部分概念错误——把问题定位为 RS 入方向严格 uRPF 丢弃客户端报文，实际应是网关对 RS 以 VIP 为源的出向报文做 uRPF/源校验而丢弃。"
+        },
+        {
+          "point": "总结收益（回程不占 LB、高吞吐、保留真实客户端 IP）与限制（无法 SNAT/L7、运维复杂）",
+          "hit": true,
+          "comment": "收益覆盖回程不占 LB 带宽与高吞吐，限制覆盖无法做 L7 响应处理、需二层/隧道及 ARP/uRPF 配置复杂；未提保留客户端真实 IP 与无法 SNAT，属轻微遗漏。"
+        }
+      ],
+      "score": 4,
+      "comment": "五个要点实质均被覆盖，DSR 转发路径、两种实现、环回口 VIP 与 ARP 抑制及其后果、收益与限制的表述基本准确；但 uRPF 问题被错误定位到 RS 入方向而非网关对 VIP 源出向报文的校验，且遗漏具体 ARP 抑制参数与保留客户端真实 IP 等细节，未达满分。"
     }
   },
   {
@@ -3010,6 +5638,38 @@
       },
       "model": "deepseek-ai/DeepSeek-V4-Flash",
       "thinking_mode": "disabled"
+    },
+    "evaluation": {
+      "judge_model": "glm-5.3",
+      "point_results": [
+        {
+          "point": "给出配置位置为隧道接口下、命令 ip tcp adjust-mss（值 1360），参数范围 500–1460",
+          "hit": false,
+          "comment": "回答明确称应配置在物理出接口/隧道源接口而非隧道接口，与正确做法相反（加密后已无法改写内层MSS），且参数范围写成68~1460而非500–1460。"
+        },
+        {
+          "point": "说明机制：改写经过接口的 SYN/SYN-ACK 中的 MSS 选项，仅影响 TCP",
+          "hit": true,
+          "comment": "正确说明拦截TCP SYN并改写其中MSS选项（原值更大时改小）、仅对TCP生效，仅漏提SYN-ACK方向。"
+        },
+        {
+          "point": "说明与 ip mtu 的区别：不依赖 PMTUD/ICMP，从源头压小发送段，常与 ip mtu 配合",
+          "hit": true,
+          "comment": "正确区分ip mtu作用于IP层分片门限（影响所有IP包）与adjust-mss只改TCP协商值，并说明二者配合原因，但未提及ip mtu依赖PMTUD/ICMP、ICMP被丢弃形成黑洞这一关键区别。"
+        },
+        {
+          "point": "给出 1360 的估算：1500 减去外层 IP+GRE+ESP 开销并留余量",
+          "hit": true,
+          "comment": "给出了1500减封装开销减IP+TCP头再留余量、保守取1360的正确估算思路和结论，但字节拆分（GRE 24、ESP合计约14~18）明显低估ESP典型开销，推导过程不够准确。"
+        },
+        {
+          "point": "能解释故障现象：小包正常、大包分片或 DF 丢弃导致大流量挂起",
+          "hit": true,
+          "comment": "以封装后超过路径MTU导致分片或丢弃说明了大流量失败的成因，可解释故障，但未明确展开小包正常与大流量挂起的对比分析。"
+        }
+      ],
+      "score": 3,
+      "comment": "机制、与ip mtu的区别配合及1360估算思路大体正确，但第（1）问的核心配置位置严重错误（称应配在物理出接口而非隧道接口，实际加密流量在物理口已无法改写MSS），参数范围也写错为68~1460，且漏掉PMTUD/ICMP黑洞要点、开销字节估算不准，含严重概念错误故下调一档，综合评3分。"
     }
   },
   {
@@ -3048,6 +5708,38 @@
       },
       "model": "deepseek-ai/DeepSeek-V4-Flash",
       "thinking_mode": "disabled"
+    },
+    "evaluation": {
+      "judge_model": "glm-5.3",
+      "point_results": [
+        {
+          "point": "给出四区域级别：Local 100、Trust 85、DMZ 50、Untrust 5",
+          "hit": true,
+          "comment": "回答明确列出 Trust 85、Untrust 5、DMZ 50、Local 100，四个默认级别数值全部正确。"
+        },
+        {
+          "point": "说明方向由安全级别高低定义：低→高为 Inbound，高→低为 Outbound",
+          "hit": true,
+          "comment": "回答明确指出 Inbound 为低级别区域到高级别区域、Outbound 为高级别到低级别，并举例说明，定义正确。"
+        },
+        {
+          "point": "正确判断 Trust→Untrust 为 Outbound",
+          "hit": true,
+          "comment": "回答结合 Trust(85) 高于 Untrust(5) 判断该访问为 Outbound，判断正确。"
+        },
+        {
+          "point": "说明 Local 代表设备自身，管理/路由协议/VPN 等本机流量涉及 Local 域间策略",
+          "hit": true,
+          "comment": "回答说明 Local 代表防火墙自身且级别最高，列举了 SSH/HTTPS 管理、ping、VPN 协商、NTP/日志等本机收发流量均涉及 Local 策略，覆盖要点实质；虽未点名路由协议且 NAT/会话老化举例略欠严谨，但核心概念正确。"
+        },
+        {
+          "point": "给出按信任度划区、默认拒绝显式放行等实践建议",
+          "hit": true,
+          "comment": "回答给出按 Trust/DMZ/Untrust 分区边界划分、默认拒绝仅按最小化原则放行、并对 Local 管理限源的建议，实践建议完整合理。"
+        }
+      ],
+      "score": 5,
+      "comment": "五个评分要点全部命中：区域级别数值正确、域间方向定义及 Trust→Untrust 判断正确、Local 区域本质与本机流量场景表述基本准确、实践建议覆盖按信任度划区和默认拒绝显式放行；仅个别举例（如 NAT 转发流量归入 Local）略有瑕疵，不影响整体正确性。"
     }
   },
   {
@@ -3086,6 +5778,38 @@
       },
       "model": "deepseek-ai/DeepSeek-V4-Flash",
       "thinking_mode": "disabled"
+    },
+    "evaluation": {
+      "judge_model": "glm-5.3",
+      "point_results": [
+        {
+          "point": "正确描述主动模式 PORT/服务器 20 端口发起、被动模式 PASV/客户端发起",
+          "hit": true,
+          "comment": "准确描述PORT命令上报客户端IP+端口、服务器从TCP20主动发起，PASV由服务器回复监听端口、客户端主动发起"
+        },
+        {
+          "point": "指出数据连接端口在应用层动态协商、仅放行 21 时无表项可匹配",
+          "hit": true,
+          "comment": "说明数据连接使用PORT/PASV协商出的动态端口，防火墙无法预知这些端口、非21端口新连接无策略可匹配而被丢弃"
+        },
+        {
+          "point": "说明 ALG 机制：解析控制通道、改写地址端口、生成动态表项放行数据连接",
+          "hit": true,
+          "comment": "正确描述解析控制通道PORT/PASV命令并动态创建临时会话放行数据连接，但未提及配合NAT改写报文中地址端口"
+        },
+        {
+          "point": "给出华为域间视图 detect ftp 配置",
+          "hit": true,
+          "comment": "给出了 firewall interzone trust untrust 视图下 detect ftp 的正确配置示例"
+        },
+        {
+          "point": "指出加密控制通道无法 ALG 及安全风险中的至少一条",
+          "hit": true,
+          "comment": "指出FTPS加密后ALG失效，并列举解析漏洞可被绕过/DoS、动态端口开放被滥用等安全风险"
+        }
+      ],
+      "score": 5,
+      "comment": "五个评分要点均被实质正确覆盖且无概念错误，仅遗漏ALG配合NAT改写应用层地址端口这一细节，属小瑕疵不影响评分档位"
     }
   },
   {
@@ -3125,6 +5849,38 @@
       },
       "model": "deepseek-ai/DeepSeek-V4-Flash",
       "thinking_mode": "disabled"
+    },
+    "evaluation": {
+      "judge_model": "glm-5.3",
+      "point_results": [
+        {
+          "point": "说明 twice NAT 同时转换源与目的地址",
+          "hit": true,
+          "comment": "回答明确指出twice NAT在同一流上同时转换源地址和目的地址，表述正确。"
+        },
+        {
+          "point": "给出地址重叠互访或内网回流（域名访问内部服务器）典型场景",
+          "hit": true,
+          "comment": "给出的两个私网重叠地址段互访（VPN互联）场景实质命中地址重叠互访应用。"
+        },
+        {
+          "point": "会话表判读：方括号为转换后地址，可验证源/目的转换与方向对称性",
+          "hit": true,
+          "comment": "正确说明方括号内为NAT转换后地址、括号外为原始地址，并据此核对转换是否符合NAT策略预期，也提及了方向错误的检查。"
+        },
+        {
+          "point": "指出安全策略按目的 NAT 后、源 NAT 前的地址匹配，配置错地址导致不命中",
+          "hit": false,
+          "comment": "虽指出配置错地址导致策略不命中，但未说明安全策略按目的NAT后、源NAT前的地址匹配顺序，且笼统称'应基于转换后地址'对源地址匹配而言不准确。"
+        },
+        {
+          "point": "提到 display nat-policy all 或 server-map 排查手段",
+          "hit": false,
+          "comment": "回答中未提及 display nat-policy all 命令或 server-map 表项等排查手段。"
+        }
+      ],
+      "score": 3,
+      "comment": "答对了twice NAT概念、地址重叠场景和会话表方括号判读，但安全策略与NAT地址匹配顺序的关键概念表述不准确，且缺少nat-policy/server-map排查手段，约六成要点命中。"
     }
   },
   {
@@ -3164,6 +5920,43 @@
       },
       "model": "deepseek-ai/DeepSeek-V4-Flash",
       "thinking_mode": "disabled"
+    },
+    "evaluation": {
+      "judge_model": "glm-5.3",
+      "point_results": [
+        {
+          "point": "说明 VGMP 统一管理多个 VRRP 组、维护整机 Active/Standby 一致性",
+          "hit": true,
+          "comment": "回答明确 VGMP 将多个 VRRP 组绑定统一管理、保证所有接口 VRRP 状态一致（整机 Master/Backup），实质覆盖该要点。"
+        },
+        {
+          "point": "解释 VGMP 通过优先级（接口故障降级）统一裁决，避免双主或绕行",
+          "hit": true,
+          "comment": "第(2)点提到接口/链路故障导致 VGMP 优先级下降，并结合优先级统一裁决、避免流量路径分裂，实质覆盖。"
+        },
+        {
+          "point": "列出 HRP 同步内容（会话表/Server-map/策略等）",
+          "hit": true,
+          "comment": "列出会话表、安全策略、NAT、IPSec SA、用户表等同步内容，覆盖核心（未提 Server-map 不影响）。"
+        },
+        {
+          "point": "给出倒换触发条件：接口故障、心跳超时、手工切换",
+          "hit": true,
+          "comment": "明确列出心跳超时、接口/链路故障致优先级下降、管理员手动切换三个触发条件。"
+        },
+        {
+          "point": "说明抢占需配置延迟，风险是链路抖动引发反复倒换",
+          "hit": true,
+          "comment": "提到设备不稳引发频繁倒换致会话中断，并建议设置较长抢占延迟，实质覆盖；但称抢占默认开启且称抢占延迟可能引发双主，与实际不符。"
+        },
+        {
+          "point": "给出 display hrp state 等可操作的排查思路",
+          "hit": true,
+          "comment": "给出 display vgmp、display hrp、display logbuffer、心跳链路检查、流量路径验证等可操作的排查步骤。"
+        }
+      ],
+      "score": 4,
+      "comment": "六个评分要点均实质覆盖，排查思路具体可操作；但存在若干小错误：HRP 全称误写为 Hot Standby Router Protocol（应为 Huawei Redundancy Protocol，混淆了 HSRP）、称华为防火墙抢占默认开启（实际默认关闭）、称抢占延迟可能引发双主（依据不足），故未达'全部命中且无错误'的 5 分标准。"
     }
   },
   {
@@ -3203,6 +5996,43 @@
       },
       "model": "deepseek-ai/DeepSeek-V4-Flash",
       "thinking_mode": "disabled"
+    },
+    "evaluation": {
+      "judge_model": "glm-5.3",
+      "point_results": [
+        {
+          "point": "解释空闲老化机制：超时删表、后续报文无会话被丢弃",
+          "hit": true,
+          "comment": "回答明确说明空闲超时后防火墙删除会话表项、后续报文因无会话匹配被丢弃并表现为连接中断，机制解释完整正确。"
+        },
+        {
+          "point": "说明FIN/RST正常结束会即时回收表项，与空闲老化的区别",
+          "hit": true,
+          "comment": "回答指出FIN/RST结束时防火墙立即删表属协议层正常结束，并对比了主动关闭与被动超时删除、不通知两端的区别。"
+        },
+        {
+          "point": "定位根因：keepalive未开启或周期大于防火墙老化时间",
+          "hit": true,
+          "comment": "回答指出长连接空闲期无心跳（keepalive未开启）或心跳间隔大于老化时间导致会话被老化删除，与参考根因一致。"
+        },
+        {
+          "point": "给出开启keepalive（周期小于最小老化时间一半）或针对会话加长老化时间的治理",
+          "hit": true,
+          "comment": "回答给出了调长老化时间、开启TCP keepalive、应用层心跳且间隔小于老化时间及五元组白名单等治理措施，核心内容覆盖，但未强调'小于最小老化时间一半'的安全余量和不宜全局放大。"
+        },
+        {
+          "point": "给出display firewall session table verbose观察剩余老化时间等验证方法",
+          "hit": true,
+          "comment": "回答提出在防火墙查看会话表、记录老化时间戳并对比空闲间隔，方法实质等价，但未给出具体命令display firewall session table verbose。"
+        },
+        {
+          "point": "说明中断间隔与老化时间吻合是判别依据",
+          "hit": true,
+          "comment": "回答通过对比默认老化时间（30分钟~1小时）与业务空闲/中断间隔，并用临时调大老化时间观察是否仍中断来验证，判别逻辑正确。"
+        }
+      ],
+      "score": 5,
+      "comment": "回答完整覆盖了全部评分要点：老化机制解释准确、正常回收与空闲老化区别清晰、根因定位正确、治理与验证方法齐全且无概念错误，仅个别细节（具体查看命令、keepalive周期取半的安全余量）未精确给出，不影响实质命中。"
     }
   },
   {
@@ -3240,6 +6070,33 @@
       },
       "model": "deepseek-ai/DeepSeek-V4-Flash",
       "thinking_mode": "disabled"
+    },
+    "evaluation": {
+      "judge_model": "glm-5.3",
+      "point_results": [
+        {
+          "point": "说明 RU 为子载波组资源，给出 26/52/106/242/484/996 等粒度中的至少三个",
+          "hit": false,
+          "comment": "正确说明 RU 为子载波组资源并给出 26-tone 与 996-tone 两种粒度，但仅列出两种（未达至少三个），且将 996-tone 误标为 40MHz（实际约 80MHz，484-tone 才对应 40MHz）。"
+        },
+        {
+          "point": "解释上下行 OFDMA 多用户并行传输及高密收益",
+          "hit": true,
+          "comment": "以 20MHz 分 9 个 RU 同时服务 9 个用户为例说明一帧多用户并行收发，并指出减少竞争开销、提升小包吞吐与时延，覆盖该要点（虽未明确区分上行/下行方向，但机制与收益表述正确）。"
+        },
+        {
+          "point": "说明 TWT 协商专属唤醒时间片与省电收益",
+          "hit": true,
+          "comment": "正确描述 AP 与 STA 协商唤醒时间表、仅在服务期内唤醒收发，并给出省电与降低空口竞争两项收益。"
+        },
+        {
+          "point": "列出其他改进至少三项：1024-QAM、长符号/小子载波间隔、BSS Coloring、上行 MU-MIMO 等",
+          "hit": true,
+          "comment": "列出上行 MU-MIMO、1024-QAM、BSS Coloring、更长 OFDM 符号（12.8μs vs 3.2μs）、扩展 A-MPDU 等五项，均表述正确。"
+        }
+      ],
+      "score": 4,
+      "comment": "整体回答质量较好，OFDMA 并行传输、TWT 机制与收益及其他改进项均覆盖准确，仅 RU 粒度仅给出两种且 996-tone 对应带宽标注有误，未完全满足第一要点要求。"
     }
   },
   {
@@ -3279,6 +6136,28 @@
       },
       "model": "deepseek-ai/DeepSeek-V4-Flash",
       "thinking_mode": "disabled"
+    },
+    "evaluation": {
+      "judge_model": "glm-5.3",
+      "point_results": [
+        {
+          "point": "给出控制信道 UDP 5246、数据信道 UDP 5247",
+          "hit": true,
+          "comment": "回答明确给出控制信道 UDP 5246、数据信道 UDP 5247，与规范一致。"
+        },
+        {
+          "point": "指出控制信道必须 DTLS、数据信道 DTLS 可选",
+          "hit": true,
+          "comment": "回答指出 RFC 5415 强制控制信道使用 DTLS、数据信道 DTLS 可选不强制，符合要点（关于受限环境允许明文的补充为厂商实践，不构成实质错误）。"
+        },
+        {
+          "point": "说明防火墙需放行 5246（隧道转发时还需 5247）及 NAT/地址稳定性注意点",
+          "hit": true,
+          "comment": "回答要求放行 AP 与 AC 间 UDP 5246 与 5247 并给出 DTLS 复用同端口、NAT 会话超时等注意事项，实质覆盖了放行内容与 NAT 兼容性要点，只是未明确区分隧道转发才需 5247 的条件。"
+        }
+      ],
+      "score": 5,
+      "comment": "三个要点均正确覆盖：端口号准确，DTLS 强制/可选的区别表述清楚，防火墙策略涵盖 5246/5247 放行与 NAT 兼容注意点；虽未点明 5247 仅隧道转发模式需要，并附带少量题外内容（如 IPsec、心跳保活），但无严重概念错误。"
     }
   },
   {
@@ -3318,6 +6197,43 @@
       },
       "model": "deepseek-ai/DeepSeek-V4-Flash",
       "thinking_mode": "disabled"
+    },
+    "evaluation": {
+      "judge_model": "glm-5.3",
+      "point_results": [
+        {
+          "point": "描述 FT 密钥层次：PMK-R0/R1 与 R0KH/R1KH 的预分发机制",
+          "hit": true,
+          "comment": "回答说明了 PMK-R0 由 R0KH 持有、按 AP 派生 PMK-R1 并关联 R1KH，漫游时新 AP 的 R1KH 经 R0KH 获取 PMK-R1，实质覆盖了密钥层次与分发机制（仅'认证服务器生成'表述略欠精确）。"
+        },
+        {
+          "point": "说明省去完整 802.1X/EAP 认证使漫游时延大幅下降",
+          "hit": true,
+          "comment": "明确指出漫游时'无需重新认证，直接完成快速握手，缩短时延'，实质表达了省去完整认证使时延下降的含义。"
+        },
+        {
+          "point": "区分 over-the-air（目标 AP 信道直接交互）与 over-the-DS（经原 AP 转交）",
+          "hit": true,
+          "comment": "正确区分了 over-the-air 为 STA 直接与目标 AP 无线交互、over-the-DS 为经原 AP 通过 DS 转发 FT 消息，并比较了各自时延与适用场景。"
+        },
+        {
+          "point": "说明 11k 邻居报告减少扫描、11v 网络侧引导漫游目标",
+          "hit": true,
+          "comment": "指出 11k 提供邻居报告与测量信息以减少扫描时延，11v 通过 BSS Transition Management 由网络侧主动建议漫游目标，表述正确。"
+        },
+        {
+          "point": "描述 k 告知候选、v 建议切换、r 保障切换速度的联动关系",
+          "hit": true,
+          "comment": "以'11k 收集环境信息→11v 下发漫游决策→11r 快速执行密钥切换'的感知-决策-执行闭环准确描述了三者联动关系。"
+        },
+        {
+          "point": "给出灰度开启、终端兼容性验证等部署要点与风险",
+          "hit": true,
+          "comment": "给出了阈值调优防乒乓、R0KH/R1KH 配置一致性等部署要点，并明确老终端不兼容需回退、BTM 触发条件、R0KH 单点故障等风险，覆盖终端兼容性验证与回退要求（未显式提'灰度'但部署风险要点实质覆盖）。"
+        }
+      ],
+      "score": 5,
+      "comment": "回答完整覆盖全部评分要点：密钥层次与分发机制、省去完整认证降低时延、两种 FT 交互方式的区别、11k/11v 能力及与 11r 的联动、部署要点与风险均表述正确，仅存在 PMK-R0 生成来源等个别措辞上的小瑕疵，不构成概念性错误，整体质量高。"
     }
   },
   {
@@ -3359,6 +6275,38 @@
       },
       "model": "deepseek-ai/DeepSeek-V4-Flash",
       "thinking_mode": "disabled"
+    },
+    "evaluation": {
+      "judge_model": "glm-5.3",
+      "point_results": [
+        {
+          "point": "说明四个 profile 的职责：国家码合规、SSID、安全策略、VAP 业务聚合",
+          "hit": true,
+          "comment": "四个 profile 的职责均已说明：regulatory-domain 定义合规域（信道/功率）、ssid-profile 定义 SSID、security-profile 定义认证加密、vap-profile 聚合 SSID 与安全策略，实质覆盖该要点。"
+        },
+        {
+          "point": "给出引用关系：vap-profile 引用 ssid/security-profile，ap-group 绑定 regulatory-domain-profile 与各射频的 vap-profile",
+          "hit": true,
+          "comment": "明确给出 vap-profile 引用 ssid/security-profile、regulatory-domain-profile 独立绑定不参与 VAP 引用，且步骤中提及绑定到 AP 组及 radio 视图下绑定 vap-profile，引用关系实质正确（AP 组统一绑定的表述略含糊）。"
+        },
+        {
+          "point": "配置顺序正确：先合规域与模板创建，再 vap 聚合，最后在 AP 组射频下绑定",
+          "hit": true,
+          "comment": "步骤顺序为 regulatory-domain → ssid-profile → security-profile → vap-profile 聚合引用 → radio 视图下绑定 vap-profile，与推荐顺序一致。"
+        },
+        {
+          "point": "说明配置经 AP 组下发给上线的 AP 生效",
+          "hit": false,
+          "comment": "仅笼统称 commit 后 AP 自动下发生效，未说明配置经 AP 组绑定后下发给上线 AP 的机制，表述含糊。"
+        },
+        {
+          "point": "给出 display vap ssid / display ap 类核查命令",
+          "hit": true,
+          "comment": "给出了 display vap（ssid-profile name 形式，语法略有偏差但意图为按 SSID 查 VAP）及 display ap all，符合核查命令要求。"
+        }
+      ],
+      "score": 4,
+      "comment": "回答整体正确：四个模板职责、引用关系、配置顺序和核查命令均实质覆盖，主要不足是未说明配置经 AP 组下发给上线 AP 的生效机制，个别命令写法略有偏差，未含严重概念错误。"
     }
   },
   {
@@ -3397,6 +6345,43 @@
       },
       "model": "deepseek-ai/DeepSeek-V4-Flash",
       "thinking_mode": "disabled"
+    },
+    "evaluation": {
+      "judge_model": "glm-5.3",
+      "point_results": [
+        {
+          "point": "正确描述两种模式数据路径：AP 本地交换 vs CAPWAP 数据隧道到 AC",
+          "hit": true,
+          "comment": "清楚说明直接转发业务数据由 AP 本地经有线口送接入交换机不经 AC，隧道转发业务数据封装进 CAPWAP 由 AC 解封装后转发，路径描述准确。"
+        },
+        {
+          "point": "指出 CAPWAP 依赖差异：直接仅控制 5246，隧道还需数据 5247（可选 DTLS）",
+          "hit": true,
+          "comment": "正确指出直接模式 CAPWAP 仅承载管理/控制报文、数据面不依赖隧道，隧道模式控制与数据均依赖 CAPWAP 且隧道中断业务即中断，依赖差异实质覆盖（未具体提及 5246/5247 端口号与 DTLS 细节，属次要遗漏）。"
+        },
+        {
+          "point": "对比 VLAN 规划：业务 VLAN 下沉 AP 上联 vs 集中终结 AC",
+          "hit": true,
+          "comment": "明确对比直接模式业务 VLAN 需延伸至接入层并配 trunk，隧道模式业务 VLAN 仅在 AC 侧规划、接入侧只需管理 VLAN，与参考要点一致。"
+        },
+        {
+          "point": "对比优缺点：直接模式性能好但策略分散，隧道模式集中但 AC 成瓶颈与故障域",
+          "hit": true,
+          "comment": "表格完整对比：直接模式低时延、AC 负载小但策略分散，隧道模式集中管控便于审计但 AC 易成瓶颈、故障域大，要点全覆盖。"
+        },
+        {
+          "point": "给出与场景匹配的选型建议",
+          "hit": true,
+          "comment": "建议大流量、低时延、分布式分支选直接转发，需集中管控审计、频繁跨三层漫游场景选隧道转发，与场景匹配合理。"
+        },
+        {
+          "point": "每模式给出至少两个可操作排查点（VLAN 透传、隧道 MTU/带宽等）",
+          "hit": true,
+          "comment": "直接模式给出 trunk 业务 VLAN 透传与 PVID 检查、交换机 VLAN 间路由/ACL 排查；隧道模式给出 CAPWAP 数据隧道状态统计（display capwap statistics）与 AC 侧业务 VLAN/DHCP/资源检查，均为可操作排查点（未提及隧道 MTU 分片问题，属细节遗漏）。"
+        }
+      ],
+      "score": 5,
+      "comment": "六个评分要点全部实质命中，数据路径、CAPWAP 依赖、VLAN 规划、优缺点、选型与排障要点表述准确无概念错误，仅未提及 UDP 5246/5247、DTLS 与隧道 MTU 等次要细节，整体质量高。"
     }
   },
   {
@@ -3436,6 +6421,33 @@
       },
       "model": "deepseek-ai/DeepSeek-V4-Flash",
       "thinking_mode": "disabled"
+    },
+    "evaluation": {
+      "judge_model": "glm-5.3",
+      "point_results": [
+        {
+          "point": "给出 T1=0.5T、T2=0.875T",
+          "hit": true,
+          "comment": "明确给出 T1=租期50%、T2=租期87.5%（即7/8），与参考答案一致。"
+        },
+        {
+          "point": "说明 T1 单播 DHCPREQUEST 续租（RENEWING）",
+          "hit": true,
+          "comment": "正确说明 T1 时刻进入 RENEWING 状态并向原 DHCP 服务器单播 DHCPREQUEST 续约。"
+        },
+        {
+          "point": "说明 T2 广播 DHCPREQUEST 可被任一服务器应答（REBINDING）",
+          "hit": true,
+          "comment": "正确说明 T2 时刻进入 REBINDING 状态并广播 DHCPREQUEST（255.255.255.255），任意服务器均可应答。"
+        },
+        {
+          "point": "说明租约到期后须停用地址重新申请",
+          "hit": true,
+          "comment": "明确指出租约到期后停止使用该 IP 并广播 DHCPDISCOVER 重新开始申请流程。"
+        }
+      ],
+      "score": 5,
+      "comment": "四个评分要点全部命中，T1/T2 取值、状态、单播/广播续租动作及到期后行为均表述准确，广播原因的解释（原服务器不可达、允许任一服务器应答）也与参考答案一致，无概念错误。"
     }
   },
   {
@@ -3476,6 +6488,38 @@
       },
       "model": "deepseek-ai/DeepSeek-V4-Flash",
       "thinking_mode": "disabled"
+    },
+    "evaluation": {
+      "judge_model": "glm-5.3",
+      "point_results": [
+        {
+          "point": "给出 dhcp enable、接口下 dhcp select relay 与指向服务器的基本配置",
+          "hit": true,
+          "comment": "给出了接口下 dhcp select relay 及 dhcp relay server-ip 指向服务器等基本配置，实质覆盖要点，但遗漏了全局 dhcp enable 命令"
+        },
+        {
+          "point": "说明 dhcp relay information enable 的作用：中继插入 Option 82",
+          "hit": true,
+          "comment": "明确说明该命令使中继在转发 DHCP 请求时插入 Option 82（中继代理信息选项）以标识用户接入位置"
+        },
+        {
+          "point": "指出子选项 1 Circuit ID（接入电路/物理位置）与子选项 2 Remote ID（设备/用户标识）",
+          "hit": true,
+          "comment": "正确说明 Circuit ID 携带接口槽位/端口号等接入电路物理信息，Remote ID 携带中继设备 MAC/管理 IP 等设备标识"
+        },
+        {
+          "point": "说明 Option 82 支撑 IP 到物理端口映射与审计定位",
+          "hit": true,
+          "comment": "说明服务器依据 Circuit ID 与 Remote ID 结合位置数据库可将用户 IP 映射到具体设备端口，实现精确定位"
+        },
+        {
+          "point": "提到对已有 Option 82 的 strategy 处理（replace/append/drop）",
+          "hit": false,
+          "comment": "虽出现 replace、丢弃等关键词，但声称默认不覆盖直接透传，与华为默认策略为 replace 相悖，未提 append，且用不确切的 trust 命令并称需按版本确认，表述含糊有误"
+        }
+      ],
+      "score": 4,
+      "comment": "总体掌握较好：中继基本配置、Option 82 插入作用、两个子选项含义及定位原理均正确；扣分点在于遗漏全局 dhcp enable，且对客户端已携带 Option 82 报文的处理策略描述错误（默认应为 replace 以防伪造，还应有 append/drop 选项）"
     }
   },
   {
@@ -3516,6 +6560,43 @@
       },
       "model": "deepseek-ai/DeepSeek-V4-Flash",
       "thinking_mode": "disabled"
+    },
+    "evaluation": {
+      "judge_model": "glm-5.3",
+      "point_results": [
+        {
+          "point": "列出发现途径：静态配置、DHCP Option 43、DNS 域名解析、同网段广播/组播",
+          "hit": true,
+          "comment": "列出了广播/组播、DNS、Option 43 三种途径且定位基本正确，静态配置仅以'低于手动配置'间接提及，但整体途径覆盖可接受（huawei-ac 域名说法存疑）。"
+        },
+        {
+          "point": "说明华为用 Option 43 子选项 3 携带 AC 的 IPv4 地址列表",
+          "hit": false,
+          "comment": "明确写成子选项 0x01/sub-option 1，与华为实际使用的子选项 3 不符，属关键事实错误。"
+        },
+        {
+          "point": "给出地址池下 option 43 sub-option 3 ip-address 配置",
+          "hit": false,
+          "comment": "给出的命令是 option 43 sub-option 1 ip-address，子选项号错误，未正确给出要求的 sub-option 3 配置。"
+        },
+        {
+          "point": "排错包含 DHCP 分配与 Option 43 内容核对（抓包/服务器配置）",
+          "hit": true,
+          "comment": "包含检查 AP 获取 IP/地址池余量、display dhcp client 查看 Option 43 及服务器 display ip pool 核对，覆盖了该要点。"
+        },
+        {
+          "point": "排错包含 UDP 5246 连通性与 display ap online-fail record 上线原因",
+          "hit": false,
+          "comment": "UDP 5246/5247 连通性检查已覆盖，但缺少 display ap online-fail record，替代使用的 display capwap ap config-error 非华为有效命令。"
+        },
+        {
+          "point": "提到版本匹配、认证/DTLS、白名单或 MTU 等至少一项深度检查",
+          "hit": true,
+          "comment": "提到了 AP 软件版本与 AC 匹配（必要时升级）以及 AP MAC/SN 认证模式核查，满足至少一项深度检查要求。"
+        }
+      ],
+      "score": 3,
+      "comment": "排错思路较系统，途径列举和深度检查基本到位，但核心的第二问出现关键错误：华为应为 Option 43 子选项 3，回答写成子选项 1/0x01，配置命令同样错误，且缺失 display ap online-fail record 这一标准上线原因排查命令，约半数要点命中，且含核心概念性错误。"
     }
   },
   {
@@ -3558,6 +6639,43 @@
       },
       "model": "deepseek-ai/DeepSeek-V4-Flash",
       "thinking_mode": "disabled"
+    },
+    "evaluation": {
+      "judge_model": "glm-5.3",
+      "point_results": [
+        {
+          "point": "说明 M 位控制有状态 DHCPv6 地址获取、O 位控制无状态 DHCPv6 参数获取",
+          "hit": true,
+          "comment": "回答明确指出 M=1 用有状态 DHCPv6 取地址、O=1 用 DHCPv6 取 DNS/NTP 等其他参数且地址仍由 SLAAC 生成，含义正确。"
+        },
+        {
+          "point": "给出四种组合的行为（含 M=0/O=1 的常见 SLAAC+无状态 DHCPv6 组合）",
+          "hit": true,
+          "comment": "完整列出 M=0/O=0、M=0/O=1、M=1/O=0、M=1/O=1 四种组合及主机行为，其中 M=0/O=1 的 SLAAC+无状态 DHCPv6 描述正确。"
+        },
+        {
+          "point": "说明 SLAAC 机制：RA 前缀+接口标识自配与 DAD",
+          "hit": false,
+          "comment": "覆盖了 RA 前缀+EUI-64/隐私扩展接口标识自配，但全文未提及 DAD（重复地址检测），要点覆盖不完整。"
+        },
+        {
+          "point": "说明 DHCPv6 的集中分配与前缀委派能力",
+          "hit": true,
+          "comment": "说明了服务器集中分配地址与参数、集中管理与租期控制，并在 RFC 9915 部分提到 DHCPv6 前缀委派（PD）能力。"
+        },
+        {
+          "point": "指出 RFC 9915 于 2026 年将 DHCPv6 确立为 STD 102 现行标准",
+          "hit": false,
+          "comment": "回答称 RFC 9915 于 2024 年发布且内容为选项扩展与 PD 改进，与参考答案的 2026 年发布并确立为 STD 102 互联网标准不符，属事实错误。"
+        },
+        {
+          "point": "给出与场景匹配的选型建议及两者共存方式",
+          "hit": true,
+          "comment": "按场景分别给出 SLAAC、有状态/无状态 DHCPv6 的选型条件，并提出 M=0/O=1 混合策略及严格管控时 M=1/O=1 的共存方式，建议合理。"
+        }
+      ],
+      "score": 4,
+      "comment": "整体对 RA 的 M/O 位、四种组合行为及 SLAAC/DHCPv6 分工与选型建议掌握较好，命中 6 个要点中的 4 个；主要缺陷是 RFC 9915 的发布年份与意义表述错误（应为 2026 年确立为 STD 102），且 SLAAC 机制缺少 DAD 说明。"
     }
   },
   {
@@ -3599,6 +6717,38 @@
       },
       "model": "deepseek-ai/DeepSeek-V4-Flash",
       "thinking_mode": "disabled"
+    },
+    "evaluation": {
+      "judge_model": "glm-5.3",
+      "point_results": [
+        {
+          "point": "说明格式源于浏览器（NSS）的事实标准并被 RFC 9850 于 2026 年标准化",
+          "hit": true,
+          "comment": "正确说明格式源于 NSS/Firefox 的事实标准并由 RFC 9850 标准化，但将年份误写为 2025 年（参考答案为 2026 年 7 月）"
+        },
+        {
+          "point": "给出行格式：LABEL + ClientRandom + Secret，以 ClientRandom 关联连接",
+          "hit": true,
+          "comment": "明确给出\"标签+客户端随机数+密钥\"的空格分隔行格式，并提及通过 ClientHello 中的随机数关联连接"
+        },
+        {
+          "point": "列出 TLS 1.2 的 CLIENT_RANDOM 与 TLS 1.3 的各 traffic secret 标签",
+          "hit": true,
+          "comment": "完整列出 TLS 1.2 的 CLIENT_RANDOM 和 TLS 1.3 的 CLIENT/SERVER_HANDSHAKE_TRAFFIC_SECRET、CLIENT/SERVER_TRAFFIC_SECRET_0、EXPORTER_SECRET 等标签"
+        },
+        {
+          "point": "说明 Wireshark 指定密钥文件即可解密的用法",
+          "hit": true,
+          "comment": "给出了 Edit→Preferences→Protocols→TLS→(Pre)-Master-Secret log filename 的具体配置路径即可自动解密"
+        },
+        {
+          "point": "强调密钥文件等价于明文密钥的权限控制、用后即删等安全要求",
+          "hit": true,
+          "comment": "明确指出密钥文件等同明文流量，需严格限权、禁止生产环境长期开启、使用后立即删除，并补充了安全传输要求"
+        }
+      ],
+      "score": 4,
+      "comment": "五个评分要点全部实质覆盖且表述准确，仅 RFC 9850 标准化年份误写为 2025 年（应为 2026 年），存在一处小的事实错误，故不给满分"
     }
   },
   {
@@ -3640,6 +6790,43 @@
       },
       "model": "deepseek-ai/DeepSeek-V4-Flash",
       "thinking_mode": "disabled"
+    },
+    "evaluation": {
+      "judge_model": "glm-5.3",
+      "point_results": [
+        {
+          "point": "说明 SVCB/HTTPS RR 在 DNS 层提供端点与协议参数引导",
+          "hit": true,
+          "comment": "回答明确指出提供协议、端口、ECH、IPv4/IPv6 提示及替代端点（CDN），覆盖 DNS 层引导语义。"
+        },
+        {
+          "point": "说明 SVCB 为通用记录、HTTPS 为其面向 HTTPS 的特化形式",
+          "hit": true,
+          "comment": "明确说明 HTTPS RR 是 SVCB 的特例、SVCB 可服务任意协议，关系表述正确。"
+        },
+        {
+          "point": "准确区分 AliasMode（指向另一记录继续解析）与 ServiceMode（直接给端点参数）",
+          "hit": true,
+          "comment": "正确区分 SvcPriority=0 的别名模式需继续解析 TargetName，ServiceMode 直接提供目标与参数。"
+        },
+        {
+          "point": "列出 alpn、ipv4hint/ipv6hint、mandatory、port、ech 中至少四个参数",
+          "hit": true,
+          "comment": "列出 alpn、port、ipv4hint/ipv6hint、ech（另加 no-default-alpn），满足至少四个且描述基本准确。"
+        },
+        {
+          "point": "描述按 alpn 选协议/地址族、hints 并行建连、ALPN 确认的流程",
+          "hit": false,
+          "comment": "流程仅泛泛提到结合 alpn/port 建连，未描述按 alpn 选择地址族、利用 hints 并行尝试建连及 TLS 握手中 ALPN 确认等关键环节，也缺少 mandatory 不可识别时退回 A/AAAA 的说明。"
+        },
+        {
+          "point": "对比 Alt-Svc：DNS 阶段引导无需先访问一次，首访即最优",
+          "hit": true,
+          "comment": "明确指出 DNS 在建连前生效而 Alt-Svc 需先完成一次 HTTP 交互、增加首访延迟，核心对比正确（个别如安全性论述略欠严谨但不影响要点）。"
+        }
+      ],
+      "score": 4,
+      "comment": "六个要点命中五个，对问题定位、记录关系、两种模式、关键参数及 Alt-Svc 对比均表述准确；主要不足是客户端选择流程描述不完整，缺少按 alpn 选地址族、hints 并行建连与 TLS ALPN 确认等关键细节，整体质量良好，评 4 分。"
     }
   },
   {
@@ -3679,6 +6866,33 @@
       },
       "model": "deepseek-ai/DeepSeek-V4-Flash",
       "thinking_mode": "disabled"
+    },
+    "evaluation": {
+      "judge_model": "glm-5.3",
+      "point_results": [
+        {
+          "point": "给出结论：标准查询 QDCOUNT 应为 1",
+          "hit": true,
+          "comment": "回答明确指出标准查询（opcode=QUERY）QDCOUNT 必须为 1，问题节只能含一个条目，并说明固化为 MUST 要求，结论准确。"
+        },
+        {
+          "point": "指出 RFC 1035 格式允许但语义未定义的歧义",
+          "hit": true,
+          "comment": "回答说明 RFC 1035 只定义 QDCOUNT 为问题条目数、未明确禁止多问题或零问题且未定义对应处理语义，实质覆盖了格式允许而语义未定义的歧义。"
+        },
+        {
+          "point": "说明无实现支持多 Question，RFC 9619 固化互操作现实",
+          "hit": true,
+          "comment": "回答指出 BIND、Unbound 等主流实现实际只处理 QDCOUNT=1、行为不一造成互操作问题，且文档将'通常为 1'的实践固化为规范；虽附加的'放大攻击/缓存投毒'说法缺乏依据，但要点实质命中。"
+        },
+        {
+          "point": "给出服务器回应 FORMERR 的要求",
+          "hit": true,
+          "comment": "回答明确服务器必须以 FORMERR（RCODE=1）回应并丢弃 QDCOUNT≠1 的标准查询，不得部分处理或返回其他 RCODE，与要求一致。"
+        }
+      ],
+      "score": 5,
+      "comment": "四个评分要点全部实质命中且表述准确，仅有个别补充性说法（如多问题查询用于放大攻击/缓存投毒）缺乏规范依据，属冗余 embellishment，不影响核心正确性。"
     }
   },
   {
@@ -3720,6 +6934,38 @@
       },
       "model": "deepseek-ai/DeepSeek-V4-Flash",
       "thinking_mode": "disabled"
+    },
+    "evaluation": {
+      "judge_model": "glm-5.3",
+      "point_results": [
+        {
+          "point": "描述信任链：信任锚→父区 DS 认证子区 DNSKEY→子区验证逐级下探",
+          "hit": true,
+          "comment": "正确描述从根信任锚出发，用父区已验证的 DNSKEY 验证 DS、再用 DS 认证子区 DNSKEY、逐级下探至权威区 ZSK 验证 RRSIG 的完整链路（首句'根区对 TLD 的 DNSKEY 签名'措辞稍欠严谨，但后续表述准确）。"
+        },
+        {
+          "point": "说明 KSK 签 DNSKEY RRset、ZSK 签区数据，DS 为父子区信任纽带",
+          "hit": true,
+          "comment": "明确 KSK 签名 DNSKEY RRset、ZSK 签名区内其他 RRset，并说明 DS 为父区存放的子区 KSK 摘要、是跨区信任纽带，与参考答案一致。"
+        },
+        {
+          "point": "给出 RRset 验证步骤：验签+时间窗校验+AD 位",
+          "hit": true,
+          "comment": "覆盖获取 RRset/RRSIG、选钥验签、签名有效期校验及向上追溯 DS 链等核心步骤，但未提及验证通过后在应答中置 AD 位这一要素。"
+        },
+        {
+          "point": "列出时间偏差、DS/DNSKEY 不匹配、签名过期、多权威不一致等至少四种原因",
+          "hit": true,
+          "comment": "列出 DS/KSK 不匹配、签名过期与时钟偏差、算法不支持、ZSK 与 RRSIG 不符、NSEC/NSEC3 证明错误等五种以上有效原因，满足'至少四种'要求。"
+        },
+        {
+          "point": "给出 dig +dnssec、delv、dnssec-dsfromkey 等可操作排查手段",
+          "hit": true,
+          "comment": "提供了 dig +dnssec、delv、dig +trace、dig +sigchase、dig +norecurse 等可操作手段，但缺少用 dnssec-dsfromkey 比对 DS 与 DNSKEY 摘要这一针对性方法。"
+        }
+      ],
+      "score": 4,
+      "comment": "整体掌握扎实：信任链构成、KSK/ZSK 分工与 DS 作用、RRset 验证步骤、失败原因及排查手段均实质正确覆盖，且补充了算法不支持、NSEC 证明错误等合理原因；扣分点在于第3问未提 AD 位置位、排查工具缺少 dnssec-dsfromkey，属大部分命中而非完全，评 4 分。"
     }
   },
   {
@@ -3758,6 +7004,38 @@
       },
       "model": "deepseek-ai/DeepSeek-V4-Flash",
       "thinking_mode": "disabled"
+    },
+    "evaluation": {
+      "judge_model": "glm-5.3",
+      "point_results": [
+        {
+          "point": "说明 2.4GHz 信道间隔与 20MHz 实占约 22MHz 的频谱重叠原因",
+          "hit": true,
+          "comment": "明确指出信道编号间隔 5MHz 而 20MHz 信道实际占用 22MHz，相邻信道必然重叠。"
+        },
+        {
+          "point": "给出 1/6/11 中心频差满足不重叠要求（或等效组合）",
+          "hit": true,
+          "comment": "给出信道 1/6/11 中心频率 2.412/2.437/2.462GHz，间隔 25MHz 满足不重叠条件。"
+        },
+        {
+          "point": "指出 40MHz 绑定占用过宽且与周边 20MHz BSS 互扰",
+          "hit": true,
+          "comment": "说明 2.4GHz 实际仅能部署一个 40MHz 信道、占用三个非重叠信道中的两个且严重加剧对相邻 AP/网络的干扰。"
+        },
+        {
+          "point": "提到 OBSS/共存机制使 AP 退回 20MHz",
+          "hit": true,
+          "comment": "虽未点名 OBSS 扫描，但正确描述了 802.11n 的 40MHz Intolerant/共存机制使收到信息的 AP 自动降级回 20MHz，实质覆盖该要点。"
+        },
+        {
+          "point": "给出三信道复用、关闭 40MHz、业务向 5GHz 迁移的建议",
+          "hit": true,
+          "comment": "明确给出禁用 40MHz、仅用 1/6/11 三信道复用、通过 Band Steering 引导终端优先 5GHz，并补充降功率等合理建议。"
+        }
+      ],
+      "score": 5,
+      "comment": "三个子问题均回答完整且技术细节基本准确，五条评分要点全部命中；仅有少量措辞不够严谨（如 1+6 绑定举例、CCA 回退表述），不构成概念性错误。"
     }
   },
   {
@@ -3795,6 +7073,33 @@
       },
       "model": "deepseek-ai/DeepSeek-V4-Flash",
       "thinking_mode": "disabled"
+    },
+    "evaluation": {
+      "judge_model": "glm-5.3",
+      "point_results": [
+        {
+          "point": "列出 CAC 判据：用户数、信道利用率、SNR/干扰等",
+          "hit": true,
+          "comment": "正确列出关联终端数、信道利用率、带宽占用等判据，但未提及SNR/干扰维度，覆盖不完整。"
+        },
+        {
+          "point": "说明超阈值后拒绝新关联（可对高优先级例外）",
+          "hit": true,
+          "comment": "明确指出拒绝新终端关联并引导至其他AP，覆盖核心要点，虽未提及高优先级例外属次要遗漏。"
+        },
+        {
+          "point": "解释负载均衡触发：启动门限+组内差值门限，仅影响新接入终端",
+          "hit": true,
+          "comment": "给出了射频间/AP间负载差值门限触发条件，并正确说明仅对新接入终端生效不强拆已连接终端，但未明确负载需先达启动门限这一条件。"
+        },
+        {
+          "point": "给出功率收紧、CAC 门限、负载均衡、SNR 准入、11k/v 或频段引导中至少四条优化",
+          "hit": true,
+          "comment": "给出了降低功率缩小蜂窝、设置CAC门限、802.11k/v引导、Band Steering频段引导等四条以上，满足要点要求。"
+        }
+      ],
+      "score": 4,
+      "comment": "四个要点均实质命中，高密优化部分内容详实正确；扣分点在于CAC判据漏掉SNR/干扰维度、负载均衡缺少启动门限概念，且称CAC会踢除已关联低优先级终端不符合标准CAC行为，属轻微概念偏差。"
     }
   },
   {
@@ -3836,6 +7141,43 @@
       },
       "model": "deepseek-ai/DeepSeek-V4-Flash",
       "thinking_mode": "disabled"
+    },
+    "evaluation": {
+      "judge_model": "glm-5.3",
+      "point_results": [
+        {
+          "point": "解释 HPACK 依赖 TCP 字节流有序性、表状态错位问题",
+          "hit": true,
+          "comment": "明确指出 HPACK 依赖 TCP 可靠有序传输保证动态表同步，更新乱序/丢失会导致状态错乱（表述为解码失败），实质正确。"
+        },
+        {
+          "point": "说明 QUIC 无传输层队头阻塞，HPACK 会在压缩层复活队头阻塞",
+          "hit": false,
+          "comment": "虽提及 QUIC 各流独立交付、流间无序，但将后果仅表述为\"解码失败\"，未点明 HPACK 的表状态依赖会在压缩层重新引入（复活）队头阻塞这一核心问题。"
+        },
+        {
+          "point": "描述 QPACK 架构：编码器/解码器两条单向流与业务流分离",
+          "hit": true,
+          "comment": "正确描述编码器流/解码器流为两条方向固定的单向流，业务流仅携带对表条目的引用，架构阐述准确。"
+        },
+        {
+          "point": "说明动态表插入/确认机制与 Known Received Count 水位",
+          "hit": true,
+          "comment": "正确描述编码器流 Insert 指令插入动态表、解码器流回送确认（Section Acknowledgment）及 Required Insert Count 的作用，但未明确提及 Known Received Count 水位推进，且\"必须确保已被确认\"的表述略混淆解码端接收与编码端确认。"
+        },
+        {
+          "point": "说明 Blocked Streams 上限把阻塞范围限制在引用未确认表项的流",
+          "hit": true,
+          "comment": "说明解码器仅阻塞引用未同步条目的流、其他流不受影响，并给出 SETTINGS_QPACK_BLOCKED_STREAMS 限制并发阻塞流数，\"仅发生在单个流内\"的表述略有夸大但机制正确。"
+        },
+        {
+          "point": "给出表容量/阻塞流数/引用策略的权衡与控制参数",
+          "hit": true,
+          "comment": "完整给出表容量（越大压缩率越高但同步延迟/阻塞风险上升）、阻塞流数与编码器引用策略（高频字段插入、低频用静态表/字面量、等待确认）的权衡，但称小阻塞流数会使解码器\"返回错误拒绝流\"属于对机制的错误描述。"
+        }
+      ],
+      "score": 4,
+      "comment": "回答整体质量较高，QPACK 架构、动态表插入/确认、阻塞范围控制和权衡参数均正确覆盖，但未点明 HPACK 在压缩层复活队头阻塞的核心论断，且对 Blocked Streams 参数机制（称解码器会主动拒绝并返回错误）和确认语义存在细节错误，故评 4 分。"
     }
   },
   {
@@ -3876,6 +7218,38 @@
       },
       "model": "deepseek-ai/DeepSeek-V4-Flash",
       "thinking_mode": "disabled"
+    },
+    "evaluation": {
+      "judge_model": "glm-5.3",
+      "point_results": [
+        {
+          "point": "给出 snmp-agent group v3 ... privacy read-view/write-view 的组配置",
+          "hit": true,
+          "comment": "给出了组名为 v3group、privacy 级别并绑定 read-view/write-view 的组配置，含义正确，仅组名与 v3 关键字顺序有语法瑕疵"
+        },
+        {
+          "point": "给出 snmp-agent usm-user v3 <user> <group> authentication-mode ... privacy-mode ... 的用户配置",
+          "hit": true,
+          "comment": "给出了 usm-user 绑定组并配置 sha2-256 认证与 AES 加密的完整用户配置，符合认证+加密要求（仅 v3 关键字位置略有出入）"
+        },
+        {
+          "point": "说明组级别是组内用户下限，privacy 组要求用户认证+加密齐备",
+          "hit": false,
+          "comment": "表述方向颠倒，称\"组的安全级别必须≥用户实际使用的级别\"，未说明组级别是组内用户下限、privacy 组要求用户必须同时配置认证与加密，按此说法仅认证用户也可入 privacy 组，与实际规则不符"
+        },
+        {
+          "point": "说明视图限定可读/可写 MIB 子树实现最小权限",
+          "hit": true,
+          "comment": "明确 read-view/write-view 分别限定可读/可写 MIB 子树，未配 write-view 默认只读，并举例说明用于最小权限控制"
+        },
+        {
+          "point": "列出 display snmp-agent usm-user/group/mib-view 及检查点",
+          "hit": false,
+          "comment": "给出了 display snmp-agent usm-user 与 group 及对应检查点，但缺少 display snmp-agent mib-view 这一条，要点未完整覆盖"
+        }
+      ],
+      "score": 3,
+      "comment": "配置部分（组与 USM 用户）和视图作用基本正确，但安全级别匹配规则方向表述错误（把组级别说成用户级别上限而非下限），且核查命令缺少 mib-view 一条，约半数要点命中，总评 3 分"
     }
   },
   {
@@ -3918,6 +7292,43 @@
       },
       "model": "deepseek-ai/DeepSeek-V4-Flash",
       "thinking_mode": "disabled"
+    },
+    "evaluation": {
+      "judge_model": "glm-5.3",
+      "point_results": [
+        {
+          "point": "给出 SSH 承载、默认端口 830",
+          "hit": true,
+          "comment": "明确指出基于 SSH（RFC 6242）、默认端口 830，并正确补充 TLS(6513) 等可选传输。"
+        },
+        {
+          "point": "描述 <hello> 互发 capability 的协商过程",
+          "hit": true,
+          "comment": "正确描述会话建立后客户端与服务器互发携带 capabilities 列表的 <hello>，取交集确定可用能力。"
+        },
+        {
+          "point": "说明 base 1.0/1.1 分帧差异及 :candidate/:validate 等能力含义中的至少两项",
+          "hit": false,
+          "comment": "capability 含义解释到位（:candidate/:validate/:startup/:rollback-on-error 等），但完全未提及 1.0/1.1 的分帧差异（chunked framing），且误将 <action>、<get-data> 归为 base 1.1 特性，属事实错误。"
+        },
+        {
+          "point": "说明 YANG 提供数据建模、模块经 capability 通告",
+          "hit": true,
+          "comment": "准确说明 YANG 是 NETCONF 数据建模语言并定义树形结构、类型、约束及 RPC 签名，建模角色实质覆盖（模块经 capability 通告未明确展开，属次要遗漏）。"
+        },
+        {
+          "point": "列出 get-config/edit-config/commit/copy-config 等至少四个操作",
+          "hit": true,
+          "comment": "列出 get/get-config、edit-config、copy-config、delete-config、lock/unlock、commit 等七个操作且说明正确，远超四个的要求。"
+        },
+        {
+          "point": "给出事务化、模型化、优于 SNMP/CLI 的理由",
+          "hit": true,
+          "comment": "从事务性（candidate+commit 原子提交、可回退、SNMP 无事务）、YANG 模型化跨厂商一致（对比私有 CLI）、结构化操作等方面给出充分理由。"
+        }
+      ],
+      "score": 4,
+      "comment": "整体覆盖良好，SSH/830、hello 协商、YANG 建模、核心 RPC 操作及对 SNMP/CLI 的优势均正确且详实；主要缺陷在于未说明 base 1.0/1.1 的 chunked 分帧差异，并误将 <action>/<get-data> 当作 base 1.1 特性，存在明显事实错误，故不予满分。"
     }
   },
   {
@@ -3956,6 +7367,38 @@
       },
       "model": "deepseek-ai/DeepSeek-V4-Flash",
       "thinking_mode": "disabled"
+    },
+    "evaluation": {
+      "judge_model": "glm-5.3",
+      "point_results": [
+        {
+          "point": "给出 EAPOL 以太封装与 EtherType 0x888E",
+          "hit": true,
+          "comment": "回答明确指出 EAPOL 直接封装在以太网帧中且 EtherType 为 0x888E，与参考答案一致。"
+        },
+        {
+          "point": "说明触发方式：终端 EAPOL-Start 或 authenticator 的 Request/Identity",
+          "hit": true,
+          "comment": "回答完整列出客户端发 EAPOL-Start 与交换机发 EAP-Request/Identity 两种触发方式。"
+        },
+        {
+          "point": "正确描述三角色与交换机 pass-through 中继（EAP-Message 属性透传）",
+          "hit": true,
+          "comment": "正确给出 supplicant/authenticator/authentication server 三角色，并说明交换机透传不解析、经 RADIUS EAP-Message 属性转发。"
+        },
+        {
+          "point": "解释受控/非受控端口逻辑与认证后授权",
+          "hit": true,
+          "comment": "正确描述非受控端口仅放行 EAPOL、受控端口认证成功后才开放业务流量，并提及 Access-Accept 与 VLAN 数据放行。"
+        },
+        {
+          "point": "给出 MAB 等哑终端退路",
+          "hit": true,
+          "comment": "给出 MAB（以 MAC 作用户名/密码走 RADIUS）及端口绑定、访客 VLAN、设备指纹等多种退路方案。"
+        }
+      ],
+      "score": 5,
+      "comment": "五个评分要点全部命中且表述准确，仅未提及认证后授权回收（logoff/链路 down）等细节，不影响要点覆盖。"
     }
   },
   {
@@ -3996,6 +7439,43 @@
       },
       "model": "deepseek-ai/DeepSeek-V4-Flash",
       "thinking_mode": "disabled"
+    },
+    "evaluation": {
+      "judge_model": "glm-5.3",
+      "point_results": [
+        {
+          "point": "描述资源证书链与 ROA 要素：前缀、origin AS、maxLength",
+          "hit": true,
+          "comment": "回答给出了 RIR 作信任锚的 X.509 层级证书体系绑定前缀与公钥，并明确 ROA 三要素为前缀、最大前缀长度、源 AS，覆盖完整。"
+        },
+        {
+          "point": "给出三状态判定条件：Valid/Invalid/NotFound",
+          "hit": true,
+          "comment": "Valid（前缀与源 AS 匹配且不超 maxLength）、Invalid（origin 不符或超长）、NotFound（无覆盖 ROA）三条件均表述正确。"
+        },
+        {
+          "point": "说明 Invalid 默认拒绝、NotFound 通常接受的处置",
+          "hit": true,
+          "comment": "明确 Invalid 默认丢弃，NotFound 通常照常转发并可按本地策略调整，处置正确。"
+        },
+        {
+          "point": "描述部署组件：本地 validator 同步 ROA、RTR 协议下发路由器",
+          "hit": true,
+          "comment": "描述了信任锚、本地缓存/validator 从 RIR 同步验证 ROA、经 RTR（RFC 8210）下发路由器的完整架构。"
+        },
+        {
+          "point": "指出只验证 origin、不验证 AS_PATH 路径真实性的局限",
+          "hit": true,
+          "comment": "明确指出防不住伪造 AS_PATH 的路径篡改及子前缀劫持等场景，说明 RPKI 仅验证源 AS。"
+        },
+        {
+          "point": "给出 ROA 配置错误风险、传播时延、先监控后强制的运营注意",
+          "hit": false,
+          "comment": "未提及 ROA 配置错误（maxLength/AS 填错）自伤风险和 ROA 发布撤销的全球传播时延，仅有\"逐步收紧\"等模糊表述，未明确先监控后强制拒绝的部署流程。"
+        }
+      ],
+      "score": 4,
+      "comment": "前 5 个要点均正确覆盖，概念准确且结构清晰，仅第 6 点运营注意事项缺少 ROA 配置错误风险、传播时延和监控模式过渡等关键内容，属大部分命中，给 4 分。"
     }
   }
 ]
