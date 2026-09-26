@@ -48,7 +48,7 @@
 ├── llm_eval/                     # 评测引擎(配置/作答/裁判打分/报告生成,详见其 README)
 ├── data/ 其余目录、tools/、docs/  # 测试集生成与校验的过程文件和辅助工具
 ├── LLM网络知识评测基准调研报告.md  # 相关公开评测基准调研
-└── requirements.md / LICENSE
+└── LICENSE
 ```
 
 ## 执行评测
