@@ -86,12 +86,12 @@ python main.py --config config.json
 
 ### 4. 查看报告
 
-以 `report/glm-5.3/` 为例:
+以被评测模型 DeepSeek-V4-Flash(裁判 glm-5.3)为例,产出在 `report/DeepSeek-V4-Flash/` 下:
 
 ```
-RECORD_glm-5.3_enabled_dataset_common_basic.json            # 作答记录
-EVALUATION_glm-5.3_glm-5.3_enabled_dataset_common_basic.json # 逐题评分
-EVALUATION_glm-5.3_glm-5.3_enabled_summary.md                # 总结报告
+RECORD_DeepSeek-V4-Flash_disabled_dataset_common_basic.json             # 作答记录
+EVALUATION_glm-5.3_DeepSeek-V4-Flash_disabled_dataset_common_basic.json # 逐题评分
+EVALUATION_glm-5.3_DeepSeek-V4-Flash_disabled_summary.md                # 总结报告
 ```
 
 summary 按数据集分别统计(不做跨数据集合并),每个数据集包含:总体评价(通过率/综合评分)、按各分类维度的得分分布表、知识缺口(命中率低于 50% 的评分要点)、不通过题目详情与归因分析。
